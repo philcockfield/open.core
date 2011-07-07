@@ -2,7 +2,7 @@
   "name": "open.core",
   "version": "0.0.1",
   "description": "Common utility functionality used between multiple applications.",
-  "homepage": "",
+  "homepage": "https://github.com/philcockfield/open.core",
   "author": {
     "name": "Phil Cockfield",
     "url": "https://github.com/philcockfield"
@@ -10,7 +10,7 @@
   "main": "./index.js",
   "repository": {
     "type" : "git",
-    "url" : ""
+    "url" : "git@github.com:philcockfield/open.core.git"
   },
   "dependencies": {
     "express": "2.4.0",
@@ -24,7 +24,7 @@
           [
             {
               "type" : "MIT",
-              "url" : ""
+              "url" : "https://github.com/philcockfield/open.core/blob/master/LICENCE-MIT"
             }
           ]
 }
