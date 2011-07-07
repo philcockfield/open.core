@@ -13,7 +13,7 @@ Common utility functionality used between multiple applications.
 
 ## Licence
 
-The MIT License (MIT)
+The MIT License (MIT)  
 Copyright © 2011 Phil Cockfield
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
