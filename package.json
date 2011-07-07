@@ -1,0 +1,30 @@
+{
+  "name": "open.core",
+  "version": "0.0.1",
+  "description": "Common utility functionality used between multiple applications.",
+  "homepage": "",
+  "author": {
+    "name": "Phil Cockfield",
+    "url": "https://github.com/philcockfield"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type" : "git",
+    "url" : ""
+  },
+  "dependencies": {
+    "express": "2.4.0",
+    "stylus": ">= 0.13.5",
+    "jade": ">= 0.0.1",
+    "coffee-script": ">= 1.1.1",
+    "jasmine-node": ">= 1.0.6"
+  },
+  "keywords": ["utility", "core", "foundation", "library", "common"],
+  "licenses":
+          [
+            {
+              "type" : "MIT",
+              "url" : ""
+            }
+          ]
+}
