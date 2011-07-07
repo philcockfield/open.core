@@ -1,5 +1,4 @@
-paths     = require './config/paths'
-
 module.exports =
-  title: 'Open.Core'
-  paths: paths
+  title:  'Open.Core'
+  paths:  require './config/paths'
+  util:   require './util'
