@@ -3,7 +3,7 @@ fs = require 'fs'
 root  = fs.realpathSync("#{__dirname}/../../../..")
 lib   = "#{root}/lib"
 
-module.exports =
+paths =
     root:   root
     lib:    lib
     public: "#{lib}/public"
@@ -11,3 +11,8 @@ module.exports =
     src:    "#{lib}/src"
     server: "#{lib}/src/server"
     client: "#{lib}/src/client"
+module.exports = paths
+
+# Put the root modules into the global paths.
+require.paths.unshift paths.server
+require.paths.unshift paths.client
