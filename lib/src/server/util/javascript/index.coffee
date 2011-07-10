@@ -1,7 +1,14 @@
 minifier = require './minifier'
 
 module.exports =
+
+  # Index
   minifier:   minifier
-  compress:   minifier.compress
-  Compiler:   require './compiler'
   build:      require './build'
+
+  # Methods
+  compress:   minifier.compress
+
+  # Classes
+  Compiler:         require './compiler'
+  FileConcatenator: require './file_concatenator'

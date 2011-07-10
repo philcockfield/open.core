@@ -1,6 +1,9 @@
 describe 'server/util/file_contatenator', ->
-  it 'exists of the util index', ->
+  core = test.server
+  util = core.util.javascript
 
+  it 'exists of the util index', ->
+    expect(util.FileConcatenator).toBeDefined()
 
 
 
