@@ -35,7 +35,7 @@ module.exports =
   @param path to the folder.
   @param callback (data)
   ###
-  folder: (path, callback) ->
+  folder1: (path, callback) ->
     self = @
     Seq()
       .seq ->
