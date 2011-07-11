@@ -1,20 +1,27 @@
 fs  = require 'fs'
 Seq = require 'seq'
 
-header = (files)->
+
+module.exports =
+  ###
+  Creates a comment header list the given set of files
+  with their paths removed.
+  @param files: array of file paths
+  ###
+  headerComment: (files) ->
         text = '/* \n'
         for key of files
             text += "  - #{_(key).strRightBack('/')}\n" if key?
         text += '*/\n\n\n'
 
-
-module.exports =
   ###
   Concatenates the given files to a single string.
   @param paths - the array of paths to files to concatenate.
   @param callback (err, instance)
   ###
   files: (paths, callback)->
+      self = @
+
       Seq(paths)
         .seqEach (file) ->
             fs.readFile file, this.into(file)
@@ -22,7 +29,7 @@ module.exports =
             code = ''
             for key of @vars
                 code += "#{@vars[key].toString()}\n\n\n"
-            callback? header(@vars) + code
+            callback? self.headerComment(@vars) + code
 
 
   ###
