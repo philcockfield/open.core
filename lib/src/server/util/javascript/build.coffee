@@ -7,31 +7,23 @@ module.exports =
   ###
   libs: (callback) ->
     core = require 'core.server'
-    folder = "#{core.paths.public}/javascripts/libs/"
+    libs = "#{core.paths.public}/javascripts/libs"
+    src = "#{libs}/src/"
+    paths = [
+      "#{src}/jquery-1.6.2.js"
+      "#{src}/underscore-1.1.6.js"
+      "#{src}/underscore.string-1.1.5.js"
+      "#{src}/backbone-0.5.1.js"
+    ]
 
-    FileConcatenator = core.util.javascript.FileConcatenator
+    console.log "Saving lib files to: #{libs}"
+    console.log '...'
 
-    fs.readFile folder, (err, data) ->
-
-        console.log 'err', err
-
-
-    FileConcatenator.fromFolder folder, (concatenator) ->
-        console.log 'concatenator :: ', concatenator.paths
-
-
-
-#    libs = "#{core.paths.public}/javascripts/libs"
-#    srcLibs = "#{libs}/src"
-#
-#    saved = 0
-#    save = (script, toFile) ->
-#              fs.writeFile toFile, script, (err) ->
-#                      throw err if err?
-#                      saved += 1
-#                      callback?() if saved == 2
-#
-#    compiler = new core.util.javascript.Compiler(srcLibs)
-#    compiler.build false, (script) -> save script, "#{libs}/libs.js"
-#    compiler.build true, (script) -> save script, "#{libs}/libs-min.js"
+    concat = new core.util.javascript.FileConcatenator(paths)
+    options =
+        paths: paths
+        standard: "#{libs}/libs.js"
+        minified: "#{libs}/libs-min.js"
+    concat.save options, ->
+        console.log 'Done'
 

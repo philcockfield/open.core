@@ -1,6 +1,6 @@
 fs  = require 'fs'
-Seq = require 'seq'
 
+core = null
 
 ###
 Concatenates a list of files into a single file.
@@ -11,26 +11,28 @@ class FileConcatenator
   @param paths - the array of paths to files to concatenate.
   ###
   constructor: (@paths) ->
+      core = require 'core.server'
       @paths = [@paths] if not _.isArray(@paths)
 
 
 
+  save: (options = {}, callback)->
+      core.util.fs.concatenate.files options.paths, (code) ->
+          saved = 0
+          onSaved = ->
+              saved += 1
+              callback?() if saved == 2
 
-# Public members.
+          save = (data, toFile) ->
+              unless toFile?
+                  onSaved()
+                  return
+              fs.writeFile toFile, data, (err) ->
+                      throw err if err?
+                      onSaved()
 
-###
-Creates a new instance of the class populated with the
-files in the given folder.
-@param path to the folder.
-@param callback (err, instance)
-###
-FileConcatenator.fromFolder = (path, callback) ->
-    Seq()
-      .seq ->
-        fs.readdir path, @
-      .seq (files) ->
-        files = (file for file in files when not _.startsWith(file, '.'))
-        callback? new FileConcatenator(files)
+          save code, options.standard
+          core.util.javascript.compress code, (min)-> save min, options.minified
 
 
 # Export
