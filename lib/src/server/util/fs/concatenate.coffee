@@ -36,21 +36,6 @@ module.exports =
       load file for file in files
 
 
-
-
-
-
-#      self = @
-#      Seq(paths)
-#        .seqEach (file) ->
-#            fs.readFile file, this.into(file)
-#        .seq () ->
-#            code = ''
-#            for key of @vars
-#                code += "#{@vars[key].toString()}\n\n\n"
-#            callback? self.headerComment(@vars) + code
-
-
   ###
   Concatenates the specified set of files together and saves them
   to the file system.
@@ -62,7 +47,8 @@ module.exports =
   ###
   save: (options = {}, callback)->
       core = require 'core.server'
-      core.util.fs.concatenate.files options.paths, (code) ->
+      paths = options.paths
+      core.util.fs.concatenate.files paths, (code) =>
           saved = 0
           onSaved = ->
               saved += 1
@@ -77,4 +63,6 @@ module.exports =
                       onSaved()
 
           save code, options.standard
-          core.util.javascript.compress code, (min)-> save min, options.minified
+          core.util.javascript.compress code, (min) =>
+                min = @headerComment(paths) + min
+                save min, options.minified
