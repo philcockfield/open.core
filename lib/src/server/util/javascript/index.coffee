@@ -11,4 +11,3 @@ module.exports =
 
   # Classes
   Compiler:         require './compiler'
-  FileConcatenator: require './file_concatenator'

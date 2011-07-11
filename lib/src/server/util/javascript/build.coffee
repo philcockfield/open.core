@@ -19,11 +19,10 @@ module.exports =
     console.log "Saving lib files to: #{libs}"
     console.log '...'
 
-    concat = new core.util.javascript.FileConcatenator(paths)
     options =
         paths: paths
         standard: "#{libs}/libs.js"
         minified: "#{libs}/libs-min.js"
-    concat.save options, ->
-        console.log 'Done'
+    core.util.fs.concatenate.save options, -> console.log 'Done'
+
 
