@@ -1,7 +1,6 @@
 fs  = require 'fs'
 Seq = require 'seq'
 
-
 module.exports =
   ###
   Creates a comment header list the given set of files
