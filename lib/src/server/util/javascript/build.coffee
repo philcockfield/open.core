@@ -8,7 +8,7 @@ module.exports =
   libs: (callback) ->
     core = require 'core.server'
     libs = "#{core.paths.public}/javascripts/libs"
-    src = "#{libs}/src/"
+    src = "#{libs}/src"
     paths = [
       "#{src}/jquery-1.6.2.js"
       "#{src}/underscore-1.1.6.js"

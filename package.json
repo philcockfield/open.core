@@ -24,7 +24,6 @@
     "backbone": ">=0.3.3",
     "jquery": ">=1.5.1",
     "uglify-js": ">= 1.0.3",
-    "sec": ">= 0.3.3"
   },
   "keywords": ["utility", "core", "foundation", "library", "common"],
   "licenses":

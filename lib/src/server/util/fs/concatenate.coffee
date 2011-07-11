@@ -1,5 +1,4 @@
 fs  = require 'fs'
-Seq = require 'seq'
 
 module.exports =
   ###
@@ -9,44 +8,47 @@ module.exports =
   ###
   headerComment: (files) ->
         text = '/* \n'
-        for key of files
-            text += "  - #{_(key).strRightBack('/')}\n" if key?
+        for file in files
+            text += "  - #{_(file).strRightBack('/')}\n" if file?
         text += '*/\n\n\n'
 
   ###
   Concatenates the given files to a single string.
   @param paths - the array of paths to files to concatenate.
-  @param callback (err, instance)
+  @param callback(code) to invoke upon completion.  Passes the single file content.
   ###
   files: (paths, callback)->
-      self = @
-      Seq(paths)
-        .seqEach (file) ->
-            fs.readFile file, this.into(file)
-        .seq () ->
+      loaded = 0
+      files = _(paths).map (path)-> { path: path }
+
+      loadComplete = () =>
             code = ''
-            for key of @vars
-                code += "#{@vars[key].toString()}\n\n\n"
-            callback? self.headerComment(@vars) + code
+            for file in files
+                code += "#{file.data.toString()}\n\n\n"
+            callback? @headerComment(paths) + code
+
+      load = (file) ->
+        fs.readFile file.path, (err, data) ->
+              throw err if err?
+              file.data = data
+              loaded += 1
+              loadComplete() if loaded == paths.length
+      load file for file in files
 
 
-  ###
-  Concatenates all the files in the given folder to a single string.
-  @param path to the folder.
-  @param callback (data)
-  ###
-  folder1: (path, callback) ->
-    self = @
-    Seq()
-      .seq ->
-          fs.readdir path, @
-      .seq (files) ->
-          # Remove hidden items and append paths.
-          files = (file for file in files when not _.startsWith(file, '.'))
-          files = _(files).map (item) -> path + item
 
-          # Pass execution to the 'files' method.
-          self.files files, callback
+
+
+
+#      self = @
+#      Seq(paths)
+#        .seqEach (file) ->
+#            fs.readFile file, this.into(file)
+#        .seq () ->
+#            code = ''
+#            for key of @vars
+#                code += "#{@vars[key].toString()}\n\n\n"
+#            callback? self.headerComment(@vars) + code
 
 
   ###
