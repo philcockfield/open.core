@@ -1,3 +1,3 @@
 module.exports =
-  view:       require './view'
-  template:   require './template'
+  View:       require './view'
+  Template:   require './template'
