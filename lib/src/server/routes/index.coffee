@@ -4,11 +4,12 @@ module.exports =
     @param core: the root Open.Core server module.
     ###
     init: (core) ->
-      app = core.app
+      app     = core.app
       baseUrl = core.baseUrl
-      paths = core.paths
+      paths   = core.paths
+      send    = core.util.send
 
-      console.log 'base', baseUrl
+      console.log 'baseUrl', baseUrl
 
       # Routes.
       # Send from file.
@@ -18,3 +19,15 @@ module.exports =
             min = '-min' if req.params.min == '-min'
             core.util.send.scriptFile res, "#{libs}/libs#{min}.js"
 
+
+      app.get "#{baseUrl}/build/:package?.js", (req, res) =>
+          package   = req.params.package
+          minified  = _(package).endsWith '-min'
+
+          switch req.params.package
+            when 'core', 'core-min'
+                # Serve fresh version of the file (but don't save).
+                compiler = new core.util.javascript.Compiler(paths.client)
+                compiler.build minified, (code) -> send.script res, code
+            else
+              res.send 404
