@@ -1,0 +1,20 @@
+!!! 5
+html(lang="en")
+  head
+    title= title
+
+    // Test runner.
+    link(type='text/css', rel='stylesheet', href="#{libFolder}/jasmine.css")
+    script(type='text/javascript', src="#{libFolder}/jasmine.js")
+    script(type='text/javascript', src="#{libFolder}/jasmine-html.js")
+
+    // Source files (under test).
+    script(type='text/javascript', src="#{baseUrl}/specs/source")
+
+    // Spec files.
+    script(type='text/javascript', src="#{baseUrl}/specs/tests")
+
+  body
+    :coffeescript
+      jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
+      jasmine.getEnv().execute()
