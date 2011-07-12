@@ -1,0 +1,33 @@
+// ------------------------------------------------------
+//                      Utility
+// ------------------------------------------------------
+toUnit(prop, value, unit=px)
+    if value is not null
+      {prop} unit(value, unit)
+
+absPosition(left = 0, top = 0, right = 0, bottom = 0, unit=px)
+    position absolute
+    toUnit 'left', left, unit
+    toUnit 'top', top, unit
+    toUnit 'right', right, unit
+    toUnit 'bottom', bottom, unit
+
+gradient(type, start, stops...)
+  prop = current-property
+  stops = unquote(join(', ', stops))
+  webkit = '-webkit-gradient(type, %s, %s, %s)' % (type start stops)
+  add-property(prop[0], webkit)
+  '-moz-%s-gradient(%s, %s)' % (type start stops)
+
+
+gradientY(defaultColor, topColor, bottomColor)
+    prop = current-property[0]
+    add-property(prop, defaultColor)
+
+    // WebKit
+    add-property(prop, -webkit-gradient(linear, left top, left bottom, from(topColor), to(bottomColor)))
+
+    // Firefox (3.6+)
+    add-property(prop, -moz-linear-gradient(top,  topColor,  bottomColor))
+
+
