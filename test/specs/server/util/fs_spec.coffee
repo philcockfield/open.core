@@ -7,14 +7,21 @@ describe 'server/util/fs', ->
 
 
   describe 'exists', ->
-    it 'determines that the file exists', ->
+    it 'determines that a file exists', ->
       path = "#{paths.server}/core.server.coffee"
       exists = null
       fsUtil.exists path, (result) -> exists = result
       waitsFor -> exists?
       runs -> expect(exists).toEqual true
 
-    it 'determines that file does not exist', ->
+    it 'determines that a folder exists', ->
+      path = "#{paths.server}"
+      exists = null
+      fsUtil.exists path, (result) -> exists = result
+      waitsFor -> exists?
+      runs -> expect(exists).toEqual true
+
+    it 'determines that a path does not exist', ->
       path = "foo.bar"
       exists = null
       fsUtil.exists path, (result) ->
