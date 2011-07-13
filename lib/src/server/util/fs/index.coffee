@@ -2,11 +2,60 @@ fs      = require 'fs'
 util    = require 'util'
 fsPath  = require 'path'
 
+###
+PRIVATE MEMBERS
+###
 notFoundError = (err) -> err.errno == 2
 cleanDirPath = (path) ->
                 path = _.trim(path)
                 path = _.rtrim(path, '/')
                 path
+
+###
+Performs a deep copy of a directory, and all it's contents.
+-- Special purpose method used by the more general [copy] method. --
+
+@param source:      path to directory to copy.
+@param destination: path to copy to.
+@param options:
+            - mode: copy code (defaults to 0777 for full permissions).
+@param callback: (err)
+###
+copyDir = (source, destination, options..., callback) ->
+
+  # Setup initial conditions.
+  self = @
+  options = options[0] ?= {}
+  mode = options.mode ?= 0777
+
+  # Sanitize the paths.
+  source      = cleanDirPath(source)
+  destination = cleanDirPath(destination)
+
+  # 1. Ensure the target directory exists.
+  module.exports.createDir destination, options, (err) ->
+      if err?
+          callback?(err)
+          return
+      else
+          # 2. Get the files.
+          module.exports.readDir source, expandPaths: false, (err, files) ->
+              if err? or files.length == 0
+                  callback?(err)
+                  return
+              else
+                # 3. Copy each file (at this level).
+                files = _(files).map (file) ->
+                        item =
+                            source:      "#{source}/#{file}"
+                            destination: "#{destination}/#{file}"
+
+                module.exports.copyAll files, options, (err) ->
+                      if err?
+                          callback?(err)
+                          return # Failed - exit out completely.
+                      else
+                          callback?(err) # Done.
 
 
 module.exports =
@@ -44,50 +93,6 @@ module.exports =
           files = self.expandPaths(path, files) if expandPaths
           callback? null, files
 
-
-  ###
-  Performs a deep copy of a directory, and all it's contents.
-  @param source:      path to directory to copy.
-  @param destination: path to copy to.
-  @param options:
-              - mode: copy code (defaults to 0777 for full permissions).
-  @param callback: (err)
-  ###
-  copyDir: (source, destination, options..., callback) ->
-
-    # Setup initial conditions.
-    self = @
-    options = options[0] ?= {}
-    mode = options.mode ?= 0777
-
-    # Sanitize the paths.
-    source      = cleanDirPath(source)
-    destination = cleanDirPath(destination)
-
-    # 1. Ensure the target directory exists.
-    self.createDir destination, options, (err) ->
-        if err?
-            callback?(err)
-            return
-        else
-            # 2. Get the files.
-            self.readDir source, expandPaths: false, (err, files) ->
-                if err? or files.length == 0
-                    callback?(err)
-                    return
-                else
-                  # 3. Copy each file (at this level).
-                  files = _(files).map (file) ->
-                          item =
-                              source:      "#{source}/#{file}"
-                              destination: "#{destination}/#{file}"
-
-                  self.copyAll files, options, (err) ->
-                        if err?
-                            callback?(err)
-                            return # Failed - exit out completely.
-                        else
-                            callback?(err) # Done.
 
 
   ###
@@ -152,7 +157,7 @@ module.exports =
           else
               if stats.isDirectory()
                   # 2a. Copy the directory.
-                  self.copyDir source, destination, options, (err) -> callback?()
+                  copyDir source, destination, options, (err) -> callback?()
               else
                   # 2b. Check whether the destination file already exists
                   #    and if so don't overwrite.
