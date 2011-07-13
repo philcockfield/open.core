@@ -58,8 +58,12 @@ copyDir = (source, destination, options..., callback) ->
                           callback?(err) # Done.
 
 
+###
+Module Exports
+###
 module.exports =
   concatenate: require './concatenate'
+
 
   ###
   Prepends the given path on the array of files.
