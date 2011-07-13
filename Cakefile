@@ -17,9 +17,29 @@ task 'build:libs', 'Build and save the 3rd party libs to /public', ->
 
 
 task 'temp', 'Temp', ->
+  fsPath = require 'path'
 
-  paths     = core.paths
-  path = "#{paths.server}/core.server.coffee"
+  paths = core.paths
+  serverPath = "#{paths.server}/core.server.coffee"
+  fs = core.util.fs
 
-  core.util.fs.exists path, (result) ->
-    console.log 'result', result
+  # fsPath.exists serverPath, (result) -> console.log 'Exists: ', result, serverPath
+  # fsPath.exists serverPath + 1, (result) -> console.log 'Exists: ', result, serverPath + 1
+
+  src = "#{paths.test}/foo_src2/"
+  dst = "#{paths.test}/FOO"
+  
+  copyDir = -> fs.copy src, dst,
+      mode:0777
+      foo:123
+      bar:456,
+      (err) ->
+        console.log 'DONE'
+        console.log 'err:', err
+        console.log ''
+  copyDir()
+
+
+  # fs.createDir "#{paths.test}/_TMP/foo/baz/thing", -> console.log 'DIR DONE'
+
+

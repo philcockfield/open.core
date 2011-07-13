@@ -6,31 +6,41 @@ describe 'server/util/fs', ->
     expect(test.server.util.fs).toBeDefined()
 
 
-  describe 'exists', ->
-    it 'determines that a file exists', ->
-      path = "#{paths.server}/core.server.coffee"
-      exists = null
-      fsUtil.exists path, (result) -> exists = result
-      waitsFor -> exists?
-      runs -> expect(exists).toEqual true
+  describe 'parentDir', ->
+    it 'retrieves the parent directory', ->
+      path = '/foo/bar/bas.txt'
+      expect(fsUtil.parentDir(path)).toEqual '/foo/bar'
 
-    it 'determines that a folder exists', ->
-      path = "#{paths.server}"
-      exists = null
-      fsUtil.exists path, (result) -> exists = result
-      waitsFor -> exists?
-      runs -> expect(exists).toEqual true
+    it 'retrieves the parent directory from leading slash', ->
+      path = '/foo/bar/'
+      expect(fsUtil.parentDir(path)).toEqual '/foo'
 
-    it 'determines that a path does not exist', ->
-      path = "foo.bar"
-      exists = null
-      fsUtil.exists path, (result) ->
-          exists = result
-      waitsFor -> exists?
-      runs -> expect(exists).toEqual false
+    it 'retrieves the parent directory with no leading slash', ->
+      path = '/foo/bar'
+      expect(fsUtil.parentDir(path)).toEqual '/foo'
 
+    it 'has no parent directory when / only', ->
+      path = '/'
+      expect(fsUtil.parentDir(path)).toEqual null
 
+    it 'has no parent directory when empty', ->
+      path = ''
+      expect(fsUtil.parentDir(path)).toEqual null
 
+    it 'has no parent directory when white space', ->
+      path = '    '
+      expect(fsUtil.parentDir(path)).toEqual null
 
+    it 'has no parent directory when null', ->
+      path = null
+      expect(fsUtil.parentDir(path)).toEqual null
+
+    it 'has no parent directory when at root', ->
+      path = '/foo'
+      expect(fsUtil.parentDir(path)).toEqual null
+
+    it 'has no parent directory when at root (padded)', ->
+      path = '  /foo  '
+      expect(fsUtil.parentDir(path)).toEqual null
 
 
