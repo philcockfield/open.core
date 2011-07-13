@@ -45,7 +45,12 @@ task 'temp', 'Temp', ->
 
   # fs.createDir "#{paths.test}/_TMP/foo/baz/thing", -> console.log 'DIR DONE'
 
-  fs.writeFile "#{dst}/hello.txt", 'Hello', (err) ->
+  files = [
+    { path: "#{dst}/hello.txt", data:'Hello1' }
+    { path: "#{dst}/hello2.txt", data:'Hello2' }
+  ]
+
+  fs.writeFiles files, (err) ->
         console.log 'DONE'
         console.log 'err:', err
         console.log ''
