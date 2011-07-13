@@ -37,7 +37,7 @@ task 'temp', 'Temp', ->
         console.log 'DONE'
         console.log 'err:', err
         console.log ''
-  copyDir()
+  # copyDir()
 
 
   # fs.createDir "#{paths.test}/_TMP/foo/baz/thing", -> console.log 'DIR DONE'
