@@ -82,7 +82,7 @@ module.exports =
                               source:      "#{source}/#{file}"
                               destination: "#{destination}/#{file}"
 
-                  self.copyItems files, options, (err) ->
+                  self.copyAll files, options, (err) ->
                         if err?
                             callback?(err)
                             return # Failed - exit out completely.
@@ -91,18 +91,19 @@ module.exports =
 
 
   ###
-  Copies a collection of files to a new location.
+  Copies a collection of files/folders to a new location.
   if that does not already exist.
-  @param files:  Array of file descriptors.  Each descriptor is an object
+  @param items:  Array of file descriptors.  Each descriptor is an object
                  containing the following structure:
                  [
                    { source:'/foo/bar.txt', destination:'/baz/thing.txt' }
+                   { source:'/folder', destination:'/folder_new' }
                  ]
   @param options:
               - mode: copy code (defaults to 0777 for full permissions).
   @param callback: (err)
   ###
-  copyItems: (files, options..., callback) ->
+  copyAll: (items, options..., callback) ->
     self = @
     copied = 0
     failed = false
@@ -110,9 +111,9 @@ module.exports =
     onCopied = (file) ->
           return if failed
           copied += 1
-          callback?() if copied >= files.length
+          callback?() if copied >= items.length
 
-    for file in files
+    for file in items
         self.copy file.source, file.destination, options, (err) ->
             unless err?
               onCopied(file) # Success.
