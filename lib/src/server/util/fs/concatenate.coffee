@@ -45,10 +45,10 @@ module.exports =
             - minified: The path to save the compressed file to.
   @param callback invoked upon completion.
   ###
-  save: (options = {}, callback)->
+  save: (options = {}, callback) ->
       core = require 'core.server'
       paths = options.paths
-      core.util.fs.concatenate.files paths, (code) =>
+      @files paths, (code) =>
           saved = 0
           onSaved = ->
               saved += 1
@@ -58,7 +58,7 @@ module.exports =
               unless toFile?
                   onSaved()
                   return
-              fs.writeFile toFile, data, (err) ->
+              core.util.fs.writeFile toFile, data, (err) ->
                       throw err if err?
                       onSaved()
 

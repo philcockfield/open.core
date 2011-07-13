@@ -236,3 +236,24 @@ module.exports =
       path = _.strLeftBack(path, '/')
       return null if path == ''
       path
+
+
+  ###
+  Writes the data to the specified path (creating the containing folder if required).
+  @param path: of the file to write to.
+  @param data: to write
+  @param options:
+              - encoding: defaults to 'utf8'
+  @param callback: (err)
+  ###
+  writeFile: (path, data, options..., callback) ->
+
+      # 1. Ensure the directory exists.
+      dir = fsPath.dirname(path)
+      @createDir dir, (err) ->
+          if err?
+              callback?(err)
+              return # Failed - exit out.
+          else
+              # 2. Write the file.
+              fs.writeFile path, data, callback

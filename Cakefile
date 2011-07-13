@@ -16,6 +16,9 @@ task 'build:libs', 'Build and save the 3rd party libs to /public', ->
   core.util.javascript.build.libs()
 
 
+
+
+
 task 'temp', 'Temp', ->
   fsPath = require 'path'
 
@@ -41,5 +44,10 @@ task 'temp', 'Temp', ->
 
 
   # fs.createDir "#{paths.test}/_TMP/foo/baz/thing", -> console.log 'DIR DONE'
+
+  fs.writeFile "#{dst}/hello.txt", 'Hello', (err) ->
+        console.log 'DONE'
+        console.log 'err:', err
+        console.log ''
 
 

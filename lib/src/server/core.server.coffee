@@ -1,8 +1,4 @@
-express = require 'express'
-routes  = require './routes'
-
 require './config/libs'
-
 
 module.exports =
   title:  'Open.Core (Server)'
@@ -15,6 +11,10 @@ module.exports =
           - baseUrl: The base URL path to put the TestHarness within (default: /testharness).
   ###
   configure: (app, options = {}) ->
+        # Modules.
+        express = require 'express'
+        routes  = require './routes'
+
         # Setup initial conditions.
         baseUrl = options.baseUrl ?= '/core'
         paths   = @paths
