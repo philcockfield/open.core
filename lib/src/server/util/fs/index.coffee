@@ -16,12 +16,12 @@ Performs a deep copy of a directory, and all it's contents.
 -- Special purpose method used by the more general [copy] method. --
 
 @param source:      path to directory to copy.
-@param destination: path to copy to.
+@param target:      path to copy to.
 @param options:
             - mode: copy code (defaults to 0777 for full permissions).
 @param callback: (err)
 ###
-copyDir = (source, destination, options..., callback) ->
+copyDir = (source, target, options..., callback) ->
 
   # Setup initial conditions.
   self = @
@@ -30,10 +30,10 @@ copyDir = (source, destination, options..., callback) ->
 
   # Sanitize the paths.
   source      = cleanDirPath(source)
-  destination = cleanDirPath(destination)
+  target      = cleanDirPath(target)
 
   # 1. Ensure the target directory exists.
-  module.exports.createDir destination, options, (err) ->
+  module.exports.createDir target, options, (err) ->
       if err?
           callback?(err)
           return
@@ -47,8 +47,8 @@ copyDir = (source, destination, options..., callback) ->
                 # 3. Copy each file (at this level).
                 files = _(files).map (file) ->
                         item =
-                            source:      "#{source}/#{file}"
-                            destination: "#{destination}/#{file}"
+                            source:   "#{source}/#{file}"
+                            target:   "#{target}/#{file}"
 
                 module.exports.copyAll files, options, (err) ->
                       if err?
@@ -105,8 +105,8 @@ module.exports =
   @param items:  Array of file descriptors.  Each descriptor is an object
                  containing the following structure:
                  [
-                   { source:'/foo/bar.txt', destination:'/baz/thing.txt' }
-                   { source:'/folder', destination:'/folder_new' }
+                   { source:'/foo/bar.txt',   target:'/baz/thing.txt' }
+                   { source:'/folder',        target:'/folder_new' }
                  ]
   @param options:
               - mode: copy code (defaults to 0777 for full permissions).
@@ -123,7 +123,7 @@ module.exports =
           callback?() if copied >= items.length
 
     for file in items
-        self.copy file.source, file.destination, options, (err) ->
+        self.copy file.source, file.target, options, (err) ->
             unless err?
               onCopied(file) # Success.
             else
@@ -135,13 +135,13 @@ module.exports =
   ###
   Copies a file or directory to a new location, creating the
   target directory if it does not already exist.
-  @param source:      path the file/directory to copy.
-  @param destination: path to copy to.
+  @param source:    path the file/directory to copy.
+  @param target:    path to copy to.
   @param options:
               - mode: copy code (defaults to 0777 for full permissions).
   @param callback: (err)
   ###
-  copy: (source, destination, options..., callback) ->
+  copy: (source, target, options..., callback) ->
       self = @
 
       prepareDir = (file, onComplete) ->
@@ -161,21 +161,21 @@ module.exports =
           else
               if stats.isDirectory()
                   # 2a. Copy the directory.
-                  copyDir source, destination, options, (err) -> callback?()
+                  copyDir source, target, options, (err) -> callback?()
               else
-                  # 2b. Check whether the destination file already exists
+                  # 2b. Check whether the target file already exists
                   #    and if so don't overwrite.
-                  fsPath.exists destination, (exists) ->
+                  fsPath.exists target, (exists) ->
                         if exists
                             callback?()
                             return
                         else
                             # 3. Ensure the target directory exists.
-                            prepareDir destination, ->
+                            prepareDir target, ->
 
                                 # 4. Perform the file copy operation.
                                 reader = fs.createReadStream(source)
-                                writer = fs.createWriteStream(destination)
+                                writer = fs.createWriteStream(target)
                                 util.pump reader, writer, (err) ->
                                       callback?(err)
 
