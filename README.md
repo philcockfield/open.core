@@ -7,7 +7,7 @@ Common utility functionality used between multiple applications.
 ### Install using NPM
 
 
-    npm install testharness
+    npm install open.core
 
 
 
