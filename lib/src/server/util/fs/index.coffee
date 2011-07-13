@@ -2,10 +2,14 @@ fs      = require 'fs'
 util    = require 'util'
 fsPath  = require 'path'
 
-###
-PRIVATE MEMBERS
-###
-notFoundError = (err) -> err.errno == 2
+# CONSTANTS
+ERROR =
+  NOT_FOUND: 2
+  NOT_EMPTY: 66
+
+
+# PRIVATE MEMBERS
+notFoundError = (err) -> err.errno == ERROR.NOT_FOUND
 cleanDirPath = (path) ->
                 path = _.trim(path)
                 path = _.rtrim(path, '/')
@@ -96,6 +100,34 @@ module.exports =
               return
           files = self.expandPaths(path, files) if expandPaths
           callback? null, files
+
+
+  ###
+  Deletes a directory.
+  @param options (optional)
+          - force: Flag indicating if the directly should be deleted  
+                   if it contains content (default: true).
+  @param callback: (err)
+  ###
+  deleteDir: (path, options..., callback) ->
+      options = options[0] ?= {}
+      force = options.force ?= true
+
+      fs.rmdir path, (err) ->
+          if err?
+            if err.errno == ERROR.NOT_EMPTY and force
+              require('rimraf')(path, callback)
+            else
+              callback?(err)
+          else
+            callback?() # Success.
+
+
+
+
+
+      
+
 
 
 

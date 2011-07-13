@@ -51,8 +51,25 @@ task 'temp', 'Temp', ->
   ]
 
   fs.writeFiles files, (err) ->
-        console.log 'DONE'
-        console.log 'err:', err
-        console.log ''
+        console.log 'Created Folder'
+        throw err if err?
+
+        fs.deleteDir dst, (err) ->
+            console.log 'DELETED'
+            console.log 'err:', err
+            console.log ''
+
+
+task 'temp:del', ->
+  fs = core.util.fs
+  path = "#{core.paths.test}/FOO"
+  fs.createDir path, ->
+        fs.deleteDir path, (err) ->
+            console.log 'DELETED'
+            console.log 'err:', err
+            console.log ''
+
+
+
 
 
