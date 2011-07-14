@@ -33,10 +33,6 @@ module.exports = class Compiler
         @package  = stitch.createPackage( paths:@paths )
         @header   = options.header
 
-        console.log 'options', options
-
-        console.log '@header', @header
-
   ###
   Stitches the code at the paths (given to the constructor)
   into a single file.
