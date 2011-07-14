@@ -122,8 +122,6 @@ module.exports =
             callback?() # Success.
 
 
-
-
   ###
   Copies a collection of files/folders to a new location.
   if that does not already exist.
