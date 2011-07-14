@@ -54,14 +54,22 @@ module.exports = class Compiler
 
   ###
   Either packs or minifies the code based on the given flag.
-  @param minified: Flag indicating if the code should be minified.
-  @param callback(code): invoked when complete with the produced code.
+  @param callback : invoked upon completion (optional).
+                      Passes a function with two properties:
+                        - packed: the packed code
+                        - minified: the minified code if a minified path was specified
+                      The function can be invoked like so:
+                        fn(minified):
+                          - minified: true - returns the minified code.
+                          - minified: false - returns the unminified, packed code.
   ###
-  build: (minified, callback) ->
-              if minified
-                 @minify (code) -> callback?(code)
-              else
-                 @pack (code) -> callback?(code)
+  build: (callback) ->
+          self = @
+          @minify (code) ->
+              result = (minified) -> if minified then self.minified else self.packed
+              result.minified = self.minified
+              result.packed = self.packed
+              callback? result
 
 
   ###
@@ -69,35 +77,35 @@ module.exports = class Compiler
   @param options:
             - minified      : the file to save the minified file to (optional).
             - packed        : the file to save the packed file to (optional).
-            - callback      : invoked upon completion (optional).
             - writeResponse : a response object to write output details to.
+            - callback      : invoked upon completion (optional).
+                              Passes a function with two properties:
+                                - packed: the packed code
+                                - minified: the minified code if a minified path was specified
+                              The function can be invoked like so:
+                                fn(minified):
+                                  - minified: true - returns the minified code.
+                                  - minified: false - returns the unminified, packed code.
   ###
   save: (options) ->
       return unless options?
-      self = @
-      callback = options.callback
+      self     = @
+      core     = require 'core.server'
 
-      # Determine total number of save operations.
-      total = 0
-      total += 1 if options.minified
-      total += 1 if options.packed
-      if total == 0
-          callback?()
-          return
+      # 1. Build the code.
+      @build (code) ->
+          writeResponse self, options
+          code.paths =
+              packed: options.packed
+              minified: options.minified
 
-      # Write to disk.
-      saved = 0
-      write = (file, code) ->
-                fs.writeFile file, code, (err) ->
-                        throw err if err?
-                        saved += 1
-                        if saved == total
-                            writeResponse self, options
-                            callback?()
-
-      # Get the code to save.
-      @pack (packedCode) ->
-          write(options.packed, packedCode) if options.packed?
+          # Construct the list of files to save.
+          files = []
           if options.minified?
-                writeMinified = (minifiedCode) -> write options.minified, minifiedCode
-                self.minify writeMinified, packedCode
+            files.push path:options.minified, data: code(true)
+
+          if options.packed?
+            files.push path:options.packed, data: code(false)
+
+          # 2. Save the file(s) to disk.
+          core.util.fs.writeFiles files, (err) -> options.callback?(code)

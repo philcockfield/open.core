@@ -6,6 +6,24 @@ module.exports =
   util:   require './util/util'
 
   ###
+  Generates the standard copyright notice (MIT).
+  @param options (optional)
+          - asComment: Flag indicating if the copyright notice should be within an HTML comment.
+  ###
+  copyright: (options = {}) ->
+      notice = "Copyright #{new Date().getFullYear()} Phil Cockfield. All rights reserved."
+      if options.asComment
+                notice = """
+                /*
+                  #{notice}
+                  The MIT License (MIT)
+                  https://github.com/philcockfield/open.core
+                */
+                """
+      notice
+
+
+  ###
   Configures the library.
   @param options:
           - baseUrl: The base URL path to put the TestHarness within (default: /testharness).

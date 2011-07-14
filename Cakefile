@@ -16,8 +16,21 @@ task 'build:libs', 'Build and save the 3rd party libs to /public', ->
   core.util.javascript.build.libs()
 
 
+task 'build:client', 'Packages all Open.Core client-code into files', ->
+  console.log 'Building all client-code into files...'
+  core.util.javascript.build.client
+      save: true
+      callback: (result) ->
+          console.log 'Done'
+          console.log 'result', result
+          console.log ' - Packed file:   ', result.paths.packed
+          console.log ' - Minified file: ', result.paths.minified
+          console.log ''
 
 
+
+
+# =======================
 
 task 'temp', 'Temp', ->
   fsPath = require 'path'
