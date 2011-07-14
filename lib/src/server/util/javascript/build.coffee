@@ -47,19 +47,23 @@ module.exports =
       core      = require 'core.server'
       folder    = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
-      paths =
+      output =
           packed:   "#{folder}/core.js"
           minified: "#{folder}/core-min.js"
 
-      compiler  = new core.util.javascript.Compiler core.paths.client, header: copyright
+      paths =
+          source: core.paths.client
+          target: '/core'
+
+      compiler  = new core.util.javascript.Compiler paths, header: copyright
       if options.save
         compiler.save
-              packed:         paths.packed
-              minified:       paths.minified
+              packed:         output.packed
+              minified:       output.minified
               writeResponse:  options.writeResponse
               callback:       options.callback
       else
         compiler.build (code) ->
-              code.paths = paths
+              code.paths = output
               options.callback?(code)
 

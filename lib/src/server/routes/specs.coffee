@@ -25,7 +25,7 @@ exports.init = (routes) ->
               res.send 404
               return
 
-         compiler = new core.util.javascript.Compiler(folder)
+         compiler = new core.util.javascript.Compiler( source: folder, target: '/' )
          compiler.build minified, (code) -> send.script res, code
 
 

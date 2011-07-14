@@ -1,6 +1,7 @@
 fs       = require 'fs'
 stitch   = require 'stitch'
 minifier = require './minifier'
+core     = -> require 'core.server'
 
 writeResponse = (compiler, options)->
         res = options.writeResponse
@@ -20,17 +21,33 @@ prependHeader = (compiler, code) ->
         return code unless compiler.header?
         "#{compiler.header}\n#{code}"
 
-module.exports = class Compiler
+prepackCopy = (files, targetDir, callback) ->
+       # Prepare copy list.
+       for item in files
+          item.target = _(item.target).ltrim('/')
+          item.target = "#{targetDir}/#{item.target}"
 
+       core().util.fs.copyAll files, (err) ->
+              throw err if err?
+              callback?()
+
+
+
+module.exports = class Compiler
   ###
   Constructor.
   @param paths: The collection of paths to the source files to compile.
+                The array takes object in the form of:
+                [
+                  { source: '/foo', target: 'ns/foo' }
+                ]
+                This is allows you to insert code into different CommonJS path namespaces.
+
   @param options (optional):
             - header: Header to put at the top of the file (eg copyright notice).
   ###
   constructor: (@paths, options = {}) ->
         @paths    = [@paths] unless _.isArray(@paths)
-        @package  = stitch.createPackage( paths:@paths )
         @header   = options.header
 
   ###
@@ -40,11 +57,24 @@ module.exports = class Compiler
   ###
   pack: (callback) ->
           self = @
-          @package.compile (err, code) ->
-                            throw err if err?
-                            code = prependHeader self, code
-                            self.packed = code
-                            callback?(code)
+          paths = core().paths
+
+          # 1. Copy source files to temporary location (retaining relative structure).
+          unique = new Date().getTime()
+          tmpDir = "#{paths.root}/_tmp#{unique}"
+          prepackCopy @paths, tmpDir, ->
+
+              # 2. Stitch the folder up.
+              package  = stitch.createPackage( paths:[tmpDir] )
+              package.compile (err, code) ->
+                        throw err if err?
+                        code = prependHeader self, code
+                        self.packed = code
+
+                        # 3. Clean up.
+                        core().util.fs.deleteDir tmpDir, (err) ->
+                                                    throw err if err?
+                                                    callback?(code)
 
   ###
   Compresses the code.
@@ -103,8 +133,7 @@ module.exports = class Compiler
   ###
   save: (options) ->
       throw 'No options specified' unless options?
-      self     = @
-      core     = require 'core.server'
+      self = @
 
       # 1. Build the code.
       @build (code) ->
@@ -122,4 +151,4 @@ module.exports = class Compiler
             files.push path:options.packed, data: code(false)
 
           # 2. Save the file(s) to disk.
-          core.util.fs.writeFiles files, (err) -> options.callback?(code)
+          core().util.fs.writeFiles files, (err) -> options.callback?(code)
