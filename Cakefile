@@ -17,7 +17,6 @@ task 'build:client', 'Packages all Open.Core client-code into files', ->
       save: true
       callback: (result) ->
           console.log 'Done'
-          console.log 'result', result
           console.log ' - Packed file:   ', result.paths.packed
           console.log ' - Minified file: ', result.paths.minified
           console.log ''

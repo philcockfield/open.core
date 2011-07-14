@@ -44,19 +44,19 @@ module.exports =
                                   - minified: false - returns the unminified, packed code.
   ###
   client: (options = {}) ->
-      core = require 'core.server'
+      core      = require 'core.server'
       folder    = "#{core.paths.public}/javascripts"
+      copyright = core.copyright(asComment: true)
       paths =
           packed:   "#{folder}/core.js"
           minified: "#{folder}/core-min.js"
 
-      compiler  = new core.util.javascript.Compiler(core.paths.client)
+      compiler  = new core.util.javascript.Compiler core.paths.client, header: copyright
       if options.save
         compiler.save
               packed:         paths.packed
               minified:       paths.minified
               writeResponse:  options.writeResponse
-              header:         core.copyright(asComment: true)
               callback:       options.callback
       else
         compiler.build (code) ->

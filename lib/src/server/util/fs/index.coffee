@@ -112,7 +112,6 @@ module.exports =
   deleteDir: (path, options..., callback) ->
       options = options[0] ?= {}
       force = options.force ?= true
-
       fs.rmdir path, (err) ->
           if err?
             if err.errno == ERROR.NOT_EMPTY and force
@@ -121,12 +120,6 @@ module.exports =
               callback?(err)
           else
             callback?() # Success.
-
-
-
-
-
-      
 
 
 

@@ -16,10 +16,26 @@ writeResponse = (compiler, options)->
         res.write "#{compiler.packed}\n\n\n"
         res.end()
 
+prependHeader = (compiler, code) ->
+        return code unless compiler.header?
+        "#{compiler.header}\n#{code}"
+
 module.exports = class Compiler
-  constructor: (@paths) ->
-        @paths = [@paths] unless _.isArray(@paths)
-        @package = stitch.createPackage( paths:@paths )
+
+  ###
+  Constructor.
+  @param paths: The collection of paths to the source files to compile.
+  @param options (optional):
+            - header: Header to put at the top of the file (eg copyright notice).
+  ###
+  constructor: (@paths, options = {}) ->
+        @paths    = [@paths] unless _.isArray(@paths)
+        @package  = stitch.createPackage( paths:@paths )
+        @header   = options.header
+
+        console.log 'options', options
+
+        console.log '@header', @header
 
   ###
   Stitches the code at the paths (given to the constructor)
@@ -30,6 +46,7 @@ module.exports = class Compiler
           self = @
           @package.compile (err, code) ->
                             throw err if err?
+                            code = prependHeader self, code
                             self.packed = code
                             callback?(code)
 
@@ -43,6 +60,7 @@ module.exports = class Compiler
           # Minify the javascript.
           minify = (c) ->
                minifier.compress c, (min)->
+                  min = prependHeader self, min
                   self.minified = min
                   callback?(min)
 
@@ -54,22 +72,22 @@ module.exports = class Compiler
 
   ###
   Either packs or minifies the code based on the given flag.
-  @param callback : invoked upon completion (optional).
-                      Passes a function with two properties:
-                        - packed: the packed code
-                        - minified: the minified code if a minified path was specified
-                      The function can be invoked like so:
-                        fn(minified):
-                          - minified: true - returns the minified code.
-                          - minified: false - returns the unminified, packed code.
+  @param callback     : invoked upon completion (optional).
+                        Passes a function with two properties:
+                          - packed: the packed code
+                          - minified: the minified code if a minified path was specified
+                        The function can be invoked like so:
+                          fn(minified):
+                            - minified: true - returns the minified code.
+                            - minified: false - returns the unminified, packed code.
   ###
   build: (callback) ->
-          self = @
-          @minify (code) ->
-              result = (minified) -> if minified then self.minified else self.packed
-              result.minified = self.minified
-              result.packed = self.packed
-              callback? result
+      self = @
+      @minify (code) ->
+          result = (minified) -> if minified then self.minified else self.packed
+          result.minified = self.minified
+          result.packed = self.packed
+          callback? result
 
 
   ###
