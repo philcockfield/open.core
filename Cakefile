@@ -67,15 +67,16 @@ task 'temp', 'Temp', ->
             console.log ''
 
 
-task 'temp:del', ->
+task 'temp:copy', ->
   fs = core.util.fs
-  path = "#{core.paths.test}/FOO"
-  fs.createDir path, ->
-        fs.deleteDir path, (err) ->
-            console.log 'DELETED'
-            console.log 'err:', err
-            console.log ''
-
+  paths = core.paths
+  src = "#{paths.test}/_SRC"
+  dst = "#{paths.test}/_FOO/"
+  
+  fs.copy src, dst, overwrite:true, (err) ->
+        console.log 'DONE'
+        console.log 'err:', err
+        console.log ''
 
 
 

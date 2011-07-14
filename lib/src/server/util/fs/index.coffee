@@ -123,8 +123,9 @@ module.exports =
 
 
   ###
-  Copies a collection of files/folders to a new location.
-  if that does not already exist.
+  Copies a collection of files/folders to a new location providing a
+  single callback when complete.
+  See the [copy()] method for more information.
   @param items:  Array of file descriptors.  Each descriptor is an object
                  containing the following structure:
                  [
@@ -133,10 +134,12 @@ module.exports =
                  ]
   @param options:
               - mode: copy code (defaults to 0777 for full permissions).
+              - overwrite : flag indicating if an existing file should be overwritten.
   @param callback: (err)
   ###
   copyAll: (items, options..., callback) ->
     self = @
+    options = options[0] ?= {}
     copied = 0
     failed = false
 
@@ -161,11 +164,15 @@ module.exports =
   @param source:    path the file/directory to copy.
   @param target:    path to copy to.
   @param options:
-              - mode: copy code (defaults to 0777 for full permissions).
+              - mode      : copy code (defaults to 0777 for full permissions).
+              - overwrite : flag indicating if an existing file should be overwritten.
   @param callback: (err)
   ###
   copy: (source, target, options..., callback) ->
       self = @
+      options = options[0] ?= {}
+      mode = options.mode ?= 0777
+      overwrite = options.overwrite ?= false
 
       prepareDir = (file, onComplete) ->
             dir = fsPath.dirname(file)
@@ -175,6 +182,15 @@ module.exports =
                   else
                     callback(err)
                     return # Failed - exit out completely.
+
+      # The final copy operation.
+      _copyFile = ->
+            # Ensure the target directory exists.
+            prepareDir target, ->
+                  # Perform the file copy operation.
+                  reader = fs.createReadStream(source)
+                  writer = fs.createWriteStream(target, mode:mode)
+                  util.pump reader, writer, (err) -> callback?(err)
 
       # 1. Check whether the source is a directory.
       fs.stat source, (err, stats) ->
@@ -186,21 +202,19 @@ module.exports =
                   # 2a. Copy the directory.
                   copyDir source, target, options, (err) -> callback?()
               else
-                  # 2b. Check whether the target file already exists
-                  #    and if so don't overwrite.
-                  fsPath.exists target, (exists) ->
-                        if exists
-                            callback?()
-                            return
-                        else
-                            # 3. Ensure the target directory exists.
-                            prepareDir target, ->
-
-                                # 4. Perform the file copy operation.
-                                reader = fs.createReadStream(source)
-                                writer = fs.createWriteStream(target)
-                                util.pump reader, writer, (err) ->
-                                      callback?(err)
+                  if overwrite
+                      # 2b. Copy - overwriting any existing file.
+                      _copyFile()
+                  else
+                      # 2c. Check whether the target file already exists
+                      #    and if so don't overwrite it.
+                      fsPath.exists target, (exists) ->
+                            if exists
+                                callback?()
+                                return # File exists - do nothing.
+                            else
+                              # 3. File does not exist - copy it now.
+                              _copyFile()
 
 
   ###
