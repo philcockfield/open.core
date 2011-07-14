@@ -39,8 +39,10 @@ module.exports =
           switch req.params.package
             when 'core', 'core-min'
                 # Serve fresh version of the file (but don't save).
-                compiler = new core.util.javascript.Compiler(paths.client)
-                compiler.build minified, (code) -> send.script res, code
+                core.util.javascript.build.client
+                      save: false
+                      callback: (code) ->
+                          send.script res, code(minified)
             else
               res.send 404
 

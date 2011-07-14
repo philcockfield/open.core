@@ -7,11 +7,6 @@ task 'specs', 'Run the Jasmine BDD specs', ->
       console.log stdout + stderr
 
 
-task 'kill', 'Kill all running node processes', ->
-  exec 'killall node', (err, stdout, stderr) ->
-      console.log stdout + stderr
-
-
 task 'build:libs', 'Build and save the 3rd party libs to /public', ->
   core.util.javascript.build.libs()
 

@@ -88,7 +88,7 @@ module.exports = class Compiler
                                   - minified: false - returns the unminified, packed code.
   ###
   save: (options) ->
-      return unless options?
+      throw 'No options specified' unless options?
       self     = @
       core     = require 'core.server'
 
