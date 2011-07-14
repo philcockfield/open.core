@@ -18,18 +18,26 @@ writeResponse = (compiler, options)->
         res.end()
 
 prependHeader = (compiler, code) ->
-        return code unless compiler.header?
-        "#{compiler.header}\n#{code}"
+    return code unless compiler.header?
+    "#{compiler.header}\n#{code}"
 
 prepackCopy = (files, targetDir, callback) ->
-       # Prepare copy list.
-       for item in files
-          item.target = _(item.target).ltrim('/')
-          item.target = "#{targetDir}/#{item.target}"
+     # Prepare copy list.
+     for item in files
+        item.target = _(item.target).ltrim('/')
+        item.target = "#{targetDir}/#{item.target}"
 
-       core().util.fs.copyAll files, (err) ->
-              throw err if err?
-              callback?()
+     core().util.fs.copyAll files, (err) ->
+            throw err if err?
+            callback?()
+
+
+processPaths = (paths) ->
+    paths = [paths] unless _.isArray(paths)
+    paths = _(paths).map (item) ->
+        item = { source: item, target: '/' } if _.isString(item)
+        item
+    paths
 
 
 
@@ -37,7 +45,7 @@ module.exports = class Compiler
   ###
   Constructor.
   @param paths: The collection of paths to the source files to compile.
-                The array takes object in the form of:
+                The array takes either a flat list of strings, or objects in the form of:
                 [
                   { source: '/foo', target: 'ns/foo' }
                 ]
@@ -47,8 +55,8 @@ module.exports = class Compiler
             - header: Header to put at the top of the file (eg copyright notice).
   ###
   constructor: (@paths, options = {}) ->
-        @paths    = [@paths] unless _.isArray(@paths)
-        @header   = options.header
+        @paths  = processPaths(@paths)
+        @header = options.header
 
   ###
   Stitches the code at the paths (given to the constructor)

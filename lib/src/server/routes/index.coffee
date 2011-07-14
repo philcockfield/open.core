@@ -32,20 +32,6 @@ module.exports =
             core.util.send.scriptFile res, "#{libs}/libs#{min}.js"
 
 
-      app.get "#{@baseUrl}/build/:package?.js", (req, res) =>
-          package   = req.params.package
-          minified  = _(package).endsWith '-min'
-
-          switch req.params.package
-            when 'core', 'core-min'
-                # Serve fresh version of the file (but don't save).
-                core.util.javascript.build.client
-                      save: false
-                      callback: (code) ->
-                          send.script res, code(minified)
-            else
-              res.send 404
-
   ###
   Renders the specified template from the 'views' path.
   @param response object to write to.

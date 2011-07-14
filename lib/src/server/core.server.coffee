@@ -22,13 +22,17 @@ module.exports =
                 """
       notice
 
-
   ###
   Configures the library.
   @param options:
           - baseUrl: The base URL path to put the TestHarness within (default: /testharness).
   ###
   configure: (app, options = {}) ->
+
+        # Build client-side JavaScript.
+        @util.javascript.build.client
+                save: true
+
         # Modules.
         express = require 'express'
         routes  = require './routes'

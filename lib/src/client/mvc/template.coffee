@@ -1,8 +1,6 @@
 ###
-Helper for simple client-side templates using the Underscore template engine
-in must Mustache mode.
+Helper for simple client-side templates using the Underscore template engine.
 ###
-
 class Template
   constructor: ->
 
