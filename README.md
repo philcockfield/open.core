@@ -1,5 +1,4 @@
 #Open.Core
-
 Common utility functionality used between multiple applications.
 
 --------
@@ -12,7 +11,7 @@ Common utility functionality used between multiple applications.
 
 ## Licence
 
-The MIT License (MIT)  
+The [MIT License](http://www.opensource.org/licenses/mit-license.php) (MIT)  
 Copyright © 2011 Phil Cockfield
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

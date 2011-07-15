@@ -25,8 +25,10 @@ exports.init = (routes) ->
               res.send 404
               return
 
-         compiler = new core.util.javascript.Compiler( source: folder, target: '/' )
-         compiler.build minified, (code) -> send.script res, code
+
+         send.script res, "console.log('todo - specs: #{req.params.type}');"
+#         compiler = new core.util.javascript.Compiler( source: folder, target: '/' )
+#         compiler.build minified, (code) -> send.script res, code
 
 
 

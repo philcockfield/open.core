@@ -80,7 +80,7 @@ module.exports = class Compiler
                         self.packed = code
 
                         # 3. Clean up.
-                        core().util.fs.deleteDir tmpDir, (err) ->
+                        core().util.fs.delete tmpDir, (err) ->
                                                     throw err if err?
                                                     callback?(code)
 

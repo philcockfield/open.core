@@ -67,6 +67,25 @@ task 'temp', 'Temp', ->
             console.log ''
 
 
+task 'temp:del', ->
+  fs = core.util.fs
+  paths = core.paths
+  src = "#{paths.test}/_SRC"
+  dst = "#{paths.test}/_FOO/"
+
+  fs.copy src, dst, overwrite:true, (err) ->
+
+        file = "#{dst}/text.txt"
+        dir = "#{dst}"
+
+        path = file
+
+        fs.delete path, (err)->
+            console.log 'DONE'
+            console.log 'err:', err if err?
+            console.log ''
+
+
 task 'temp:copy', ->
   fs = core.util.fs
   paths = core.paths

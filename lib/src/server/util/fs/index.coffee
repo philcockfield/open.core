@@ -63,6 +63,28 @@ copyDir = (source, target, options..., callback) ->
 
 
 ###
+Deletes a directory.
+@param the path to the directory to delete.
+@param options (optional)
+        - force: Flag indicating if the directory should be deleted
+                 if it contains content (default: true).
+@param callback: (err)
+###
+deleteDir = (path, options..., callback) ->
+    options = options[0] ?= {}
+    force = options.force ?= true
+    fs.rmdir path, (err) ->
+        if err?
+          if err.errno == ERROR.NOT_EMPTY and force
+            require('rimraf')(path, callback)
+          else
+            callback?(err)
+        else
+          callback?() # Success.
+
+
+
+###
 Module Exports
 ###
 module.exports =
@@ -103,23 +125,24 @@ module.exports =
 
 
   ###
-  Deletes a directory.
+  Deletes either file/directory at the specified path.
+  @param the path to the file/directory to delete.
   @param options (optional)
-          - force: Flag indicating if the directly should be deleted  
+          - force: Flag indicating if a directory should be deleted
                    if it contains content (default: true).
   @param callback: (err)
   ###
-  deleteDir: (path, options..., callback) ->
+  delete: (path, options..., callback) ->
       options = options[0] ?= {}
-      force = options.force ?= true
-      fs.rmdir path, (err) ->
+      fs.stat path, (err, stats) ->
           if err?
-            if err.errno == ERROR.NOT_EMPTY and force
-              require('rimraf')(path, callback)
-            else
               callback?(err)
+              return # Failed.
           else
-            callback?() # Success.
+            if stats.isDirectory()
+              deleteDir path, options, callback
+            else
+              fs.unlink path, (err) -> callback?(err)
 
 
   ###
