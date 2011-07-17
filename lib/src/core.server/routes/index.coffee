@@ -3,8 +3,10 @@ module.exports =
   Initializes the routes.
   @param core: the root Open.Core server module.
   ###
-  init: (core) ->
+  init: ->
+
       # Setup initial conditions.
+      core    = require 'core.server'
       app     = core.app
       paths   = core.paths
       send    = core.util.send
@@ -18,7 +20,6 @@ module.exports =
       # Prepare the base-url for passing to templates.
       @baseUrl  = '' unless @baseUrl?
       @baseUrl  = '' if @baseUrl is '/'
-
 
       # Initialize sibling route modules.
       require('./specs').init @

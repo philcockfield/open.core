@@ -1,3 +1,4 @@
 // Alias from here to the actual Open.Core module in CoffeeScript.
-module.exports = require('./lib/src/core.server/index.coffee');
+require('./lib/src/core.server/config/paths.coffee');
+module.exports = require('core.server');
 

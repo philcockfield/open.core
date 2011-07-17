@@ -1,6 +1,5 @@
-fs = require 'fs'
-
-root  = process.env.PWD
+fs    = require 'fs'
+root  = fs.realpathSync("#{__dirname}/../../../..")
 lib   = "#{root}/lib"
 
 paths =
