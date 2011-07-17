@@ -1,4 +1,4 @@
-describe 'server/util/fs', ->
+xdescribe 'server/util/fs', ->
   paths     = test.paths
   fsUtil    = test.server.util.fs
 

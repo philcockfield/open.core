@@ -1,4 +1,4 @@
-paths = require "#{__dirname}/../../../lib/src/server/config/paths"
+paths = require "#{__dirname}/../../../lib/src/core.server/config/paths"
 
 global.test =
     paths: paths
