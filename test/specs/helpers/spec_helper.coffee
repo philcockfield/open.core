@@ -1,8 +1,8 @@
-paths = require "#{__dirname}/../../../lib/src/core.server/config/paths"
+server = require process.env.PWD
 
 global.test =
-    paths: paths
-    server: require 'core.server'
+    paths: server.paths
+    server: server
     client: require 'core.client'
 
 

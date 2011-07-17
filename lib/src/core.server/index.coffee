@@ -4,6 +4,7 @@ module.exports =
   title:  'Open.Core (Server)'
   paths:  require './config/paths'
   util:   require './util/util'
+  client: require 'core.client'
 
   ###
   Generates the standard copyright notice (MIT).
