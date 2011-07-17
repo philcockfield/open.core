@@ -11,8 +11,10 @@ module.exports = (app, options = {}) ->
     routes  = require '../routes'
 
     # Setup initial conditions.
-    baseUrl = options.baseUrl ?= '/core'
     paths   = core.paths
+    baseUrl = options.baseUrl ?= '/core'
+    baseUrl = _.trim(baseUrl)
+    baseUrl = '' if baseUrl is '/'
 
     # Store on module.
     core.baseUrl = baseUrl
@@ -47,7 +49,5 @@ module.exports = (app, options = {}) ->
 
     # Setup routes.
     routes.init()
-
-
 
 
