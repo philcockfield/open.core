@@ -69,7 +69,8 @@ module.exports = class Compiler
 
           # 1. Copy source files to temporary location (retaining relative structure).
           unique = new Date().getTime()
-          tmpDir = "#{process.env.PWD}/_tmp#{unique}"
+          tmpDir = process.env.PWD ?= paths.root
+          tmpDir = "#{tmpDir}/_tmp#{unique}"
           prepackCopy @paths, tmpDir, ->
 
               # 2. Stitch the folder up.
