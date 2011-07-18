@@ -1,5 +1,6 @@
 fs       = require 'fs'
 stitch   = require 'stitch'
+uuid     = require 'node-uuid'
 minifier = require './minifier'
 core     = -> require 'core.server'
 
@@ -68,7 +69,7 @@ module.exports = class Compiler
           paths = core().paths
 
           # 1. Copy source files to temporary location (retaining relative structure).
-          unique = new Date().getTime()
+          unique = uuid()
           tmpDir = process.env.PWD ?= paths.root
           tmpDir = "#{tmpDir}/_tmp#{unique}"
           prepackCopy @paths, tmpDir, ->
@@ -81,10 +82,9 @@ module.exports = class Compiler
                         self.packed = code
 
                         # 3. Clean up.
-                        callback?(code) # TEMP
-#                        core().util.fs.delete tmpDir, (err) ->
-#                                                    throw err if err?
-#                                                    callback?(code)
+                        core().util.fs.delete tmpDir, (err) ->
+                                                    throw err if err?
+                                                    callback?(code)
 
   ###
   Compresses the code.

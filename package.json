@@ -24,7 +24,8 @@
     "backbone": ">=0.3.3",
     "jquery": ">=1.5.1",
     "uglify-js": ">= 1.0.3",
-    "rimraf": ">= 1.0.2"
+    "rimraf": ">= 1.0.2",
+    "node-uuid": ">= 1.2.0"
   },
   "keywords": ["utility", "core", "foundation", "library", "common"],
   "licenses":

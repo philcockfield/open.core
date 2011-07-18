@@ -21,7 +21,7 @@ module.exports = (app, options = {}) ->
     core.app = app
 
     # Build client-side JavaScript.
-    core.util.javascript.build.client( save: true )
+    core.util.javascript.build.client( save: true ) if app.settings.env is 'development'
 
     # Put middleware within the given URL namespace.
     use = (middleware) ->
