@@ -81,9 +81,10 @@ module.exports = class Compiler
                         self.packed = code
 
                         # 3. Clean up.
-                        core().util.fs.delete tmpDir, (err) ->
-                                                    throw err if err?
-                                                    callback?(code)
+                        callback?(code) # TEMP
+#                        core().util.fs.delete tmpDir, (err) ->
+#                                                    throw err if err?
+#                                                    callback?(code)
 
   ###
   Compresses the code.
