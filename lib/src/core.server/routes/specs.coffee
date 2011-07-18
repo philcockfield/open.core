@@ -39,12 +39,20 @@ module.exports = (app, options) ->
 
 
     # Route: The spec file.
-    core.app.get "#{url}/specs/:file", (req, res) ->
-        file = req.params.file
+    core.app.get "#{url}/specs/*", (req, res) ->
+        file = "#{specsDir}/#{req.params[0]}"
 
-        res.send 404
+        if _(file).endsWith '.js'
+          core.util.send.scriptFile res, file
+        else
+          res.send 404
 
-        console.log ' >> ', req.params
+
+
+
+        console.log ' >> ', file
+#        res.send 404
+
 
 
 #exports.init = (routes) ->
