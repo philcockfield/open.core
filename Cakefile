@@ -98,5 +98,22 @@ task 'temp:copy', ->
         console.log ''
 
 
+task 'temp:flattenDir', ->
+  fs = core.util.fs
+  paths = core.paths
+  src = "#{paths.test}/_SRC"
+
+  fs.flattenDir src, hidden:false, (err, paths) ->
+        console.log 'DONE'
+        console.log 'err:', err
+        console.log '++ paths:'
+        for path in paths
+          console.log ' > ', path
+
+        console.log ''
+
+
+
+
 
 

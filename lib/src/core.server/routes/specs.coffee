@@ -1,4 +1,3 @@
-
 ###
 Configures the Jasmine BDD spec runner.
 @param app express/connect that the test runner is operating within.
@@ -14,18 +13,28 @@ module.exports = (app, options) ->
     options.url = options.url ?= '/specs'
     options.title = options.title ?= 'Specs'
 
-    console.log 'options', options
-    
+    getSpecs = (dir, callback) ->
+        fs = core.util.fs
+
+        fs.flattenDir dir, hidden:false, (err, paths) ->
+            throw err if err?
+#            console.log '+++DIR', paths
+
+#        console.log 'READ DIR'
+#        fs.readDir dir, (err, paths)->
+#            throw err if err?
+#            console.log '+++DIR', paths
+
 
     # The test runner.
     core.app.get options.url, (req, res) ->
-        libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
-#
-        core.util.render res, 'specs/index',
-                              title:      options.title
-                              layout:     false
-                              baseUrl:    core.baseUrl
-                              libFolder:  libFolder
+        getSpecs options.specsDir, (specPaths) ->
+            libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
+            core.util.render res, 'specs/index',
+                                  title:      options.title
+                                  layout:     false
+                                  baseUrl:    core.baseUrl
+                                  libFolder:  libFolder
 
 
 #exports.init = (routes) ->

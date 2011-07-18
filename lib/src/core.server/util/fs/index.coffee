@@ -83,6 +83,39 @@ deleteDir = (path, options..., callback) ->
           callback?() # Success.
 
 
+###
+Filters out a set of paths.
+@param paths to filter
+@param fnInclude(path, stats): determines if the path is be be included
+@param callback(err, paths)
+###
+filterPaths = (paths, fnInclude, callback) ->
+    count = 0
+    result = []
+    failed = false
+
+    statRetrieved = (path, stats) ->
+        return if failed
+        count += 1
+        result.push path if fnInclude?(path, stats)
+        if count == paths.length
+          callback?(null, result)
+
+    readStats = (path) ->
+        fs.stat path, (err, stats) ->
+            if err?
+                callback?(err)
+                failed = true
+                return
+            else
+                statRetrieved path, stats
+
+    readStats path for path in paths
+
+    
+
+
+
 
 ###
 Module Exports
@@ -104,24 +137,119 @@ module.exports =
 
 
   ###
-  Reads the list of fully qualified file paths within the given directory.
+  Determines whether the specified path is hidden.
+  @param path to examine.
+  @return boolean
+  ###
+  isHidden: (path) ->
+      path = _.strRightBack(path, '/')
+      _.startsWith(path, '.')
+
+  ###
+  Retrieves the list of fully qualified file paths within the given directory.
   @param path: to the directory.
   @param options:
-              - expandPaths: Flag indicating if paths should be expanded (default: true)
-              - {Futures: filter out hidden files, and directories}
+              - dirs     : Flag indicating if directories should be included (default: true)
+              - files    : Flag indicating if files should be included (default:true)
+              - hidden:  : Flag indicating if hidden files or folders should be included.
   @param callback: (err, paths)
   ###
   readDir: (path, options..., callback) ->
+
+      # Setup initial conditions.
       self = @
       options = options[0] ?= {}
-      expandPaths = options.expandPaths ?= true
+
+      # Determine filters.
+      includeDirs = options.dirs ?= true
+      includeFiles = options.files ?= true
+      includeHidden = options.hidden ?= true
+      isFiltered = not includeDirs or not includeFiles or not includeHidden
+
+      failed = (err) ->
+            callback?(err) if err?
+            err?
+
+      returnPaths = (files) ->
+            callback? null, files
+
+      fnFilter = (path, stats) ->
+            return false if not includeHidden and self.isHidden(path)
+            return false if not includeDirs and stats.isDirectory()
+            return false if not includeFiles and stats.isFile()
+            true
 
       fs.readdir path, (err, files) ->
-          if err?
-              callback?(err)
-              return
-          files = self.expandPaths(path, files) if expandPaths
-          callback? null, files
+          return if failed(err)
+          files = self.expandPaths(path, files)
+
+          unless isFiltered
+            # Return the file list (unfiltered).
+            returnPaths files
+          else
+            # A filter has been applied.  Narrow the return list.
+            filterPaths files, fnFilter, (err, filteredPaths) ->
+                return if failed(err)
+                returnPaths filteredPaths
+
+
+
+  ###
+  Flattens a directory structure to a set of file paths (deep).
+  @param path: to the directory.
+  @param options:
+              - hidden:  : Flag indicating if hidden files or folders should be included
+  @param callback: (err, paths)
+  ###
+  flattenDir: (path, options..., callback) ->
+
+      # Setup initial conditions.
+      self = @
+      options = options[0] ?= {}
+      includeHidden = options.hidden ?= true
+      result = []
+
+      returnResult = () ->
+            callback? null, result
+
+      failed = (err) ->
+            callback?(err) if err?
+            err?
+
+      # 1. Read the files.
+      self.readDir path, dirs:false, files:true, hidden:includeHidden, (err, files) ->
+            return if failed(err)
+
+            if files.length is 0
+                # No files - return now.
+                returnResult()
+            else
+
+                result.push file for file in files
+                console.log 'files', files
+
+                # 2. Walk sub directories.
+                self.readDir path, dirs:true, files:false, hidden:includeHidden, (err, dirs) ->
+                    return if failed(err)
+                    count = 0
+
+                    if dirs.length is 0
+                        # No directories - return now.
+                        returnResult()
+
+                    else
+                        # -- Recursion --
+                        for dir in dirs
+                            self.flattenDir dir, options, (err, paths)->
+                                return if failed(err)
+
+                                # Add child paths and return.
+                                result.push file for file in paths
+
+                                # 3. Check if this the last directory.
+                                count += 1
+                                returnResult() if count == dirs.length
+
 
 
   ###
