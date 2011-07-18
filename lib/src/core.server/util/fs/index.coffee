@@ -43,7 +43,7 @@ copyDir = (source, target, options..., callback) ->
           return
       else
           # 2. Get the files.
-          module.exports.readDir source, expandPaths: false, (err, files) ->
+          fs.readdir source, (err, files) ->
               if err? or files.length == 0
                   callback?(err)
                   return
@@ -112,8 +112,6 @@ filterPaths = (paths, fnInclude, callback) ->
 
     readStats path for path in paths
 
-    
-
 
 
 
@@ -149,9 +147,9 @@ module.exports =
   Retrieves the list of fully qualified file paths within the given directory.
   @param path: to the directory.
   @param options:
-              - dirs     : Flag indicating if directories should be included (default: true)
-              - files    : Flag indicating if files should be included (default:true)
-              - hidden:  : Flag indicating if hidden files or folders should be included.
+              - dirs        : Flag indicating if directories should be included (default: true)
+              - files       : Flag indicating if files should be included (default:true)
+              - hidden:     : Flag indicating if hidden files or folders should be included (default:true)
   @param callback: (err, paths)
   ###
   readDir: (path, options..., callback) ->
@@ -224,9 +222,7 @@ module.exports =
                 # No files - return now.
                 returnResult()
             else
-
                 result.push file for file in files
-                console.log 'files', files
 
                 # 2. Walk sub directories.
                 self.readDir path, dirs:true, files:false, hidden:includeHidden, (err, dirs) ->
@@ -343,6 +339,9 @@ module.exports =
                   writer = fs.createWriteStream(target, mode:mode)
                   util.pump reader, writer, (err) -> callback?(err)
 
+
+
+
       # 1. Check whether the source is a directory.
       fs.stat source, (err, stats) ->
           if err?
@@ -351,7 +350,12 @@ module.exports =
           else
               if stats.isDirectory()
                   # 2a. Copy the directory.
-                  copyDir source, target, options, (err) -> callback?()
+                  copyDir source, target, options, (err) ->
+                            if err?
+                              callback?(err)
+                              return # Failed - exit out completely.
+
+                            callback?()
               else
                   if overwrite
                       # 2b. Copy - overwriting any existing file.

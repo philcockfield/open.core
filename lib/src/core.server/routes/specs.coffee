@@ -13,17 +13,21 @@ module.exports = (app, options) ->
     options.url = options.url ?= '/specs'
     options.title = options.title ?= 'Specs'
 
+    isSpec = (file) ->
+          _(file).endsWith('_spec.js') or _(file).endsWith('_spec.coffee')
+
+
     getSpecs = (dir, callback) ->
         fs = core.util.fs
-
         fs.flattenDir dir, hidden:false, (err, paths) ->
             throw err if err?
-#            console.log '+++DIR', paths
+            paths = _.map paths, (file) -> return file if isSpec(file)
+            paths = _.compact(paths)
 
-#        console.log 'READ DIR'
-#        fs.readDir dir, (err, paths)->
-#            throw err if err?
-#            console.log '+++DIR', paths
+            for path in paths
+              console.log ' >> SPEC: ', path
+            console.log ''
+
 
 
     # The test runner.

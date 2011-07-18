@@ -74,10 +74,8 @@ task 'temp:del', ->
   dst = "#{paths.test}/_FOO/"
 
   fs.copy src, dst, overwrite:true, (err) ->
-
         file = "#{dst}/text.txt"
         dir = "#{dst}"
-
         path = file
 
         fs.delete path, (err)->
