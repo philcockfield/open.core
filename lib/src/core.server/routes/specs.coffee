@@ -1,3 +1,7 @@
+fs = require 'fs'
+CoffeeScript = require 'coffee-script'
+
+
 ###
 Configures the Jasmine BDD spec runner.
 @param app express/connect that the test runner is operating within.
@@ -14,9 +18,8 @@ module.exports = (app, options) ->
     title = options.title ?= 'Specs'
     specsDir = options.specsDir ?= "#{process.env.PWD}/test/specs"
 
-    console.log 'specsDir', specsDir
-
     isSpec = (file) -> _(file).endsWith('_spec.coffee') or _(file).endsWith('_spec.js')
+
     getSpecs = (dir, callback) ->
         dir = _.rtrim(dir, '/') + '/'
         core.util.fs.flattenDir dir, hidden:false, (err, paths) ->
@@ -24,6 +27,10 @@ module.exports = (app, options) ->
               paths = _.map paths, (file) -> _(file).strRight(dir) if isSpec(file)
               paths = _.compact(paths)
               callback?(paths)
+
+    compileCoffee = (file, callback) ->
+        fs.readFile file, 'utf8', (err, data) ->
+            callback CoffeeScript.compile(data)
 
 
     # Route: The test runner.
@@ -40,18 +47,23 @@ module.exports = (app, options) ->
 
     # Route: The spec file.
     core.app.get "#{url}/specs/*", (req, res) ->
+
+        # Setup initial conditions.
         file = "#{specsDir}/#{req.params[0]}"
+        extension = _(file).strRightBack('.')
 
-        if _(file).endsWith '.js'
+        if extension is 'js'
+          # Send the standard JavaScript file.
           core.util.send.scriptFile res, file
+        else if extension is 'coffee'
+
+          # Compile the coffee script.
+          compileCoffee file, (script) -> core.util.send.script res, script
+
         else
-          res.send 404
+          # Unknown script type/
+          res.send "Script type [.#{extension}] not supported", 415
 
-
-
-
-        console.log ' >> ', file
-#        res.send 404
 
 
 
