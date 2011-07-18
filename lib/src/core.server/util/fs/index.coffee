@@ -94,12 +94,14 @@ filterPaths = (paths, fnInclude, callback) ->
     result = []
     failed = false
 
+    returnResult = -> callback?(null, result)
+    returnResult() if paths.length is 0
+
     statRetrieved = (path, stats) ->
         return if failed
         count += 1
         result.push path if fnInclude?(path, stats)
-        if count == paths.length
-          callback?(null, result)
+        returnResult() if count == paths.length
 
     readStats = (path) ->
         fs.stat path, (err, stats) ->
@@ -185,6 +187,7 @@ module.exports =
             # Return the file list (unfiltered).
             returnPaths files
           else
+
             # A filter has been applied.  Narrow the return list.
             filterPaths files, fnFilter, (err, filteredPaths) ->
                 return if failed(err)
@@ -207,9 +210,7 @@ module.exports =
       includeHidden = options.hidden ?= true
       result = []
 
-      returnResult = () ->
-            callback? null, result
-
+      returnResult = () -> callback? null, result
       failed = (err) ->
             callback?(err) if err?
             err?
@@ -217,34 +218,29 @@ module.exports =
       # 1. Read the files.
       self.readDir path, dirs:false, files:true, hidden:includeHidden, (err, files) ->
             return if failed(err)
+            result.push file for file in files
 
-            if files.length is 0
-                # No files - return now.
-                returnResult()
-            else
-                result.push file for file in files
+            # 2. Walk sub directories.
+            self.readDir path, dirs:true, files:false, hidden:includeHidden, (err, dirs) ->
+                return if failed(err)
+                count = 0
 
-                # 2. Walk sub directories.
-                self.readDir path, dirs:true, files:false, hidden:includeHidden, (err, dirs) ->
-                    return if failed(err)
-                    count = 0
+                if dirs.length is 0 #and files.length is 0
+                    # No directories - return now.
+                    returnResult()
+                else
 
-                    if dirs.length is 0
-                        # No directories - return now.
-                        returnResult()
+                    # -- Recursion --
+                    for dir in dirs
+                        self.flattenDir dir, options, (err, paths)->
+                            return if failed(err)
 
-                    else
-                        # -- Recursion --
-                        for dir in dirs
-                            self.flattenDir dir, options, (err, paths)->
-                                return if failed(err)
+                            # Add child paths and return.
+                            result.push file for file in paths
 
-                                # Add child paths and return.
-                                result.push file for file in paths
-
-                                # 3. Check if this the last directory.
-                                count += 1
-                                returnResult() if count == dirs.length
+                            # 3. Check if this the last directory.
+                            count += 1
+                            returnResult() if count == dirs.length
 
 
 

@@ -103,7 +103,7 @@ task 'temp:flattenDir', ->
 
   fs.flattenDir src, hidden:false, (err, paths) ->
         console.log 'DONE'
-        console.log 'err:', err
+        console.log 'err:', err if err?
         console.log '++ paths:'
         for path in paths
           console.log ' > ', path

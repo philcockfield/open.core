@@ -10,35 +10,41 @@ module.exports = (app, options) ->
 
     # Setup initial conditions.
     core = require 'core.server'
-    options.url = options.url ?= '/specs'
-    options.title = options.title ?= 'Specs'
+    url = options.url ?= '/specs'
+    title = options.title ?= 'Specs'
+    specsDir = options.specsDir ?= "#{process.env.PWD}/test/specs"
 
-    isSpec = (file) ->
-          _(file).endsWith('_spec.js') or _(file).endsWith('_spec.coffee')
+    console.log 'specsDir', specsDir
 
-
+    isSpec = (file) -> _(file).endsWith('_spec.coffee') or _(file).endsWith('_spec.js')
     getSpecs = (dir, callback) ->
-        fs = core.util.fs
-        fs.flattenDir dir, hidden:false, (err, paths) ->
-            throw err if err?
-            paths = _.map paths, (file) -> return file if isSpec(file)
-            paths = _.compact(paths)
-
-            for path in paths
-              console.log ' >> SPEC: ', path
-            console.log ''
+        dir = _.rtrim(dir, '/') + '/'
+        core.util.fs.flattenDir dir, hidden:false, (err, paths) ->
+              throw err if err?
+              paths = _.map paths, (file) -> _(file).strRight(dir) if isSpec(file)
+              paths = _.compact(paths)
+              callback?(paths)
 
 
-
-    # The test runner.
-    core.app.get options.url, (req, res) ->
-        getSpecs options.specsDir, (specPaths) ->
+    # Route: The test runner.
+    core.app.get url, (req, res) ->
+        getSpecs specsDir, (specPaths) ->
             libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
             core.util.render res, 'specs/index',
-                                  title:      options.title
                                   layout:     false
-                                  baseUrl:    core.baseUrl
+                                  title:      title
+                                  url:        url
                                   libFolder:  libFolder
+                                  specPaths:  specPaths
+
+
+    # Route: The spec file.
+    core.app.get "#{url}/specs/:file", (req, res) ->
+        file = req.params.file
+
+        res.send 404
+
+        console.log ' >> ', req.params
 
 
 #exports.init = (routes) ->

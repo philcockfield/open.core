@@ -9,10 +9,11 @@ html(lang="en")
     script(type='text/javascript', src="#{libFolder}/jasmine-html.js")
 
     // Source files (under test).
-    script(type='text/javascript', src="#{baseUrl}/specs/source")
+    // script(type='text/javascript', src="#{url}/source")
 
     // Spec files.
-    script(type='text/javascript', src="#{baseUrl}/specs/tests")
+    - each path in specPaths
+      script(type='text/javascript', src="#{url}/specs/#{path}")
 
   body
     :coffeescript
