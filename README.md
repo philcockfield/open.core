@@ -11,11 +11,14 @@ Common utility functionality used between multiple applications.
 ### Initialize
 To initialize the **Open.Core** library from [Express](http://expressjs.com/):
 
-```javascript
+```coffeescript
 
-app = require('express').createServer();
-require('open.core').configure(app);
-app.listen options.port ?= 8000
+  express = require 'express'
+  core    = require 'open.core'
+
+  app = express.createServer()
+  core.configure(app)
+  app.listen options.port ?= 8000
 
 ```
 
@@ -33,12 +36,12 @@ To use the [Jasmine](http://pivotal.github.com/jasmine/) test runner from your h
 
 ```coffeescript
 
-    core = require 'open.core'
-    core.configure.specs app,
-              title:      'TestHarness Specs'
-              url:        '/specs'
-              specsDir:   "#{paths.specs}/client/"
-              sourceUrls: '/javascripts/harness.js'
+  core = require 'open.core'
+  core.configure.specs app,
+            title:      'TestHarness Specs'
+            url:        '/specs'
+            specsDir:   "#{paths.specs}/client/"
+            sourceUrls: '/javascripts/harness.js'
 
 
 ```
