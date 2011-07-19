@@ -1,8 +1,7 @@
 describe 'client/base', ->
-  Base = test.client.Base
-
-  it 'is provided off the root core.client', ->
-    expect(test.client.Base).toEqual require "#{test.paths.client}/base"
+  Base = null
+  beforeEach ->
+    Base = core.Base
 
   it 'supports eventing', ->
     base = new Base()

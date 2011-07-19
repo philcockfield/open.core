@@ -1,16 +1,14 @@
 describe 'client/mvc/template', ->
-  core = test.client
-  Template = core.mvc.Template
-
-  class Sample extends Template
-    foo: """
-      Foo: {{ name }}
-    """
-    bar: -> 'some function'
-    baz: 123
-
-  it 'is provided', ->
-    expect(core.mvc.Template).toEqual require "#{test.paths.client}/mvc/template"
+  Template = null
+  Sample = null
+  beforeEach ->
+    Template = core.mvc.Template
+    class Sample extends Template
+      foo: """
+        Foo: {{ name }}
+      """
+      bar: -> 'some function'
+      baz: 123
 
   it 'converts members into underscore templates', ->
     tmpl = new Sample()
@@ -20,10 +18,4 @@ describe 'client/mvc/template', ->
     tmpl = new Sample()
     expect(tmpl.bar()).toEqual 'some function'
     expect(tmpl.baz).toEqual 123
-
-
-
-
-
-
 
