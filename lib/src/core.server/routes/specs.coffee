@@ -9,7 +9,8 @@ Configures the Jasmine BDD spec runner.
         - url         : (optional) The URL that loads the test-runner (defaults to /specs).
         - title       : (optional) The page title (defaults to 'Specs').
         - specsDir    : The path to the directory containing the client-side specs.
-        - sourceUrls  : With an array or URLs (or a single URL) to the source scripts that are under test.
+        - sourceUrls  : An array or URLs (or a single URL) pointing to the source script(s)
+                        that are under test.
 ###
 module.exports = (app, options) ->
 
