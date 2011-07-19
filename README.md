@@ -25,7 +25,7 @@ To initialize the **Open.Core** library from [Express](http://expressjs.com/):
 
 ### Tests
 
-To run server side tests: `open.core $ cake specs`
+To run server side tests, from the `open.core` module folder: `$ cake specs`
 
 To run client-side tests in browser:
 
