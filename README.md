@@ -9,7 +9,7 @@ Common utility functionality used between multiple applications.
 
 
 ### Initialize
-To initialize the **Open.Core** library from [Express](http://expressjs.com/):
+To initialize the **open.core** library from [Express](http://expressjs.com/):
 
 ```coffeescript
 
@@ -29,16 +29,11 @@ To run server side tests, from the `open.core` module folder: `$ cake specs`
 
 To run client-side tests in browser:
 
-1. Configure **open.core** in your hosting application:
-
-    ```coffeescript
-    core = require 'open.core'
-    core.configure app
-    ```
-
+1. Configure **open.core** in your host application:
 2. Run tests in the browser at: `http://localhost:8000/core/specs`
 
-To use the [Jasmine](http://pivotal.github.com/jasmine/) test runner from your hosting application:
+To use the [Jasmine](http://pivotal.github.com/jasmine/) test runner in the browser from your
+host application:
 
 ```coffeescript
 
