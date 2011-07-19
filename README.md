@@ -18,7 +18,7 @@ To initialize the **Open.Core** library from [Express](http://expressjs.com/):
 
   app = express.createServer()
   core.configure(app)
-  app.listen options.port ?= 8000
+  app.listen 8000
 
 ```
 
