@@ -8,6 +8,26 @@ Common utility functionality used between multiple applications.
     npm install open.core
 
 
+### Initialize
+To initialize the **Open.Core** library from [Express](http://expressjs.com/):
+
+```javascript
+app = require('express').createServer();
+require('open.core').configure(app);
+app.listen options.port ?= 8000
+```
+
+
+### Open.Core Tests
+
+To run server side tests: `cake specs`
+
+To run client-side tests in browser:
+
+1. Configure **open.core** in your hosting application: `require('open.core').configure(app);`
+2. Run tests in the browser at: `http://localhost:8000/core/specs`
+
+
 
 ## Licence
 

@@ -22,10 +22,10 @@ module.exports = (app, options) ->
     sourceUrls = options.sourceUrls ?= []
     sourceUrls = [sourceUrls] if not _.isArray(sourceUrls)
 
-    console.log 'sourceUrls', sourceUrls
-
-
-    isSpec = (file) -> _(file).endsWith('_spec.coffee') or _(file).endsWith('_spec.js')
+    isSpec = (file) ->
+        for ending in ['_spec.coffee', '_helper.coffee', '_spec.js', '_helper.js']
+          return true if _(file).endsWith(ending)
+        false
 
     getSpecs = (dir, callback) ->
         dir = _.rtrim(dir, '/') + '/'

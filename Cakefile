@@ -3,7 +3,7 @@ core = require './index'
 
 
 task 'specs', 'Run the Jasmine BDD specs', ->
-  exec 'jasmine-node --color --coffee test/specs', (err, stdout, stderr) ->
+  exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
 
 

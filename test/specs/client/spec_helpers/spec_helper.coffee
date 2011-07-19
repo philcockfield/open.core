@@ -1,0 +1,2 @@
+window.core = require 'core'
+

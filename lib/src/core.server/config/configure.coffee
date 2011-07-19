@@ -16,7 +16,7 @@ module.exports = (app, options = {}) ->
     baseUrl = _.trim(baseUrl)
     baseUrl = '' if baseUrl is '/'
 
-    # Store on module.
+    # Store values on module.
     core.baseUrl = baseUrl
     core.app = app
 
@@ -43,6 +43,16 @@ module.exports = (app, options = {}) ->
 
     app.configure 'development', ->
         use express.errorHandler( dumpExceptions: true, showStack: true )
+
+        # Setup the client-side test runner.
+        core.configure.specs app,
+              title:      'Open.Core Specs'
+              url:        "#{baseUrl}/specs"
+              specsDir:   "#{core.paths.test}/specs/client/"
+              sourceUrls: [
+                "#{baseUrl}/javascripts/libs/libs.js"
+                "#{baseUrl}/javascripts/core.js" ]
+
 
     app.configure 'production', ->
         use express.errorHandler()
