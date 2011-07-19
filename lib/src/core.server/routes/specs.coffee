@@ -9,6 +9,7 @@ Configures the Jasmine BDD spec runner.
         - url         : (optional) The URL that loads the test-runner (defaults to /specs).
         - title       : (optional) The page title (defaults to 'Specs').
         - specsDir    : The path to the directory containing the client-side specs.
+        - sourceUrls  : With an array or URLs (or a single URL) to the source scripts that are under test.
 ###
 module.exports = (app, options) ->
 
@@ -17,6 +18,11 @@ module.exports = (app, options) ->
     url = options.url ?= '/specs'
     title = options.title ?= 'Specs'
     specsDir = options.specsDir ?= "#{process.env.PWD}/test/specs"
+    sourceUrls = options.sourceUrls ?= []
+    sourceUrls = [sourceUrls] if not _.isArray(sourceUrls)
+
+    console.log 'sourceUrls', sourceUrls
+
 
     isSpec = (file) -> _(file).endsWith('_spec.coffee') or _(file).endsWith('_spec.js')
 
@@ -43,6 +49,7 @@ module.exports = (app, options) ->
                                   url:        url
                                   libFolder:  libFolder
                                   specPaths:  specPaths
+                                  sourceUrls: sourceUrls
 
 
     # Route: The spec file.

@@ -9,7 +9,8 @@ html(lang="en")
     script(type='text/javascript', src="#{libFolder}/jasmine-html.js")
 
     // Source files (under test).
-    // script(type='text/javascript', src="#{url}/source")
+    - each path in sourceUrls
+      script(type='text/javascript', src="#{path}")
 
     // Spec files.
     - each path in specPaths
