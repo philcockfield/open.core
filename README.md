@@ -29,7 +29,7 @@ To run server side tests, from the `open.core` module folder: `$ cake specs`
 
 To run client-side tests in browser:
 
-1. Configure **open.core** in your host application:
+1. Configure **open.core** in your host application (see above).
 2. Run tests in the browser at: `http://localhost:8000/core/specs`
 
 To use the [Jasmine](http://pivotal.github.com/jasmine/) test runner in the browser from your
@@ -39,11 +39,12 @@ host application:
 
   core = require 'open.core'
   core.configure.specs app,
-            title:      'TestHarness Specs'
+            title:      'My Specs'
             url:        '/specs'
-            specsDir:   "#{paths.specs}/client/"
-            sourceUrls: '/javascripts/harness.js'
-
+            specsDir:   "#{__dirname}/specs/client/"
+            sourceUrls: [
+                '/javascripts/libs.js'
+                '/javascripts/app.js' ]
 
 ```
 
