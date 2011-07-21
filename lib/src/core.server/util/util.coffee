@@ -2,6 +2,7 @@ module.exports =
   javascript: require './javascript'
   send:       require './send'
   fs:         require './fs'
+  cake:       require './cake'
 
   ###
   Renders the specified template from the 'views' path.
