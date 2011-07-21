@@ -37,7 +37,8 @@ module.exports = (app, options = {}) ->
         use express.bodyParser()
         use express.methodOverride()
         use express.cookieParser()
-#        require('./css').configure use
+
+#        require('./css').configure use # TEMP
         use require('stylus').middleware( src: paths.public )
 
         use app.router
