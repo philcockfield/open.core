@@ -32,7 +32,6 @@ module.exports = class View extends Base
         el.html html
       el.html()
 
-
   ###
   Gets or sets whether the view is visible.
   ###
