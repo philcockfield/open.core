@@ -1,7 +1,5 @@
 {exec}  = require 'child_process'
 fs      = require 'fs'
-cake = require './_common'
-
 
 root =
   ###
