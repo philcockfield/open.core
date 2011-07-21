@@ -200,7 +200,7 @@ module.exports =
   Flattens a directory structure to a set of file paths (deep).
   @param path: to the directory.
   @param options:
-              - hidden:  : Flag indicating if hidden files or folders should be included
+              - hidden:  : Flag indicating if hidden files or folders should be included (default true)
   @param callback: (err, paths)
   ###
   flattenDir: (path, options..., callback) ->

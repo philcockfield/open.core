@@ -2,6 +2,22 @@ describe 'server/util/fs', ->
   sampleDir = "#{__dirname}/sample"
   paths     = test.paths
   fsUtil    = test.server.util.fs
+  fs        = require 'fs'
+  fsPath    = require 'path'
+  createEmptyFolder = (path) ->
+          # Creating empty folders for tests is needed
+          # because Git does not store empty folders.
+          return if fsPath.existsSync(path)
+          fs.mkdirSync path, 0777
+  createEmptyFolder("#{sampleDir}/empty")
+
+
+  includesPath = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
+  includesAllPaths = (paths, files) ->
+      for file in files
+          return false if not includesPath paths, file
+      true
+
 
   it 'is available from the util module', ->
     expect(test.server.util.fs).toBeDefined()
@@ -60,7 +76,6 @@ describe 'server/util/fs', ->
 
   describe 'readDir', ->
     path = null
-    includes = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
     beforeEach ->
       path = "#{sampleDir}/read_dir"
 
@@ -83,12 +98,12 @@ describe 'server/util/fs', ->
       fsUtil.readDir path, dirs:false, (err, paths) -> result = paths
       waitsFor -> result?
       runs ->
-        expect(includes(result, '.hidden')).toEqual false
-        expect(includes(result, 'dir')).toEqual false
+        expect(includesPath(result, '.hidden')).toEqual false
+        expect(includesPath(result, 'dir')).toEqual false
 
-        expect(includes(result, ".hidden.txt")).toEqual true
-        expect(includes(result, "file1.txt")).toEqual true
-        expect(includes(result, "file2.txt")).toEqual true
+        expect(includesPath(result, ".hidden.txt")).toEqual true
+        expect(includesPath(result, "file1.txt")).toEqual true
+        expect(includesPath(result, "file2.txt")).toEqual true
 
 
     it 'includes folders but not files', ->
@@ -96,12 +111,12 @@ describe 'server/util/fs', ->
       fsUtil.readDir path, files:false, (err, paths) -> result = paths
       waitsFor -> result?
       runs ->
-        expect(includes(result, '.hidden')).toEqual true
-        expect(includes(result, 'dir')).toEqual true
+        expect(includesPath(result, '.hidden')).toEqual true
+        expect(includesPath(result, 'dir')).toEqual true
 
-        expect(includes(result, ".hidden.txt")).toEqual false
-        expect(includes(result, "file1.txt")).toEqual false
-        expect(includes(result, "file2.txt")).toEqual false
+        expect(includesPath(result, ".hidden.txt")).toEqual false
+        expect(includesPath(result, "file1.txt")).toEqual false
+        expect(includesPath(result, "file2.txt")).toEqual false
 
     it 'includes neither folders or files (nothing)', ->
       result = null
@@ -115,20 +130,51 @@ describe 'server/util/fs', ->
       fsUtil.readDir path, hidden:false, (err, paths) -> result = paths
       waitsFor -> result?
       runs ->
-        expect(includes(result, '.hidden')).toEqual false
-        expect(includes(result, ".hidden.txt")).toEqual false
+        expect(includesPath(result, '.hidden')).toEqual false
+        expect(includesPath(result, ".hidden.txt")).toEqual false
 
-        expect(includes(result, 'dir')).toEqual true
-        expect(includes(result, "file1.txt")).toEqual true
-        expect(includes(result, "file2.txt")).toEqual true
+        expect(includesPath(result, 'dir')).toEqual true
+        expect(includesPath(result, "file1.txt")).toEqual true
+        expect(includesPath(result, "file2.txt")).toEqual true
 
 
   describe 'flattenDir', ->
     path = null
-    includes = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
     beforeEach ->
-      path = "#{sampleDir}/flatten_dir"
+        path = "#{sampleDir}/flatten_dir"
+        createEmptyFolder "#{path}/empty"
+        createEmptyFolder "#{path}/folder/empty"
 
+    it 'flattens entire directory structure (excluding empty folders)', ->
+      result = null
+      fsUtil.flattenDir path, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expected = [
+          '/.hidden/file.txt'
+          '/folder/child/child.txt'
+          '/folder/file1.txt'
+          '/folder/file2.txt'
+          '.hidden.txt'
+          'file.txt'
+        ]
+        expect(includesAllPaths(result, expected)).toEqual true
 
-
+    it 'flattens entire directory structure not includeing hidden files', ->
+      result = null
+      fsUtil.flattenDir path, hidden:false, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expected = [
+          '/folder/child/child.txt'
+          '/folder/file1.txt'
+          '/folder/file2.txt'
+          'file.txt'
+        ]
+        notExpected = [
+          '/.hidden/file.txt'
+          '.hidden.txt'
+        ]
+        expect(includesAllPaths(result, expected)).toEqual true
+        expect(includesAllPaths(result, notExpected)).toEqual false
 
