@@ -142,6 +142,7 @@ module.exports =
   @return boolean
   ###
   isHidden: (path) ->
+      return false unless path?
       path = _.strRightBack(path, '/')
       _.startsWith(path, '.')
 

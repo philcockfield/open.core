@@ -1,4 +1,4 @@
-server = require process.env.PWD
+server = require(process.env.PWD)
 
 global.test =
     paths: server.paths
