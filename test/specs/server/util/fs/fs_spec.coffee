@@ -58,3 +58,77 @@ describe 'server/util/fs', ->
       expect(fsUtil.isHidden(undefined)).toEqual false
 
 
+  describe 'readDir', ->
+    path = null
+    includes = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
+    beforeEach ->
+      path = "#{sampleDir}/read_dir"
+
+    it 'reads all content', ->
+      result = null
+      fsUtil.readDir path, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs -> expect(result.length).toEqual 5
+
+    it 'expands paths', ->
+      result = null
+      fsUtil.readDir path, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expect(result[0]).toEqual "#{path}/.hidden"
+
+
+    it 'includes files but not folders', ->
+      result = null
+      fsUtil.readDir path, dirs:false, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expect(includes(result, '.hidden')).toEqual false
+        expect(includes(result, 'dir')).toEqual false
+
+        expect(includes(result, ".hidden.txt")).toEqual true
+        expect(includes(result, "file1.txt")).toEqual true
+        expect(includes(result, "file2.txt")).toEqual true
+
+
+    it 'includes folders but not files', ->
+      result = null
+      fsUtil.readDir path, files:false, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expect(includes(result, '.hidden')).toEqual true
+        expect(includes(result, 'dir')).toEqual true
+
+        expect(includes(result, ".hidden.txt")).toEqual false
+        expect(includes(result, "file1.txt")).toEqual false
+        expect(includes(result, "file2.txt")).toEqual false
+
+    it 'includes neither folders or files (nothing)', ->
+      result = null
+      fsUtil.readDir path, files:false, dirs:false, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expect(result.length).toEqual 0
+
+    it 'does not include hidden items', ->
+      result = null
+      fsUtil.readDir path, hidden:false, (err, paths) -> result = paths
+      waitsFor -> result?
+      runs ->
+        expect(includes(result, '.hidden')).toEqual false
+        expect(includes(result, ".hidden.txt")).toEqual false
+
+        expect(includes(result, 'dir')).toEqual true
+        expect(includes(result, "file1.txt")).toEqual true
+        expect(includes(result, "file2.txt")).toEqual true
+
+
+  describe 'flattenDir', ->
+    path = null
+    includes = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
+    beforeEach ->
+      path = "#{sampleDir}/flatten_dir"
+
+
+
+

@@ -68,10 +68,10 @@ module.exports = class Compiler
           self = @
           paths = core().paths
 
-          # 1. Copy source files to temporary location (retaining relative structure).
+          # 1. Copy source files to temporary location (retaining the relative path structure).
           unique = uuid()
           tmpDir = process.env.PWD ?= paths.root
-          tmpDir = "#{tmpDir}/_tmp#{unique}"
+          tmpDir = "#{tmpDir}/_tmp/compiler/_tmp#{unique}"
           prepackCopy @paths, tmpDir, ->
 
               # 2. Stitch the folder up.
