@@ -37,12 +37,9 @@ module.exports = (app, options = {}) ->
         use express.bodyParser()
         use express.methodOverride()
         use express.cookieParser()
-
-#        require('./css').configure use # TEMP
-        use require('stylus').middleware( src: paths.public )
-
-        use app.router
+        require('./css').configure use # CSS pre-processor (Stylus).
         use express.static(paths.public)
+        use app.router
 
     app.configure 'development', ->
         use express.errorHandler( dumpExceptions: true, showStack: true )
