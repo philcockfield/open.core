@@ -37,5 +37,17 @@ module.exports =
           options.baseUrl ?= core.baseUrl
           response.render "#{core.paths.views}/#{template}.#{extension}", options
 
-
-
+  ###
+  Default handler after the invoked 'exec' command.
+  Prints output to console and exits process if failed.
+  @param err    : the error (if any).
+  @param stdout : the standard out.
+  @param stderr : the standard error.
+  ###
+  onExec: (err, stdout, stderr) ->
+    console.log stdout if stdout
+    console.log stderr if stderr
+    # print the err message and kill the process
+    if err?
+        process.stdout.write "#{color.red}#{err.stack}#{color.reset}\n"
+        process.exit -1
