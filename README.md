@@ -39,11 +39,12 @@ host application:
 
   core = require 'open.core'
   core.configure.specs app,
-            title:        'My Specs'
-            url:          '/specs'
-            specsDir:     "#{__dirname}/specs/client/"
-            sourceUrls: [ '/javascripts/libs.js'
-                          '/javascripts/app.js' ]
+            title:      'My Specs'
+            url:        '/specs'
+            specsDir:   "#{__dirname}/specs/client/"
+            sourceUrls: [
+                '/javascripts/libs.js'
+                '/javascripts/app.js' ]
 
 ```
 

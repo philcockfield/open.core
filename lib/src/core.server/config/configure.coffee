@@ -1,3 +1,4 @@
+
 ###
 Configures the library.
 @param options:
@@ -36,6 +37,7 @@ module.exports = (app, options = {}) ->
         use express.bodyParser()
         use express.methodOverride()
         use express.cookieParser()
+#        require('./css').configure use
         use require('stylus').middleware( src: paths.public )
 
         use app.router
