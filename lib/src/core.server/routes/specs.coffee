@@ -41,7 +41,7 @@ module.exports = (app, options) ->
 
 
     # Route: The test runner.
-    core.app.get url, (req, res) ->
+    app.get url, (req, res) ->
         getSpecs specsDir, (specPaths) ->
             libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
             core.util.render res, 'specs/index',
@@ -54,7 +54,7 @@ module.exports = (app, options) ->
 
 
     # Route: The spec file.
-    core.app.get "#{url}/specs/*", (req, res) ->
+    app.get "#{url}/specs/*", (req, res) ->
 
         # Setup initial conditions.
         file = "#{specsDir}/#{req.params[0]}"
@@ -72,35 +72,3 @@ module.exports = (app, options) ->
           # Unknown script type/
           res.send "Script type [.#{extension}] not supported", 415
 
-
-
-
-#exports.init = (routes) ->
-#
-#
-#    return
-#
-#    core = require 'core.server'
-#    baseUrl = routes.baseUrl
-#    send    = core.util.send
-#
-#
-#
-#    # The source files under test.
-#    routes.app.get "#{baseUrl}/specs/:type", (req, res) ->
-#         minified = req.query.min == 'true'
-#
-#         switch req.params.type
-#           when 'source' then folder = routes.paths.client
-#           when 'tests' then folder = routes.paths.specs
-#           else
-#              res.send 404
-#              return
-#
-#
-#         send.script res, "console.log('todo - specs: #{req.params.type}');"
-##         compiler = new core.util.javascript.Compiler( source: folder, target: '/' )
-##         compiler.build minified, (code) -> send.script res, code
-#
-#
-#

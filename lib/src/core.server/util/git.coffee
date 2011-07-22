@@ -11,7 +11,6 @@ module.exports =
   exec: (cmd, options..., callback) ->
      options = options[0] ?= {}
      dir = options.dir
-
      if dir?
         cmd = "git --git-dir=#{dir}/.git --work-tree=#{dir} #{cmd}"
      else
