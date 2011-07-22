@@ -27,11 +27,11 @@ module.exports =
 
   ###
   Renders the specified template from the 'views' path.
-  @param response object to write to.
-  @param template: path to the template within the 'views' folder.
-  @param options: variables to pass to the template.
+  @param response   : object to write to.
+  @param template   : path to the template within the 'views' folder.
+  @param options    : variables to pass to the template.
   ###
-  render: (response, template, options) ->
+  render: (response, template, options = {}) ->
           core = require 'core.server'
           extension = options.extension ?= 'jade'
           options.baseUrl ?= core.baseUrl
@@ -46,8 +46,8 @@ module.exports =
   ###
   onExec: (err, stdout, stderr) ->
     console.log stdout if stdout
-    console.log stderr if stderr
-    # print the err message and kill the process
+    @log(stderr, color.red) if stderr
+    # Write the err message and kill the process.
     if err?
         process.stdout.write "#{color.red}#{err.stack}#{color.reset}\n"
         process.exit -1

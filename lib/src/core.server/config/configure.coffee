@@ -1,14 +1,14 @@
-
 ###
 Configures the library.
 @param options:
         - baseUrl: The base URL path to put the TestHarness within (default: /testharness).
+        - express: The instance of Express being used.
 ###
 module.exports = (app, options = {}) ->
 
     # Modules.
     core    = require 'core.server'
-    express = require 'express'
+    express = options.express ?= require('express')
     routes  = require '../routes'
 
     # Setup initial conditions.

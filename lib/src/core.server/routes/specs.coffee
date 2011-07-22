@@ -30,7 +30,9 @@ module.exports = (app, options) ->
     getSpecs = (dir, callback) ->
         dir = _.rtrim(dir, '/') + '/'
         core.util.fs.flattenDir dir, hidden:false, (err, paths) ->
-              throw err if err?
+              if err?
+                err.message = "Could not load specs from the directory: #{dir}"
+                throw err
               paths = _.map paths, (file) -> _(file).strRight(dir) if isSpec(file)
               paths = _.compact(paths)
               callback?(paths)
