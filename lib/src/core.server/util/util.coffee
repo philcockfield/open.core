@@ -1,9 +1,10 @@
+client = require 'core.client'
+
 global.color =
     bold  : "\033[0;1m"
     red   :"\033[0;31m"
     green : "\033[0;32m"
     reset : "\033[0m"
-
 
 module.exports =
   javascript: require './javascript'
@@ -11,6 +12,9 @@ module.exports =
   fs:         require './fs'
   cake:       require './cake'
   git:        require './git'
+
+  # Client aliases.
+  toBool: client.util.toBool
 
   ###
   Logs a message to the console optionally with a color.
