@@ -6,14 +6,19 @@ module.exports =
   init: ->
       # Setup initial conditions.
       core    = require 'core.server'
+      app     = core.app
       paths   = core.paths
 
+      # Helpers.
+      minRequested = (req)-> _(req.params.package).endsWith '-min'
+
       # Routes.
-      # Send from file.
-      core.app.get "#{core.baseUrl}/libs:min?.js", (req, res) ->
-            libs = "#{paths.public}/javascripts/libs"
-            min = ''
-            min = '-min' if req.params.min == '-min'
-            core.util.send.scriptFile res, "#{libs}/libs#{min}.js"
-
-
+      app.get "#{core.baseUrl}/:package?.js", (req, res) ->
+          min = if minRequested(req) then '-min' else ''
+          switch req.params.package
+            when 'libs', 'libs-min'
+              file = "#{paths.public}/javascripts/libs/libs#{min}.js"
+            else
+              res.send 404
+              return
+          core.util.send.scriptFile res, file
