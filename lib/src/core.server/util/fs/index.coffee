@@ -4,12 +4,10 @@ fsPath  = require 'path'
 
 # CONSTANTS
 ERROR =
-  NOT_FOUND: 2
-  NOT_EMPTY: 66
+  NOT_EMPTY: 'ENOTEMPTY'
 
 
 # PRIVATE MEMBERS
-notFoundError = (err) -> err.errno == ERROR.NOT_FOUND
 cleanDirPath = (path) ->
                 path = _.trim(path)
                 path = _.rtrim(path, '/')
@@ -75,7 +73,7 @@ deleteDir = (path, options..., callback) ->
     force = options.force ?= true
     fs.rmdir path, (err) ->
         if err?
-          if err.errno == ERROR.NOT_EMPTY and force
+          if err.code == ERROR.NOT_EMPTY and force
             require('rimraf')(path, callback)
           else
             callback?(err)

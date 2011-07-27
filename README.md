@@ -26,6 +26,7 @@ To initialize the **open.core** library from [Express](http://expressjs.com/):
 ### Tests
 
 To run server side tests, from the `open.core` module folder: `$ cake specs`
+Make sure Jasmine-Node has been installed globally: `npm install -g jasmine-node`
 
 To run client-side tests in browser:
 

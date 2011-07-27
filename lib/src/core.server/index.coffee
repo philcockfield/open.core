@@ -6,7 +6,7 @@ configure.specs = require './routes/specs'
 server =
   title:       'Open.Core (Server)'
   paths:       paths
-  util:        require './util/util'
+  util:        require './util'
   client:      require 'core.client'
   configure:   configure
 
