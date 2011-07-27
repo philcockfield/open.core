@@ -1,11 +1,10 @@
-fs      = require 'fs'
-util    = require 'util'
-fsPath  = require 'path'
+fs       = require 'fs'
+util     = require 'util'
+fsPath   = require 'path'
+fsCommon = require './_common'
 
 # CONSTANTS
-ERROR =
-  NOT_EMPTY: 'ENOTEMPTY'
-
+ERROR = fsCommon.ERROR
 
 # PRIVATE MEMBERS
 cleanDirPath = (path) ->
@@ -20,7 +19,7 @@ Performs a deep copy of a directory, and all it's contents.
 @param source:      path to directory to copy.
 @param target:      path to copy to.
 @param options:
-            - mode: copy code (defaults to 0777 for full permissions).
+            - mode: copy code (defaults to 0664 for Read-Write for users/groups, Read-Only world).
 @param callback: (err)
 ###
 copyDir = (source, target, options..., callback) ->
@@ -28,7 +27,7 @@ copyDir = (source, target, options..., callback) ->
   # Setup initial conditions.
   self = @
   options = options[0] ?= {}
-  mode = options.mode ?= 0777
+  mode = options.mode ?= 0664 # Read-Write for users/groups, Read-Only world.
 
   # Sanitize the paths.
   source      = cleanDirPath(source)
@@ -119,31 +118,9 @@ filterPaths = (paths, fnInclude, callback) ->
 ###
 Module Exports
 ###
-module.exports =
+index = module.exports =
   concatenate: require './concatenate'
 
-
-  ###
-  Prepends the given path on the array of files.
-  @param path to prepend
-  @param files to be prepended
-  @returns an array with the fully expanded paths.
-  ###
-  expandPaths: (path, files = []) ->
-      return files unless path?
-      path = _.rtrim(path, '/')
-      _(files).map (file) -> "#{path}/#{file}"
-
-
-  ###
-  Determines whether the specified path is hidden.
-  @param path to examine.
-  @return boolean
-  ###
-  isHidden: (path) ->
-      return false unless path?
-      path = _.strRightBack(path, '/')
-      _.startsWith(path, '.')
 
   ###
   Retrieves the list of fully qualified file paths within the given directory.
@@ -426,59 +403,10 @@ module.exports =
       path
 
 
-  ###
-  Writes the data to the specified path (creating the containing folder if required).
-  @param path: of the file to write to.
-  @param data: to write
-  @param options (optional):
-              - encoding: defaults to 'utf8'
-  @param callback: (err)
-  ###
-  writeFile: (path, data, options..., callback) ->
-      # Setup initial conditions.
-      options = options[0] ?= {}
-      encoding = options.encoding ?= 'utf8'
-
-      # 1. Ensure the directory exists.
-      dir = fsPath.dirname(path)
-      @createDir dir, (err) ->
-          if err?
-              callback?(err)
-              return # Failed - exit out.
-          else
-              # 2. Write the file.
-              fs.writeFile path, data, encoding, callback
 
 
-  ###
-  Writes the collection of file to disk providing a single
-  callback when complete.
-  @param files: An array of files definitions taking the following form:
-                [
-                  {
-                    path:     '/path/to/write/to',
-                    data:     {the data to write},
-                  }
-                ]
-  @param options (optional) - See 'writeFile' method
-  @param callback: (err)
-  ###
-  writeFiles: (files, options..., callback) ->
-       self = @
-       failed = false
-       loaded = 0
-
-       onWritten = ->
-          return if failed
-          loaded += 1
-          callback?() if loaded == files.length
-
-       for file in files
-          @writeFile file.path, file.data, (err) ->
-            if err?
-                failed = true
-                callback?(err)
-                return # Failed.
-            else
-              onWritten()
+# Copy common methods onto the index.
+_.extend index, 
+    fsCommon, 
+    require('./_async_write')
 

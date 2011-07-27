@@ -178,3 +178,57 @@ describe 'server/util/fs', ->
         expect(includesAllPaths(result, expected)).toEqual true
         expect(includesAllPaths(result, notExpected)).toEqual false
 
+  describe 'writeFile', ->
+    path = null
+    dir = null
+    file1 = null
+    file2 = null
+    deleteSample = -> 
+        tryTo = (fn) -> 
+            try
+              fn()
+            catch error
+        tryTo -> fs.unlinkSync file1
+        tryTo -> fs.unlinkSync file2
+        tryTo -> fs.rmdirSync dir
+    
+    beforeEach ->
+        dir  = "#{sampleDir}/writeFile/folder"
+        file1 = "#{dir}/file1.txt"
+        file2 = "#{dir}/file2.txt"
+        deleteSample()
+        
+    it 'write a single file creating the containing directory', ->
+      result = null
+      fsUtil.writeFile file1, 'Hello!', (err) -> result = true
+      waitsFor -> result?
+      runs ->
+          data = fs.readFileSync(file1)
+          expect(data.toString()).toEqual 'Hello!'
+          deleteSample()
+
+    it 'write a single file creating the containing directory', ->
+      result = null
+      files = [
+          { path:file1, data:'Hello1' }
+          { path:file2, data:'Hello2' }
+        ]
+      
+      fsUtil.writeFiles files, (err) -> result = true
+      waitsFor -> result?
+      runs ->
+          expect(fs.readFileSync(file1).toString()).toEqual 'Hello1'
+          expect(fs.readFileSync(file2).toString()).toEqual 'Hello2'
+          deleteSample()
+        
+      
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
