@@ -29,8 +29,8 @@ prepackCopy = (files, targetDir, callback) ->
         item.target = "#{targetDir}/#{item.target}"
 
      core().util.fs.copyAll files, (err) ->
-            throw err if err?
-            callback?()
+                throw err if err?
+                callback?()
 
 
 processPaths = (paths) ->
@@ -71,7 +71,7 @@ module.exports = class Compiler
           # 1. Copy source files to temporary location (retaining the relative path structure).
           unique = uuid()
           tmpDir = process.env.PWD ?= paths.root
-          tmpDir = "#{tmpDir}/_tmp/compiler/_tmp#{unique}"
+          tmpDir = "#{tmpDir}/_tmp/compiler/_tmp_#{unique}"
           prepackCopy @paths, tmpDir, ->
 
               # 2. Stitch the folder up.

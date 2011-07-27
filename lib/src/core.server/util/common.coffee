@@ -2,12 +2,18 @@ client = require 'core.client'
 
 # Store color in global namespace.
 global.color =
-    bold  : "\033[0;1m"
-    red   :"\033[0;31m"
-    green : "\033[0;32m"
-    reset : "\033[0m"
+    bold   : "\033[0;1m"
+    grey  : "\033[0;30m"
+    red    : "\033[0;31m"
+    green  : "\033[0;32m"
+    yellow : "\033[0;33m"
+    blue   : "\033[0;34m"
+    pink   : "\033[0;35m"
+    cyan   : "\033[0;36m"
+    reset  : "\033[0m"
 
 log = (message, color, explanation) ->
+        color = '' unless color?
         if message?
           explanation ?= ''
           console.log "#{color}#{message}#{global.color.reset} #{explanation}"

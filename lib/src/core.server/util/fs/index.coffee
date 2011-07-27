@@ -74,7 +74,8 @@ deleteDir = (path, options..., callback) ->
     fs.rmdir path, (err) ->
         if err?
           if err.code == ERROR.NOT_EMPTY and force
-            require('rimraf')(path, callback)
+            require('rimraf') path, (err) -> 
+                  callback?(err)
           else
             callback?(err)
         else
