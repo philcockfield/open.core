@@ -33,17 +33,27 @@ module.exports =
   @param message  : The commit message.
   @param options
                   - dir     : (optional) The directory the git repository is in (default current).
+                  - add     : (optional) Whether to add everything before invoking the commit (default true).
   @param callback(err, stdout, stderr)
   ###
-  addAndCommit: (message, options..., callback) -> 
+  commit: (message, options..., callback) -> 
       options = options[0] ?= {}
       dir = options.dir
+      add = options.add ?= true
       msg = _.trim(message)
       throw 'A message (-m) must be provided for commits, eg. cake -m "MESSAGE" commit' unless msg? and msg.length > 0
       console.log 'Committing...'
       
-      @exec 'add .', dir:dir, (err, stdout, stderr) =>
-        @exec 'add -u', dir:dir, (err, stdout, stderr) =>
+      fnAdd = (onComplete) => 
+          if not add
+              # Add not required.
+              onComplete()
+              return
+          @exec 'add .', dir:dir, (err, stdout, stderr) =>
+            @exec 'add -u', dir:dir, (err, stdout, stderr) =>
+              onComplete()
+      
+      fnCommit = () =>     
           @exec "commit -m \"#{msg}\"", dir:dir, onExec:false, (err, stdout, stderr) ->
             if err?.code == 1
               util.log 'Nothing to commit', color.red
@@ -51,4 +61,6 @@ module.exports =
               util.onExec err, stdout, stderr
               util.log 'Commit done', color.green
             callback?(err, stdout, stderr)
-        
+          
+      fnAdd -> fnCommit()
+      
