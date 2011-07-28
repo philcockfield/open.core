@@ -49,23 +49,57 @@ describe 'client/util/property_func', ->
       spyOn prop, 'write'
       prop.fn(123)
       expect(prop.write).toHaveBeenCalled()
-    
-  describe 'fireChange', ->
-    it 'fires change event from class', ->
-      count = 0
-      prop = new PropFunc( name:'foo', store: {} )
-      prop.bind 'change', -> count += 1
-      prop.fireChange()
-      expect(count).toEqual 1
       
-    it 'fires change event from [fn] method', ->
-      count = 0
-      prop = new PropFunc( name:'foo', store: {} )
-      prop.fn.bind 'change', -> count += 1
-      prop.fireChange()
-      expect(count).toEqual 1
       
     
+  describe 'change event', ->
+    prop = null
+    args = null
+    count = 0
+    beforeEach ->
+      count = 0
+      args = null
+      prop = new PropFunc( name:'foo', store: {}, default:123 )
+      prop.bind 'change', (e) -> 
+            count += 1
+            args = e
+
+    describe 'fireChange method', ->
+      it 'fires change event from class', ->
+        prop.fireChange()
+        expect(count).toEqual 1
+      
+      it 'fires change event from [fn] method', ->
+        prop.fireChange()
+        expect(count).toEqual 1
+      
+      it 'passes values as args in event', ->
+        prop.fireChange(1, 2)
+        expect(args.oldValue).toEqual 1
+        expect(args.newValue).toEqual 2
+    
+    describe 'change event when writing', ->
+      it 'fires change event when value is different', ->
+        prop.fn('abc')
+        expect(count).toEqual 1
+
+      it 'does not fire change event when value is the same (as default)', ->
+        prop.fn(123)
+        expect(count).toEqual 0
+
+      it 'does not fire change event when value is the same (multiple change with same value)', ->
+        prop.fn('abc')
+        prop.fn('abc')
+        prop.fn('abc')
+        expect(count).toEqual 1
+
+      it 'passes the old and new values in event args', ->
+        prop.fn('abc')
+        expect(args.oldValue).toEqual 123
+        expect(args.newValue).toEqual 'abc'
+        
+        
+      
     
     
     

@@ -43,20 +43,30 @@ module.exports = class PropFunc
       value = @_.default if value == undefined
       value
 
-
   ###
   Writes the given value to the property.
   ###
   write: (value) -> 
+      # Setup initial conditions.
       return if value == undefined
+      oldValue = @read()
+      return if value == oldValue
+      
+      # Store the value.
       store = @_.store      
       store[@name] = value
+      
+      # Alert listeners.
+      @fireChange oldValue, value
 
-
-  fireChange: (previousValue, newValue) -> 
+  ###
+  Fires the change event (from the PropFunc instance, and the [fn] method).
+  @param oldValue : The value before the property is changing from.
+  @param newValue : The new value the property is changing to.
+  ###
+  fireChange: (oldValue, newValue) -> 
       fire = (obj) => 
-              console.log 'obj', obj
-              obj.trigger 'change'
+              obj.trigger 'change', { oldValue:oldValue, newValue:newValue }
       fire @
       fire @fn
 
