@@ -5,3 +5,5 @@ describe 'client/mvc/model', ->
 
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
+
+  

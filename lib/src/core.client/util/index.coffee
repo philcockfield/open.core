@@ -1,4 +1,6 @@
 module.exports =
+  PropFunc: require './prop_func'
+
   ###
   Converts a value to boolean.
   @param value: To convert.
