@@ -12,3 +12,10 @@ module.exports =
   @param file to send.
   ###
   scriptFile: (response, file) -> response.sendfile file, 'Content-Type': 'text/javascript'
+
+  ###
+  Writes the contents of the given JSON file to the response stream.
+  @param response to write to.
+  @param file to send.
+  ###
+  jsonFile: (response, file) -> response.sendfile file, 'Content-Type': 'application/json'
