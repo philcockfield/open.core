@@ -14,7 +14,7 @@ cleanDirPath = (path) ->
 
 ###
 Performs a deep copy of a directory, and all it's contents.
--- Special purpose method used by the more general [copy] method. --
+Special purpose method used by the more general [copy] method.
 
 @param source:      path to directory to copy.
 @param target:      path to copy to.
