@@ -10,7 +10,7 @@ describe 'client/mvc/model', ->
       class SampleModel extends Model
         constructor: () -> 
             super
-            @addProps
+            @.util.addProps
                     foo: 123
                     bar: null
       
