@@ -15,8 +15,8 @@ module.exports = class View extends Base
       
       # Store internal state.
       @_.merge
-        view: view
-        atts: params
+          view: view
+          atts: params
       @el = $(view.el)
 
       # Assign public methods.

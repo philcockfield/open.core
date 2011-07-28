@@ -20,9 +20,6 @@ describe 'client/base', ->
       expect(obj._.bar).toEqual null
       
   describe 'util', ->
-    it 'store reference to parent object on util', ->
-      expect(obj.util._parent).toEqual obj
-    
     it 'merges parameters', ->
       class Parent extends Base
         constructor: (@params) ->
@@ -40,18 +37,18 @@ describe 'client/base', ->
       target = { foo:'abc' }
       expect(-> obj.util.merge(source, target)).toThrow()
     
-    describe 'addProp', ->
-      it 'adds multiple properties to the object', ->
-        obj.util.addProp 
-                    foo: 123
-                    bar: null
-        expect(obj.foo()).toEqual 123
-        expect(obj.bar()).toEqual null
-        
-      it 'does not override an existing property', ->
-        obj.foo = 'hello'
-        expect(-> obj.util.addProp(foo:123)).toThrow()
-        expect(obj.foo).toEqual 'hello'
+  describe 'addProps', ->
+    it 'adds multiple properties to the object', ->
+      obj.addProps 
+                  foo: 123
+                  bar: null
+      expect(obj.foo()).toEqual 123
+      expect(obj.bar()).toEqual null
+     
+    it 'does not override an existing property', ->
+      obj.foo = 'hello'
+      expect(-> obj.addProps(foo:123)).toThrow()
+      expect(obj.foo).toEqual 'hello'
         
         
       

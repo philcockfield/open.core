@@ -2,20 +2,16 @@ PropFunc = require './util/prop_func'
 
 merge = (source = {}, target = {}) -> 
     for key of source
-        throw "[#{key}] exists" if target.hasOwnProperty(key)
+        throw "Merge fail. [#{key}] exists" if target.hasOwnProperty(key)
         target[key] = source[key]
     target
-  
-  
+
 
 ###
 Common base class.
 ###
 module.exports = class Base
   constructor: ->
-          # Setup initial conditions.
-          util = @util
-          util._parent = @
           
           # Prepare the internal state object.
           _internal =
@@ -30,7 +26,7 @@ module.exports = class Base
   ###
   Common utility functionality for the class.
   ###
-  util:
+  util: 
       ###
       Merges the properties from the source object onto the target object.
       @returns: The target object.
@@ -43,40 +39,44 @@ module.exports = class Base
                        super @util.merge params, { myParam: 1234 }
       ###
       merge: (source, target) -> merge(source, target)
+    
+
+
+  ###
+  Adds one or more [PropFunc] properties to the object.
+  @param props :    Object literal describing the properties to add
+                    The object takes the form [name: default-value].
+                    {
+                      name: 'default value'
+                    }
+  ###
+  addProps: (props) ->
+
+      # Setup initial conditions.
+      return unless props?
+      self  = @
+      store = @_propertyStore()
+
+      # Add the PropFunc to the object.
+      add = (name) -> 
+            defaultValue = props[name]
+            prop = new PropFunc
+                            name:     name
+                            default:  defaultValue
+                            store:    store
+            self[name] = prop.fn
       
-      
-      ###
-      Adds one or more [PropFunc] properties to the object.
-      @param props : Object literal describing the properties to add
-                     The object takes the form [name: default-value].
-                     {
-                        name: 'default value'
-                     }
-      ###
-      addProp: (props) -> 
-          
-          # Setup initial conditions.
-          return unless props?
-          parent = @_parent
-          store = parent._.basePropStore ?= {}
-          
-          add = (name) -> 
-              defaultValue = props[name]
-              prop = new PropFunc
-                              name:     name
-                              default:  defaultValue
-                              store:    store
-              parent[name] = prop.fn
-          
-          # Add each property.
-          for name of props
-              throw "[#{name}] exists" if parent.hasOwnProperty(name)
-              add name
+      # Add each property.
+      for name of props
+          throw "Add property fail. [#{name}] exists" if @hasOwnProperty(name)
+          add name
+  
 
-
-
-
-
+  ###
+  Retrieves the property store.  
+  Override this to provide a custom property store.
+  ###
+  _propertyStore: -> @_.basePropStore ?= {}
 
 
 

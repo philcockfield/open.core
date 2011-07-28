@@ -1,4 +1,4 @@
-describe 'client/util/property_func', ->
+describe 'client/util/prop_func', ->
   PropFunc = null
   beforeEach ->
     PropFunc = core.util.PropFunc
@@ -9,6 +9,10 @@ describe 'client/util/property_func', ->
   it 'exposes name', ->
     prop = new PropFunc( name:'foo', store: {} )
     expect(prop.name).toEqual 'foo'
+  
+  it 'exposes _parent from [fn] method', ->
+    prop = new PropFunc( name:'foo', store: {} )
+    expect(prop.fn._parent).toEqual prop
     
   
   describe 'reading values', ->
@@ -31,7 +35,7 @@ describe 'client/util/property_func', ->
       spyOn prop, 'write'
       prop.fn()
       expect(prop.write).not.toHaveBeenCalled()
-    
+
     
   describe 'writing values', ->
     it 'writes a value', ->
@@ -50,7 +54,55 @@ describe 'client/util/property_func', ->
       prop.fn(123)
       expect(prop.write).toHaveBeenCalled()
       
+  
+  describe 'function store', ->
+    fnStore = null
+    prop = null
+    readValue = undefined
+    writeName = null
+    writeTotal = 0
+    
+    beforeEach ->
+      readValue = undefined
+      writeTotal = 0
+      writeName = null
+      fnStore = (name, value) -> 
+             if value != undefined
+                 readValue = value
+                 writeTotal += 1
+                 writeName = name
+             readValue
+             
+      prop = new PropFunc( name:'foo', store:fnStore, default:123 )
+    
+    describe 'read', ->
+      it 'reads from function-store', ->
+        readValue = 'hello'
+        expect(prop.fn()).toEqual 'hello'
+
+      it 'reads default value from function-store', ->
+        expect(prop.fn()).toEqual 123
+
+    describe 'write', ->
+      it 'writes a value', ->
+        prop.fn('abc')
+        expect(prop.fn()).toEqual 'abc'
+
+      it 'writes null', ->
+        prop.fn(null)
+        expect(prop.fn()).toEqual null
       
+      it 'passes the name to the function-store', ->
+        prop.fn('abc')
+        expect(writeName).toEqual 'foo'
+      
+      it 'calls the function-store once', ->
+        prop.fn('abc')
+        prop.fn('abc')
+        prop.fn('abc')
+        expect(writeTotal).toEqual 1
+        
+    
     
   describe 'change event', ->
     prop = null

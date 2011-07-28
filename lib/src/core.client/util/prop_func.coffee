@@ -42,16 +42,17 @@ module.exports = class PropFunc
   ###
   Reads the property value.
   ###
-  read: -> 
+  read: => 
       store = @_.store      
       if _.isFunction(store) then value = store() else value = store[@name]
       value = @_.default if value == undefined
       value
 
+
   ###
   Writes the given value to the property.
   ###
-  write: (value) -> 
+  write: (value) => 
       # Setup initial conditions.
       return if value == undefined
       oldValue = @read()
@@ -59,17 +60,18 @@ module.exports = class PropFunc
       
       # Store the value.
       store = @_.store      
-      if _.isFunction(store) then store(value) else store[@name] = value
+      if _.isFunction(store) then store(@name, value) else store[@name] = value
       
       # Alert listeners.
       @fireChange oldValue, value
+
 
   ###
   Fires the change event (from the PropFunc instance, and the [fn] method).
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
   ###
-  fireChange: (oldValue, newValue) -> 
+  fireChange: (oldValue, newValue) => 
       fire = (obj) => 
               obj.trigger 'change', { oldValue:oldValue, newValue:newValue }
       fire @
