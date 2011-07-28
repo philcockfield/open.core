@@ -1,3 +1,6 @@
+# TODO - onBefore, onAfter events
+
+
 ###
 A function which is used as a property.
 Create an instance of this class and assign the 'fn' to a property on an object. 
@@ -9,18 +12,20 @@ module.exports = class PropFunc
   ###
   Constructor.
   @param options
-            - name:   (required) The name of the property.
-            - store:  (required) Either the object to store values in (using the 'name' as key)
-                                 of a function used to read/write values to another store.
+            - name:    (required) The name of the property.
+            - store:   (required) Either the object to store values in (using the 'name' as key)
+                                  of a function used to read/write values to another store.
             - default: (optional) The default value to use.
   ###
   constructor: (options = {}) -> 
+      fn = @fn
       @name = options.name
       @_ = 
           store:    options.store
           default:  options.default ?= null
       _.extend @, Backbone.Events
-      _.extend @fn, Backbone.Events
+      _.extend fn, Backbone.Events
+      fn._parent = @
 
 
   ###
@@ -29,7 +34,7 @@ module.exports = class PropFunc
   @param value (optional) the value to assign.  
                Do not specify (undefined) for read operations.
   ###
-  fn: (value) -> 
+  fn: (value) => 
       @write(value) if value != undefined
       @read()
 

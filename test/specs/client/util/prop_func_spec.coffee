@@ -1,4 +1,4 @@
-describe 'client/util/prop_func', ->
+describe 'client/util/property_func', ->
   PropFunc = null
   beforeEach ->
     PropFunc = core.util.PropFunc
@@ -9,11 +9,6 @@ describe 'client/util/prop_func', ->
   it 'exposes name', ->
     prop = new PropFunc( name:'foo', store: {} )
     expect(prop.name).toEqual 'foo'
-  
-  it 'exposes _parent from [fn] method', ->
-    
-    prop = new PropFunc( name:'foo', store: {} )
-    expect(prop.fn._parent).toEqual prop
     
   
   describe 'reading values', ->

@@ -7,7 +7,7 @@ window.ensure =
   @param fnAction to invoke that should cause the 'super' to be called.
   ###
   parentConstructorWasCalled: (Class, fnAction) ->
-      spyOn Class.__super__, 'constructor'
+      spyOn(Class.__super__, 'constructor').andCallThrough()
       fnAction?()
       expect(Class.__super__.constructor).toHaveBeenCalled()
 

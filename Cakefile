@@ -11,7 +11,7 @@ task 'build:libs', 'Build and save the 3rd party libs to /public', ->
   core.util.javascript.build.libs()
 
 
-task 'build:client', 'Packages all Open.Core client-code into files', ->
+task 'build:core', 'Packages all Open.Core client-code into files', ->
   console.log 'Building all client-code into files...'
   core.util.javascript.build.client
       save: true

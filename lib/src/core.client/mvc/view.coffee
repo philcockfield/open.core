@@ -10,17 +10,18 @@ module.exports = class View extends Base
 
       # Create the wrapped Backbone View.
       view = new Backbone.View
-                    tagName: params.tagName
+                    tagName:   params.tagName
                     className: params.className
-
+      
       # Store internal state.
-      @_ =
+      @_.merge
         view: view
         atts: params
       @el = $(view.el)
 
       # Assign public methods.
       @$ = view.$
+
 
 
   ###
