@@ -9,12 +9,6 @@ describe 'client/util/property_func', ->
   it 'exposes name', ->
     prop = new PropFunc( name:'foo', store: {} )
     expect(prop.name).toEqual 'foo'
-
-  describe 'fn', ->
-    it 'supports eventing', ->
-      prop = new PropFunc( name:'foo', store: {} )
-      prop.bind 'event'
-      
     
   
   describe 'reading values', ->
@@ -55,5 +49,28 @@ describe 'client/util/property_func', ->
       spyOn prop, 'write'
       prop.fn(123)
       expect(prop.write).toHaveBeenCalled()
+    
+  describe 'fireChange', ->
+    it 'fires change event from class', ->
+      count = 0
+      prop = new PropFunc( name:'foo', store: {} )
+      prop.bind 'change', -> count += 1
+      prop.fireChange()
+      expect(count).toEqual 1
+      
+    it 'fires change event from [fn] method', ->
+      count = 0
+      prop = new PropFunc( name:'foo', store: {} )
+      prop.fn.bind 'change', -> count += 1
+      prop.fireChange()
+      expect(count).toEqual 1
+      
+    
+    
+    
+    
+    
+    
+    
     
     

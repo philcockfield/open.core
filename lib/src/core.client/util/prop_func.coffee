@@ -20,6 +20,7 @@ module.exports = class PropFunc
           store:    options.store
           default:  options.default ?= null
       _.extend @, Backbone.Events
+      _.extend @fn, Backbone.Events
 
 
   ###
@@ -52,4 +53,10 @@ module.exports = class PropFunc
       store[@name] = value
 
 
+  fireChange: (previousValue, newValue) -> 
+      fire = (obj) => 
+              console.log 'obj', obj
+              obj.trigger 'change'
+      fire @
+      fire @fn
 
