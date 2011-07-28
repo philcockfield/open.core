@@ -32,7 +32,7 @@ describe 'client/mvc/model', ->
     it 'writes to the backing model', ->
       spyOn backingModel, 'set'
       model.foo('hello')
-      expect(backingModel.set).toHaveBeenCalledWith( foo:'hello')
+      expect(backingModel.set).toHaveBeenCalledWith( foo:'hello' )
 
       
     

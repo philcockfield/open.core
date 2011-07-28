@@ -152,10 +152,33 @@ describe 'client/util/prop_func', ->
         
         
       
+    describe 'async', ->
+      prop = null
+      beforeEach ->
+          prop = new PropFunc( name:'foo', store: {}, default:123 )
     
-    
-    
-    
+      it 'reads from an async callback', ->
+        value = null
+        read = -> value = prop.fn()
+        setTimeout read, 5
+        waitsFor -> value != null
+        runs -> 
+          expect(value).toEqual 123
+
+
+      it 'writes from an async callback', ->
+        written = false
+        write = -> 
+                prop.fn('hello')
+                written = true
+        setTimeout write, 5
+        waitsFor -> written == true
+        runs -> 
+          expect(prop.fn()).toEqual 'hello'
+        
+        
+      
+      
     
     
     

@@ -74,8 +74,6 @@ module.exports = class Base
               add name
   
 
-  
-
   ###
   Retrieves the property store.  
   Override this to provide a custom property store.
