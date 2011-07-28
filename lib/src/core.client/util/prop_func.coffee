@@ -44,7 +44,7 @@ module.exports = class PropFunc
   ###
   read: -> 
       store = @_.store      
-      value = store[@name]
+      if _.isFunction(store) then value = store() else value = store[@name]
       value = @_.default if value == undefined
       value
 
@@ -59,7 +59,7 @@ module.exports = class PropFunc
       
       # Store the value.
       store = @_.store      
-      store[@name] = value
+      if _.isFunction(store) then store(value) else store[@name] = value
       
       # Alert listeners.
       @fireChange oldValue, value

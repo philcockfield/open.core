@@ -11,7 +11,6 @@ describe 'client/util/prop_func', ->
     expect(prop.name).toEqual 'foo'
   
   it 'exposes _parent from [fn] method', ->
-    
     prop = new PropFunc( name:'foo', store: {} )
     expect(prop.fn._parent).toEqual prop
     
@@ -36,7 +35,7 @@ describe 'client/util/prop_func', ->
       spyOn prop, 'write'
       prop.fn()
       expect(prop.write).not.toHaveBeenCalled()
-    
+
     
   describe 'writing values', ->
     it 'writes a value', ->
@@ -55,7 +54,53 @@ describe 'client/util/prop_func', ->
       prop.fn(123)
       expect(prop.write).toHaveBeenCalled()
       
+  
+  describe 'function store', ->
+    fnStore = null
+    prop = null
+    readValue = undefined
+    writeTotal = 0
+    
+    beforeEach ->
+      readValue = undefined
+      writeTotal = 0
+      fnStore = (value) -> 
+             if value != undefined
+               readValue = value
+               writeTotal += 1
+             readValue
+             
+      prop = new PropFunc( name:'foo', store:fnStore, default:123 )
+    
+    describe 'read', ->
+      it 'reads from function-store', ->
+        readValue = 'hello'
+        expect(prop.fn()).toEqual 'hello'
+
+      it 'reads default value from function-store', ->
+        expect(prop.fn()).toEqual 123
+
+    describe 'write', ->
+      it 'writes a value', ->
+        prop.fn('abc')
+        expect(prop.fn()).toEqual 'abc'
+
+      it 'writes null', ->
+        prop.fn(null)
+        expect(prop.fn()).toEqual null
       
+      it 'calls the function-store once', ->
+        prop.fn('abc')
+        prop.fn('abc')
+        prop.fn('abc')
+        expect(writeTotal).toEqual 1
+        
+      
+      
+    
+    
+    
+    
     
   describe 'change event', ->
     prop = null
