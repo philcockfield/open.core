@@ -9,6 +9,13 @@ describe 'client/util/property_func', ->
   it 'exposes name', ->
     prop = new PropFunc( name:'foo', store: {} )
     expect(prop.name).toEqual 'foo'
+
+  describe 'fn', ->
+    it 'supports eventing', ->
+      prop = new PropFunc( name:'foo', store: {} )
+      prop.bind 'event'
+      
+    
   
   describe 'reading values', ->
     it 'reads null value', ->
@@ -18,6 +25,19 @@ describe 'client/util/property_func', ->
     it 'reads default', ->
       prop = new PropFunc( name:'foo', store: {}, default:123 )
       expect(prop.fn()).toEqual 123
+    
+    it 'defers to the [read] method', ->
+      prop = new PropFunc( name:'foo', store: {} )
+      spyOn prop, 'read'
+      prop.fn()
+      expect(prop.read).toHaveBeenCalled()
+
+    it 'does not defer to the [write] method', ->
+      prop = new PropFunc( name:'foo', store: {} )
+      spyOn prop, 'write'
+      prop.fn()
+      expect(prop.write).not.toHaveBeenCalled()
+    
     
   describe 'writing values', ->
     it 'writes a value', ->
@@ -30,5 +50,10 @@ describe 'client/util/property_func', ->
       prop.fn(null)
       expect(prop.fn()).toEqual null
 
+    it 'defers to the [write] method', ->
+      prop = new PropFunc( name:'foo', store: {} )
+      spyOn prop, 'write'
+      prop.fn(123)
+      expect(prop.write).toHaveBeenCalled()
     
     

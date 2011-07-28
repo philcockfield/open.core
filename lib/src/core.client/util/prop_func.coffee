@@ -15,27 +15,41 @@ module.exports = class PropFunc
             - default: (optional) The default value to use.
   ###
   constructor: (options = {}) -> 
-    @name = options.name
-    @_ = 
-        store:    options.store
-        default:  options.default ?= null
-
+      @name = options.name
+      @_ = 
+          store:    options.store
+          default:  options.default ?= null
+      _.extend @, Backbone.Events
 
 
   ###
-  The read/write function of the property.
+  The primary read/write function of the property.
+  Expose this from your objects as a property-func.
   @param value (optional) the value to assign.  
                Do not specify (undefined) for read operations.
   ###
   fn: (value) -> 
-      # Setup initial conditions.
-      store = @_.store      
-      
-      # Write value.
-      if value != undefined
-          store[@name] = value
+      @write(value) if value != undefined
+      @read()
 
-      # Read value.
+
+  ###
+  Reads the property value.
+  ###
+  read: -> 
+      store = @_.store      
       value = store[@name]
       value = @_.default if value == undefined
       value
+
+
+  ###
+  Writes the given value to the property.
+  ###
+  write: (value) -> 
+      return if value == undefined
+      store = @_.store      
+      store[@name] = value
+
+
+
