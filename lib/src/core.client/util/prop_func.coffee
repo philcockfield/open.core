@@ -44,7 +44,7 @@ module.exports = class PropFunc
   ###
   read: => 
       store = @_.store      
-      if _.isFunction(store) then value = store() else value = store[@name]
+      if _.isFunction(store) then value = store(@name) else value = store[@name]
       value = @_.default if value == undefined
       value
 

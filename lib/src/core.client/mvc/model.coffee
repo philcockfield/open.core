@@ -16,11 +16,13 @@ module.exports = class Model extends Base
         @_.merge
             model: model
 
+
   # Override: Return the custom property store function ferrys
   #           read/write requests into the backing Backbone model.
   _propertyStore: -> 
       model = @_.model
       fnStore = (name, value) -> 
+          
           if value != undefined
                 #  Write value to backing model.
                 param = {}

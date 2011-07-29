@@ -48,23 +48,5 @@ describe 'client/base', ->
      
       it 'does not override an existing property', ->
         obj.foo = 'hello'
-        expect(-> obj.util.addProps(foo:123)).toThrow()
+        expect(-> obj.util.addProps( foo:123 )).toThrow()
         expect(obj.foo).toEqual 'hello'
-
-# TEMP 
-  # describe 'addProps', ->
-  #   it 'adds multiple properties to the object', ->
-  #     obj.addProps 
-  #                 foo: 123
-  #                 bar: null
-  #     expect(obj.foo()).toEqual 123
-  #     expect(obj.bar()).toEqual null
-  #    
-  #   it 'does not override an existing property', ->
-  #     obj.foo = 'hello'
-  #     expect(-> obj.addProps(foo:123)).toThrow()
-  #     expect(obj.foo).toEqual 'hello'
-        
-        
-      
-
