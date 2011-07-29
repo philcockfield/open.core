@@ -75,19 +75,34 @@ describe 'client/mvc/model', ->
           
     it 'invokes the success callback', ->
       count = 0
+      callbackModel = null
+      callabackResponse = null
       options = 
-            success: -> count += 1
+            success: (m, r)->  
+                count += 1
+                callbackModel = m
+                callabackResponse = r
       model.fetch(options)
-      fetchArgs.success()
+      fetchArgs.success('model', 'res')
       expect(count).toEqual 1
+      expect(callbackModel).toEqual model
+      expect(callabackResponse).toEqual 'res'
     
     it 'invokes the error callback', ->
       count = 0
+      callbackModel = null
+      callabackResponse = null
       options = 
-            error: ->  count += 1
+            error: (m, r)->  
+                count += 1
+                callbackModel = m
+                callabackResponse = r
       model.fetch(options)
-      fetchArgs.error()
+      fetchArgs.error('model', 'res')
+
       expect(count).toEqual 1
+      expect(callbackModel).toEqual model
+      expect(callabackResponse).toEqual 'res'
       
     describe 'event: complete', ->
       fireCount = 0
@@ -110,7 +125,31 @@ describe 'client/mvc/model', ->
         fetchArgs.error()
         expect(fireCount).toEqual 1
         
+      it 'passes event-args when completed successfully', ->
+        model.fetch()
+        fetchArgs.success('model', 'res')
+        expect(args.model).toEqual model
+        expect(args.response).toEqual 'res'
+
+      it 'passes event-args when completed with error', ->
+        model.fetch()
+        fetchArgs.error('model', 'res')
+        expect(args.model).toEqual model
+        expect(args.response).toEqual 'res'
+
+    # describe 'handler: onComplete', ->
+    #   it 'invokes callback on success', ->
+    #     args = null
+    #     model.fetch.onComplete (e) -> args = e
+    #     model.fetch()
+    #     fetchArgs.success('model', 'res')
+    #     
+    #     expect(args.model).toEqual 'model'
         
+      
+      
+        
+    
         
       
       

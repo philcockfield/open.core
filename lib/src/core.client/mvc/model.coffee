@@ -40,20 +40,20 @@ module.exports = class Model extends Base
   ###
   Fetches the model's state from the server.
   @param options
-          - error    : (optional) Function to invoke if an error occurs.
-          - success  : (optional) Function to invoke upon success.
+          - error(model, response)   : (optional) Function to invoke if an error occurs.
+          - success(model, response) : (optional) Function to invoke upon success.
   ###
   fetch: (options = {}) ->     
       self = @
       model = @_.model
       
-      onComplete = (callback) -> 
-          self.fetch.trigger 'complete'
-          callback?()
+      onComplete = (response, callback) -> 
+          self.fetch.trigger 'complete', { model:self, response:response }
+          callback?(self, response)
       
       model.fetch
-          error:   -> onComplete options.error
-          success: -> onComplete options.success
+          error: (m, res)  -> onComplete(res, options.error)
+          success: (m, res) -> onComplete(res, options.success)
               
               
               
