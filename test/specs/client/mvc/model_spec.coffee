@@ -1,7 +1,7 @@
 describe 'client/mvc/model', ->
   Model = null
   model = null
-  backingModel = null
+  backboneModel = null
   SampleModel = null
   beforeEach ->
       Model = core.mvc.Model
@@ -15,7 +15,7 @@ describe 'client/mvc/model', ->
                     bar: null
       
       model = new SampleModel()
-      backingModel = model._.model
+      backboneModel = model._.model
 
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
@@ -25,14 +25,14 @@ describe 'client/mvc/model', ->
 
   describe 'Read/Write properties', ->
     it 'GETS from the backing model', ->
-      spyOn backingModel, 'get'
+      spyOn backboneModel, 'get'
       model.foo()
-      expect(backingModel.get).toHaveBeenCalled()
+      expect(backboneModel.get).toHaveBeenCalled()
     
     it 'SETS to the backing model', ->
-      spyOn backingModel, 'set'
+      spyOn backboneModel, 'set'
       model.foo('hello')
-      expect(backingModel.set).toHaveBeenCalledWith( foo:'hello' )
+      expect(backboneModel.set).toHaveBeenCalledWith( foo:'hello' )
       
     it 'reads from model', ->
       expect(model.foo()).toEqual 123
@@ -60,6 +60,71 @@ describe 'client/mvc/model', ->
         runs -> 
           expect(model.bar()).toEqual 'hello'
     
+      
+  describe 'fetch', ->
+    fetchArgs = null
     
+    beforeEach ->
+      fetchArgs = null
+      spyOn(backboneModel, 'fetch').andCallFake (args) -> 
+          fetchArgs = args
+    
+    it 'passes execution to the Backbone.fetch method', ->
+      model.fetch()
+      expect(backboneModel.fetch).toHaveBeenCalled()
+          
+    it 'invokes the success callback', ->
+      count = 0
+      options = 
+            success: -> count += 1
+      model.fetch(options)
+      fetchArgs.success()
+      expect(count).toEqual 1
+    
+    it 'invokes the error callback', ->
+      count = 0
+      options = 
+            error: ->  count += 1
+      model.fetch(options)
+      fetchArgs.error()
+      expect(count).toEqual 1
+      
+    describe 'event: complete', ->
+      fireCount = 0
+      args = null
+      beforeEach ->
+        fireCount = 0
+        args = null
+        model.fetch.unbind()
+        model.fetch.bind 'complete', (e) -> 
+              fireCount += 1
+              args = e
+      
+      it 'fires event when completed successfully', ->
+        model.fetch()
+        fetchArgs.success()
+        expect(fireCount).toEqual 1
+
+      it 'fires event when completed with error', ->
+        model.fetch()
+        fetchArgs.error()
+        expect(fireCount).toEqual 1
+        
+        
+        
       
       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
