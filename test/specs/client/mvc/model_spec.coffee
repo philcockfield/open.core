@@ -75,34 +75,36 @@ describe 'client/mvc/model', ->
           
     it 'invokes the success callback', ->
       count = 0
-      callbackModel = null
-      callabackResponse = null
+      args = null
       options = 
-            success: (m, r)->  
+            success: (e)->  
                 count += 1
-                callbackModel = m
-                callabackResponse = r
+                args = e
       model.fetch(options)
       fetchArgs.success('model', 'res')
+      
       expect(count).toEqual 1
-      expect(callbackModel).toEqual model
-      expect(callabackResponse).toEqual 'res'
+      expect(args.model).toEqual model
+      expect(args.response).toEqual 'res'
+      expect(args.success).toEqual true
+      expect(args.error).toEqual false
+
     
     it 'invokes the error callback', ->
       count = 0
-      callbackModel = null
-      callabackResponse = null
+      args = null
       options = 
-            error: (m, r)->  
+            error: (e)->  
                 count += 1
-                callbackModel = m
-                callabackResponse = r
+                args = e
       model.fetch(options)
       fetchArgs.error('model', 'res')
-
+      
       expect(count).toEqual 1
-      expect(callbackModel).toEqual model
-      expect(callabackResponse).toEqual 'res'
+      expect(args.model).toEqual model
+      expect(args.response).toEqual 'res'
+      expect(args.success).toEqual false
+      expect(args.error).toEqual true
       
     describe 'event: complete', ->
       fireCount = 0
@@ -130,21 +132,28 @@ describe 'client/mvc/model', ->
         fetchArgs.success('model', 'res')
         expect(args.model).toEqual model
         expect(args.response).toEqual 'res'
+        expect(args.success).toEqual true
+        expect(args.error).toEqual false
 
       it 'passes event-args when completed with error', ->
         model.fetch()
         fetchArgs.error('model', 'res')
         expect(args.model).toEqual model
         expect(args.response).toEqual 'res'
+        expect(args.success).toEqual false
+        expect(args.error).toEqual true
 
-    # describe 'handler: onComplete', ->
-    #   it 'invokes callback on success', ->
-    #     args = null
-    #     model.fetch.onComplete (e) -> args = e
-    #     model.fetch()
-    #     fetchArgs.success('model', 'res')
-    #     
-    #     expect(args.model).toEqual 'model'
+    describe 'handler: onComplete', ->
+      it 'invokes callback on success', ->
+        args = null
+        model.fetch.onComplete (e) -> args = e
+        model.fetch()
+        fetchArgs.success('model', 'res')
+        
+        expect(args.model).toEqual model
+        expect(args.response).toEqual 'res'
+        expect(args.success).toEqual true
+        expect(args.error).toEqual false
         
       
       

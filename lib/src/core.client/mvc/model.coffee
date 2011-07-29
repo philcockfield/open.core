@@ -8,6 +8,7 @@ module.exports = class Model extends Base
         # Setup initial conditions.
         super
         self = @
+        fnFetch = @fetch
 
         # Create the wrapped Backbone Model.
         model = new Backbone.Model()
@@ -16,8 +17,12 @@ module.exports = class Model extends Base
         @_.merge
             model: model
         
-        # Event enable members.
-        _.extend @fetch, Backbone.Events
+        # Extend members with events.
+        _.extend fnFetch, Backbone.Events
+        
+        # Add event-handler helpers.
+        fnFetch.onComplete = (handler) -> fnFetch.bind 'complete', handler
+        
         
 
   # Override: Return the custom property store function ferrys
@@ -47,13 +52,18 @@ module.exports = class Model extends Base
       self = @
       model = @_.model
       
-      onComplete = (response, callback) -> 
-          self.fetch.trigger 'complete', { model:self, response:response }
-          callback?(self, response)
+      onComplete = (response, success, error, callback) -> 
+          args = 
+              model:    self
+              response: response
+              success:  success
+              error:    error
+          self.fetch.trigger 'complete', args
+          callback?(args)
       
       model.fetch
-          error: (m, res)  -> onComplete(res, options.error)
-          success: (m, res) -> onComplete(res, options.success)
+          success: (m, res) -> onComplete(res, true, false, options.success)
+          error:   (m, res) -> onComplete(res, false, true,  options.error)
               
               
               
