@@ -1,5 +1,19 @@
 Base = require '../base'
 
+excludeMethods = [
+  'initialize'
+]
+
+
+excludeMethod = (name) -> 
+    
+    return true if name.substring(0, 1) is '_'
+    return true if _.any(excludeMethods, (m) -> m == name)
+    
+    false
+    
+
+
 ###
 Base class for models.
 ###
@@ -16,6 +30,12 @@ module.exports = class Model extends Base
         # Store internal state.
         @_.merge
             model: model
+        
+        # Copy members from Backbone model.
+        for key of model
+            continue if @[key] != undefined
+            continue if excludeMethod(key)
+            @[key] = model[key]
         
         # Extend members with events.
         _.extend fnFetch, Backbone.Events

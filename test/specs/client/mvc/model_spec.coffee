@@ -158,6 +158,22 @@ describe 'client/mvc/model', ->
       
       
         
+  describe 'copying model methods', ->
+    it 'should not copy the initialize method', ->
+      expect(model.initialize).not.toBeDefined()
+    
+    it 'should not overwrite custom defined methods', ->
+      expect(model.fetch.onComplete).toBeDefined()
+    
+    
+    it 'foo', ->
+      
+      # TEMP 
+      
+      for key of model
+        console.log ' >> ', key
+      
+      console.log 'FOO', model.fetch.onComplete
     
         
       

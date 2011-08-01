@@ -58,7 +58,7 @@ module.exports = class Base
           return unless props?
           parent = @_parent
           store = parent._propertyStore()
-
+          
           # Add the PropFunc to the object.
           add = (name) -> 
                 defaultValue = props[name]
@@ -72,6 +72,8 @@ module.exports = class Base
           for name of props
               throw "Add property fail. [#{name}] exists" if parent.hasOwnProperty(name)
               add name
+  
+
   
 
   ###
