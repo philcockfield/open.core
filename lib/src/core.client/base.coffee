@@ -1,11 +1,4 @@
-PropFunc = require './util/prop_func'
-
-merge = (source = {}, target = {}) -> 
-    for key of source
-        throw "Merge fail. [#{key}] exists" if target.hasOwnProperty(key)
-        target[key] = source[key]
-    target
-
+Property = require './util/property'
 
 ###
 Common base class.
@@ -15,7 +8,7 @@ or manually via underscore (_.extend source, new Base())
 module.exports = class Base
 
   ###
-  Adds one or more [PropFunc] properties to the object.
+  Adds one or more [Property] functions to the object.
   @param props :    Object literal describing the properties to add
                     The object takes the form [name: default-value].
                     {
@@ -29,10 +22,10 @@ module.exports = class Base
       self = @
       store = @propertyStore()
       
-      # Add the PropFunc to the object.
+      # Add the [Property] to the object.
       add = (name) -> 
             defaultValue = props[name]
-            prop = new PropFunc
+            prop = new Property
                             name:     name
                             default:  defaultValue
                             store:    store
@@ -52,7 +45,4 @@ module.exports = class Base
   propertyStore: -> 
       internal = @_ ?= {}
       internal.basePropertyStore ?= {}
-
-
-
 

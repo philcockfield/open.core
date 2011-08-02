@@ -1,5 +1,5 @@
 module.exports =
-  PropFunc: require './prop_func'
+  Property: require './property'
 
   ###
   Converts a value to boolean.

@@ -8,7 +8,7 @@ Usage:
 - Read:  the 'fn' function is invoked with no parameter.
 - Write: the 'fn' function is invoekd with a value parameter.
 ###
-module.exports = class PropFunc
+module.exports = class Property
   ###
   Constructor.
   @param options
@@ -67,7 +67,7 @@ module.exports = class PropFunc
 
 
   ###
-  Fires the change event (from the PropFunc instance, and the [fn] method).
+  Fires the change event (from the [Property] instance, and the [fn] method).
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
   ###

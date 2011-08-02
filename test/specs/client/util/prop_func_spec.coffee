@@ -1,37 +1,37 @@
-describe 'client/util/prop_func', ->
-  PropFunc = null
+describe 'client/util/property', ->
+  Property = null
   beforeEach ->
-    PropFunc = core.util.PropFunc
+    Property = core.util.Property
 
   it 'exists', ->
-    expect(PropFunc).toBeDefined()
+    expect(Property).toBeDefined()
   
   it 'exposes name', ->
-    prop = new PropFunc( name:'foo', store: {} )
+    prop = new Property( name:'foo', store: {} )
     expect(prop.name).toEqual 'foo'
   
   it 'exposes _parent from [fn] method', ->
-    prop = new PropFunc( name:'foo', store: {} )
+    prop = new Property( name:'foo', store: {} )
     expect(prop.fn._parent).toEqual prop
     
   
   describe 'reading values', ->
     it 'reads null value', ->
-      prop = new PropFunc( name:'foo', store: {} )
+      prop = new Property( name:'foo', store: {} )
       expect(prop.fn()).toEqual null
 
     it 'reads default', ->
-      prop = new PropFunc( name:'foo', store: {}, default:123 )
+      prop = new Property( name:'foo', store: {}, default:123 )
       expect(prop.fn()).toEqual 123
     
     it 'defers to the [read] method', ->
-      prop = new PropFunc( name:'foo', store: {} )
+      prop = new Property( name:'foo', store: {} )
       spyOn prop, 'read'
       prop.fn()
       expect(prop.read).toHaveBeenCalled()
 
     it 'does not defer to the [write] method', ->
-      prop = new PropFunc( name:'foo', store: {} )
+      prop = new Property( name:'foo', store: {} )
       spyOn prop, 'write'
       prop.fn()
       expect(prop.write).not.toHaveBeenCalled()
@@ -39,17 +39,17 @@ describe 'client/util/prop_func', ->
     
   describe 'writing values', ->
     it 'writes a value', ->
-      prop = new PropFunc( name:'foo', store: {}, default:123 )
+      prop = new Property( name:'foo', store: {}, default:123 )
       prop.fn('abc')
       expect(prop.fn()).toEqual 'abc'
 
     it 'writes null', ->
-      prop = new PropFunc( name:'foo', store: {}, default:123 )
+      prop = new Property( name:'foo', store: {}, default:123 )
       prop.fn(null)
       expect(prop.fn()).toEqual null
 
     it 'defers to the [write] method', ->
-      prop = new PropFunc( name:'foo', store: {} )
+      prop = new Property( name:'foo', store: {} )
       spyOn prop, 'write'
       prop.fn(123)
       expect(prop.write).toHaveBeenCalled()
@@ -73,7 +73,7 @@ describe 'client/util/prop_func', ->
                  writeName = name
              readValue
              
-      prop = new PropFunc( name:'foo', store:fnStore, default:123 )
+      prop = new Property( name:'foo', store:fnStore, default:123 )
     
     describe 'read', ->
       it 'reads from function-store', ->
@@ -111,7 +111,7 @@ describe 'client/util/prop_func', ->
     beforeEach ->
       count = 0
       args = null
-      prop = new PropFunc( name:'foo', store: {}, default:123 )
+      prop = new Property( name:'foo', store: {}, default:123 )
       prop.bind 'change', (e) -> 
             count += 1
             args = e
@@ -155,7 +155,7 @@ describe 'client/util/prop_func', ->
     describe 'async', ->
       prop = null
       beforeEach ->
-          prop = new PropFunc( name:'foo', store: {}, default:123 )
+          prop = new Property( name:'foo', store: {}, default:123 )
     
       it 'reads from an async callback', ->
         value = null

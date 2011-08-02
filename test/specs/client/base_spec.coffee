@@ -1,10 +1,10 @@
 describe 'client/base', ->
   Base = null
-  PropFunc = null
+  Property = null
   obj = null
   beforeEach ->
     Base = core.Base
-    PropFunc = core.util.PropFunc
+    Property = core.util.Property
     obj = new Base()
   
   describe 'extending from', ->
