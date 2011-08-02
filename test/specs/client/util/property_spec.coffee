@@ -157,7 +157,19 @@ describe 'client/util/property', ->
         cancel = true
         prop.fn(987)
         expect(prop.fn()).toEqual 123
-        
+
+    describe 'Handler helper: onChanging', ->
+      it 'binds to [changing] event', ->
+        prop.fn.onChanging (e) -> args = e
+        prop.fn 'abc'
+        expect(prop.fn()).toEqual 'abc'
+        expect(args.oldValue).toEqual 123
+        expect(args.newValue).toEqual 'abc'
+
+      it 'cancels bound event', ->
+        prop.fn.onChanging (e) -> args.cancel = yes
+        prop.fn 'abc'
+        expect(prop.fn()).toEqual 123
   
     
   describe 'event: changed', ->
@@ -186,8 +198,8 @@ describe 'client/util/property', ->
         expect(args.oldValue).toEqual 1
         expect(args.newValue).toEqual 2
     
-    describe '[change] event when writing', ->
-      it 'fires change event when value is different', ->
+    describe '[changed] event when writing', ->
+      it 'fires [changed] event when value is different', ->
         prop.fn('abc')
         expect(count).toEqual 1
 
@@ -206,6 +218,14 @@ describe 'client/util/property', ->
         expect(args.oldValue).toEqual 123
         expect(args.newValue).toEqual 'abc'
         
+    describe 'Handler helper: onChanged', ->
+      it 'binds to [changed] event', ->
+        prop.fn.onChanged (e) -> args = e
+        prop.fn 'abc'
+        expect(prop.fn()).toEqual 'abc'
+        expect(args.oldValue).toEqual 123
+        expect(args.newValue).toEqual 'abc'
+
         
       
     describe 'async', ->
@@ -221,7 +241,6 @@ describe 'client/util/property', ->
         runs -> 
           expect(value).toEqual 123
 
-
       it 'writes from an async callback', ->
         written = false
         write = -> 
@@ -231,6 +250,32 @@ describe 'client/util/property', ->
         waitsFor -> written == true
         runs -> 
           expect(prop.fn()).toEqual 'hello'
+
+      it 'binds to [changing] event and cancels change from an async callback', ->
+        fired = false
+        args = null
+        prop.fn.onChanging (e) -> 
+                    args = e
+                    fired = true
+                    e.cancel = true
+        write = -> prop.fn('hello')
+        setTimeout write, 5
+        waitsFor -> fired == true
+        runs -> 
+          expect(args.newValue).toEqual 'hello'
+          expect(prop.fn()).toEqual 123
+
+      it 'binds to [changed] event from an async callback', ->
+        fired = false
+        prop.fn.onChanged (e) -> 
+                    fired = true
+        write = -> prop.fn('hello')
+        setTimeout write, 5
+        waitsFor -> fired == true
+        runs -> 
+          expect(prop.fn()).toEqual 'hello'
+        
+        
         
         
       

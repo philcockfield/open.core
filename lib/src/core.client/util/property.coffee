@@ -1,12 +1,8 @@
-# TODO - changing / changed events
-
 fireEvent = (eventName, prop, args) => 
     fire = (obj) => obj.trigger eventName, args
     fire prop
     fire prop.fn
     args
-
-
 
 ###
 A function which is used as a property.
@@ -25,14 +21,22 @@ module.exports = class Property
             - default: (optional) The default value to use.
   ###
   constructor: (options = {}) -> 
+
+      # Store references.
       fn = @fn
+      fn._parent = @
       @name = options.name
       @_ = 
           store:    options.store
           default:  options.default ?= null
+
+      # Setup eventing.
       _.extend @, Backbone.Events
       _.extend fn, Backbone.Events
-      fn._parent = @
+      
+      # Add handler helper methods.
+      fn.onChanging = (handler) -> fn.bind 'changing', handler
+      fn.onChanged  = (handler) -> fn.bind 'changed', handler
 
 
   ###
