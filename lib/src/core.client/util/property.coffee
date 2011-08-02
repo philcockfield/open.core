@@ -1,5 +1,12 @@
 # TODO - changing / changed events
 
+fireEvent = (eventName, prop, args) => 
+    fire = (obj) => obj.trigger eventName, args
+    fire prop
+    fire prop.fn
+    args
+
+
 
 ###
 A function which is used as a property.
@@ -58,22 +65,52 @@ module.exports = class Property
       oldValue = @read()
       return if value == oldValue
       
+      # Pre-event.
+      args = @fireChanging oldValue, value
+      return if args.cancel is yes
+      
       # Store the value.
       store = @_.store      
       if _.isFunction(store) then store(@name, value) else store[@name] = value
       
-      # Alert listeners.
-      @fireChange oldValue, value
+      # Post-event.
+      @fireChanged oldValue, value
 
 
   ###
-  Fires the change event (from the [Property] instance, and the [fn] method).
+  Fires the 'changing' event (from the [Property] instance, and the [fn] method)
+  allowing listeners to cancel the change.
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
+  @returns the event args.
   ###
-  fireChange: (oldValue, newValue) => 
-      fire = (obj) => 
-              obj.trigger 'changed', { oldValue:oldValue, newValue:newValue }
-      fire @
-      fire @fn
+  fireChanging: (oldValue, newValue) => 
+      args = 
+          oldValue: oldValue
+          newValue: newValue
+          cancel:   false
+      fireEvent 'changing', @, args
+      args
+
+
+  ###
+  Fires the 'changed' event (from the [Property] instance, and the [fn] method).
+  @param oldValue : The value before the property is changing from.
+  @param newValue : The new value the property is changing to.
+  @returns the event args.
+  ###
+  fireChanged: (oldValue, newValue) => 
+      fireEvent 'changed', @,
+                    oldValue: oldValue
+                    newValue: newValue
+
+
+
+
+
+
+
+
+
+
 

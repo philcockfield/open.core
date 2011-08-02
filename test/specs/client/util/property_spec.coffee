@@ -103,8 +103,64 @@ describe 'client/util/property', ->
         expect(writeTotal).toEqual 1
         
     
+  describe 'event: changing', ->
+    prop = null
+    args = null
+    count = 0
+    cancel = false
+    beforeEach ->
+      count = 0
+      cancel = false
+      args = null
+      prop = new Property( name:'foo', store: {}, default:123 )
+      prop.bind 'changing', (e) -> 
+            count += 1
+            args = e
+            args.cancel = cancel
     
-  describe 'change event', ->
+    describe 'fireChanging method', ->
+      it 'fires [changing] event from class', ->
+        prop.fireChanging()
+        expect(count).toEqual 1
+      
+      it 'fires [changing] event from [fn] method', ->
+        prop.fireChanging()
+        expect(count).toEqual 1
+      
+      it 'passes values as args in event', ->
+        prop.fireChanging(1, 2)
+        expect(args.oldValue).toEqual 1
+        expect(args.newValue).toEqual 2
+        expect(args.cancel).toEqual false
+
+    describe '[changing] event when writing', ->
+      it 'fires [changing] event when value is different', ->
+        prop.fn('abc')
+        expect(count).toEqual 1
+
+      it 'does not fire [changing] event when value is the same (as default)', ->
+        prop.fn(123)
+        expect(count).toEqual 0
+
+      it 'does not fire [changing] event when value is the same (multiple changes with same value)', ->
+        prop.fn('abc')
+        prop.fn('abc')
+        prop.fn('abc')
+        expect(count).toEqual 1
+
+      it 'passes the old and new values in event args', ->
+        prop.fn('abc')
+        expect(args.oldValue).toEqual 123
+        expect(args.newValue).toEqual 'abc'
+
+      it 'does not change property value when cancelled', ->
+        cancel = true
+        prop.fn(987)
+        expect(prop.fn()).toEqual 123
+        
+  
+    
+  describe 'event: changed', ->
     prop = null
     args = null
     count = 0
@@ -116,30 +172,30 @@ describe 'client/util/property', ->
             count += 1
             args = e
 
-    describe 'fireChange method', ->
+    describe 'fireChanged method', ->
       it 'fires change event from class', ->
-        prop.fireChange()
+        prop.fireChanged()
         expect(count).toEqual 1
       
       it 'fires change event from [fn] method', ->
-        prop.fireChange()
+        prop.fireChanged()
         expect(count).toEqual 1
       
       it 'passes values as args in event', ->
-        prop.fireChange(1, 2)
+        prop.fireChanged(1, 2)
         expect(args.oldValue).toEqual 1
         expect(args.newValue).toEqual 2
     
-    describe 'change event when writing', ->
+    describe '[change] event when writing', ->
       it 'fires change event when value is different', ->
         prop.fn('abc')
         expect(count).toEqual 1
 
-      it 'does not fire change event when value is the same (as default)', ->
+      it 'does not fire [changed] event when value is the same (as default)', ->
         prop.fn(123)
         expect(count).toEqual 0
 
-      it 'does not fire change event when value is the same (multiple change with same value)', ->
+      it 'does not fire [changed] event when value is the same (multiple changes with same value)', ->
         prop.fn('abc')
         prop.fn('abc')
         prop.fn('abc')
