@@ -70,16 +70,23 @@ describe 'client/mvc/model', ->
         url: -> 'http://foo.com'
       expect(new MyModel().url()).toEqual 'http://foo.com'
       
-
+# TEMP 
   describe 'server method wrapping', ->
+    beforeEach ->
+      spyOn(model, '_execServerMethod')
+        
+    
     it 'wraps [fetch]', ->
-      expect(model.fetch._wrapped).toEqual backboneModel.fetch
-
+      model.fetch()
+      expect(model._execServerMethod).toHaveBeenCalled()
+  
     it 'wraps [save]', ->
-      expect(model.save._wrapped).toEqual backboneModel.save
-
+      model.save()
+      expect(model._execServerMethod).toHaveBeenCalled()
+      
     it 'wraps [destroy]', ->
-      expect(model.destroy._wrapped).toEqual backboneModel.destroy
+      model.destroy()
+      expect(model._execServerMethod).toHaveBeenCalled()
     
       
   describe 'fetch (and generic server method handler)', ->
@@ -87,12 +94,11 @@ describe 'client/mvc/model', ->
     
     beforeEach ->
       fetchArgs = null
-      spyOn(model.fetch, '_wrapped').andCallFake (args) -> fetchArgs = args
-    
+      spyOn(Backbone.Model.prototype, 'fetch').andCallFake (args) -> fetchArgs = args
     
     it 'passes execution to the Backbone.fetch method', ->
       model.fetch()
-      expect(model.fetch._wrapped).toHaveBeenCalled()
+      expect(Backbone.Model.prototype.fetch).toHaveBeenCalled()
           
     it 'invokes the success callback', ->
       count = 0

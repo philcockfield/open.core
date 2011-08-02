@@ -1,48 +1,6 @@
 Base = require '../base'
-
-excludeMethods = [
-  'initialize'
-  'idAttribute'
-]
-
-excludeMethod = (name) -> 
-    return true if name.substring(0, 1) is '_'
-    return true if _.any(excludeMethods, (m) -> m == name)
-    false
-
-###
-Provides standardized response behavior for all of the server
-interaction methods. 
-- Fetch
-- Save
-- Destroy
-###
-serverMethod = (model, wrappedMethod) -> 
-    #  Proxy to the underlying Backbone method.
-    fnProxy = (options = {}) -> 
-        onComplete = (response, success, error, callback) -> 
-                args = 
-                    model:    model
-                    response: response
-                    success:  success
-                    error:    error
-                fnProxy.trigger 'complete', args
-                callback?(args)
-    
-        # Execute the method, with callbacks to the standard response handler.
-        fnProxy._wrapped
-            success: (m, response) -> onComplete(response, true, false, options.success)
-            error:   (m, response) -> onComplete(response, false, true,  options.error)
-            
-
-    #  Extend the method.
-    _.extend fnProxy, Backbone.Events
-    fnProxy.onComplete = (handler) -> fnProxy.bind 'complete', handler
-    fnProxy._wrapped = wrappedMethod # Exposed for testing puroses (allow spy override)
-    fnProxy
-    
-
 basePrototype = new Base()
+
 
 
 ###
@@ -68,31 +26,24 @@ class Model extends Backbone.Model
           
                 # Read value from backing model.
                 self.get(name)
-
-
+  
+# TEMP   
         # Create the wrapped Backbone model.
         model = new Backbone.Model()
-
+  
         # Store internal state.
         @_ = 
           model: model
 
         # Extend members.
-        @fetch    = serverMethod(@, model.fetch)
-        @save     = serverMethod(@, model.save)
-        @destroy  = serverMethod(@, model.destroy)
-        
-        # Copy members from Backbone model.
-        for key of model
-            continue if @[key] != undefined or excludeMethod(key)
-            @[key] = model[key]
-        @atts = @attributes
-        
-        
+        do => 
+            init = (method) -> 
+                  _.extend method, Backbone.Events
+                  method.onComplete = (handler) -> method.bind 'complete', handler
+            init @fetch
+            init @save
+            init @destroy
 
-
-      
-        
   ###
   Fetches the model's state from the server.
   @param options
@@ -100,19 +51,32 @@ class Model extends Backbone.Model
           - success(model, response) : (optional) Function to invoke upon success.
   # See backbone.js documentation for more details.
   ###
-  fetch: undefined   # Set in constructor.
-
+  fetch: (options) -> @_execServerMethod @, 'fetch', options
   
   # Saves the model on the server.
   # Params: same as fetch
   # See backbone.js documentation for more details.
-  save: undefined   # Set in constructor.
-
+  save: (options) -> @_execServerMethod @, 'save', options
+  
   # Destroys the model on the server.
   # Params: same as fetch
   # See backbone.js documentation for more details.
-  destroy: undefined   # Set in constructor.
+  destroy: (options) -> @_execServerMethod @, 'destroy', options
 
+  _execServerMethod: (model, methodName, options = {}) -> 
+          onComplete = (response, success, error, callback) -> 
+                  args = 
+                      model:    model
+                      response: response
+                      success:  success
+                      error:    error
+                  model[methodName].trigger 'complete', args
+                  callback?(args)
+    
+          # Execute the method, with callbacks to the standard response handler.
+          Backbone.Model.prototype[methodName].call model,
+              success: (m, response) -> onComplete(response, true, false, options.success)
+              error:   (m, response) -> onComplete(response, false, true,  options.error)
 
               
               
