@@ -26,14 +26,6 @@ class Model extends Backbone.Model
           
                 # Read value from backing model.
                 self.get(name)
-  
-# TEMP   
-        # Create the wrapped Backbone model.
-        model = new Backbone.Model()
-  
-        # Store internal state.
-        @_ = 
-          model: model
 
         # Extend members.
         do => 
@@ -63,6 +55,7 @@ class Model extends Backbone.Model
   # See backbone.js documentation for more details.
   destroy: (options) -> @_execServerMethod @, 'destroy', options
 
+  
   _execServerMethod: (model, methodName, options = {}) -> 
           onComplete = (response, success, error, callback) -> 
                   args = 

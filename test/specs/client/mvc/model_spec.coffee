@@ -1,7 +1,6 @@
 describe 'client/mvc/model', ->
   Model = null
   model = null
-  backboneModel = null
   SampleModel = null
   beforeEach ->
       Model = core.mvc.Model
@@ -15,7 +14,6 @@ describe 'client/mvc/model', ->
                     bar: null
       
       model = new SampleModel()
-      backboneModel = model._.model
   
   
   it 'supports eventing', ->
@@ -23,9 +21,7 @@ describe 'client/mvc/model', ->
   
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
-  
-  it 'wraps a Backbone Model', ->
-    expect(model._.model instanceof Backbone.Model).toEqual true 
+
 
   describe 'Read/Write properties', ->
     it 'GETS from the backing model', ->
@@ -70,11 +66,9 @@ describe 'client/mvc/model', ->
         url: -> 'http://foo.com'
       expect(new MyModel().url()).toEqual 'http://foo.com'
       
-# TEMP 
   describe 'server method wrapping', ->
     beforeEach ->
       spyOn(model, '_execServerMethod')
-        
     
     it 'wraps [fetch]', ->
       model.fetch()
