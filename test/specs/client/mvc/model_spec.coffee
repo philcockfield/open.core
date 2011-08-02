@@ -10,13 +10,16 @@ describe 'client/mvc/model', ->
       class SampleModel extends Model
         constructor: () -> 
             super
-            @.util.addProps
+            @.addProps
                     foo: 123
                     bar: null
       
       model = new SampleModel()
       backboneModel = model._.model
 
+  it 'supports eventing', ->
+    expect(-> model.bind('foo')).not.toThrow()
+  
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
   
@@ -174,7 +177,34 @@ describe 'client/mvc/model', ->
         expect(args.success).toEqual true
         expect(args.error).toEqual false
         
+  describe 'FOO', ->
+    it 'FOO', ->
       
+      class M extends Backbone.Model
+        
+      class B extends core.Base
+        
+      m = new M()
+      console.log 'm', m
+      
+      b = new B()
+      console.log 'b', b
+      console.log 'b.util', b.util
+      
+      z = {}
+      _.extend z, new Backbone.Model()
+      console.log 'z', z
+      
+      class Foo
+      _.extend Foo, Backbone.Events
+      foo = new Foo()
+      console.log 'foo', foo
+      
+      class MyModel extends Backbone.Model
+        constructor: () -> 
+            super
+      
+          
       
         
   # describe 'copying model methods', ->

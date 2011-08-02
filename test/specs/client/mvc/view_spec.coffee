@@ -6,10 +6,8 @@ describe 'client/mvc/view', ->
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled View, -> new View()
 
-  it 'does not overwrite the base _ internal object', ->
-    view = new View()
-    expect(view._.merge).toBeDefined()
-  
+  it 'supports eventing', ->
+    expect(-> new View().bind('foo')).not.toThrow()
   
   describe 'el', ->
     it 'has an el which is a jQuery object', ->

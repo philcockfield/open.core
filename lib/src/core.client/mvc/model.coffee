@@ -51,14 +51,13 @@ class Model extends Base
         # Setup initial conditions.
         super
         self = @
-        # fnFetch = @fetch
 
         # Create the wrapped Backbone model.
         model = new Backbone.Model()
 
         # Store internal state.
-        @_.merge
-            model: model
+        @_ = 
+          model: model
 
         # Extend members.
         @fetch    = serverMethod(@, model.fetch)
@@ -97,6 +96,7 @@ class Model extends Base
   # See backbone.js documentation for more details.
   ###
   fetch: undefined   # Set in constructor.
+
   
   # Saves the model on the server.
   # Params: same as fetch

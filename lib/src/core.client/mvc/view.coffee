@@ -7,6 +7,7 @@ module.exports = class View extends Base
   constructor: (params = {}) ->
       # Setup initial conditions.
       super
+      _.extend @, Backbone.Events
 
       # Create the wrapped Backbone View.
       view = new Backbone.View
@@ -14,7 +15,7 @@ module.exports = class View extends Base
                     className: params.className
       
       # Store internal state.
-      @_.merge
+      @_ =
           view: view
           atts: params
       @el = $(view.el)
