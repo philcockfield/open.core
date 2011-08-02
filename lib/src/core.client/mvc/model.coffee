@@ -42,15 +42,33 @@ serverMethod = (model, wrappedMethod) ->
     fnProxy
     
 
+basePrototype = new Base()
+
 
 ###
 Base class for models.
 ###
-class Model extends Base
+class Model extends Backbone.Model
   constructor: (params = {}) ->
         # Setup initial conditions.
         super
         self = @
+        
+        # Extend from Base for auto properties.
+        # Note:  Return the custom property store function that ferrys
+        #        read/write requests into the Backbone model's GET/SET methods.
+        _.extend @, basePrototype
+        @propertyStore = () =>
+            fn = (name, value) => 
+                if value != undefined
+                      #  Write value to backing store.
+                      param = {}
+                      param[name] = value
+                      self.set param
+          
+                # Read value from backing model.
+                self.get(name)
+
 
         # Create the wrapped Backbone model.
         model = new Backbone.Model()
@@ -72,19 +90,6 @@ class Model extends Base
         
         
 
-  # Override: Return the custom property store function ferrys
-  #           read/write requests into the backing Backbone model.
-  propertyStore: -> 
-      model = @_.model
-      fnStore = (name, value) -> 
-          if value != undefined
-                #  Write value to backing model.
-                param = {}
-                param[name] = value
-                model.set param
-          
-          # Read value from backing model.
-          model.get(name)
 
       
         

@@ -16,9 +16,10 @@ describe 'client/mvc/model', ->
       
       model = new SampleModel()
       backboneModel = model._.model
-
+  
+  
   it 'supports eventing', ->
-    expect(-> model.bind('foo')).not.toThrow()
+     expect(-> model.bind('foo')).not.toThrow()
   
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
@@ -28,19 +29,19 @@ describe 'client/mvc/model', ->
 
   describe 'Read/Write properties', ->
     it 'GETS from the backing model', ->
-      spyOn backboneModel, 'get'
+      spyOn model, 'get'
       model.foo()
-      expect(backboneModel.get).toHaveBeenCalled()
+      expect(model.get).toHaveBeenCalled()
     
     it 'SETS to the backing model', ->
-      spyOn backboneModel, 'set'
+      spyOn model, 'set'
       model.foo('hello')
-      expect(backboneModel.set).toHaveBeenCalledWith( foo:'hello' )
+      expect(model.set).toHaveBeenCalledWith( foo:'hello' )
       
     it 'reads from model', ->
       expect(model.foo()).toEqual 123
     
-    it 'write to model', ->
+    it 'writes to model', ->
       model.foo 'yo'
       expect(model.foo()).toEqual 'yo'
     
@@ -79,8 +80,6 @@ describe 'client/mvc/model', ->
 
     it 'wraps [destroy]', ->
       expect(model.destroy._wrapped).toEqual backboneModel.destroy
-      
-    
     
       
   describe 'fetch (and generic server method handler)', ->
@@ -177,88 +176,3 @@ describe 'client/mvc/model', ->
         expect(args.success).toEqual true
         expect(args.error).toEqual false
         
-  describe 'FOO', ->
-    it 'FOO', ->
-      
-      class M extends Backbone.Model
-        
-      class B extends core.Base
-        
-      m = new M()
-      console.log 'm', m
-      
-      b = new B()
-      console.log 'b', b
-      console.log 'b.util', b.util
-      
-      z = {}
-      _.extend z, new Backbone.Model()
-      console.log 'z', z
-      
-      class Foo
-      _.extend Foo, Backbone.Events
-      foo = new Foo()
-      console.log 'foo', foo
-      
-      class MyModel extends Backbone.Model
-        constructor: () -> 
-            super
-      
-          
-      
-        
-  # describe 'copying model methods', ->
-  #   describe 'methods NOT copied', ->
-  #     it 'does not copy the initialize method', ->
-  #       expect(model.initialize).not.toBeDefined()
-  #     
-  #     it 'does not copy the [idAttribute] method', ->
-  #       expect(model.idAttribute).not.toBeDefined()
-  #   
-  #   it 'creates an alias from [attributes] to [atts]', ->
-  #     expect(model.atts).toEqual model._.model.attributes
-  # 
-  # 
-  #   describe 'Custom defined functions', ->
-  #     
-  #   
-  #   it 'does not overwrite fetch', ->
-  #     expect(model.fetch.onComplete).toBeDefined()
-  # 
-  #   
-  #   
-  #   it 'foo', ->
-  #     
-      # TEMP 
-      
-      # for key of model
-      #   console.log ' >> ', key
-      # console.log 'FOO', model.fetch.onComplete
-    
-        
-      
-      
-
-
-# Fetch
-
-###
-Override
-- clone
-
-fetch
-save
-destroy
-
-###
-
-
-
-
-
-
-
-
-
-
-
