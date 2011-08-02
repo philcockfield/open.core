@@ -112,7 +112,7 @@ describe 'client/util/property', ->
       count = 0
       args = null
       prop = new Property( name:'foo', store: {}, default:123 )
-      prop.bind 'change', (e) -> 
+      prop.bind 'changed', (e) -> 
             count += 1
             args = e
 

@@ -73,7 +73,7 @@ module.exports = class Property
   ###
   fireChange: (oldValue, newValue) => 
       fire = (obj) => 
-              obj.trigger 'change', { oldValue:oldValue, newValue:newValue }
+              obj.trigger 'changed', { oldValue:oldValue, newValue:newValue }
       fire @
       fire @fn
 
