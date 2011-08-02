@@ -57,7 +57,7 @@ module.exports = class Base
           # Setup initial conditions.
           return unless props?
           parent = @_parent
-          store = parent._propertyStore()
+          store = parent.propertyStore()
           
           # Add the PropFunc to the object.
           add = (name) -> 
@@ -77,10 +77,11 @@ module.exports = class Base
   
 
   ###
-  Retrieves the property store.  
+  Retrieves the property store.
+  This should be either an object or a property-function. 
   Override this to provide a custom property store.
   ###
-  _propertyStore: -> @_.basePropStore ?= {}
+  propertyStore: -> @_.basePropStore ?= {}
 
 
 

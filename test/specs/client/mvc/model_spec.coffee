@@ -60,18 +60,37 @@ describe 'client/mvc/model', ->
         runs -> 
           expect(model.bar()).toEqual 'hello'
     
+  describe 'url', ->
+    it 'can be overridden', ->
+      class MyModel extends Model
+        url: -> 'http://foo.com'
+      expect(new MyModel().url()).toEqual 'http://foo.com'
       
-  describe 'fetch', ->
+
+  describe 'server method wrapping', ->
+    it 'wraps [fetch]', ->
+      expect(model.fetch._wrapped).toEqual backboneModel.fetch
+
+    it 'wraps [save]', ->
+      expect(model.save._wrapped).toEqual backboneModel.save
+
+    it 'wraps [destroy]', ->
+      expect(model.destroy._wrapped).toEqual backboneModel.destroy
+      
+    
+    
+      
+  describe 'fetch (and generic server method handler)', ->
     fetchArgs = null
     
     beforeEach ->
       fetchArgs = null
-      spyOn(backboneModel, 'fetch').andCallFake (args) -> 
-          fetchArgs = args
+      spyOn(model.fetch, '_wrapped').andCallFake (args) -> fetchArgs = args
+    
     
     it 'passes execution to the Backbone.fetch method', ->
       model.fetch()
-      expect(backboneModel.fetch).toHaveBeenCalled()
+      expect(model.fetch._wrapped).toHaveBeenCalled()
           
     it 'invokes the success callback', ->
       count = 0
@@ -121,7 +140,7 @@ describe 'client/mvc/model', ->
         model.fetch()
         fetchArgs.success()
         expect(fireCount).toEqual 1
-
+    
       it 'fires event when completed with error', ->
         model.fetch()
         fetchArgs.error()
@@ -134,7 +153,7 @@ describe 'client/mvc/model', ->
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual true
         expect(args.error).toEqual false
-
+    
       it 'passes event-args when completed with error', ->
         model.fetch()
         fetchArgs.error('model', 'res')
@@ -142,7 +161,7 @@ describe 'client/mvc/model', ->
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual false
         expect(args.error).toEqual true
-
+    
     describe 'handler: onComplete', ->
       it 'invokes callback on success', ->
         args = null
@@ -158,29 +177,50 @@ describe 'client/mvc/model', ->
       
       
         
-  describe 'copying model methods', ->
-    it 'should not copy the initialize method', ->
-      expect(model.initialize).not.toBeDefined()
-    
-    it 'should not overwrite custom defined methods', ->
-      expect(model.fetch.onComplete).toBeDefined()
-    
-    
-    it 'foo', ->
-      
+  # describe 'copying model methods', ->
+  #   describe 'methods NOT copied', ->
+  #     it 'does not copy the initialize method', ->
+  #       expect(model.initialize).not.toBeDefined()
+  #     
+  #     it 'does not copy the [idAttribute] method', ->
+  #       expect(model.idAttribute).not.toBeDefined()
+  #   
+  #   it 'creates an alias from [attributes] to [atts]', ->
+  #     expect(model.atts).toEqual model._.model.attributes
+  # 
+  # 
+  #   describe 'Custom defined functions', ->
+  #     
+  #   
+  #   it 'does not overwrite fetch', ->
+  #     expect(model.fetch.onComplete).toBeDefined()
+  # 
+  #   
+  #   
+  #   it 'foo', ->
+  #     
       # TEMP 
       
-      for key of model
-        console.log ' >> ', key
-      
-      console.log 'FOO', model.fetch.onComplete
+      # for key of model
+      #   console.log ' >> ', key
+      # console.log 'FOO', model.fetch.onComplete
     
         
       
       
 
 
+# Fetch
 
+###
+Override
+- clone
+
+fetch
+save
+destroy
+
+###
 
 
 
