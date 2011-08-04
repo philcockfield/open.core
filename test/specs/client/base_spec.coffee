@@ -1,4 +1,4 @@
-describe 'client/base', ->
+describe 'base', ->
   Base = null
   Property = null
   obj = null

@@ -1,4 +1,4 @@
-describe 'server/util/html', ->
+describe 'util/html', ->
   html = core.util.html
   qs = '?uid'
   beforeEach ->

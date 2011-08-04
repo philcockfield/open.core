@@ -1,4 +1,4 @@
-describe 'client/mvc/template', ->
+describe 'mvc/template', ->
   Template = null
   Sample = null
   beforeEach ->

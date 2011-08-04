@@ -1,4 +1,4 @@
-describe 'server/core.server', ->
+describe 'core.server', ->
   server = require 'core.server'
 
   it 'exists', ->

@@ -1,4 +1,4 @@
-describe 'client/mvc/view', ->
+describe 'mvc/view', ->
   View = null
   beforeEach ->
     View = core.mvc.View

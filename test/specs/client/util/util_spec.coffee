@@ -1,4 +1,4 @@
-describe 'client/util', ->
+describe 'util', ->
   describe 'toBool', ->
     toBool = null
     beforeEach -> toBool = core.util.toBool

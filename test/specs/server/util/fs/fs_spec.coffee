@@ -1,4 +1,4 @@
-describe 'server/util/fs', ->
+describe 'util/fs', ->
   sampleDir = "#{__dirname}/sample"
   paths     = test.paths
   fsUtil    = test.server.util.fs

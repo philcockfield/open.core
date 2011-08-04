@@ -1,4 +1,4 @@
-describe 'client/util/property', ->
+describe 'util/property', ->
   Property = null
   beforeEach ->
     Property = core.util.Property

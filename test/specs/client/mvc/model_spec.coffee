@@ -1,4 +1,4 @@
-describe 'client/mvc/model', ->
+describe 'mvc/model', ->
   Model = null
   model = null
   SampleModel = null

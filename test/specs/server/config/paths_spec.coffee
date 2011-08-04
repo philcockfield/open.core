@@ -1,4 +1,4 @@
-describe 'server/config/paths', ->
+describe 'config/paths', ->
 
   describe 'global paths', ->
     it 'puts [server] into the global paths', ->

@@ -1,4 +1,4 @@
-describe 'server/util', ->
+describe 'util', ->
   util = core.util
   
   it 'aliases to client toBool() method', ->
