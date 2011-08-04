@@ -18,3 +18,4 @@ module.exports = paths
 
 # Put the root modules into the global paths.
 require.paths.unshift paths.src
+require.paths.unshift paths.client

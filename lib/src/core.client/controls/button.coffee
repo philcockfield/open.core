@@ -1,6 +1,6 @@
-mvc = require '../mvc'
+core = require 'core'
 
-console.log 'mvc', mvc
-
-module.exports = 
-  foo:123 # TEMP 
+###
+A clickable button.
+###
+module.exports = class Button extends core.mvc.View

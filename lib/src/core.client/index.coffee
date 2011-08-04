@@ -1,2 +1,3 @@
 module.exports = 
-  core: require './core'
+  core:     require './core'
+  controls: require './controls'

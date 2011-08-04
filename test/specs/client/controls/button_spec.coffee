@@ -2,14 +2,13 @@ describe 'controls/button', ->
   Button = require 'core/controls/button'
   button = null
   beforeEach ->
-      # button = new Button()
+      button = new Button()
   
   it 'exists', ->
     expect(Button).toBeDefined()
 
-# TEMP 
-  # it 'is an MVC view', ->
-  #   expect(button instanceof core.mvc.View).toEqual true 
+  it 'is an MVC view', ->
+    expect(button instanceof core.mvc.View).toEqual true 
   
   
   describe 'default values', ->
