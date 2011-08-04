@@ -12,14 +12,6 @@ absPosition(left = 0, top = 0, right = 0, bottom = 0, unit=px)
     toUnit 'right', right, unit
     toUnit 'bottom', bottom, unit
 
-gradient(type, start, stops...)
-  prop = current-property
-  stops = unquote(join(', ', stops))
-  webkit = '-webkit-gradient(type, %s, %s, %s)' % (type start stops)
-  add-property(prop[0], webkit)
-  '-moz-%s-gradient(%s, %s)' % (type start stops)
-
-
 gradientY(defaultColor, topColor, bottomColor)
     prop = current-property[0]
     add-property(prop, defaultColor)

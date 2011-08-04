@@ -33,7 +33,7 @@ module.exports =
   Builds the entire client scripts to a single package.
   @param options:
             - writeResponse : a response object to write output details to (optional).
-            - save:         : flag indicating if the code should be saved to disk.
+            - save:         : flag indicating if the code should be saved to disk (default false).
             - callback      : invoked upon completion (optional).
                               Passes a function with two properties:
                                 - packed: the packed code
@@ -56,7 +56,7 @@ module.exports =
           target: '/core'
 
       compiler  = new core.util.javascript.Compiler paths, header: copyright
-      if options.save
+      if options.save == true
         compiler.save
               packed:         output.packed
               minified:       output.minified

@@ -5,6 +5,7 @@ fsCommon = require './_common'
 
 # CONSTANTS
 ERROR = fsCommon.ERROR
+DEFAULT_FILE_MODE = 0664 # Read-Write for users/groups, Read-Only world
 
 # PRIVATE MEMBERS
 cleanDirPath = (path) ->
@@ -27,7 +28,7 @@ copyDir = (source, target, options..., callback) ->
   # Setup initial conditions.
   self = @
   options = options[0] ?= {}
-  mode = options.mode ?= 0664 # Read-Write for users/groups, Read-Only world.
+  mode = options.mode ?= DEFAULT_FILE_MODE # Read-Write for users/groups, Read-Only world.
 
   # Sanitize the paths.
   source      = cleanDirPath(source)
@@ -253,8 +254,8 @@ index = module.exports =
                    { source:'/folder',        target:'/folder_new' }
                  ]
   @param options:
-              - mode: copy code (defaults to 0777 for full permissions).
-              - overwrite : flag indicating if an existing file should be overwritten.
+              - mode: copy code (defaults to 0664).
+              - overwrite : flag indicating if an existing file should be overwritten (default false).
   @param callback: (err)
   ###
   copyAll: (items, options..., callback) ->
@@ -284,14 +285,14 @@ index = module.exports =
   @param source:    path the file/directory to copy.
   @param target:    path to copy to.
   @param options:
-              - mode      : copy code (defaults to 0777 for full permissions).
-              - overwrite : flag indicating if an existing file should be overwritten.
+              - mode      : copy code (defaults to 0664 - see: DEFAULT_FILE_MODE).
+              - overwrite : flag indicating if an existing file should be overwritten (default false).
   @param callback: (err)
   ###
   copy: (source, target, options..., callback) ->
       self = @
       options = options[0] ?= {}
-      mode = options.mode ?= 0777
+      mode = options.mode ?= DEFAULT_FILE_MODE
       overwrite = options.overwrite ?= false
 
       prepareDir = (file, onComplete) ->
@@ -350,13 +351,13 @@ index = module.exports =
   Note: If the directly already exists no changes are made.
   @param path: of the directory to create.
   @param options:
-              - mode: copy code (defaults to 0777 for full permissions).
+              - mode: copy code (defaults to 0664 - see: DEFAULT_FILE_MODE).
   @param callback: (err)
   ###
   createDir: (path, options..., callback) ->
       self = @
       options = options[0] ?= {}
-      mode = options.mode ?= 0777
+      mode = options.mode ?= DEFAULT_FILE_MODE
 
       # Recursive create operation.
       create = (dir, onCreated) ->

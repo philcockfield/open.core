@@ -120,7 +120,8 @@ module.exports = class Compiler
   build: (callback) ->
       self = @
       @minify (code) ->
-          result = (minified) -> if minified then self.minified else self.packed
+          result = (minified) -> 
+                if minified then result.minified else result.packed
           result.minified = self.minified
           result.packed = self.packed
           callback? result
