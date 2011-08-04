@@ -15,7 +15,7 @@ buildLibs = (callback) ->
 
 buildCore = (callback) -> 
   console.log 'Building all [open.core] client code...'
-  core.util.javascript.build.client
+  core.util.javascript.build.all
       save: true
       callback: (result) ->
           console.log ' - Packed file:   ', result.paths.packed
@@ -28,9 +28,6 @@ task 'specs', 'Run the Jasmine BDD specs', ->
   exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
 
-task 'build', 'Runs all build tasks', ->
+task 'build', 'Build and save all JavaScript files', ->
     buildLibs -> buildCore()
-
-task 'build:libs', 'Build and save the 3rd party libs to /public', -> buildLibs()
-task 'build:core', 'Package all [Open.Core] client-code into files', -> buildCore()
 

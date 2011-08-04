@@ -24,7 +24,6 @@ module.exports =
   ###
   Builds the entire client scripts to a single package.
   @param options:
-            - writeResponse : a response object to write output details to (optional).
             - save:         : flag indicating if the code should be saved to disk (default false).
             - callback      : invoked upon completion (optional).
                               Passes a function with two properties:
@@ -35,7 +34,7 @@ module.exports =
                                   - minified: true - returns the minified code.
                                   - minified: false - returns the unminified, packed code.
   ###
-  client: (options = {}) ->
+  all: (options = {}) ->
       core      = require 'core.server'
       folder    = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
@@ -47,6 +46,7 @@ module.exports =
       clientPath = core.paths.client
       paths = [
         { source: "#{clientPath}/core", target: '/core' }
+        { source: "#{clientPath}/controls", target: '/core/controls' }
         ]
 
       # Compile and save.
@@ -55,7 +55,6 @@ module.exports =
         compiler.save
               packed:         output.packed
               minified:       output.minified
-              writeResponse:  options.writeResponse
               callback:       options.callback
       else
         compiler.build (code) ->
