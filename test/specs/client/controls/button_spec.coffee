@@ -28,6 +28,23 @@ describe 'controls/button', ->
     
     it 'has no text label by default', ->
       expect(button.label()).toEqual ''
+
+
+  describe 'constructor', ->
+    it 'recieves custom [label] from constructor', ->
+      button = new Button(label:'foo')
+      expect(button.label()).toEqual 'foo'
+
+    it 'recieves custom [pressed] value from constructor', ->
+      button = new Button(pressed: true)
+      expect(button.pressed()).toEqual true
+
+    it 'recieves custom [canToggle] value from constructor', ->
+      button = new Button(canToggle: true)
+      expect(button.canToggle()).toEqual true
+      
+    
+  
     
   describe "click (method and event)", ->
     args = null

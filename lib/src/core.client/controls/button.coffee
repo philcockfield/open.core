@@ -4,12 +4,16 @@ core = require 'core'
 A clickable button.
 ###
 module.exports = class Button extends core.mvc.View
-  constructor: () -> 
+  ###
+  Constructor.
+  @param params : used to override default property values.
+  ###
+  constructor: (params = {}) -> 
       super
       @addProps
-          pressed:  false # Gets or sets whether the button is currently pressed (in a down state).
-          canToggle:  false # Gets or sets whether the button can remain toggled in a down state.
-          label:      ''    # Gets or sets the text label for the button.
+          pressed:    params.pressed   ?= false  # Gets or sets whether the button is currently pressed (in a down state).
+          canToggle:  params.canToggle ?= false  # Gets or sets whether the button can remain toggled in a down state.
+          label:      params.label     ?= ''     # Gets or sets the text label for the button.
       
       # Wire up events.
       @pressed.onChanged (e) => 
