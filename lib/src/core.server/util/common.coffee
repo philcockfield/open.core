@@ -1,9 +1,9 @@
-client = require 'core.client'
+client = require 'core.client/core'
 
 # Store color in global namespace.
 global.color =
     bold   : "\033[0;1m"
-    grey  : "\033[0;30m"
+    grey   : "\033[0;30m"
     red    : "\033[0;31m"
     green  : "\033[0;32m"
     yellow : "\033[0;33m"

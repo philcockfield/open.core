@@ -43,10 +43,13 @@ module.exports =
           packed:   "#{folder}/core.js"
           minified: "#{folder}/core-min.js"
 
-      paths =
-          source: core.paths.client
-          target: '/core'
+      # Construct paths.
+      clientPath = core.paths.client
+      paths = [
+        { source: "#{clientPath}/core", target: '/core' }
+        ]
 
+      # Compile and save.
       compiler  = new core.util.javascript.Compiler paths, header: copyright
       if options.save == true
         compiler.save
