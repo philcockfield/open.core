@@ -18,4 +18,3 @@ describe 'client/mvc/template', ->
     tmpl = new Sample()
     expect(tmpl.bar()).toEqual 'some function'
     expect(tmpl.baz).toEqual 123
-

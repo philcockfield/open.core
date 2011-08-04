@@ -16,17 +16,11 @@ module.exports =
           "#{src}/backbone-0.5.1.js"
         ]
 
-        console.log "Saving lib files to: #{libs}"
-        console.log '...'
-
         options =
             paths: paths
             standard: "#{libs}/libs.js"
             minified: "#{libs}/libs-min.js"
-        core.util.fs.concatenate.save options, ->
-                  console.log 'Done'
-                  callback?()
-
+        core.util.fs.concatenate.save options, -> callback?()
 
 
   ###
