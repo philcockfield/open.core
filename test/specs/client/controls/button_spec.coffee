@@ -46,44 +46,44 @@ describe 'controls/button', ->
     
   
     
-  describe "click (method and event)", ->
+  describe 'click (method and event)', ->
     args = null
     fireCount = null
     beforeEach ->
-      button.bind "click", (e) ->
+      button.bind 'click', (e) ->
                       args = e
                       fireCount += 1
       
       args = null
       fireCount = 0
 
-    it "fires event when click method is invoked", ->
+    it 'fires event when click method is invoked', ->
       button.click()
       expect(fireCount).toEqual 1
     
-    it "does not fire event when click method is invoked silently", ->
+    it 'does not fire event when click method is invoked silently', ->
       button.click silent: true
       expect(fireCount).toEqual 0
 
-    it "does not fire event when the model is disabled", ->
+    it 'does not fire event when the model is disabled', ->
       button.enabled false
       button.click()
       expect(fireCount).toEqual 0
     
-    it "returns the model as the event args", ->
+    it 'returns the model as the event args', ->
       button.click()
       expect(args.source).toEqual button
     
-  describe "toggling pressed", ->
-    describe "when canToggle is true", ->
+  describe 'toggling pressed', ->
+    describe 'when canToggle is true', ->
       beforeEach ->
         button.canToggle true
       
-      it "toggles pressed to true", ->
+      it 'toggles pressed to true', ->
         button.click()
         expect(button.pressed()).toEqual true
       
-      it "toggles pressed to false", ->
+      it 'toggles pressed to false', ->
         button.click()
         button.click()
         expect(button.pressed()).toEqual false
@@ -94,16 +94,16 @@ describe 'controls/button', ->
         button.click()
         expect(button.pressed()).toEqual false
   
-    describe "when canToggle is false", ->
+    describe 'when canToggle is false', ->
       beforeEach ->
         button.canToggle false
       
-      it "does not change pressed value", ->
+      it 'does not change pressed value', ->
         button.click()
         expect(button.pressed()).toEqual false
     
-  describe "onClick : event handler helper", ->
-    it "wires up event handler", ->
+  describe 'onClick : event handler helper', ->
+    it 'wires up event handler', ->
       onClickCount = 0
       button.onClick ->
         onClickCount += 1
@@ -111,7 +111,7 @@ describe 'controls/button', ->
       button.click()
       expect(onClickCount).toEqual 1
     
-    it "wire up multiple event handlers", ->
+    it 'wire up multiple event handlers', ->
       fire1 = 0
       fire2 = 0
       button.onClick ->
@@ -130,7 +130,7 @@ describe 'controls/button', ->
     beforeEach ->
             e = undefined
             clickArgs = undefined
-            button.bind "pre:click", (e) -> preArgs = e
+            button.bind 'pre:click', (e) -> preArgs = e
             button.onClick (e)-> clickArgs = e
   
     it 'fires a pre:click event', ->
@@ -138,45 +138,45 @@ describe 'controls/button', ->
       expect(preArgs).toBeDefined()
   
     it 'does not fire the click event if the pre:event was cancelled', ->
-      button.bind "pre:click", (e) -> e.cancel = true
+      button.bind 'pre:click', (e) -> e.cancel = true
       button.click()
       expect(clickArgs).not.toBeDefined()
   
     it 'does not toggle if the pre:event was cancelled', ->
-      button.bind "pre:click", (e) -> e.cancel = true
+      button.bind 'pre:click', (e) -> e.cancel = true
       button.canToggle(true);
       button.click()
       expect(button.pressed()).toEqual false
   
   
-  describe "[selected] event", ->
+  describe '[selected] event', ->
     e = undefined
     beforeEach ->
             e = undefined
             button.canToggle true
-            button.bind "selected", (args) -> e = args
+            button.bind 'selected', (args) -> e = args
     
-    it "fires selected event when pressed", ->
+    it 'fires selected event when pressed', ->
       button.pressed true
       expect(e.source).toEqual button
     
-    it "does not fire selected event when un-pressed", ->
+    it 'does not fire selected event when un-pressed', ->
       button.pressed true
       e = null
       button.pressed false
       expect(e).toEqual null
     
-    it "does not fire selected event if button does not toggle", ->
+    it 'does not fire selected event if button does not toggle', ->
       button.canToggle false
       button.pressed true
       expect(e).not.toBeDefined()
 
 
-  describe "onSelected : event handler helper", ->
+  describe 'onSelected : event handler helper', ->
     beforeEach ->
         button.canToggle true
     
-    it "wires up event handler", ->
+    it 'wires up event handler', ->
       onSelectedCount = 0
       button.onSelected ->
           onSelectedCount += 1
@@ -184,7 +184,7 @@ describe 'controls/button', ->
       button.click()
       expect(onSelectedCount).toEqual 1
     
-    it "wire up multiple event handlers", ->
+    it 'wire up multiple event handlers', ->
       fire1 = 0
       fire2 = 0
       button.onSelected ->

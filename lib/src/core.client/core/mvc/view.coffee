@@ -1,4 +1,4 @@
-Base = require '../base'
+Model = require './model'
 
 syncVisibility = (view, visible) -> 
       display = if visible then '' else 'none'
@@ -8,11 +8,10 @@ syncVisibility = (view, visible) ->
 ###
 Base class for visual controls.
 ###
-module.exports = class View extends Base
+module.exports = class View extends Model
   constructor: (params = {}) ->
       # Setup initial conditions.
       super
-      _.extend @, Backbone.Events
       
       # Property functions.
       @addProps

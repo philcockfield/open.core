@@ -1,2 +1,4 @@
 module.exports = 
-  Button:   require './button'
+  Button:    require './button'
+  ButtonSet: require './button_set'
+  

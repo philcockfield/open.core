@@ -14,14 +14,16 @@ describe 'mvc/model', ->
                     bar: null
       
       model = new SampleModel()
-  
+
+  it 'is a Backbone model', ->
+    expect(model instanceof Backbone.Model).toEqual true 
   
   it 'supports eventing', ->
      expect(-> model.bind('foo')).not.toThrow()
   
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
-
+  
 
   describe 'Read/Write properties', ->
     it 'GETS from the backing model', ->
@@ -68,19 +70,19 @@ describe 'mvc/model', ->
       
   describe 'server method wrapping', ->
     beforeEach ->
-      spyOn(model, '_execServerMethod')
+      spyOn(model, '_sync')
     
     it 'wraps [fetch]', ->
       model.fetch()
-      expect(model._execServerMethod).toHaveBeenCalled()
+      expect(model._sync).toHaveBeenCalled()
   
     it 'wraps [save]', ->
       model.save()
-      expect(model._execServerMethod).toHaveBeenCalled()
+      expect(model._sync).toHaveBeenCalled()
       
     it 'wraps [destroy]', ->
       model.destroy()
-      expect(model._execServerMethod).toHaveBeenCalled()
+      expect(model._sync).toHaveBeenCalled()
     
       
   describe 'fetch (and generic server method handler)', ->
@@ -105,7 +107,7 @@ describe 'mvc/model', ->
       fetchArgs.success('model', 'res')
       
       expect(count).toEqual 1
-      expect(args.model).toEqual model
+      expect(args.source).toEqual model
       expect(args.response).toEqual 'res'
       expect(args.success).toEqual true
       expect(args.error).toEqual false
@@ -122,11 +124,32 @@ describe 'mvc/model', ->
       fetchArgs.error('model', 'res')
       
       expect(count).toEqual 1
-      expect(args.model).toEqual model
+      expect(args.source).toEqual model
       expect(args.response).toEqual 'res'
       expect(args.success).toEqual false
       expect(args.error).toEqual true
       
+    describe 'event: start', ->
+      fireCount = 0
+      args = null
+      beforeEach ->
+        fireCount = 0
+        args = null
+        model.fetch.unbind()
+        model.fetch.bind 'start', (e) -> 
+              fireCount += 1
+              args = e
+
+      it 'fires event when starting', ->
+        model.fetch()
+        expect(fireCount).toEqual 1
+
+      it 'passes source in args', ->
+        model.fetch()
+        expect(args.source).toEqual model
+        
+
+    
     describe 'event: complete', ->
       fireCount = 0
       args = null
@@ -151,7 +174,7 @@ describe 'mvc/model', ->
       it 'passes event-args when completed successfully', ->
         model.fetch()
         fetchArgs.success('model', 'res')
-        expect(args.model).toEqual model
+        expect(args.source).toEqual model
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual true
         expect(args.error).toEqual false
@@ -159,7 +182,7 @@ describe 'mvc/model', ->
       it 'passes event-args when completed with error', ->
         model.fetch()
         fetchArgs.error('model', 'res')
-        expect(args.model).toEqual model
+        expect(args.source).toEqual model
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual false
         expect(args.error).toEqual true
@@ -171,7 +194,7 @@ describe 'mvc/model', ->
         model.fetch()
         fetchArgs.success('model', 'res')
         
-        expect(args.model).toEqual model
+        expect(args.source).toEqual model
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual true
         expect(args.error).toEqual false

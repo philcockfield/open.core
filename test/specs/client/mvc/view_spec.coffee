@@ -11,6 +11,10 @@ describe 'mvc/view', ->
   it 'supports eventing', ->
     expect(-> new View().bind('foo')).not.toThrow()
 
+  it 'is an MVC model', ->
+    expect(view instanceof core.mvc.Model).toEqual true 
+  
+
   describe 'default property values', ->
     it 'is enabled by default', ->
       expect(view.enabled()).toEqual true
