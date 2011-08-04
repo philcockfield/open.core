@@ -5,7 +5,8 @@ fsCommon = require './_common'
 
 # CONSTANTS
 ERROR = fsCommon.ERROR
-DEFAULT_FILE_MODE = 0664 # Read-Write for users/groups, Read-Only world
+DEFAULT_FILE_MODE = 0777 # Full permissions.
+# DEFAULT_FILE_MODE = 0664 # Read-Write for users/groups, Read-Only world
 
 # PRIVATE MEMBERS
 cleanDirPath = (path) ->
