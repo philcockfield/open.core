@@ -1,6 +1,6 @@
 describe 'client', ->
   it 'exists', ->
-    expect(require('core')).toBeDefined()
+    expect(require('core.client')).toBeDefined()
 
   it 'has title', ->
     expect(_.isString(core.title)).toEqual true

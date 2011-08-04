@@ -45,8 +45,8 @@ module.exports =
       # Construct paths.
       clientPath = core.paths.client
       paths = [
-        { source: "#{clientPath}/core", target: '/core' }
-        { source: "#{clientPath}/controls", target: '/core/controls' }
+        { source: "#{clientPath}/core", target: '/core.client' }
+        { source: "#{clientPath}/controls", target: '/core.client/controls' }
         ]
 
       # Compile and save.

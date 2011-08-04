@@ -1,4 +1,4 @@
-window.core = require 'core'
+window.core = require 'core.client'
 
 window.ensure =
   ###

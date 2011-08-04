@@ -1,7 +1,6 @@
 fs    = require 'fs'
 root  = fs.realpathSync("#{__dirname}/../../../..")
 lib   = "#{root}/lib"
-
 paths =
     root:         root
     lib:          lib
@@ -17,5 +16,5 @@ paths =
 module.exports = paths
 
 # Put the root modules into the global paths.
+# require.paths.unshift paths.client
 require.paths.unshift paths.src
-require.paths.unshift paths.client

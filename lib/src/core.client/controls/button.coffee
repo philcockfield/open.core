@@ -1,4 +1,4 @@
-core = require 'core'
+core = require 'core.client/core'
 
 ###
 A clickable button.
