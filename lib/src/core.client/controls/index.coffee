@@ -1,2 +1,2 @@
 module.exports = 
-  Button: require './button'
+  Button:   require './button'

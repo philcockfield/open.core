@@ -1,22 +1,29 @@
 describe 'mvc/view', ->
   View = null
+  view = null
   beforeEach ->
     View = core.mvc.View
+    view = new View()
 
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled View, -> new View()
 
   it 'supports eventing', ->
     expect(-> new View().bind('foo')).not.toThrow()
+
+  describe 'default property values', ->
+    it 'is enabled by default', ->
+      expect(view.enabled()).toEqual true
+    
+    it 'is visible by default', ->
+      expect(view.visible()).toEqual true
   
   describe 'el', ->
     it 'has an el which is a jQuery object', ->
-      view = new View()
       expect(view.html instanceof Function).toEqual true
   
   describe 'tagName', ->
     it 'is a DIV by default', ->
-      view = new View()
       expect(view.el.get(0).tagName).toEqual 'DIV'
   
     it 'has a custom tag name', ->
@@ -25,7 +32,6 @@ describe 'mvc/view', ->
   
   describe 'classname', ->
     it 'has no class name by default', ->
-      view = new View()
       expect(view.el.get(0).className).toEqual ''
   
     it 'has a custom class name', ->
@@ -35,32 +41,27 @@ describe 'mvc/view', ->
   
   describe 'html', ->
     it 'insert HTML within the view', ->
-      view = new View()
       view.html '<p>foo</p>'
       expect(view.el.clone().wrap('<div></div>').parent().html()).toEqual '<div><p>foo</p></div>'
   
     it 'reads the views inner HTML', ->
-      view = new View()
       view.html '<p>foo</p>'
       expect(view.html()).toEqual '<p>foo</p>'
        
   
   describe 'visible', ->
-    it 'is visibile by default', ->
-      expect(new View().visible()).toEqual true
+    it 'is a property-function', ->
+      expect(view.visible._parent.name).toEqual 'visible'
   
-    it 'is persists the visibility state', ->
-      view = new View()
+    it 'persists the visibility state', ->
       view.visible false
       expect(view.visible()).toEqual false
   
     it 'changes the CSS display value to none', ->
-      view = new View()
       view.visible false
       expect(view.el.css('display')).toEqual 'none'
   
     it 'changes the CSS display value to empty string', ->
-      view = new View()
       view.visible false
       view.visible true
       expect(view.el.css('display')).toEqual ''

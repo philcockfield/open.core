@@ -1,5 +1,10 @@
 Base = require '../base'
 
+syncVisibility = (view, visible) -> 
+      display = if visible then '' else 'none'
+      view.el.css 'display', display
+
+
 ###
 Base class for visual controls.
 ###
@@ -8,6 +13,11 @@ module.exports = class View extends Base
       # Setup initial conditions.
       super
       _.extend @, Backbone.Events
+      
+      # Property functions.
+      @addProps
+          enabled: true
+          visible: true
 
       # Create the wrapped Backbone View.
       view = new Backbone.View
@@ -20,6 +30,9 @@ module.exports = class View extends Base
           atts: params
       @el = $(view.el)
 
+      # Wire up events.
+      @visible.onChanged (e) => syncVisibility(@, e.newValue)
+      
       # Assign public methods.
       @$ = view.$
 
@@ -33,13 +46,4 @@ module.exports = class View extends Base
       if html?
         el.html html
       el.html()
-
-  ###
-  Gets or sets whether the view is visible.
-  ###
-  visible: (isVisible) ->
-      if isVisible?
-          @el.css 'display', if isVisible then '' else 'none'
-      @el.css('display') != 'none'
-
 
