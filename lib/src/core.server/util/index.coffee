@@ -1,5 +1,3 @@
-client = require 'core.client'
-
 module.exports = index =
     javascript: require './javascript'
     send:       require './send'

@@ -2,7 +2,7 @@ describe 'util', ->
   util = core.util
   
   it 'aliases to client toBool() method', ->
-    expect(util.toBool).toEqual core.client.util.toBool
+    expect(util.toBool).toEqual core.client.core.util.toBool
 
   it 'puts color in the global namespace', ->
     expect(color).toBeDefined()
