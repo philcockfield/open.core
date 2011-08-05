@@ -25,6 +25,10 @@ describe 'mvc/view', ->
   describe 'el', ->
     it 'has an el which is a jQuery object', ->
       expect(view.html instanceof Function).toEqual true
+    
+    it 'has an [element] which is a DOM element', ->
+      expect(view.element.tagName).toEqual 'DIV'
+    
   
   describe 'tagName', ->
     it 'is a DIV by default', ->

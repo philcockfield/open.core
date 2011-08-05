@@ -27,7 +27,8 @@ module.exports = class View extends Model
       @_ =
           view: view
           atts: params
-      @el = $(view.el)
+      @element = view.el
+      @el = $(@element)
 
       # Wire up events.
       @visible.onChanged (e) => syncVisibility(@, e.newValue)

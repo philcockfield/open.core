@@ -9,7 +9,7 @@ module.exports = class Button extends core.mvc.View
   @param params : used to override default property values.
   ###
   constructor: (params = {}) -> 
-      super
+      super params
       @addProps
           pressed:    params.pressed   ?= false  # Gets or sets whether the button is currently pressed (in a down state).
           canToggle:  params.canToggle ?= false  # Gets or sets whether the button can remain toggled in a down state.

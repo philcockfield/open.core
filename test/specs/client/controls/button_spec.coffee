@@ -1,9 +1,13 @@
-controls = require 'core/controls'
 
 describe 'controls/button', ->
-  Button = controls.Button
+  controls = null
+  Button = null
   button = null
   beforeEach ->
+
+      controls = require 'core.client/controls/index'
+      Button = controls.Button
+
       button = new Button()
   
   it 'exists', ->
@@ -43,7 +47,13 @@ describe 'controls/button', ->
       button = new Button(canToggle: true)
       expect(button.canToggle()).toEqual true
       
-    
+    it 'passes tagName to base class', ->
+      button = new Button(tagName: 'a')
+      expect(button.element.tagName).toEqual 'A'
+
+    it 'passes className to base class', ->
+      button = new Button(className: 'foo bar')
+      expect(button.element.className).toEqual 'foo bar'
   
     
   describe 'click (method and event)', ->
@@ -123,6 +133,7 @@ describe 'controls/button', ->
       button.click()
       expect(fire1).toEqual 1
       expect(fire2).toEqual 1
+
 
   describe '[pre:click] event', ->
     preArgs = undefined

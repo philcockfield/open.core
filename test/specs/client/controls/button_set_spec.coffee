@@ -1,4 +1,4 @@
-controls = require 'core/controls'
+controls = require 'core.client/controls'
 
 
 describe 'controls/button_set', ->
@@ -155,6 +155,7 @@ describe 'controls/button_set', ->
       model.buttons.bind 'add', (e) -> args = e
       model.addButton(btn, silent:true)
       expect(args).not.toBeDefined()
+    
     
   describe 'clear', ->
     beforeEach ->

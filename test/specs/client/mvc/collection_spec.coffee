@@ -26,11 +26,6 @@ describe 'mvc/collection', ->
       m = new SampleModel()
       col.add m
       expect(col.include(m)).toEqual true
-      
-      console.log ''
-      console.log 'm', m
-      console.log 'col.models[0]', col.models[0]
-      console.log ''
     
 
   describe 'Events', ->
