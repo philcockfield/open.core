@@ -14,14 +14,16 @@ module.exports =
 
       # Routes.
       app.get "#{core.baseUrl}/:package?.js", (req, res) ->
+          package = req.params.package
           min  = if minRequested(req) then '-min' else ''
           dir  = "#{paths.public}/javascripts"
-          file = (name) -> "#{name}#{min}.js"
-
+          file = (name) -> 
+                  name = _.strLeftBack(name, '-min')
+                  "#{name}#{min}.js"
+      
           switch req.params.package
             when 'libs', 'libs-min' then file = "#{dir}/libs/#{file('libs')}"
-            when 'core', 'core-min' then file = "#{dir}/#{file('core')}"
             else
-              res.send 404
-              return
+              file = "#{dir}/#{file(package)}"
+
           core.util.send.scriptFile res, file
