@@ -9,8 +9,8 @@ paths =
     stylesheets:  "#{lib}/public/stylesheets"
     views:        "#{lib}/views"
     src:          "#{lib}/src"
-    server:       "#{lib}/src/core.server"
-    client:       "#{lib}/src/core.client"
+    server:       "#{lib}/src/open.server"
+    client:       "#{lib}/src/open.client"
     test:         "#{root}/test"
     specs:        "#{root}/test/specs"
 module.exports = paths

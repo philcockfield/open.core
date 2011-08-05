@@ -1,4 +1,4 @@
-controls = require 'core.client/controls'
+controls = require 'open.client/controls'
 
 
 describe 'controls/button_set', ->

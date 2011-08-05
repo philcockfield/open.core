@@ -15,10 +15,10 @@ Configures the Jasmine BDD spec runner.
 module.exports = (app, options) ->
 
     # Setup initial conditions.
-    core = require 'core.server'
-    url = options.url ?= '/specs'
-    title = options.title ?= 'Specs'
-    specsDir = options.specsDir ?= "#{process.env.PWD}/test/specs"
+    core       = require 'open.server'
+    url        = options.url ?= '/specs'
+    title      = options.title ?= 'Specs'
+    specsDir   = options.specsDir ?= "#{process.env.PWD}/test/specs"
     sourceUrls = options.sourceUrls ?= []
     sourceUrls = [sourceUrls] if not _.isArray(sourceUrls)
 

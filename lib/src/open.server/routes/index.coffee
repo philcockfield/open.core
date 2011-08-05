@@ -5,7 +5,7 @@ module.exports =
   ###
   init: ->
       # Setup initial conditions.
-      core    = require 'core.server'
+      core    = require 'open.server'
       app     = core.app
       paths   = core.paths
 

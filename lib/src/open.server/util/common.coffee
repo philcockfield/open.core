@@ -1,4 +1,4 @@
-client = require 'core.client/core'
+client = require 'open.client/core'
 
 # Store color in global namespace.
 global.color =
@@ -39,7 +39,7 @@ module.exports =
   @param options    : variables to pass to the template.
   ###
   render: (response, template, options = {}) ->
-          core = require 'core.server'
+          core = require 'open.server'
           extension = options.extension ?= 'jade'
           options.baseUrl ?= core.baseUrl
           response.render "#{core.paths.views}/#{template}.#{extension}", options

@@ -46,7 +46,7 @@ module.exports =
   @param callback invoked upon completion.
   ###
   save: (options = {}, callback) ->
-      core = require 'core.server'
+      core = require 'open.server'
       paths = options.paths
       @files paths, (code) =>
           saved = 0

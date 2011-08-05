@@ -1,4 +1,4 @@
-core = require 'core.client/core'
+core = require 'open.client/core'
 
 ###
 Manages a set of toggle buttons providing single-selection 

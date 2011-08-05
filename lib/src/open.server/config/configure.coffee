@@ -7,7 +7,7 @@ Configures the library.
 module.exports = (app, options = {}) ->
 
     # Modules.
-    core    = require 'core.server'
+    core    = require 'open.server'
     express = options.express ?= require('express')
     routes  = require '../routes'
 

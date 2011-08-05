@@ -1,5 +1,5 @@
 express = require 'express'
-core    = require('core.server')
+core    = require('open.server')
 
 describe 'config/configure', ->
   app = null
@@ -7,7 +7,7 @@ describe 'config/configure', ->
     app = express.createServer()
 
   describe 'baseUrl', ->
-    it 'stores the base url on [core.server]', ->
+    it 'stores the base url on [open.server]', ->
       core.configure app, baseUrl: '/abc'
       expect(core.baseUrl).toEqual '/abc'
 

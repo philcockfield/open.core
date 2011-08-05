@@ -1,7 +1,7 @@
-core = require 'core.client/core'
+core = require 'open.client/core'
 
 ###
-A clickable button.
+A click-able button.
 ###
 module.exports = class Button extends core.mvc.View
   ###

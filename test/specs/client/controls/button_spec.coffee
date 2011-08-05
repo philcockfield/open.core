@@ -5,7 +5,7 @@ describe 'controls/button', ->
   button = null
   beforeEach ->
 
-      controls = require 'core.client/controls/index'
+      controls = require 'open.client/controls/index'
       Button = controls.Button
 
       button = new Button()

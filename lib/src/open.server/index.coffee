@@ -7,7 +7,7 @@ server =
   title:       'Open.Core (Server)'
   paths:       paths
   util:        require './util'
-  client:      require 'core.client'
+  client:      require 'open.client'
   configure:   configure
 
   ###

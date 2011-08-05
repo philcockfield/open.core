@@ -4,7 +4,7 @@ module.exports =
   @param callback: invoked upon completion.
   ###
   libs: (callback) ->
-        core = require 'core.server'
+        core = require 'open.server'
         libs = "#{core.paths.public}/javascripts/libs"
         src = "#{libs}/src"
         paths = [
@@ -35,7 +35,7 @@ module.exports =
                                   - minified: false - returns the unminified, packed code.
   ###
   all: (options = {}) ->
-      core      = require 'core.server'
+      core      = require 'open.server'
       folder    = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
       output =
@@ -45,8 +45,8 @@ module.exports =
       # Construct paths.
       clientPath = core.paths.client
       paths = [
-        { source: "#{clientPath}/core", target: '/core.client/core' }
-        { source: "#{clientPath}/controls", target: '/core.client/controls' }
+        { source: "#{clientPath}/core", target: '/open.client/core' }
+        { source: "#{clientPath}/controls", target: '/open.client/controls' }
         ]
 
       # Compile and save.
