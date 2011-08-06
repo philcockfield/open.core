@@ -18,3 +18,12 @@ describe 'mvc/template', ->
     tmpl = new Sample()
     expect(tmpl.bar()).toEqual 'some function'
     expect(tmpl.baz).toEqual 123
+
+  it 'overrides the template engine', ->
+    fn = -> 
+    class CustomEngine extends Template
+      root: "<div>Foo</div>"
+      toTemplate: -> fn
+    
+    tmpl = new CustomEngine()
+    expect(tmpl.root).toEqual fn
