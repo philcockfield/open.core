@@ -1,7 +1,9 @@
 stitch   = require 'stitch'
 uuid     = require 'node-uuid'
 minifier = require './minifier'
+
 core     = -> require 'open.server'
+fsUtil   = -> core().util.fs
 
 writeResponse = (compiler, options)->
         res = options.writeResponse
@@ -24,12 +26,10 @@ prependHeader = (compiler, code) ->
 prepackCopy = (files, targetDir, callback) ->
      # Prepare copy list.
      for item in files
-        item.target = _(item.target).ltrim('/')
-        item.target = "#{targetDir}/#{item.target}"
-
-     core().util.fs.copyAll files, (err) ->
-                throw err if err?
-                callback?()
+            item.target = _(item.target).ltrim('/')
+            item.target = "#{targetDir}/#{item.target}"
+     fsUtil().copyAllSync files
+     callback?()
 
 
 processPaths = (paths) ->
@@ -81,9 +81,8 @@ module.exports = class Compiler
                         self.packed = code
 
                         # 3. Clean up.
-                        core().util.fs.delete tmpDir, (err) ->
-                                                    throw err if err?
-                                                    callback?(code)
+                        fsUtil().deleteSync tmpDir
+                        callback?(code)
 
   ###
   Compresses the code.
@@ -161,4 +160,9 @@ module.exports = class Compiler
             files.push path:options.packed, data: code(false)
 
           # 2. Save the file(s) to disk.
-          core().util.fs.writeFiles files, (err) -> options.callback?(code)
+          fsUtil().writeFilesSync files
+          options.callback?(code)
+
+
+
+
