@@ -3,6 +3,7 @@ common = require './_common'
 
 basePrototype = new Base()
 
+
 ###
 Base class for models.
 ###
@@ -27,6 +28,9 @@ module.exports = class Model extends Backbone.Model
                 # Read value from backing model.
                 self.get(name)
 
+        # Add defaults as Property functions.
+        self.addProps @defaults
+        
         # Extend members.
         do => 
             init = (method) -> 

@@ -7,11 +7,12 @@ describe 'mvc/model', ->
       model = null
       
       class SampleModel extends Model
+        defaults:
+            foo: 123
+            bar: null
+        
         constructor: () -> 
             super
-            @.addProps
-                    foo: 123
-                    bar: null
       
       model = new SampleModel()
 
@@ -24,8 +25,37 @@ describe 'mvc/model', ->
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
   
+  describe 'adding [defaults] as Property functions', ->
+    it 'takes the elements in "defaults" and converts them to Property functions', ->
+      for key of model.defaults
+        expect(model[key] instanceof Function).toEqual true 
+    
+    it 'does nothing when there are no defaults', ->
+      class MyModel extends Model
+      model = new MyModel()
+      expect(model.defaults).not.toBeDefined()
+      
+    it 'overrides default property from child constructor', ->
+      class Father extends Model
+        defaults: 
+            foo: 123
+
+      class Son extends Model
+        constructor: -> 
+            super
+            @addProps
+                foo: 'abc'
+            
+      father = new Father()
+      son = new Son()
+      expect(father.foo()).toEqual 123
+      expect(son.foo()).toEqual 'abc'
+      
+    
 
   describe 'Read/Write properties', ->
+      
+
     it 'GETS from the backing model', ->
       spyOn model, 'get'
       model.foo()
@@ -61,6 +91,13 @@ describe 'mvc/model', ->
         waitsFor -> written == true
         runs -> 
           expect(model.bar()).toEqual 'hello'
+
+    
+      
+    
+    
+    
+    
     
   describe 'url', ->
     it 'can be overridden', ->
