@@ -361,6 +361,7 @@ describe 'util/fs', ->
     file4       = 'folder1/folder2/file4.txt'
     file5       = 'folder1/folder2/file5.txt'
     folderEmpty = 'empty'
+    img         = 'ants.png'
     
     files = [ file1, file2, file3, file4, file5 ]
     folders = [ folder1, folder2, folderEmpty ]
@@ -387,16 +388,81 @@ describe 'util/fs', ->
         setupSource()
         resetTarget()
     
+    describe 'sync', ->
+        it 'copies to a folder that already exists', ->
+          source = sourcePath(file1)
+          target = targetPath(file1)
+          fsUtil.copySync source, target
+          expect(fsUtil.existsSync(target)).toEqual true
+          resetTarget()
+        
+        it 'copies an image', ->
+          source = sourcePath(img)
+          target = targetPath(img)
+          fsUtil.copySync source, target
+
+          imgSource = fs.readFileSync(source)
+          imgTarget = fs.readFileSync(target)
+          expect(imgSource).toEqual imgTarget
+          resetTarget()
+        
+        it 'copies to a deep location', ->
+          source = sourcePath(file4)
+          target = targetPath(file4)
+          fsUtil.copySync source, target
+          expect(fsUtil.existsSync(target)).toEqual true
+          resetTarget()
+        
+        it 'does not overwrite existing content', ->
+          source = sourcePath(file4)
+          target = targetPath(file4)
+          fsUtil.copySync source, target
+          
+          fsUtil.writeFileSync sourcePath(file4), 'New content'
+          fsUtil.copySync source, target
+          
+          expect(fs.readFileSync(target).toString()).toEqual 'Foo 4' # Not the new content.
+          resetTarget()
+          
+        it 'does overwrite existing content', ->
+          source = sourcePath(file4)
+          target = targetPath(file4)
+          fsUtil.copySync source, target
+          
+          fsUtil.writeFileSync sourcePath(file4), 'New content'
+          fsUtil.copySync source, target, overwrite:true
+          
+          expect(fs.readFileSync(target).toString()).toEqual 'New content'
+          resetTarget()
+          
+      describe 'folder copy', ->
+        it 'copies to a deep location with content', ->
+          source = sourcePath(folder2)
+          target = targetPath(folder2)
+          result = fsUtil.copySync source, target
+
+          expect(targetExists(folder2)).toEqual true
+          expect(targetExists(file4)).toEqual true
+          expect(targetExists(file5)).toEqual true
+          resetTarget()
+          
+        it 'copies a root folder with all child content', ->
+          result = fsUtil.copySync sourceDir, targetDir, overwrite:true
+          for path in allPaths
+            expect(targetExists(path)).toEqual true
+          resetTarget()
+                
+    
     describe 'async', ->
       describe 'file copy', ->
-        it 'copies a to a deep location', ->
+        it 'copies to a deep location', ->
           result = null
           source = sourcePath(file4)
           target = targetPath(file4)
           fsUtil.copy source, target, (err) -> result = true
           waitsFor -> result?
           runs ->
-              expect(fsUtil.existsSync(target)).toEqual true
+              expect(targetExists(file4)).toEqual true
               resetTarget()
         
         it 'does not overwrite existing content', ->
@@ -411,7 +477,7 @@ describe 'util/fs', ->
               expect(fs.readFileSync(target).toString()).toEqual 'Foo 4' # Not the new content.
               resetTarget()
 
-        it 'does overwrites existing content', ->
+        it 'does overwrite existing content', ->
           result = null
           source = sourcePath(file4)
           target = targetPath(file4)

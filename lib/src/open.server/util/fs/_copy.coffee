@@ -3,8 +3,24 @@ util        = require 'util'
 fsPath      = require 'path'
 fsCommon    = require './_common'
 fsCreateDir = require './_create_dir'
+fsReadDir   = require './_read_dir'
 
-createDir = fsCreateDir.createDir
+createDir     = fsCreateDir.createDir
+createDirSync = fsCreateDir.createDirSync
+readDirSync   = fsReadDir.readDirSync
+
+
+toCopyList = (files, source, target) -> 
+    _(files).map (file) ->
+            item =
+                source:   "#{source}/#{file}"
+                target:   "#{target}/#{file}"
+
+
+boundsCheck = (source, target) -> 
+      throw "Cannot copy. 'source' not valid to copy: '#{source}'" unless _.isString(source)
+      throw "Cannot copy. 'target' not valid to copy: '#{target}'" unless _.isString(target)
+
 
 ###
 Performs a deep copy of a directory, and all it's contents.
@@ -21,11 +37,11 @@ copyDir = (source, target, options..., callback) ->
   # Setup initial conditions.
   self = @
   options = options[0] ?= {}
-  mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT # Read-Write for users/groups, Read-Only world.
+  mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT 
 
   # Sanitize the paths.
-  source      = fsCommon.cleanDirPath(source)
-  target      = fsCommon.cleanDirPath(target)
+  source  = fsCommon.cleanDirPath(source)
+  target  = fsCommon.cleanDirPath(target)
 
   # 1. Ensure the target directory exists.
   createDir target, options, (err) ->
@@ -40,17 +56,35 @@ copyDir = (source, target, options..., callback) ->
                   return
               else
                 # 3. Copy each file (at this level).
-                files = _(files).map (file) ->
-                        item =
-                            source:   "#{source}/#{file}"
-                            target:   "#{target}/#{file}"
-
+                files = toCopyList(files, source, target)
                 module.exports.copyAll files, options, (err) ->
                       if err?
                           callback?(err)
                           return # Failed - exit out completely.
                       else
                           callback?(err) # Done.
+
+
+copyDirSync = (source, target, options = {}) ->
+      # Setup initial conditions.
+      self = @
+      mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT 
+
+      # Sanitize the paths.
+      source  = fsCommon.cleanDirPath(source)
+      target  = fsCommon.cleanDirPath(target)
+
+      # 1. Ensure the target directory exists.
+      createDirSync target, options
+
+      # 2. Get the files.
+      files = fs.readdirSync source
+      return if files.length == 0
+  
+      # 3. Copy each file (at this level).
+      files = toCopyList(files, source, target)
+      module.exports.copyAllSync files, options
+
 
 
 ###
@@ -68,10 +102,9 @@ module.exports =
   @param callback: (err)
   ###
   copy: (source, target, options..., callback) ->
-      throw "source not valid to copy: '#{source}'" unless _.isString(source)
-      throw "target not valid to copy: '#{target}'" unless _.isString(target)
-      
+
       # Setup initial conditions.
+      boundsCheck(source, target)
       self = @
       options = options[0] ?= {}
       mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT
@@ -87,7 +120,7 @@ module.exports =
                     return # Failed - exit out completely.
 
       # The final copy operation.
-      _copyFile = ->
+      copyFile = ->
             # Ensure the target directory exists.
             prepareDir target, ->
                   # Perform the file copy operation.
@@ -111,7 +144,7 @@ module.exports =
               else
                   if overwrite
                       # 2b. Copy - overwriting any existing file.
-                      _copyFile()
+                      copyFile()
                   else
                       # 2c. Check whether the target file already exists
                       #    and if so don't overwrite it.
@@ -121,16 +154,59 @@ module.exports =
                                 return # File exists - do nothing.
                             else
                               # 3. File does not exist - copy it now.
-                              _copyFile()
+                              copyFile()
 
 
 
+  ###
+  Copies a file or directory to a new location, creating the
+  target directory if it does not already exist (synchronously).
+  @param source:    path the file/directory to copy.
+  @param target:    path to copy to.
+  @param options:
+              - mode      : copy code (defaults to 0777 - see: FILE_MODE.DEFAULT).
+              - overwrite : flag indicating if an existing file should be overwritten (default false).
+  ###
+  copySync: (source, target, options ={}) -> 
+
+      # Setup initial conditions.
+      boundsCheck(source, target)
+      self = @
+      mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT
+      overwrite = options.overwrite ?= false
+
+      # The final copy operation.
+      copyFile = -> 
+            # Ensure the target directory exists.
+            dir = fsPath.dirname(target)
+            createDirSync dir, options
+
+            # Perform the file copy operation.
+            data = fs.readFileSync(source)
+            fs.writeFileSync target, data
+
+      # 1. Check whether the source is a directory.
+      stats = fs.statSync(source)
+      if stats.isDirectory()
+          # 2a. Copy the directory.
+          copyDirSync source, target, options
+      else
+        if overwrite
+            # 2b. Copy - overwriting any existing file.
+            copyFile()
+        else
+            # 2c. Check whether the target file already exists
+            #    and if so don't overwrite it.
+            if not fsCommon.existsSync(target)
+
+                # 3. File does not exist - copy it now.
+                copyFile()
 
 
   ###
   Copies a collection of files/folders to a new location providing a
   single callback when complete.
-  See the [copy()] method for more information.
+  See the [copy] method for more information.
   @param items:  Array of file descriptors.  Each descriptor is an object
                  containing the following structure:
                  [
@@ -162,3 +238,31 @@ module.exports =
               callback?(err) # Failure.
               return
 
+
+  ###
+  Copies a collection of files/folders to a new location (synchronously).
+  See the [copySync] method for more information.
+  @param items:  Array of file descriptors.  Each descriptor is an object
+                 containing the following structure:
+                 [
+                   { source:'/foo/bar.txt',   target:'/baz/thing.txt' }
+                   { source:'/folder',        target:'/folder_new' }
+                 ]
+  @param options:
+              - mode: copy code (defaults to 0777).
+              - overwrite : flag indicating if an existing file should be overwritten (default false).
+  ###
+  copyAllSync: (items, options = {}) ->
+      for file in items
+        @copySync file.source, file.target, options
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      

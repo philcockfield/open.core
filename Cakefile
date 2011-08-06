@@ -31,3 +31,7 @@ task 'specs', 'Run the Jasmine BDD specs', ->
 task 'build', 'Build and save all JavaScript files', ->
     buildLibs -> buildCore()
 
+    
+    
+    
+    

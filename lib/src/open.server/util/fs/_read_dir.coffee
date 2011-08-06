@@ -83,7 +83,7 @@ module.exports =
 
       fs.readdir path, (err, files) ->
           return if failed(err)
-          files = self.expandPaths(path, files)
+          files = fsCommon.expandPaths(path, files)
 
           unless flags.isFiltered
             # Return the file list (unfiltered).
@@ -112,7 +112,7 @@ module.exports =
       flags = getFlags(options)
       
       files = fs.readdirSync path
-      files = self.expandPaths(path, files)
+      files = fsCommon.expandPaths(path, files)
       
       unless flags.isFiltered
         # Return the file list (unfiltered).
