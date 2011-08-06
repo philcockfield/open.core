@@ -1,4 +1,3 @@
-fs       = require 'fs'
 stitch   = require 'stitch'
 uuid     = require 'node-uuid'
 minifier = require './minifier'
