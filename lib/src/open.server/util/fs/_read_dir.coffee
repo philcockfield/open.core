@@ -83,17 +83,17 @@ module.exports =
       returnPaths = (files) ->
             callback? null, files
 
-      read = (optionFlags) -> 
+      read = -> 
           fs.readdir path, (err, files) ->
               return if failed(err)
               files = fsCommon.expandPaths(path, files)
 
-              unless optionFlags.isFiltered
+              unless flags.isFiltered
                 # Return the file list (unfiltered).
                 returnPaths files
               else
                 # A filter has been applied.  Narrow the return list.
-                fnFilter = (path, stats) -> dirFilter(optionFlags, path, stats)
+                fnFilter = (path, stats) -> dirFilter(flags, path, stats)
                 filterPaths files, fnFilter, (err, filteredPaths) ->
                     return if failed(err)
                     returnPaths filteredPaths
@@ -125,12 +125,8 @@ module.exports =
 
       else
           # Read the current level only.
-          read(flags)
+          read()
       
-              
-              
-
-
 
             
   ###
@@ -140,6 +136,7 @@ module.exports =
               - dirs        : Flag indicating if directories should be included (default: true)
               - files       : Flag indicating if files should be included (default:true)
               - hidden:     : Flag indicating if hidden files or folders should be included (default:true)
+              - deep:       : Flag indicating if the entire child hierarchy should be traversed (default: false)
   @returns array of paths
   ###
   readDirSync: (path, options = {}) ->
@@ -147,14 +144,44 @@ module.exports =
       self = @
       flags = getFlags(options)
       
-      files = fs.readdirSync path
-      files = fsCommon.expandPaths(path, files)
+      read = -> 
+          files = fs.readdirSync path
+          files = fsCommon.expandPaths(path, files)
+          unless flags.isFiltered
+            # Return the file list (unfiltered).
+            return files
+          else
+            # A filter has been applied.  Narrow the return list.
+            fnFilter = (path, stats) -> dirFilter(flags, path, stats)
+            return filterPathsSync files, fnFilter
       
-      unless flags.isFiltered
-        # Return the file list (unfiltered).
-        return files
+      # Execution.
+      if flags.deep is yes and flags.includeDirs
+          # Deep read (-- RECURSION --).
+          # 1. Read the current level without folders.
+          result = self.readDirSync path, dirs:false, deep:false, files:options.files, hidden:options.hidden
+
+          # 2. Read the contents of each folder, and fill the root return array.
+          folders = self.readDirSync path, dirs:true, deep:false, files:false
+          if folders.length is 0
+              return result
+          else
+              for folder in folders
+                  result.push folder # 3a. Add the folder itself.
+                  paths = self.readDirSync folder, options
+                  result = _.union(result, paths) # 3b. Add each each child.
+              
+              # Finish up.
+              return result
+
       else
-        # A filter has been applied.  Narrow the return list.
-        fnFilter = (path, stats) -> dirFilter(flags, path, stats)
-        return filterPathsSync files, fnFilter
+          # Read the current level only.
+          read()
+      
+      
+      
+      
+      
+      
+      
       

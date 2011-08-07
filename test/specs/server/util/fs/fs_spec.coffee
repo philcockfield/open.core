@@ -150,7 +150,6 @@ describe 'util/fs', ->
       
         it 'reads deep file path with hidden files', ->
           result = null
-          err = null
           fsUtil.readDir path, deep:true, (err, paths) -> result = paths
           waitsFor (-> result?), 100
           runs ->
@@ -166,7 +165,6 @@ describe 'util/fs', ->
                   
         it 'reads deep file path with folders only', ->
           result = null
-          err = null
           fsUtil.readDir path, deep:true, files:false, (err, paths) -> result = paths
           waitsFor (-> result?), 100
           runs ->
@@ -181,7 +179,7 @@ describe 'util/fs', ->
             expect(includesPath(result, "file2.txt")).toEqual false
 
       
-    describe 'sync', ->
+    describe 'synchronous', ->
       it 'reads all content', ->
         result = fsUtil.readDirSync path
         expect(result.length).toEqual 5
@@ -218,6 +216,40 @@ describe 'util/fs', ->
         expect(includesPath(result, 'dir')).toEqual true
         expect(includesPath(result, "file1.txt")).toEqual true
         expect(includesPath(result, "file2.txt")).toEqual true
+
+      describe 'deep read', ->
+        it 'reads only the current level if deep but dirs:false', ->
+          result = fsUtil.readDirSync path, dirs:false, deep:true
+          expect(includesPath(result, '.hidden')).toEqual false
+          expect(includesPath(result, 'dir')).toEqual false
+          expect(includesPath(result, ".hidden.txt")).toEqual true
+          expect(includesPath(result, "file1.txt")).toEqual true
+          expect(includesPath(result, "file2.txt")).toEqual true
+              
+        it 'reads deep file path with hidden files', ->
+          result = fsUtil.readDirSync path, deep:true
+          
+          expect(includesPath(result, '.hidden')).toEqual true
+          expect(includesPath(result, '.hidden/file.txt')).toEqual true
+          expect(includesPath(result, ".hidden.txt")).toEqual true
+          expect(includesPath(result, 'dir')).toEqual true
+          expect(includesPath(result, 'dir/file.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
+          expect(includesPath(result, "file1.txt")).toEqual true
+          expect(includesPath(result, "file2.txt")).toEqual true
+                  
+        it 'reads deep file path with folders only', ->
+          result = fsUtil.readDirSync path, deep:true, files:false
+          expect(includesPath(result, '.hidden')).toEqual true
+          expect(includesPath(result, '.hidden/file.txt')).toEqual false
+          expect(includesPath(result, ".hidden.txt")).toEqual false
+          expect(includesPath(result, 'dir')).toEqual true
+          expect(includesPath(result, 'dir/file.txt')).toEqual false
+          expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual false
+          expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual false
+          expect(includesPath(result, "file1.txt")).toEqual false
+          expect(includesPath(result, "file2.txt")).toEqual false
       
 
   describe 'flattenDir', ->
@@ -266,7 +298,7 @@ describe 'util/fs', ->
       it 'aliases node Path version of the method', ->
         expect(fsUtil.exists).toEqual fsPath.exists
     
-    describe 'sync', ->
+    describe 'synchronous', ->
       it 'determines that the path exists', ->
         path = "#{sampleDir}/empty"
         expect(fsUtil.existsSync(path)).toEqual true
@@ -295,7 +327,7 @@ describe 'util/fs', ->
           expect(fsUtil.existsSync(dir)).toEqual true
           deleteSample()
         
-    describe 'sync', ->
+    describe 'synchronous', ->
       it 'creates a directory with multiple levels', ->
         result = fsUtil.createDirSync dir
         expect(result).toEqual true
@@ -320,7 +352,7 @@ describe 'util/fs', ->
         fsUtil.writeFileSync file1, 'Delete Dir Content!'
         fsUtil.writeFileSync file2, 'Delete Dir Content!'
 
-    describe 'sync', ->
+    describe 'synchronous', ->
       it 'force deletes the root', ->
         # NB: Force flag not specified because it is the default.
         fsUtil.deleteSync dirRoot        
@@ -432,7 +464,7 @@ describe 'util/fs', ->
         setupSource()
         resetTarget()
     
-    describe 'sync', ->
+    describe 'synchronous', ->
         it 'copies to a folder that already exists', ->
           source = sourcePath(file1)
           target = targetPath(file1)
@@ -573,7 +605,7 @@ describe 'util/fs', ->
         deleteSample()
       
     
-    describe 'sync', ->
+    describe 'synchronous', ->
       it 'write a single file creating the containing directory', ->
         fsUtil.writeFileSync file1, 'Sync!'
         data = fs.readFileSync(file1)
