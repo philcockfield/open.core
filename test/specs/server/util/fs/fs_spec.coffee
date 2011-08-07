@@ -162,6 +162,22 @@ describe 'util/fs', ->
             expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
             expect(includesPath(result, "file1.txt")).toEqual true
             expect(includesPath(result, "file2.txt")).toEqual true
+
+        it 'reads deep file path with no hidden files/folders', ->
+          result = null
+          fsUtil.readDir path, deep:true, hidden:false, (err, paths) -> result = paths
+          waitsFor (-> result?), 100
+          runs ->
+            expect(includesPath(result, '.hidden')).toEqual false
+            expect(includesPath(result, '.hidden/file.txt')).toEqual false
+            expect(includesPath(result, ".hidden.txt")).toEqual false
+            expect(includesPath(result, 'dir')).toEqual true
+            expect(includesPath(result, 'dir/file.txt')).toEqual true
+            expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true
+            expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
+            expect(includesPath(result, "file1.txt")).toEqual true
+            expect(includesPath(result, "file2.txt")).toEqual true
+
                   
         it 'reads deep file path with folders only', ->
           result = null
@@ -228,10 +244,21 @@ describe 'util/fs', ->
               
         it 'reads deep file path with hidden files', ->
           result = fsUtil.readDirSync path, deep:true
-          
           expect(includesPath(result, '.hidden')).toEqual true
           expect(includesPath(result, '.hidden/file.txt')).toEqual true
           expect(includesPath(result, ".hidden.txt")).toEqual true
+          expect(includesPath(result, 'dir')).toEqual true
+          expect(includesPath(result, 'dir/file.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
+          expect(includesPath(result, "file1.txt")).toEqual true
+          expect(includesPath(result, "file2.txt")).toEqual true
+
+        it 'reads deep file path with no hidden files/folders', ->
+          result = fsUtil.readDirSync path, deep:true, hidden:false
+          expect(includesPath(result, '.hidden')).toEqual false
+          expect(includesPath(result, '.hidden/file.txt')).toEqual false
+          expect(includesPath(result, ".hidden.txt")).toEqual false
           expect(includesPath(result, 'dir')).toEqual true
           expect(includesPath(result, 'dir/file.txt')).toEqual true
           expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true

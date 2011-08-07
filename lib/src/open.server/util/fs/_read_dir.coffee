@@ -162,7 +162,7 @@ module.exports =
           result = self.readDirSync path, dirs:false, deep:false, files:options.files, hidden:options.hidden
 
           # 2. Read the contents of each folder, and fill the root return array.
-          folders = self.readDirSync path, dirs:true, deep:false, files:false
+          folders = self.readDirSync path, dirs:true, deep:false, files:false, hidden:options.hidden
           if folders.length is 0
               return result
           else
