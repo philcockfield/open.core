@@ -121,7 +121,6 @@ module.exports = class Button extends core.mvc.View
   _stateChanged: => 
       @trigger 'stateChanged'
       @stateChanged()
-      console.log '_stateChanged - ', @label()
       
 
 
