@@ -35,7 +35,7 @@ module.exports = class ButtonSet extends core.Base
   @param options
             silent: supresses the 'remove' event (default false).
   ###
-  addButton: (button, options = {}) -> 
+  add: (button, options = {}) -> 
       
       # Setup initial conditions.
       throw 'no button' unless button?

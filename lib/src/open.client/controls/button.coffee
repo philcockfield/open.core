@@ -28,14 +28,25 @@ module.exports = class Button extends core.mvc.View
           @over false
           @_stateChanged()
           
+          # RESET MOUSE STATE - see mouse up.
+          
       @el.mousedown (e) => 
           @_mouseDown = true
+          @_wasPressed = @pressed()
           @pressed true
           @_stateChanged()
       
       @el.mouseup (e) => 
+          
           @_mouseDown = false
-          @click _togglePressed:false
+          
+          if @canToggle()
+            @pressed not @_wasPressed
+          else
+            
+            @pressed false 
+          
+          @click _toggle:false
 
   ###
   Indicates to the button that it has been clicked.
@@ -46,7 +57,7 @@ module.exports = class Button extends core.mvc.View
   ###
   click: (options = {}) -> 
       # Setup initial conditions.
-      options._togglePressed ?= true
+      options._toggle ?= true
       preArgs = 
           source: @
           cancel: false
@@ -65,7 +76,7 @@ module.exports = class Button extends core.mvc.View
           return false if preArgs.cancel is yes
 
       # Adjust the [pressed] state
-      @toggle() if options._togglePressed
+      @toggle() if options._toggle
 
       # Alert listeners.
       @trigger('click', source: @) if fireEvent

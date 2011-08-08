@@ -38,21 +38,21 @@ describe 'controls/button_set', ->
   
   describe 'togglable', ->
     it 'gets only the toggle buttons', ->
-      model.addButton tab1
-      model.addButton tab2
-      model.addButton btn
+      model.add tab1
+      model.add tab2
+      model.add btn
       expect(model.togglable().length).toEqual 2
     
     it 'gets no buttons', ->
-      model.addButton(btn)
+      model.add(btn)
       expect(model.togglable().length).toEqual 0
   
   describe 'deselecting toggle buttons on press', ->
     beforeEach ->
-      model.addButton tab1
-      model.addButton tab2
-      model.addButton tab3
-      model.addButton btn
+      model.add tab1
+      model.add tab2
+      model.add tab3
+      model.add btn
     
     it 'deselects first tab when second tab selected', ->
       tab1.pressed true
@@ -77,10 +77,10 @@ describe 'controls/button_set', ->
         btn1 = new Button(label: 'btn1')
         btn2 = new Button(label: 'btn2')
 
-        model.addButton btn1
-        model.addButton btn2
-        model.addButton tab1
-        model.addButton tab2
+        model.add btn1
+        model.add btn2
+        model.add tab1
+        model.add tab2
     
     it 'is empty by default', ->
       expect(model.selected()).toEqual null
@@ -129,39 +129,39 @@ describe 'controls/button_set', ->
       expect(model.length).toEqual 0
 
     it 'has one button', ->
-      model.addButton(btn)
+      model.add(btn)
       expect(model.length).toEqual 1
     
   
   describe 'addButton', ->
     it 'adds the button to the collection', ->
-      model.addButton(btn)
+      model.add(btn)
       expect(model.buttons.include(btn)).toEqual true
 
     it 'returns the added button', ->
-      expect(model.addButton(btn)).toEqual btn
+      expect(model.add(btn)).toEqual btn
     
     it 'throws if button not specified', ->
-      expect(-> model.addButton()).toThrow()
+      expect(-> model.add()).toThrow()
     
     it 'causes the change event to fire on the collection', ->
       args = null
       model.buttons.bind 'add', (e) -> args = e
-      model.addButton(btn)
+      model.add(btn)
       expect(args).toEqual btn
 
     it 'suppresses the change event', ->
       args = undefined
       model.buttons.bind 'add', (e) -> args = e
-      model.addButton(btn, silent:true)
+      model.add(btn, silent:true)
       expect(args).not.toBeDefined()
     
     
   describe 'clear', ->
     beforeEach ->
-      model.addButton new Button(label: 'one')
-      model.addButton new Button(label: 'two')
-      model.addButton new Button(label: 'three')
+      model.add new Button(label: 'one')
+      model.add new Button(label: 'two')
+      model.add new Button(label: 'three')
     
     it 'fires the clear event', ->
       count = 0
