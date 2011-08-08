@@ -7,7 +7,7 @@ describe 'controls/button_set', ->
   model     = null
   buttons   = null
 
-  btn       = null
+  btn  = null
   tab1 = null
   tab2 = null
   tab3 = null
@@ -55,20 +55,20 @@ describe 'controls/button_set', ->
       model.add btn
     
     it 'deselects first tab when second tab selected', ->
-      tab1.pressed true
-      tab2.pressed true
-      expect(tab1.pressed()).toEqual false
-      expect(tab2.pressed()).toEqual true
+      tab1.selected true
+      tab2.selected true
+      expect(tab1.selected()).toEqual false
+      expect(tab2.selected()).toEqual true
     
     it 'is not effected by changes to non-toggle buttons', ->
-      tab1.pressed true
-      btn.pressed true
-      expect(tab1.pressed()).toEqual true
+      tab1.selected true
+      btn.selected true
+      expect(tab1.selected()).toEqual true
     
-    it 'does not deselect the currently pressed button on click', ->
-      tab1.pressed true
+    it 'does not deselect the currently selected button on click', ->
+      tab1.selected true
       tab1.click()
-      expect(tab1.pressed()).toEqual true
+      expect(tab1.selected()).toEqual true
   
   describe 'selected (toggle button)', ->
     btn1 = null
@@ -86,31 +86,31 @@ describe 'controls/button_set', ->
       expect(model.selected()).toEqual null
     
     it 'returns selected tab', ->
-      tab1.pressed true
-      tab1.pressed true
-      tab1.pressed true
+      tab1.selected true
+      tab1.selected true
+      tab1.selected true
       expect(model.selected()).toEqual tab1
     
     it 'does not include non-toggle buttons', ->
-      btn1.pressed true
-      btn2.pressed true
+      btn1.selected true
+      btn2.selected true
       expect(model.selected()).toEqual null
     
-    it 'returns the selectedToggle button (first pressed toggle button)', ->
-      tab1.pressed true
-      tab2.pressed true
-      btn1.pressed true
+    it 'returns the selectedToggle button (first selected toggle button)', ->
+      tab1.selected true
+      tab2.selected true
+      btn1.selected true
       expect(model.selected()).toEqual tab2
     
-    it 'has no selected buttons when tab is un-pressed', ->
-      tab1.pressed true
-      tab1.pressed false
+    it 'has no selected buttons when tab is un-selected', ->
+      tab1.selected true
+      tab1.selected false
       expect(model.selected()).toEqual null
     
     it 'does not change the size of the buttons collection', ->
       expect(model.buttons.length).toEqual 4
       expect(model.selected()).toEqual null
-      tab1.pressed true
+      tab1.selected true
       expect(model.buttons.length).toEqual 4
       expect(model.selected()).toEqual tab1
     
@@ -120,7 +120,7 @@ describe 'controls/button_set', ->
     it 'does not cause the add event to fire on the buttons collection', ->
       args = undefined
       model.buttons.bind 'add', (e) -> args = e
-      tab1.pressed true
+      tab1.selected true
       expect(args).not.toBeDefined()
   
   

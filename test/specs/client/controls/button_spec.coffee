@@ -24,11 +24,14 @@ describe 'controls/button', ->
     it 'is visible by default', ->
       expect(button.visible()).toEqual true
   
-    it 'is not pressed by default', ->
-      expect(button.pressed()).toEqual false
+    it 'is not selected by default', ->
+      expect(button.selected()).toEqual false
 
     it 'is not in a [mouse] over state by default', ->
       expect(button.over()).toEqual false
+
+    it 'is not in a [mouse] down state by default', ->
+      expect(button.down()).toEqual false
     
     it 'is does not toggle by default', ->
       expect(button.canToggle()).toEqual false
@@ -42,9 +45,9 @@ describe 'controls/button', ->
       button = new Button(label:'foo')
       expect(button.label()).toEqual 'foo'
 
-    it 'recieves custom [pressed] value from constructor', ->
-      button = new Button(pressed: true)
-      expect(button.pressed()).toEqual true
+    it 'recieves custom [selected] value from constructor', ->
+      button = new Button(selected: true)
+      expect(button.selected()).toEqual true
 
     it 'recieves custom [canToggle] value from constructor', ->
       button = new Button(canToggle: true)
@@ -87,33 +90,33 @@ describe 'controls/button', ->
       button.click()
       expect(args.source).toEqual button
     
-  describe 'toggling pressed', ->
+  describe 'toggling Selected', ->
     describe 'when canToggle is true', ->
       beforeEach ->
         button.canToggle true
       
-      it 'toggles pressed to true', ->
+      it 'toggles selected to true', ->
         button.click()
-        expect(button.pressed()).toEqual true
+        expect(button.selected()).toEqual true
       
-      it 'toggles pressed to false', ->
+      it 'toggles selected to false', ->
         button.click()
         button.click()
-        expect(button.pressed()).toEqual false
+        expect(button.selected()).toEqual false
 
       it 'does not toggle when disabled', ->
-        expect(button.pressed()).toEqual false
+        expect(button.selected()).toEqual false
         button.enabled false
         button.click()
-        expect(button.pressed()).toEqual false
+        expect(button.selected()).toEqual false
   
     describe 'when canToggle is false', ->
       beforeEach ->
         button.canToggle false
       
-      it 'does not change pressed value', ->
+      it 'does not change selected value', ->
         button.click()
-        expect(button.pressed()).toEqual false
+        expect(button.selected()).toEqual false
     
   describe 'onClick : event handler helper', ->
     it 'wires up event handler', ->
@@ -160,7 +163,7 @@ describe 'controls/button', ->
       button.bind 'pre:click', (e) -> e.cancel = true
       button.canToggle(true);
       button.click()
-      expect(button.pressed()).toEqual false
+      expect(button.selected()).toEqual false
     
     it 'returns true if the click was not cancelled', ->
       button.bind 'pre:click', (e) -> e.cancel = false
@@ -180,19 +183,19 @@ describe 'controls/button', ->
             button.canToggle true
             button.bind 'selected', (args) -> e = args
     
-    it 'fires selected event when pressed', ->
-      button.pressed true
+    it 'fires selected event when selected', ->
+      button.selected true
       expect(e.source).toEqual button
     
-    it 'does not fire selected event when un-pressed', ->
-      button.pressed true
+    it 'does not fire selected event when un-selected', ->
+      button.selected true
       e = null
-      button.pressed false
+      button.selected false
       expect(e).toEqual null
     
     it 'does not fire selected event if button does not toggle', ->
       button.canToggle false
-      button.pressed true
+      button.selected true
       expect(e).not.toBeDefined()
 
 
@@ -225,18 +228,18 @@ describe 'controls/button', ->
     it 'does not toggle if [canToggle] is false', ->
       button.canToggle false
       button.toggle()
-      expect(button.pressed()).toEqual false
+      expect(button.selected()).toEqual false
 
-    it 'toggles the button to a pressed state', ->
+    it 'toggles the button to a selected state', ->
       button.canToggle true
       button.toggle()
-      expect(button.pressed()).toEqual true
+      expect(button.selected()).toEqual true
 
-    it 'toggles the button to a non-pressed state', ->
+    it 'toggles the button to a non-selected state', ->
       button.canToggle true
       button.toggle()
       button.toggle()
-      expect(button.pressed()).toEqual false
+      expect(button.selected()).toEqual false
 
     
     

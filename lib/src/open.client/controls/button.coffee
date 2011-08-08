@@ -9,44 +9,42 @@ module.exports = class Button extends core.mvc.View
   @param params : used to override default property values.
   ###
   constructor: (params = {}) -> 
+      self = @
       super params
       @addProps
           label:      params.label     ?= ''     # Gets or sets the text label for the button.
           canToggle:  params.canToggle ?= false  # Gets or sets whether the button can remain toggled in a down state.
-          pressed:    params.pressed   ?= false  # Gets or sets whether the button is currently pressed (in a down state).
-          over:       false                      # Gets whether the the mouse is currently over the button (written to internally only.)
+          selected:   params.selected  ?= false  # Gets or sets whether the toggle button is currently selected (checked state.  Only applicable when canToggle).
+          over:       false                      # Gets whether the the mouse is currently over the button (Read-only.  Written to internally.)
+          down:       false                      # Gets whether the button is currently in a depressed state (Read-only.  Written to internally.)
       
       # Wire up events.
-      @pressed.onChanged (e) => 
-          @trigger('selected', source:@) if @canToggle() and @pressed()
+      @selected.onChanged (e) => 
+          @_stateChanged()
+          @trigger('selected', source:@) if @canToggle() and @selected()
       
       # Mouse events.
-      @el.mouseover (e) => 
-          @over true
-          @_stateChanged()
-      @el.mouseout (e) => 
-          @over false
-          @_stateChanged()
+      do -> 
+        el = self.el
+        stateChanged = self._stateChanged
+        
+        el.mouseover (e) => 
+            self.over true
+            stateChanged()
+
+        el.mouseout (e) => 
+            self.over false
+            #  Reset down state (in case the mouse went out of scope but the button was not released).
+            self.down false
+            stateChanged()
           
-          # RESET MOUSE STATE - see mouse up.
-          
-      @el.mousedown (e) => 
-          @_mouseDown = true
-          @_wasPressed = @pressed()
-          @pressed true
-          @_stateChanged()
+        el.mousedown (e) => 
+            self.down true
+            stateChanged()
       
-      @el.mouseup (e) => 
-          
-          @_mouseDown = false
-          
-          if @canToggle()
-            @pressed not @_wasPressed
-          else
-            
-            @pressed false 
-          
-          @click _toggle:false
+        el.mouseup (e) => 
+            self.down false
+            self.click()
 
   ###
   Indicates to the button that it has been clicked.
@@ -55,9 +53,8 @@ module.exports = class Button extends core.mvc.View
           - silent : Flag indicating whether the click event should be suppressed (default false).
   @returns true if the click operation completed successfully, or false if it was cancelled.
   ###
-  click: (options = {}) -> 
+  click: (options = {}) =>
       # Setup initial conditions.
-      options._toggle ?= true
       preArgs = 
           source: @
           cancel: false
@@ -67,16 +64,18 @@ module.exports = class Button extends core.mvc.View
 
       # Determine if event is required.
       fireEvent = not (options.silent == true)
-
+      
       # Fire the pre-click event.
       if (fireEvent)
           @trigger('pre:click', preArgs);
 
           # Check whether any listeners cancelled the click operation.
-          return false if preArgs.cancel is yes
+          if preArgs.cancel is yes
+              @_stateChanged()
+              return false 
 
-      # Adjust the [pressed] state
-      @toggle() if options._toggle
+      # Adjust the [selected] state
+      @toggle() 
 
       # Alert listeners.
       @trigger('click', source: @) if fireEvent
@@ -85,29 +84,28 @@ module.exports = class Button extends core.mvc.View
       @_stateChanged()
       true
 
-
   ###
   Wires up the specified handler to the button's [click] event.
   @param handler : Function to invoke when the button is clicked.
   ###
-  onClick: (handler) -> @bind('click', handler) if handler?
+  onClick: (handler) => @bind('click', handler) if handler?
 
   ###
   Wires up the specified handler to the button's [selected] event.
   The is selected when:
     1. It can toggle, and
-    2. It is pressed (down)
+    2. It is selected (down)
   @param handler : Function to invoke when the button is selected.
   ###
-  onSelected: (handler) -> @bind('selected', handler) if handler?
+  onSelected: (handler) => @bind('selected', handler) if handler?
   
   ###
-  Toggles the pressed state (if the button can toggle).
+  Toggles the selected state (if the button can toggle).
   @returns true if the button was toggled, or false if the button cannot toggle.
   ###
-  toggle: -> 
+  toggle: => 
       return false if not @canToggle()
-      @pressed(not @pressed())
+      @selected(not @selected())
     
   
   ###
@@ -115,16 +113,15 @@ module.exports = class Button extends core.mvc.View
   Override this to update visual state.
   See corresponding event: 'stateChanged'
   ###
-  stateChanged: -> 
+  stateChanged: => 
 
   ###
   PRIVATE MEMBERS
   ###
-  _stateChanged: -> 
+  _stateChanged: => 
       @trigger 'stateChanged'
       @stateChanged()
-      
-      console.log 'over: ', @over(), ' | _mouseDown: ', @_mouseDown, ' | pressed: ', @pressed()
+      console.log '_stateChanged - ', @label()
       
 
 

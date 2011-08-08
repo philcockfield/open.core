@@ -18,9 +18,9 @@ module.exports = class ButtonSet extends core.Base
   
   
   ###
-  Retrieves the collection of toggle-buttons that are currently in a pressed state.
+  Retrieves the collection of toggle-buttons that are currently in a selected state.
   ###
-  selected: -> (@buttons.select (btn) -> btn.canToggle() and btn.pressed())[0]
+  selected: -> (@buttons.select (btn) -> btn.canToggle() and btn.selected())[0]
 
 
   ###
@@ -40,25 +40,25 @@ module.exports = class ButtonSet extends core.Base
       # Setup initial conditions.
       throw 'no button' unless button?
       
-      #  Add the button to the collection.
+      # Add the button to the collection.
       @buttons.add button, options
       @length = @buttons.length
       
       # Handler pre-click.
       button.bind 'pre:click', (e) -> 
           # Do not allow a selected button to be de-selected.
-          e.cancel = true if button.pressed()
+          e.cancel = true if button.selected()
       
       # Handle button press.
-      button.pressed.onChanged (e) => 
+      button.selected.onChanged (e) => 
 
             # Deselect the other toggle buttons.
             return unless button.canToggle()
             return if e.oldValue == true
             
             for btn in @togglable()
-                if btn isnt button and btn.canToggle() and btn.pressed()
-                    btn.pressed false
+                if btn isnt button and btn.canToggle() and btn.selected()
+                    btn.selected false
       
       # Finish up.
       button
