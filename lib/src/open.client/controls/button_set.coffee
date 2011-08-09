@@ -3,6 +3,12 @@ core = require 'open.client/core'
 ###
 Manages a set of toggle buttons providing single-selection 
 behavior (for example, a tab set).
+
+Events:
+  - add
+  - remove
+  - clear
+
 ###
 module.exports = class ButtonSet extends core.Base
   constructor: () -> 
@@ -10,12 +16,14 @@ module.exports = class ButtonSet extends core.Base
       _.extend @, Backbone.Events
       @length = 0
       @buttons = new core.mvc.Collection()
+      
+      
 
   ###
   Gets the collection of buttons being managed.
   ###
   buttons: undefined  # Set in constructor.
-  
+
   
   ###
   Retrieves the collection of toggle-buttons that are currently in a selected state.
@@ -33,12 +41,13 @@ module.exports = class ButtonSet extends core.Base
   Adds a button to the set.
   @param button : The button to add.
   @param options
-            silent: supresses the 'remove' event (default false).
+            silent: supresses the 'add' event (default false).
+  @returns the added button.
   ###
   add: (button, options = {}) -> 
-      
       # Setup initial conditions.
-      throw 'no button' unless button?
+      throw 'add: no button' unless button?
+      return button if @buttons.include(button)
       
       # Add the button to the collection.
       @buttons.add button, options
@@ -61,8 +70,39 @@ module.exports = class ButtonSet extends core.Base
                     btn.selected false
       
       # Finish up.
+      if not options.silent
+          @_fire 'add' 
+          @_fireChanged()
       button
+
+  ###
+  Removes the specified button from the set.
+  @param button: The button to remove.
+  @param options
+            silent: supresses the 'remove' event (default false).
+  @returns true if the button was removed, of false if the button did not exist in the set.
+  ###
+  remove: (button, options = {}) -> 
+      # Setup initial conditions.
+      throw 'remove: no button' unless button?
+      return false if not @buttons.include(button)
+      options._fireChanged ?= true
       
+      # Add the button to the collection.
+      @buttons.remove button, options
+      @length = @buttons.length
+      
+      # Unbind from events.
+      button.unbind 'pre:click'
+      button.selected.unbind 'changed'
+      
+      # Finish up.
+      if not options.silent
+          @_fire 'remove' 
+          @_fireChanged() if options._fireChanged
+      true
+      
+        
 
   ###
   Removes all buttons from the set.
@@ -71,15 +111,32 @@ module.exports = class ButtonSet extends core.Base
   ###
   clear: (options = {}) -> 
         
-        # Setup initial conditions.
-        options.silent ?= false
-        # buttons = @buttons
+      # Setup initial conditions.
+      options.silent ?= false
+      options._fireChanged = false
+      
+      # Remove all items from the buttons collection.
+      buttons = @buttons.select -> true
+      for btn in buttons
+          @remove btn, options
+          # @buttons.remove btn, options
         
-        # Remove all items from the buttons collection.
-        buttons = @buttons.select -> true
-        for btn in buttons
-            @buttons.remove btn, options
-          
-        # Alert listeners.
-        @trigger('clear', source: @) unless options.silent
+      # Alert listeners.
+      if not options.silent
+          @_fire 'clear' 
+          @_fireChanged()
 
+      # Finish up.
+      null
+
+  ###
+  PRIVATE Methods
+  ###
+  _fire: (event) -> @trigger event, source:@
+  _fireChanged: -> @_fire 'changed'
+  
+  
+  
+  
+  
+  

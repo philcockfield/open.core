@@ -4,9 +4,16 @@ Property = require './util/property'
 Common base class.
 This class can either be extended using standard CoffeeScript syntax (class Foo extends Base)
 or manually via underscore (_.extend source, new Base())
+
+  OPTIONAL OVERRIDES: 
+  - onPropAdded(prop)  : Invoked when a property is added.
+  - onChanged(args)    : Invokd when a property value changes.
+                         args:
+                            - property : The property that has changed
+                            - oldValue : The old value changing from.
+                            - newValue : The new value changing to.
 ###
 module.exports = class Base
-
   ###
   Adds one or more [Property] functions to the object.
   @param props :    Object literal describing the properties to add
@@ -30,11 +37,21 @@ module.exports = class Base
                             default:  defaultValue
                             store:    store
             self[name] = prop.fn
+            
+            # Alert deriving class (if listener method is implemented).
+            self.onPropAdded(prop) if self.onPropAdded? 
+            
+            # Monitor changes (if listener method is implemented).
+            if self.onChanged?
+                monitorChange = (p)-> 
+                  p.fn.onChanged (e) -> self.onChanged(e)
+                monitorChange prop
   
       # Add each property.
       for name of props
           throw "Add property fail. [#{name}] exists" if @.hasOwnProperty(name)
           add name
+
 
 
   ###

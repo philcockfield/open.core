@@ -128,12 +128,18 @@ describe 'controls/button_set', ->
     it 'has no buttons (length == 0)', ->
       expect(model.length).toEqual 0
 
-    it 'has one button', ->
+    it 'incremenets the length upon add', ->
       model.add(btn)
       expect(model.length).toEqual 1
+
+    it 'decrements the length upon add', ->
+      model.add(btn)
+      model.remove(btn)
+      model.remove(btn)
+      expect(model.length).toEqual 0
     
   
-  describe 'addButton', ->
+  describe 'add() method', ->
     it 'adds the button to the collection', ->
       model.add(btn)
       expect(model.buttons.include(btn)).toEqual true
@@ -144,26 +150,70 @@ describe 'controls/button_set', ->
     it 'throws if button not specified', ->
       expect(-> model.add()).toThrow()
     
+    it 'does not add the same button twice', ->
+      model.add btn
+      model.add btn
+      expect(model.length).toEqual 1
+    
     it 'causes the change event to fire on the collection', ->
       args = null
       model.buttons.bind 'add', (e) -> args = e
       model.add(btn)
       expect(args).toEqual btn
 
-    it 'suppresses the change event', ->
+    it 'suppresses the change event when [silent:true]', ->
       args = undefined
       model.buttons.bind 'add', (e) -> args = e
       model.add(btn, silent:true)
       expect(args).not.toBeDefined()
     
+    it 'fires [add] event from ButtonSet', ->
+      args = undefined
+      model.bind 'add', (e) -> args = e
+      model.add(btn)
+      expect(args.source).toEqual model
+
+    it 'does not fire [add] event from ButtonSet when [silent:true]', ->
+      args = undefined
+      model.bind 'add', (e) -> args = e
+      model.add(btn, silent:true)
+      expect(args).not.toBeDefined()
+
     
-  describe 'clear', ->
+  describe 'remove', ->
+    beforeEach ->
+        model.add(btn)
+    
+    it 'removes the button from the collection', ->
+      model.remove(btn)
+      expect(model.buttons.include(btn)).toEqual false
+      
+    it 'returns the true if removed successfully', ->
+      expect(model.remove(btn)).toEqual true
+
+    it 'returns the false if the button was no in the set', ->
+      expect(model.remove(new Button())).toEqual false
+    
+    it 'fires [remove] event', ->
+      args = undefined
+      model.bind 'remove', (e) -> args = e
+      model.remove(btn)
+      expect(args.source).toEqual model
+      
+    it 'does not fire [remove] event when [silent:true]', ->
+      args = undefined
+      model.bind 'remove', (e) -> args = e
+      model.remove(btn, silent:true)
+      expect(args).not.toBeDefined()
+    
+    
+  describe 'clear() method', ->
     beforeEach ->
       model.add new Button(label: 'one')
       model.add new Button(label: 'two')
       model.add new Button(label: 'three')
     
-    it 'fires the clear event', ->
+    it 'fires the [clear] event', ->
       count = 0
       model.bind 'clear', ->
         count += 1
@@ -171,7 +221,7 @@ describe 'controls/button_set', ->
       model.clear()
       expect(count).toEqual 1
     
-    it 'does not fire the clear event', ->
+    it 'does not fire the [clear] event', ->
       count = 0
       model.bind 'clear', ->
         count += 1
@@ -183,18 +233,80 @@ describe 'controls/button_set', ->
       model.clear()
       expect(model.buttons.size()).toEqual 0
     
-    it 'does fire remove event from buttons collection when cleared', ->
-      count = 0
-      model.buttons.bind 'remove', ->
-        count += 1
-      
-      model.clear()
-      expect(count).toEqual 3
+    describe '[remove] event', ->
+      it 'does fire [remove] event from buttons collection when cleared', ->
+        count = 0
+        model.buttons.bind 'remove', -> count += 1
+        model.clear()
+        expect(count).toEqual 3
     
-    it 'does not fire remove event from buttons collection when cleared', ->
-      count = 0
-      model.buttons.bind 'remove', ->
-        count += 1
+      it 'does not fire [remove] event from buttons collection when cleared  (silent:true)', ->
+        count = 0
+        model.buttons.bind 'remove', -> count += 1
+        model.clear silent: true
+        expect(count).toEqual 0
+
+      it 'does fire [remove] event from the ButtonSet when cleared', ->
+        count = 0
+        model.bind 'remove', -> count += 1
+        model.clear()
+        expect(count).toEqual 3
+    
+      it 'does not fire [remove] event from the ButtonSet when cleared (silent:true)', ->
+        count = 0
+        model.bind 'remove', -> count += 1
+        model.clear silent: true
+        expect(count).toEqual 0
+
+
+  describe '[changed] event', ->
+    fireCount = 0
+    beforeEach ->
+        fireCount = 0
+        model.bind 'changed', -> fireCount += 1
+    
+    it 'fires [changed] event when button is added', ->
+      model.add btn
+      model.add btn
+      expect(fireCount).toEqual 1
       
-      model.clear silent: true
-      expect(count).toEqual 0
+    it 'fires [changed] event when button is removed', ->
+      model.add btn
+      fireCount = 0
+      model.remove btn
+      expect(fireCount).toEqual 1
+      
+    it 'fires [changed] event once when cleared', ->
+      model.add new Button()
+      model.add new Button()
+      model.add new Button()
+      fireCount = 0
+      model.clear()
+      expect(fireCount).toEqual 1
+    
+    describe 'suppressed (silent:true)', ->
+      it 'does not fire [changed] event when button is added', ->
+        model.add btn, silent:true
+        model.add btn, silent:true
+        expect(fireCount).toEqual 0
+      
+      it 'does not fire [changed] event when button is removed', ->
+        model.add btn
+        fireCount = 0
+        model.remove btn, silent:true
+        expect(fireCount).toEqual 0
+      
+      it 'does not fire [changed] event when cleared', ->
+        model.add new Button()
+        model.add new Button()
+        model.add new Button()
+        fireCount = 0
+        model.clear(silent:true)
+        expect(fireCount).toEqual 0
+      
+    
+      
+    
+      
+      
+    

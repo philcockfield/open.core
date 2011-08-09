@@ -40,6 +40,19 @@ module.exports = class Model extends Backbone.Model
             init @save
             init @destroy
 
+
+  ###
+  Adds one or more [Property] functions to the object.
+  @param props :    Object literal describing the properties to add
+                    The object takes the form [name: default-value].
+                    {
+                      name: 'default value'
+                    }
+  ###
+  addProps: (props) -> 
+    console.log 'FOO', props
+          
+
   ###
   Fetches the model's state from the server.
   @param options

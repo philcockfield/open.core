@@ -1,4 +1,5 @@
 fireEvent = (eventName, prop, args) => 
+    args.property = prop
     fire = (obj) => obj.trigger eventName, args
     fire prop
     fire prop.fn

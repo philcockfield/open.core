@@ -230,6 +230,15 @@ describe 'controls/button', ->
       button.toggle()
       expect(button.selected()).toEqual false
 
+    it 'returns false if cannot toggle', ->
+      button.canToggle false
+      expect(button.toggle()).toEqual false
+
+    it 'returns true if can toggle', ->
+      button.canToggle true
+      button.toggle()
+      expect(button.toggle()).toEqual true
+
     it 'toggles the button to a selected state', ->
       button.canToggle true
       button.toggle()
@@ -242,6 +251,32 @@ describe 'controls/button', ->
       expect(button.selected()).toEqual false
 
     
+    
+  describe 'onStateChanged (overridable method)', ->
+    beforeEach ->
+        spyOn(button, 'onStateChanged').andCallThrough()
+    
+    it 'is called on [click]', ->
+      button.click()
+      expect(button.onStateChanged).toHaveBeenCalled()
+
+    it 'is called on [mouseover]', ->
+      button.el.mouseover()
+      expect(button.onStateChanged).toHaveBeenCalled()
+
+    it 'is called on [mouseout]', ->
+      button.el.mouseout()
+      expect(button.onStateChanged).toHaveBeenCalled()
+    
+    it 'is called on [mousedown]', ->
+      button.el.mousedown()
+      expect(button.onStateChanged).toHaveBeenCalled()
+    
+    it 'is called on [mouseup]', ->
+      button.el.mouseup()
+      expect(button.onStateChanged).toHaveBeenCalled()
+
+      
     
     
     

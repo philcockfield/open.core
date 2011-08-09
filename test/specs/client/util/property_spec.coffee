@@ -132,6 +132,7 @@ describe 'util/property', ->
         expect(args.oldValue).toEqual 1
         expect(args.newValue).toEqual 2
         expect(args.cancel).toEqual false
+        expect(args.property).toEqual prop
 
     describe '[changing] event when writing', ->
       it 'fires [changing] event when value is different', ->
@@ -197,6 +198,7 @@ describe 'util/property', ->
         prop.fireChanged(1, 2)
         expect(args.oldValue).toEqual 1
         expect(args.newValue).toEqual 2
+        expect(args.property).toEqual prop
     
     describe '[changed] event when writing', ->
       it 'fires [changed] event when value is different', ->

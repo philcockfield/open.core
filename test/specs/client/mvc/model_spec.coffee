@@ -50,12 +50,9 @@ describe 'mvc/model', ->
       son = new Son()
       expect(father.foo()).toEqual 123
       expect(son.foo()).toEqual 'abc'
-      
     
 
   describe 'Read/Write properties', ->
-      
-
     it 'GETS from the backing model', ->
       spyOn model, 'get'
       model.foo()
@@ -235,4 +232,6 @@ describe 'mvc/model', ->
         expect(args.response).toEqual 'res'
         expect(args.success).toEqual true
         expect(args.error).toEqual false
-        
+
+
+    
