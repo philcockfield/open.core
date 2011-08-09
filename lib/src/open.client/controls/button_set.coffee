@@ -8,6 +8,7 @@ Events:
   - add
   - remove
   - clear
+  - selectionChanged
 
 ###
 module.exports = class ButtonSet extends core.Base
@@ -16,8 +17,6 @@ module.exports = class ButtonSet extends core.Base
       _.extend @, Backbone.Events
       @length = 0
       @buttons = new core.mvc.Collection()
-      
-      
 
   ###
   Gets the collection of buttons being managed.
@@ -60,15 +59,17 @@ module.exports = class ButtonSet extends core.Base
       
       # Handle button press.
       button.selected.onChanged (e) => 
-
-            # Deselect the other toggle buttons.
             return unless button.canToggle()
             return if e.oldValue == true
-            
+
+            # Deselect the other toggle buttons.
             for btn in @togglable()
                 if btn isnt button and btn.canToggle() and btn.selected()
                     btn.selected false
-      
+            
+            # Alert listeners.
+            @_fire 'selectionChanged', button:button
+            
       # Finish up.
       if not options.silent
           @_fire 'add' 
@@ -132,7 +133,9 @@ module.exports = class ButtonSet extends core.Base
   ###
   PRIVATE Methods
   ###
-  _fire: (event) -> @trigger event, source:@
+  _fire: (event, args = {}) -> 
+      args.source = @
+      @trigger event, args
   _fireChanged: -> @_fire 'changed'
   
   

@@ -276,12 +276,3 @@ describe 'controls/button', ->
       button.el.mouseup()
       expect(button.onStateChanged).toHaveBeenCalled()
 
-      
-    
-    
-    
-    
-    
-    
-      
-      

@@ -1,25 +1,11 @@
-// ------------------------------------------------------
-//                      Utility
-// ------------------------------------------------------
 toUnit(prop, value, unit=px)
     if value is not null
       {prop} unit(value, unit)
 
-absPosition(left = 0, top = 0, right = 0, bottom = 0, unit=px)
+abs-pos(left = 0, top = 0, right = 0, bottom = 0, unit=px)
     position absolute
     toUnit 'left', left, unit
     toUnit 'top', top, unit
     toUnit 'right', right, unit
     toUnit 'bottom', bottom, unit
-
-gradientY(defaultColor, topColor, bottomColor)
-    prop = current-property[0]
-    add-property(prop, defaultColor)
-
-    // WebKit
-    add-property(prop, -webkit-gradient(linear, left top, left bottom, from(topColor), to(bottomColor)))
-
-    // Firefox (3.6+)
-    add-property(prop, -moz-linear-gradient(top,  topColor,  bottomColor))
-
 

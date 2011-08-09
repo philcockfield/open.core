@@ -2,18 +2,41 @@
 @import 'nib'
 
 // ------------------------------------------------------
-//                        Common
+//                    Constants
+// ------------------------------------------------------
+DEFAULT_FONT_FAMILY = "Lucida Grande", Helvetica, Arial, sans-serif
+
+
+// ------------------------------------------------------
+//                   Common Styles
+// ------------------------------------------------------
+bevelHighlight()
+  absPosition(0, 0, 0, null)
+  height: 1px
+  background: white
+
+textEmboss()
+  text-shadow: 0px 1px 0px white;
+
+noEmboss()
+  text-shadow: none;
+
+
+noSelect()
+  user-select none
+
+
+// ------------------------------------------------------
+//                  Common Classes
 // ------------------------------------------------------
 body
-  font 15px "Lucida Grande", Helvetica, Arial, sans-serif
+  font 15px DEFAULT_FONT_FAMILY
 
-div.bevel.highlight
-    absPosition(0, 0, 0, null)
-    height: 1px
-    background: white
+div.core_bevel_highlight
+  bevelHighlight()
+  
+.core_text_emboss
+  textEmboss()
 
-.text_emboss
-  text-shadow: 0px 1px 0px $white;
-
-.abs_fill
-  absPosition()
+.core_abs_fill
+  abs-pos()

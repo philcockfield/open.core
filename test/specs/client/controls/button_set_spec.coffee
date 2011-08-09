@@ -305,7 +305,44 @@ describe 'controls/button_set', ->
         expect(fireCount).toEqual 0
       
     
+  describe '[selectionChanged] event', ->
+    count = 0
+    args = null
+    beforeEach ->
+        count = 0
+        args = null
+        model.bind 'selectionChanged', (e) -> 
+            args = e
+            count += 1
+    
+    it 'fires [selectionChanged] once', ->
+      model.add tab1
+      model.add tab2
+      tab2.click()
+      tab2.click()
+      expect(count).toEqual 1
+
+    it 'passes the [ButtonSet] in event args', ->
+      model.add tab1
+      tab1.click()
+      expect(args.source).toEqual model
+
+    it 'passes the button in event args', ->
+      model.add tab1
+      model.add tab2
+      tab2.click()
+      expect(args.button).toEqual tab2
       
+    
+          
+    
+    
+    
+    
+    
+    
+      
+            
     
       
       
