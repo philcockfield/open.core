@@ -75,7 +75,50 @@ describe 'base', ->
       expect(invokeCount).toEqual 1
     
     
+  describe '[bubble] event', ->
+    parent = null
+    child = null
+    beforeEach ->
+        parent = new Base()
+        child = new Base()
+        _.extend child, Backbone.Events
     
+    it 'returns the parent object (for chaining)', ->
+      result = parent.bubble 'changed', child
+      expect(result).toEqual parent
+    
+    it 'event enables the object, if not already supporting events', ->
+      expect(parent.bind).not.toBeDefined()
+      parent.bubble 'changed', child
+      expect(parent.bind).toBeDefined()
+    
+    it 'bubbles the event', ->
+      count = 0
+      parent.bubble 'changed', child
+      parent.bind 'changed', -> count += 1
+      child.trigger 'changed'
+      expect(count).toEqual 1
+
+    it 'passes the parent object as the source in event args', ->
+      args = null
+      parent.bubble 'changed', child
+      parent.bind 'changed', (e) -> args = e
+      child.trigger 'changed'
+      expect(args.source).toEqual parent
+
+    it 'changes the original source to the parent object as the source in event args', ->
+      args = null
+      parent.bubble 'changed', child
+      parent.bind 'changed', (e) -> args = e
+      child.trigger 'changed', source:child
+      expect(args.source).toEqual parent
+
+    
+      
+      
+    
+    
+        
     
     
     

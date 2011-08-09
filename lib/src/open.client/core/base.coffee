@@ -63,3 +63,22 @@ module.exports = class Base
       internal = @_ ?= {}
       internal.basePropertyStore ?= {}
 
+  
+  ###
+  Attaches to an event on an object and refires it from this object.
+  @param eventName    : The name of the event to bubble.
+  @param eventSource  : The child object that will originally fire the event.
+  ###
+  bubble: (eventName, eventSource) -> 
+      
+      # Ensure this object supports eventing.
+      _.extend(@, Backbone.Events) if not @.bind?
+      
+      # Bind to the event.
+      eventSource.bind eventName, (args = {}) => 
+          args.source = @
+          @trigger eventName, args
+      
+      # Finish up (chainable).
+      @
+      
