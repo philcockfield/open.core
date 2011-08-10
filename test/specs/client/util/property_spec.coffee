@@ -143,6 +143,10 @@ describe 'util/property', ->
         prop.fn(123)
         expect(count).toEqual 0
 
+      it 'does not fire [changing] event when {silent:true}', ->
+        prop.fn(333, silent:true)
+        expect(count).toEqual 0
+
       it 'does not fire [changing] event when value is the same (multiple changes with same value)', ->
         prop.fn('abc')
         prop.fn('abc')
@@ -207,6 +211,10 @@ describe 'util/property', ->
 
       it 'does not fire [changed] event when value is the same (as default)', ->
         prop.fn(123)
+        expect(count).toEqual 0
+
+      it 'does not fire [changed] event when {silent:true}', ->
+        prop.fn(333, silent:true)
         expect(count).toEqual 0
 
       it 'does not fire [changed] event when value is the same (multiple changes with same value)', ->

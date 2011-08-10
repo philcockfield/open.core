@@ -45,9 +45,11 @@ module.exports = class Property
   Expose this from your objects as a property-func.
   @param value (optional) the value to assign.  
                Do not specify (undefined) for read operations.
+  @param options
+            - silent : (optional) Flag indicating if events should be suppressed (default false).
   ###
-  fn: (value) => 
-      @write(value) if value != undefined
+  fn: (value, options) => 
+      @write(value, options) if value != undefined
       @read()
 
 
@@ -63,23 +65,28 @@ module.exports = class Property
 
   ###
   Writes the given value to the property.
+  @param value : The value to write.
+  @param options
+            - silent : (optional) Flag indicating if events should be suppressed (default false).
   ###
-  write: (value) => 
+  write: (value, options = {}) => 
       # Setup initial conditions.
       return if value == undefined
       oldValue = @read()
       return if value == oldValue
+      options.silent ?= false
       
       # Pre-event.
-      args = @fireChanging oldValue, value
-      return if args.cancel is yes
+      if options.silent is no
+        args = @fireChanging oldValue, value
+        return if args.cancel is yes
       
       # Store the value.
       store = @_.store      
       if _.isFunction(store) then store(@name, value) else store[@name] = value
       
       # Post-event.
-      @fireChanged oldValue, value
+      @fireChanged(oldValue, value) if options.silent is no
 
 
   ###
