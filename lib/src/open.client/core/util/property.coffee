@@ -83,7 +83,7 @@ module.exports = class Property
       
       # Store the value.
       store = @_.store      
-      if _.isFunction(store) then store(@name, value) else store[@name] = value
+      if _.isFunction(store) then store(@name, value, options) else store[@name] = value
       
       # Post-event.
       @fireChanged(oldValue, value) if options.silent is no

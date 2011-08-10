@@ -59,9 +59,24 @@ describe 'mvc/model', ->
       expect(model.get).toHaveBeenCalled()
     
     it 'SETS to the backing model', ->
-      spyOn model, 'set'
+      values = null
+      options = null
+      spyOn(model, 'set').andCallFake (v,o) -> 
+              values = v
+              options = o
       model.foo('hello')
-      expect(model.set).toHaveBeenCalledWith( foo:'hello' )
+      expect(values.foo).toEqual 'hello'
+      expect(options.silent).toEqual false
+      
+    it 'SETS to the backing model, passing [options]', ->
+      values = null
+      options = null
+      spyOn(model, 'set').andCallFake (v,o) -> 
+              values = v
+              options = o
+      model.foo('hello', silent:true)
+      expect(values.foo).toEqual 'hello'
+      expect(options.silent).toEqual true
       
     it 'reads from model', ->
       expect(model.foo()).toEqual 123
@@ -91,10 +106,6 @@ describe 'mvc/model', ->
 
     
       
-    
-    
-    
-    
     
   describe 'url', ->
     it 'can be overridden', ->

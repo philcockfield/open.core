@@ -18,12 +18,12 @@ module.exports = class Model extends Backbone.Model
         #        read/write requests into the Backbone model's GET/SET methods.
         _.extend @, basePrototype
         @propertyStore = () =>
-            fn = (name, value) => 
+            fn = (name, value, options) => 
                 if value != undefined
                       #  Write value to backing store.
                       param = {}
                       param[name] = value
-                      self.set param
+                      self.set param, options
           
                 # Read value from backing model.
                 self.get(name)
