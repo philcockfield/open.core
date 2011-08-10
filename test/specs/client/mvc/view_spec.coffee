@@ -29,6 +29,10 @@ describe 'mvc/view', ->
     it 'has an [element] which is a DOM element', ->
       expect(view.element.tagName).toEqual 'DIV'
     
+    it 'takes a custom element in the constructor', ->
+      span = $('<span>Foo</span>').get(0)
+      view = new View(el:span)
+      expect(view.el.get(0)).toEqual span
   
   describe 'tagName', ->
     it 'is a DIV by default', ->
@@ -45,7 +49,7 @@ describe 'mvc/view', ->
     it 'has a custom class name', ->
       view = new View( className: 'foo bar' )
       expect(view.el.get(0).className).toEqual 'foo bar'
-  
+    
   
   describe 'html', ->
     it 'insert HTML within the view', ->

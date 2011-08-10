@@ -9,6 +9,14 @@ syncVisibility = (view, visible) ->
 Base class for visual controls.
 ###
 module.exports = class View extends Model
+  ###
+  Constructor.
+  @param params
+          - tagName   : (optional). The tag name for the View's root element (default: DIV)
+          - className : (optional). The CSS class name for the root element.
+          - el        : (optional). An explicit element to use.
+          
+  ###
   constructor: (params = {}) ->
       # Setup initial conditions.
       super
@@ -22,6 +30,7 @@ module.exports = class View extends Model
       view = new Backbone.View
                     tagName:   params.tagName
                     className: params.className
+                    el:        params.el
       
       # Store internal state.
       @_ =

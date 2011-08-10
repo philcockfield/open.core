@@ -29,7 +29,6 @@ module.exports = class ButtonSet extends core.Base
   ###
   selected: -> (@buttons.select (btn) -> btn.canToggle() and btn.selected())[0]
 
-
   ###
   Selects the buttons that can be toggled.
   ###
