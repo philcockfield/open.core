@@ -154,7 +154,12 @@ describe 'client/controls/textbox', ->
       it 'undefined', ->
         textbox.text undefined
         expect(textbox.empty()).toEqual true
-      
+
+  describe 'watermark', ->
+    it 'does not have a watermark by default', ->
+      expect(textbox.watermark()).toEqual ''
+    
+          
     
         
   

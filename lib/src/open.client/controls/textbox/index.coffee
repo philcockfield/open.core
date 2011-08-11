@@ -32,15 +32,24 @@ module.exports = class Textbox extends core.mvc.View
     text:       ''      # Gets or sets the content of the textbox.
     multiline:  false   # Gets whether the textbox supports multi-line input.
     password:   false   # Gets or sets whether the textbox is a password (only valid if not multi-line).
+    watermark:  ''      # Gets or sets the watermark.
   
   constructor: (params = {}) -> 
       # Setup initial conditions.
       super _.extend params, tagName: 'span', className: 'core_textbox'
       @render()
       
+      syncWatermark = () => 
+            @$('span.core_watermark').html (if @empty() then @watermark() else '')
+      
       # Wire up events.
       @multiline.onChanged => @render()
-      @password.onChanged => @render()
+      @password.onChanged  => @render()
+      @watermark.onChanged syncWatermark
+      @text.onChanged      syncWatermark
+      
+      # Finish up.
+      syncWatermark()
       
   render: -> 
       # Setup initial conditions.
