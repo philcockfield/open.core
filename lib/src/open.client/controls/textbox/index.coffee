@@ -26,6 +26,11 @@ textSyncer = (textProperty, input) ->
 
 ###
 A general purpose textbox.
+
+Events:
+ - press:enter
+ - press:escape
+
 ###
 module.exports = class Textbox extends core.mvc.View
   defaults: 
@@ -48,6 +53,16 @@ module.exports = class Textbox extends core.mvc.View
       @watermark.onChanged syncWatermark
       @text.onChanged      syncWatermark
       
+      # Key events.
+      # core.keyEvents.onEnter => @enterPress() if @hasFocus()
+      @_.input.keyup (e) => @escapePress() if e.keyCode == 27
+      
+      
+      # Key handlers.
+      _.extend @_, keyHandlers =
+          press: (event) => @trigger 'press:' + event,  source: self 
+          onPress: (event, callback) => @bind 'press:' + event, callback
+      
       # Finish up.
       syncWatermark()
       
@@ -64,13 +79,15 @@ module.exports = class Textbox extends core.mvc.View
       input = if @multiline() then @$('textarea') else @$('input')
       
       # Finish up.
-      @_syncer = new textSyncer(@.text, input)
-      @_input = input
+      @_.syncer = new textSyncer(@.text, input)
+      @_.input = input
       @
       
   # Applies focus to the INPUT element.
-  focus: -> @_input.focus()
-  
+  focus: -> @_.input.focus()
+
+  # Determines whether the textbox has the focus.
+  hasFocus: -> @$('input:focus').length is 1
   
   ###
   Determines whether the textbox is empty.
@@ -83,8 +100,30 @@ module.exports = class Textbox extends core.mvc.View
       text = _.trim(text) if trim
       return true if text is ''
       return false
-      
-      
+  
+  ###
+  Called when the [Enter] key is pressed.
+  This can also be used to simulate the [Enter] key press event.
+  ###
+  enterPress: -> @_.press 'enter'
+
+  ###
+  Called when the [Escape] key is pressed.
+  Note: This can also be used to simulate the [Escape] key press event.
+  ###
+  escapePress: -> @_.press 'escape'
+
+  ###
+  Wires an event handler to the [Enter] key-press.
+  @param callback: to invoke when the [Enter] key is pressed.
+  ###
+  onEnter: (callback) -> @_.onPress 'enter', callback
+
+  ###
+  Wires an event handler to the [Escape] key-press.
+  @param callback: to invoke when the [Escape] key is pressed.
+  ###
+  onEscape: (callback) -> @_.onPress 'escape', callback      
       
       
       
