@@ -10,6 +10,57 @@ describe 'client/controls/textbox', ->
     it 'has no text by default', ->
       expect(textbox.text()).toEqual ''
     
+    describe 'updating INPUT when .text() property changes', ->
+      it 'updates the INPUT (for single-line textbox)', ->
+        textbox.text 'foo'
+        expect(textbox._input.val()).toEqual 'foo'
+    
+      it 'updates the INPUT (for password textbox)', ->
+        textbox.password true
+        textbox.text 'pwd'
+        expect(textbox._input.val()).toEqual 'pwd'
+    
+      it 'updates the INPUT (for multi-line textbox)', ->
+        textbox.multiline true
+        textbox.text 'bar'
+        expect(textbox._input.val()).toEqual 'bar'
+
+    describe 'updating when .text() property when INPUT changes [on keyup event]', ->
+      it 'updates the [text] property (for single-line textbox)', ->
+        textbox._input.val 'foo'
+        textbox._input.keyup()
+        expect(textbox.text()).toEqual 'foo'
+
+      it 'updates the [text] property (for password textbox)', ->
+        textbox.password true
+        textbox._input.val 'pwd'
+        textbox._input.keyup()
+        expect(textbox.text()).toEqual 'pwd'
+
+      it 'updates the [text] property (for multi-line textbox)', ->
+        textbox.multiline true
+        textbox._input.val 'foo'
+        textbox._input.keyup()
+        expect(textbox.text()).toEqual 'foo'
+
+    describe 'updating when .text() property when INPUT changes [on change event]', ->
+      it 'updates the [text] property (for single-line textbox)', ->
+        textbox._input.val 'foo'
+        textbox._input.change()
+        expect(textbox.text()).toEqual 'foo'
+
+      it 'updates the [text] property (for password textbox)', ->
+        textbox.password true
+        textbox._input.val 'pwd'
+        textbox._input.change()
+        expect(textbox.text()).toEqual 'pwd'
+
+      it 'updates the [text] property (for multi-line textbox)', ->
+        textbox.multiline true
+        textbox._input.val 'foo'
+        textbox._input.change()
+        expect(textbox.text()).toEqual 'foo'
+    
   
   describe 'single-line', ->
     it 'is single-line by default', ->
@@ -60,8 +111,25 @@ describe 'client/controls/textbox', ->
       expect(textbox.render).toHaveBeenCalled()
     
         
+  describe 'focus', ->
+    it 'has a focus method', ->
+      expect(textbox.focus instanceof Function).toEqual true 
+        
+
+  describe '_input (element reference)', ->
+    it 'has _input when standard single-line', ->
+      expect(textbox._input.get(0).tagName).toEqual 'INPUT'
+      
+    it 'has _input when password', ->
+      textbox = new Textbox(password:true)
+      expect(textbox._input.get(0).tagName).toEqual 'INPUT'
+
+    it 'has _input when standard multiline-line', ->
+      textbox = new Textbox(multiline:true)
+      expect(textbox._input.get(0).tagName).toEqual 'TEXTAREA'
+      
     
-    
+        
   
     
   

@@ -1,6 +1,29 @@
 core      = require 'open.client/core'
 Template  = require './tmpl'
 
+textSyncer = (textProperty, input) -> 
+      # Syncer.
+      ignore = false
+      sync = (fn) -> 
+          ignore = true
+          fn()
+          ignore = false
+    
+      # Keep INPUT synchronized with [textbox.text] property.
+      syncInput = -> 
+            return if ignore
+            sync -> input.val textProperty()
+      syncInput() # Sync on load.
+      textProperty.onChanged syncInput
+    
+      # Keep [textbox.text] property synchronized with INPUT.
+      syncProperty = -> 
+            return if ignore
+            sync -> textProperty input.val()
+      input.keyup syncProperty
+      input.change syncProperty
+
+
 ###
 A general purpose textbox.
 ###
@@ -29,6 +52,15 @@ module.exports = class Textbox extends core.mvc.View
       @html html
       
       # Reference elements.
+      input = if @multiline() then @$('textarea') else @$('input')
       
       # Finish up.
+      @_syncer = new textSyncer(@.text, input)
+      @_input = input
       @
+      
+  # Applies focus to the INPUT element.
+  focus: -> 
+    console.log '@_input', @_input
+    @_input.focus()
+      
