@@ -55,7 +55,9 @@ module.exports = class Textbox extends core.mvc.View
       
       # Key events.
       # core.keyEvents.onEnter => @enterPress() if @hasFocus()
-      @_.input.keyup (e) => @escapePress() if e.keyCode == 27
+      @_.input.keyup (e) => 
+          @enterPress()  if e.keyCode is 13
+          @escapePress() if e.keyCode is 27
       
       
       # Key handlers.
