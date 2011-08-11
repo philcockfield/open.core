@@ -60,7 +60,28 @@ module.exports = class Textbox extends core.mvc.View
       @
       
   # Applies focus to the INPUT element.
-  focus: -> 
-    console.log '@_input', @_input
-    @_input.focus()
+  focus: -> @_input.focus()
+  
+  
+  ###
+  Determines whether the textbox is empty.
+  @param trim : Flag indicating if white space should be trimmed before 
+                evaluating whether the textbox is empty (default true).
+  ###
+  empty: (trim = true) -> 
+      text = @text()
+      return true if not text?
+      text = _.trim(text) if trim
+      return true if text is ''
+      return false
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       

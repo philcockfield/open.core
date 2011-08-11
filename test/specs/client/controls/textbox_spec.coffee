@@ -128,6 +128,33 @@ describe 'client/controls/textbox', ->
       textbox = new Textbox(multiline:true)
       expect(textbox._input.get(0).tagName).toEqual 'TEXTAREA'
       
+  describe 'empty() method', ->
+    describe 'is not empty', ->
+      it 'has text', ->
+        textbox.text '  foo '
+        expect(textbox.empty()).toEqual false
+      
+      it 'has white space only (not trimmed)', ->
+        textbox.text '   '
+        expect(textbox.empty(false)).toEqual false
+    
+    describe 'is empty', ->
+      it 'empty string', ->
+        textbox.text ''
+        expect(textbox.empty()).toEqual true
+
+      it 'white space', ->
+        textbox.text '    '
+        expect(textbox.empty()).toEqual true
+
+      it 'null', ->
+        textbox.text null
+        expect(textbox.empty()).toEqual true
+
+      it 'undefined', ->
+        textbox.text undefined
+        expect(textbox.empty()).toEqual true
+      
     
         
   
