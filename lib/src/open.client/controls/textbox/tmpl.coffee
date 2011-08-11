@@ -6,19 +6,10 @@ module.exports = class TextboxTmpl extends core.mvc.Template
       <span class="core_inner">
         &nbsp;
         <span class="core_watermark"></span>
-        <input type="text" />
+        <% if (textbox.multiline()) { %>
+          <textarea></textarea>
+        <% } else { %>
+          <input type="<%= inputType %>" />
+        <% } %>
       </span>
     """
-
-
-###
-        {if $type == 'textarea'}
-          <textarea></textarea>
-        {else}
-          <input type="{$type}" />
-        {/if}
-
-
-###    
-
-
