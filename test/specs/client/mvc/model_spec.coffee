@@ -61,7 +61,7 @@ describe 'mvc/model', ->
     it 'SETS to the backing model', ->
       values = null
       options = null
-      spyOn(model, 'set').andCallFake (v,o) -> 
+      spyOn(model, 'set').andCallFake (v, o) -> 
               values = v
               options = o
       model.foo('hello')

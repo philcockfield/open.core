@@ -1,15 +1,21 @@
 @import 'functions'
 @import 'nib'
 
-// ------------------------------------------------------
-//                    Constants
-// ------------------------------------------------------
+// Resets.
+coreReset()
+  global-reset()
+  nested-reset()
+  reset-box-model()
+  reset-body()
+  reset-table()
+  reset-table-cell()
+  reset-html5()
+
+// Constants.
 DEFAULT_FONT_FAMILY = "Lucida Grande", Helvetica, Arial, sans-serif
 
 
-// ------------------------------------------------------
-//                   Common Styles
-// ------------------------------------------------------
+// Common styles.
 bevelHighlight()
   absPosition(0, 0, 0, null)
   height: 1px
@@ -25,9 +31,7 @@ noSelect()
   user-select none
 
 
-// ------------------------------------------------------
-//                  Common Classes
-// ------------------------------------------------------
+// Common classes.
 body
   font 15px DEFAULT_FONT_FAMILY
 

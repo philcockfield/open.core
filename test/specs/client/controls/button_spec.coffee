@@ -4,10 +4,8 @@ describe 'controls/button', ->
   Button = null
   button = null
   beforeEach ->
-
       controls = require 'open.client/controls/index'
       Button = controls.Button
-
       button = new Button()
   
   it 'exists', ->
