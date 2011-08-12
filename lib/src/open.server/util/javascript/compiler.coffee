@@ -40,6 +40,16 @@ processPaths = (paths) ->
         item
     paths
 
+newTempDir = -> 
+    #  Get the root compiler directory - and ensure it exists.
+    tmpDir = process.env.PWD ?= paths.root
+    tmpDir = "#{tmpDir}/_tmp/compiler/"
+    fsUtil().createDirSync tmpDir
+
+    # Generate the unique directory for this compilation.
+    unique = uuid()
+    tmpDir += "_tmp#{fs.readdirSync(tmpDir).length}_#{unique}"
+
 
 module.exports = class Compiler
   ###
@@ -68,10 +78,7 @@ module.exports = class Compiler
           paths = core().paths
 
           # 1. Copy source files to temporary location (retaining the relative path structure).
-          unique = uuid()
-          tmpDir = process.env.PWD ?= paths.root
-          tmpDir = "#{tmpDir}/_tmp/compiler/"
-          tmpDir += "_tmp#{fs.readdirSync(tmpDir).length}_#{unique}"
+          tmpDir = newTempDir()
           prepackCopy @paths, tmpDir, ->
 
               # 2. Stitch the folder up.
