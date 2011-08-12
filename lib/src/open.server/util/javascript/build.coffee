@@ -47,7 +47,9 @@ module.exports =
       paths = [
         { source: "#{clientPath}/core", target: '/open.client/core' }
         { source: "#{clientPath}/controls", target: '/open.client/controls' }
-        ]
+      ]
+      
+      
 
       # Compile and save.
       compiler  = new core.util.javascript.Compiler paths, header: copyright

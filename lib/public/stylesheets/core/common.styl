@@ -1,4 +1,3 @@
-@import 'functions'
 @import 'nib'
 
 // Resets.
@@ -15,7 +14,20 @@ coreReset()
 DEFAULT_FONT_FAMILY = "Lucida Grande", Helvetica, Arial, sans-serif
 
 
-// Common styles.
+// Functions.
+toUnit(prop, value, unit=px)
+    if value is not null
+      {prop} unit(value, unit)
+
+abs-pos(left = 0, top = 0, right = 0, bottom = 0, unit=px)
+    position absolute
+    toUnit 'left', left, unit
+    toUnit 'top', top, unit
+    toUnit 'right', right, unit
+    toUnit 'bottom', bottom, unit
+
+
+// Style functions.
 bevelHighlight()
   absPosition(0, 0, 0, null)
   height: 1px

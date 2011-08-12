@@ -1,3 +1,4 @@
+fs       = require 'fs'
 stitch   = require 'stitch'
 uuid     = require 'node-uuid'
 minifier = require './minifier'
@@ -40,7 +41,6 @@ processPaths = (paths) ->
     paths
 
 
-
 module.exports = class Compiler
   ###
   Constructor.
@@ -70,7 +70,8 @@ module.exports = class Compiler
           # 1. Copy source files to temporary location (retaining the relative path structure).
           unique = uuid()
           tmpDir = process.env.PWD ?= paths.root
-          tmpDir = "#{tmpDir}/_tmp/compiler/_tmp_#{unique}"
+          tmpDir = "#{tmpDir}/_tmp/compiler/"
+          tmpDir += "_tmp#{fs.readdirSync(tmpDir).length}_#{unique}"
           prepackCopy @paths, tmpDir, ->
 
               # 2. Stitch the folder up.

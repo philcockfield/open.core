@@ -33,5 +33,15 @@ task 'build', 'Build and save all JavaScript files', ->
 
     
     
+task 'temp', -> 
+    
+    fs = core.util.fs
+    
+    source = "#{core.paths.client}/foo.coffee"
+    target = "#{__dirname}/_tmp/foo.coffee"
+    
+    fs.copySync source, target
+    
+    console.log 'FOO'
     
     
