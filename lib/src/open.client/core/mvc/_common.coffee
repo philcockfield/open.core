@@ -1,4 +1,6 @@
 module.exports = 
+  using: (module) -> require 'open.client/core/mvc/' + module
+
   ###
   Provides common callback functionality for executing sync (server) method.
   @param fnSync       : The Backbone function to execute (eg. Backbone.Model.fetch).

@@ -1,4 +1,4 @@
-using = (m) -> require 'open.client/core/' + m
+using = (module) -> require 'open.client/core/' + module
 
 module.exports = core =
   title:  'Open.Core (Client)'

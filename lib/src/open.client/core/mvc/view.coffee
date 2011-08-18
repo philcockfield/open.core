@@ -1,4 +1,6 @@
-Model = require './model'
+common = require 'open.client/core/mvc/_common'
+Model = common.using 'model'
+
 
 syncVisibility = (view, visible) -> 
       display = if visible then '' else 'none'
