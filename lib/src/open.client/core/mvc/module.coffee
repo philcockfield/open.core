@@ -1,1 +1,6 @@
-common = require 'open.client/core/mvc/_common'
+corePath = 'open.client/core'
+Base     = require(corePath + '/base')
+common   = require(corePath + '/mvc/_common')
+
+module.exports = class Module extends Base
+
