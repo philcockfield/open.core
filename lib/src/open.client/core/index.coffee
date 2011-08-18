@@ -4,7 +4,7 @@ util = using 'util'
 module.exports = core =
   title:      'Open.Core (Client)'
   Base:       using 'base'
-  mvc:        using 'mvc/index'
+  mvc:        using 'mvc'
   util:       util
   tryRequire: util.tryRequire
 
