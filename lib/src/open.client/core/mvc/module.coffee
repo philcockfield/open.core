@@ -15,7 +15,6 @@ module.exports = class Module extends Base
       _require = (dir) => 
           return (name = '', options = {}) => 
               options.throw ?= true
-              
               @tryRequire "#{modulePath}/#{dir}/#{name}", options
       
       ###
