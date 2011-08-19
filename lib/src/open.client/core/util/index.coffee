@@ -1,4 +1,5 @@
 using = (module) -> require 'open.client/core/util/' + module
+using 'jquery' # Load jQuery extensions.
 
 module.exports =
   Property:   using 'property'
