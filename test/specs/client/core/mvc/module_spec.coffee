@@ -47,21 +47,57 @@ describe 'mvc/module', ->
         spyOn(module, 'tryRequire').andCallFake (name, options) -> 
                 args.push { name:name, options:options }
     
-    it 'indexes the [models] folder', ->
-      module.init()
-      expect(args[0].name).toEqual 'modules/foo/models/'
-      expect(args[0].options.throw).toEqual false
+    describe 'index (of MVC modules)', ->
+      it 'indexes the [models] folder', ->
+        module.init()
+        expect(args[0].name).toEqual 'modules/foo/models/'
+        expect(args[0].options.throw).toEqual false
 
-    it 'indexes the [views] folder', ->
-      module.init()
-      expect(args[1].name).toEqual 'modules/foo/views/'
-      expect(args[1].options.throw).toEqual false
+      it 'indexes the [views] folder', ->
+        module.init()
+        expect(args[1].name).toEqual 'modules/foo/views/'
+        expect(args[1].options.throw).toEqual false
     
-    it 'indexes the [controllers] folder', ->
-      module.init()
-      expect(args[2].name).toEqual 'modules/foo/controllers/'
-      expect(args[2].options.throw).toEqual false
+      it 'indexes the [controllers] folder', ->
+        module.init()
+        expect(args[2].name).toEqual 'modules/foo/controllers/'
+        expect(args[2].options.throw).toEqual false
 
+    describe 'translation of [within] option to jQuery object', ->
+      it 'does nothing if not [within] option was specified', ->
+        options = {}
+        module.init(options)
+        expect(options.within).not.toBeDefined()
+      
+      it 'does nothing if [within] option is a jQuery object', ->
+        body = $('body')
+        options = within: body
+        module.init(options)
+        expect(options.within).toEqual body
+
+      it 'translates a CSS selector [within] option to a jQuery object', ->
+        options = within: 'body'
+        module.init(options)
+        expect(options.within).toEqual $('body')
+
+      it 'translates a View [within] option to a jQuery object', ->
+        view = new core.mvc.View(className:'foo')
+        options = within: view
+        module.init(options)
+        expect(options.within).toEqual view.el
+
+      it 'translates an HTML DOM element [within] option to a jQuery object', ->
+        elBody = $('body').get(0)
+        options = within: elBody
+        module.init(options)
+        expect(options.within).toEqual $(elBody)
+        
+      
+        
+      
+      
+    
+  
   describe 'index', ->
     beforeEach ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> 

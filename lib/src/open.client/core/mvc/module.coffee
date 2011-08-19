@@ -29,16 +29,46 @@ module.exports = class Module extends Base
 
   
   ###
-  Initializes the module (overridable).
+  The root view of the module (convention).
+  When overriding the Module, set this property convention based proeprty within Init.
   ###
-  init: -> 
+  rootView: null
+  
+  ###
+  Initializes the module (overridable).
+  @param options
+          - within: The CSS selector, DOM element, JQuery Object or [View] to initialize 
+                    the module wihtin.  Passing 'options' param through the base 'init' method
+                    converts whatever type of value to a jQuery element.
+  ###
+  init: (options = {}) -> 
+      
+      # Construct MVC index.
       get = (fn) -> fn '', throw:false
       @index =
           models: get @require.model
           views: get @require.view
           controllers: get @require.controller
   
-  
+      # Translate [within] option to jQuery object.
+      within = options.within
+      if within?
+          if (within instanceof jQuery) # Ignore - no translation needed (already a jQuery object).
+
+          else if (within.el instanceof jQuery) 
+            # Retrieve jQuery .el from supplied [View]
+            options.within = within.el
+
+          else if _.isString(within) or (within instanceof HTMLElement)
+            # Look up jQuery object from supplied CSS selector, or wrap supplied DOM element.
+            options.within = $(within) 
+
+              
+            
+            
+        
+        
+          
 
 
 

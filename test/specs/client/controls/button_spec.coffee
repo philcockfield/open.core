@@ -1,4 +1,3 @@
-
 describe 'controls/button', ->
   controls = null
   Button = null
@@ -250,27 +249,52 @@ describe 'controls/button', ->
 
     
     
-  describe 'onStateChanged (overridable method)', ->
+  describe 'handleStateChanged (overridable method)', ->
     beforeEach ->
-        spyOn(button, 'onStateChanged').andCallThrough()
+        spyOn(button, 'handleStateChanged').andCallThrough()
     
     it 'is called on [click]', ->
       button.click()
-      expect(button.onStateChanged).toHaveBeenCalled()
+      expect(button.handleStateChanged).toHaveBeenCalled()
 
     it 'is called on [mouseover]', ->
       button.el.mouseover()
-      expect(button.onStateChanged).toHaveBeenCalled()
+      expect(button.handleStateChanged).toHaveBeenCalled()
 
     it 'is called on [mouseout]', ->
       button.el.mouseout()
-      expect(button.onStateChanged).toHaveBeenCalled()
+      expect(button.handleStateChanged).toHaveBeenCalled()
     
     it 'is called on [mousedown]', ->
       button.el.mousedown()
-      expect(button.onStateChanged).toHaveBeenCalled()
+      expect(button.handleStateChanged).toHaveBeenCalled()
     
     it 'is called on [mouseup]', ->
       button.el.mouseup()
-      expect(button.onStateChanged).toHaveBeenCalled()
+      expect(button.handleStateChanged).toHaveBeenCalled()
+
+
+  describe 'handleSelectedChanged (overridable method)', ->
+    args = null
+    beforeEach ->
+        args = null
+        button.canToggle true
+        spyOn(button, 'handleSelectedChanged').andCallFake (e) -> args = e
+    
+    it 'is called on [click]', ->
+      button.click()
+      expect(button.handleSelectedChanged).toHaveBeenCalled()
+
+    it 'passes args as selected', ->
+      button.click()
+      expect(args.selected).toEqual true
+
+    it 'passes args as not selected', ->
+      button.click()
+      button.click()
+      expect(args.selected).toEqual false
+
+      
+
+
 

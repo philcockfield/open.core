@@ -2,6 +2,11 @@ core = require 'open.client/core'
 
 ###
 A click-able button.
+Events:
+  - selected
+  - pre:click
+  - click
+  - stateChanged
 ###
 module.exports = class Button extends core.mvc.View
   ###
@@ -20,8 +25,10 @@ module.exports = class Button extends core.mvc.View
       
       # Wire up events.
       @selected.onChanged => 
+          isSelected = self.selected()
           self._stateChanged('selected')
-          self.trigger('selected', source:self) if self.canToggle() and self.selected()
+          self.handleSelectedChanged selected:isSelected
+          self.trigger('selected', source:self) if self.canToggle() and isSelected
       
       # Mouse events.
       do -> 
@@ -71,7 +78,7 @@ module.exports = class Button extends core.mvc.View
 
           # Check whether any listeners cancelled the click operation.
           if preArgs.cancel is yes
-              @_stateChanged('click-cancelled')
+              @_stateChanged('click:cancelled')
               return false 
 
       # Adjust the [selected] state
@@ -113,25 +120,33 @@ module.exports = class Button extends core.mvc.View
     
   
   ###
-  No-op. Invoked when the state of the button has changed (ie. via a mouse event)
+  Invoked when the state of the button has changed (ie. via a mouse event)
   Override this to update visual state.
   See corresponding event: 'stateChanged'
   @param args: 
-          - source:   The source button.
           - state:    String indicating what state caused the change.
   ###
-  onStateChanged: (args) => 
+  handleStateChanged: (args) => # No-op.
+  
+  ###
+  Invoked when the selection has changed.
+  Override this to update visual state.
+  See corresponding event: 'selected'
+  @param args: 
+          - selected:  Flag indicating if the button is currenlty selected.
+  ###
+  handleSelectedChanged: (args) -> # No-op.
+
 
   ###
   PRIVATE MEMBERS
   ###
   _stateChanged: (state) => 
       args = 
-        source:@
-        state: state
-      
+          source: @
+          state: state
       @trigger 'stateChanged', args
-      @onStateChanged args
+      @handleStateChanged args
       
       
 
