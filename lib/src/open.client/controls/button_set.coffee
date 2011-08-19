@@ -20,7 +20,6 @@ module.exports = class ButtonSet extends core.Base
       # Collection API.
       @length = 0
       @buttons = new core.mvc.Collection()
-      @contains = @buttons.include
       
 
   ###
@@ -134,6 +133,14 @@ module.exports = class ButtonSet extends core.Base
       # Finish up.
       null
 
+  ###
+  Determines whether the specified button exists within the set.
+  @param button : The button to look for.
+  @returns True if the button exists, otherwise False.
+  ###
+  contains: (button) -> @buttons.include button
+  
+  
   ###
   PRIVATE Methods
   ###

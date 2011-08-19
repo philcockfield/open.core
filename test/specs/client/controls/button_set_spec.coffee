@@ -335,8 +335,18 @@ describe 'controls/button_set', ->
       
     
   describe 'Collection methods', ->
-    it 'has a [contains] method', ->
-      expect(model.contains).toEqual model.buttons.include          
+    describe '[contains] method', ->
+      it 'determines if a button is contained within the set', ->
+        model.add tab1
+        expect(model.contains(tab1)).toEqual true
+
+      it 'determines if a button is not contained within the set', ->
+        model.add tab1
+        expect(model.contains(tab2)).toEqual false
+        
+      
+      
+    
     
     
     
