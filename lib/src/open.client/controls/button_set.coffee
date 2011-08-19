@@ -12,11 +12,16 @@ Events:
 
 ###
 module.exports = class ButtonSet extends core.Base
-  constructor: () -> 
+  constructor: -> 
+      # Setup initial conditions.
       super
       _.extend @, Backbone.Events
+      
+      # Collection API.
       @length = 0
       @buttons = new core.mvc.Collection()
+      @contains = @buttons.include
+      
 
   ###
   Gets the collection of buttons being managed.

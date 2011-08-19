@@ -334,9 +334,9 @@ describe 'controls/button_set', ->
       expect(args.button).toEqual tab2
       
     
-          
-    
-    
+  describe 'Collection methods', ->
+    it 'has a [contains] method', ->
+      expect(model.contains).toEqual model.buttons.include          
     
     
     
