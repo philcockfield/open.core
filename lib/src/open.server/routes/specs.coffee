@@ -18,7 +18,7 @@ module.exports = (app, options) ->
     core       = require 'open.server'
     url        = options.url ?= '/specs'
     title      = options.title ?= 'Specs'
-    specsDir   = options.specsDir ?= "#{process.env.PWD}/test/specs"
+    specsDir   = _.rtrim(options.specsDir ?= "#{process.env.PWD}/test/specs", '/')
     sourceUrls = options.sourceUrls ?= []
     sourceUrls = [sourceUrls] if not _.isArray(sourceUrls)
 
@@ -35,6 +35,9 @@ module.exports = (app, options) ->
                 throw err
               paths = _.map paths, (file) -> _(file).strRight(dir) if include(file, endsWith)
               paths = _.compact(paths)
+              
+              console.log 'paths', paths
+              
               callback?(paths)
 
     getSpecs   = (dir, callback) -> getFiles dir, ['_spec.coffee', '_spec.js'], callback
@@ -42,8 +45,12 @@ module.exports = (app, options) ->
 
     compileCoffee = (file, callback) ->
         fs.readFile file, 'utf8', (err, data) ->
-            callback CoffeeScript.compile(data)
-
+            try
+              callback CoffeeScript.compile(data)
+            catch error
+              msg = "Failed to compile spec file: #{file} \n#{error.message}"
+              throw msg
+              
 
     # Route: The test runner.
     app.get url, (req, res) ->
@@ -64,6 +71,7 @@ module.exports = (app, options) ->
     app.get "#{url}/specs/*", (req, res) ->
 
         # Setup initial conditions.
+        path = req.params[0]
         file = "#{specsDir}/#{req.params[0]}"
         extension = _(file).strRightBack('.')
 
