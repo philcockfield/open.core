@@ -50,8 +50,7 @@ module.exports = class Model extends Backbone.Model
                     }
   ###
   addProps: (props) -> 
-    console.log 'FOO', props
-          
+        
 
   ###
   Fetches the model's state from the server.
