@@ -35,9 +35,6 @@ module.exports = (app, options) ->
                 throw err
               paths = _.map paths, (file) -> _(file).strRight(dir) if include(file, endsWith)
               paths = _.compact(paths)
-              
-              console.log 'paths', paths
-              
               callback?(paths)
 
     getSpecs   = (dir, callback) -> getFiles dir, ['_spec.coffee', '_spec.js'], callback
