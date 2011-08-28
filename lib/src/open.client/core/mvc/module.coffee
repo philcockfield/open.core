@@ -10,12 +10,12 @@ module.exports = class Module extends Base
   Constructor.
   @param modulePath: The path to the module.
   ###
-  constructor: (modulePath) -> 
+  constructor: (@modulePath) -> 
       super
       _require = (dir) => 
           return (name = '', options = {}) => 
               options.throw ?= true
-              @tryRequire "#{modulePath}/#{dir}/#{name}", options
+              @tryRequire "#{@modulePath}/#{dir}/#{name}", options
       
       ###
       An index of helper methods for requiring modules within the MVC folder structure of the module.

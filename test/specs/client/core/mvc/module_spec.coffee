@@ -18,6 +18,11 @@ describe 'mvc/module', ->
   it 'exposes the tryRequire utility method', ->
     expect(module.tryRequire).toEqual core.tryRequire
   
+  it 'exposes the base require path', ->
+    expect(module.modulePath).toEqual 'modules/foo'
+  
+  
+  
   describe 'require', ->
     args = null
     beforeEach ->
