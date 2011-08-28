@@ -12,8 +12,10 @@ module.exports = class DataBinder
       
       # Setup data-binding on elements.
       bind = (element) -> 
-            propName = element.attr('data-bind')
-            prop = model[propName]
-            prop.onChanged (e) -> element.html prop()
+            prop = model[element.attr('data-bind')]
+            sync = -> element.html prop()
+            sync()
+            prop.onChanged (e) -> sync()
+            
       bind $(element) for element in @el.find('[data-bind]')
 
