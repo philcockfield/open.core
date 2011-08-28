@@ -7,4 +7,5 @@ module.exports =
   Template:    using 'template'
   Collection:  using 'collection'
   Module:      using 'module'
+  DataBinder:  using 'data_binder'
   
