@@ -12,6 +12,10 @@ html(lang="en")
     - each path in sourceUrls
       script(type='text/javascript', src="#{path}")
 
+    // Helper files.
+    - each path in helperPaths
+      script(type='text/javascript', src="#{url}/specs/#{path}")
+
     // Spec files.
     - each path in specPaths
       script(type='text/javascript', src="#{url}/specs/#{path}")

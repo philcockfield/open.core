@@ -22,20 +22,23 @@ module.exports = (app, options) ->
     sourceUrls = options.sourceUrls ?= []
     sourceUrls = [sourceUrls] if not _.isArray(sourceUrls)
 
-    isSpec = (file) ->
-        for ending in ['_spec.coffee', '_helper.coffee', '_spec.js', '_helper.js']
+    include = (file, endsWith) ->
+        for ending in endsWith
           return true if _(file).endsWith(ending)
         false
-
-    getSpecs = (dir, callback) ->
+    
+    getFiles = (dir, endsWith, callback) ->
         dir = _.rtrim(dir, '/') + '/'
         core.util.fs.flattenDir dir, hidden:false, (err, paths) ->
               if err?
                 err.message = "Could not load specs from the directory: #{dir}"
                 throw err
-              paths = _.map paths, (file) -> _(file).strRight(dir) if isSpec(file)
+              paths = _.map paths, (file) -> _(file).strRight(dir) if include(file, endsWith)
               paths = _.compact(paths)
               callback?(paths)
+
+    getSpecs   = (dir, callback) -> getFiles dir, ['_spec.coffee', '_spec.js'], callback
+    getHelpers = (dir, callback) -> getFiles dir, ['_helper.coffee', '_helper.js'], callback
 
     compileCoffee = (file, callback) ->
         fs.readFile file, 'utf8', (err, data) ->
@@ -44,15 +47,17 @@ module.exports = (app, options) ->
 
     # Route: The test runner.
     app.get url, (req, res) ->
-        getSpecs specsDir, (specPaths) ->
-            libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
-            core.util.render res, 'specs/index',
-                                  layout:     false
-                                  title:      title
-                                  url:        url
-                                  libFolder:  libFolder
-                                  specPaths:  specPaths
-                                  sourceUrls: sourceUrls
+        getHelpers specsDir, (helperPaths) ->
+          getSpecs specsDir, (specPaths) ->
+              libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
+              core.util.render res, 'specs/index',
+                                    layout:       false
+                                    title:        title
+                                    url:          url
+                                    libFolder:    libFolder
+                                    specPaths:    specPaths
+                                    helperPaths:  helperPaths
+                                    sourceUrls:   sourceUrls
 
 
     # Route: The spec file.
