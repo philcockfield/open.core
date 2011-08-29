@@ -51,25 +51,4 @@ module.exports = class Module extends Base
           controllers: get @require.controller
   
       # Translate [within] option to jQuery object.
-      within = options.within
-      if within?
-          if (within instanceof jQuery) # Ignore - no translation needed (already a jQuery object).
-
-          else if (within.el instanceof jQuery) 
-            # Retrieve jQuery .el from supplied [View]
-            options.within = within.el
-
-          else if _.isString(within) or (within instanceof HTMLElement)
-            # Look up jQuery object from supplied CSS selector, or wrap supplied DOM element.
-            options.within = $(within) 
-
-              
-            
-            
-        
-        
-          
-
-
-
-
+      options.within = util.toJQuery(options.within)

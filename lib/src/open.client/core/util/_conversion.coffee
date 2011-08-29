@@ -35,3 +35,30 @@ module.exports =
 
       # No match.
       null
+      
+  
+  ###
+  Attempt to convert the given [view/element/string] to a jQuery object.
+  @param value : The value to convert.  This can be either a:
+                  - jQuery object (returns same value)
+                  - string (CSS selector)
+                  - an MVC View (returns .el)
+                  - HTMLElement (wraps in jQuery object)
+  @returns a jQuery object, or null if the value was undefined/null.
+  ###
+  toJQuery: (value) ->       
+      
+      # Setup initial conditions.
+      return value if not value?
+      # throwNotSupported = -> throw 'Cannot convert to jQuery object: ' + value
+      # throwNotSupported() if not value?
+      
+      # Perform conversion.
+      return value if (value instanceof jQuery) 
+      return value.el if (value.el instanceof jQuery)
+      return $(value) if _.isString(value) or (value instanceof HTMLElement)
+      
+      # Finish up.
+      throw 'Cannot convert to jQuery object: ' + value
+
+    
