@@ -5,17 +5,13 @@ module.exports = class DataBinder
   constructor: (model, view) -> 
       
       # Retrieve the element.
-      if (view instanceof View) then @el = view.el
-      else if (view instanceof jQuery) then @el = view
-      else
-        throw 'View type not supported'
+      @el = common.util.toJQuery(view)
       
       # Setup data-binding on elements.
       bind = (element) -> 
-            prop = model[element.attr('data-bind')]
-            sync = -> element.html prop()
-            sync()
-            prop.onChanged (e) -> sync()
-            
+                prop = model[element.attr('data-bind')]
+                sync = -> element.html prop()
+                sync()
+                prop.onChanged (e) -> sync()
       bind $(element) for element in @el.find('[data-bind]')
 
