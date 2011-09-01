@@ -6,13 +6,14 @@ module.exports =
   libs: (callback) ->
         core = require 'open.server'
         libs = "#{core.paths.public}/javascripts/libs"
-        src = "#{libs}/src"
         paths = [
-          "#{src}/jquery-1.6.2.js"
-          "#{src}/underscore-1.1.6.js"
-          "#{src}/underscore.string-1.1.5.js"
-          "#{src}/backbone-0.5.1.js"
+          "jquery-1.6.2.js"
+          "underscore-1.1.6.js"
+          "underscore.string-1.1.5.js"
+          "backbone-0.5.1.js"
+          "spin.js"
         ]
+        paths = _(paths).map (path) -> "#{libs}/src/#{path}"
 
         options =
             paths: paths
