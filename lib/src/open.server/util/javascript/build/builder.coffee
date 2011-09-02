@@ -1,3 +1,4 @@
+BuildPath = require './build_path'
 
 ###
 Stitches together a set of JavaScript/CoffeeScript files
@@ -20,10 +21,12 @@ module.exports = class Builder
       - includeRequire: Flag indicating if the CommonJS require script should be included (default: false).
   
   ###
-  constructor: (@paths = [], options = {}) -> 
+  constructor: (paths = [], options = {}) -> 
 
       # Setup initial conditions.
       @includeRequire = options.includeRequire ?= false
       options.build ?= false
       
+      # Convert paths to wrapper classes.
+      @paths = _(paths).map (path) -> new BuildPath(path)
       
