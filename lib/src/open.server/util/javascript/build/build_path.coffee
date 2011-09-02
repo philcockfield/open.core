@@ -20,3 +20,9 @@ module.exports = class BuildPath
       @source    = definition.source ?= null
       @namespace = definition.namespace ?= null
       
+      # Set path-type flags.
+      if @source?
+        @isJavascript = _(@source).endsWith '.js'
+        @isCoffee = _(@source).endsWith '.coffee'
+        @isFolder = not @isJavascript and not @isCoffee
+        
