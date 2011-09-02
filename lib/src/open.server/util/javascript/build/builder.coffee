@@ -12,8 +12,7 @@ module.exports = class Builder
                      {
                         source:     The path to a folder or single file.
                         namespace:  The CommonJS namespace the source files reside within.
-                        deep:       Flag indicating if the child tree of a folder should be recursed.
-                   
+                        deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
                      }
                   ]
   @param options
