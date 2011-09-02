@@ -1,7 +1,7 @@
 fs = core.util.fs
 
 describe 'util/javascript/build/builder', ->
-  SAMPLE_PATH = "#{core.paths.server}/util/build/sample"
+  SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample"
   Builder     = null
   BuildPath   = null
   
@@ -15,10 +15,6 @@ describe 'util/javascript/build/builder', ->
   
   describe 'constructor options', ->
     describe 'defaults', ->
-      it 'does not build by default', ->
-        builder = new Builder()
-        expect(builder.code).not.toBeDefined()
-      
       it 'does not include CommonJS require code by default', ->
         builder = new Builder()
         expect(builder.includeRequire).toEqual false

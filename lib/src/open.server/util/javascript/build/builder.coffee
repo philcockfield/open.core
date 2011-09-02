@@ -1,7 +1,7 @@
 BuildPath = require './build_path'
 
 ###
-Stitches together a set of JavaScript/CoffeeScript files
+Stitches together a set of javascript/coffee-script files
 into modules that are addressable via CommonJS [require] calls.
 ###
 module.exports = class Builder
@@ -17,7 +17,6 @@ module.exports = class Builder
                      }
                   ]
   @param options
-      - build:          Invoke the build method upon construction (default: false)
       - includeRequire: Flag indicating if the CommonJS require script should be included (default: false).
   
   ###

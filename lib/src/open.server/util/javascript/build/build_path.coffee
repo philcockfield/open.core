@@ -1,6 +1,7 @@
+fs = require 'fs'
 
 ###
-Represents a single path to to a JavaScript/CoffeeScipt file, or folder, to build.
+Represents a single path to to a javascript/coffee-script file, or folder, to build.
 ###
 module.exports = class BuildPath
   ###
@@ -22,7 +23,39 @@ module.exports = class BuildPath
       
       # Set path-type flags.
       if @source?
-        @isJavascript = _(@source).endsWith '.js'
-        @isCoffee = _(@source).endsWith '.coffee'
-        @isFolder = not @isJavascript and not @isCoffee
+          @isJavascript = _(@source).endsWith '.js'
+          @isCoffee     = _(@source).endsWith '.coffee'
+          @isFolder     = not @isJavascript and not @isCoffee
+          @isFile       = not @isFolder
+      @deep = false if @isFile
+      
+  ###
+  The built code.  This is populated via the 'build' method.
+  ###
+  code: { }
+  
+  ###
+  Builds the code at the source path, storing the results
+  in the 'code' property.
+  @param callback(code): Invoked when complete. Returns the 'code' property object.
+  ###
+  build: (callback) -> 
+    
+    # Setup initial conditions.
+    self = @
+    
+    # Load the code file.
+    if @isFile is yes
+      fs.readFile @source, (err, data) ->
+          throw err if err?
+          code = data.toString()
+    
+          if self.isJavascript is yes
+            self.code.javascript = code
+            callback? self.code
+            return
         
+        
+    
+    
+  
