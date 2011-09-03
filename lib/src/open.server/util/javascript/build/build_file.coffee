@@ -44,7 +44,11 @@ module.exports = class BuildFile
   ###
   Builds the code at the source path, storing the results
   in the 'code' property.
-  @param callback(code): Invoked when complete. Returns the 'code' property object.
+  @param callback(code, buildFile): Invoked when complete. 
+                          Returns
+                            - the 'code' property object.
+                            - a reference to this BuildFile instance.
+                        
   ###
   build: (callback) -> 
     fs.readFile @path, (err, data) =>
@@ -66,7 +70,7 @@ module.exports = class BuildFile
                               """
         # Finish up.
         @isBuilt = true
-        callback? code
+        callback? code, @
 
 
 # Static methods.

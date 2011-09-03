@@ -1,4 +1,5 @@
-BuildFile    = require './build_file'
+fsUtil    = require '../../fs'
+BuildFile = require './build_file'
 
 ###
 Represents a path to a javascript/coffee-script file, or a complete folder, to build.
@@ -43,14 +44,10 @@ module.exports = class BuildPath
   build: (callback) -> 
     
     # Reset the modules collection.
-    @modules = []
+    @modules = modules = []
 
     if @isFile is yes
         # Build the single code file.
-        
-        console.log '@namespace', @namespace
-        console.log '@source', @source
-        
         buildFile = new BuildFile @source, @namespace
         buildFile.build => 
             
@@ -59,19 +56,22 @@ module.exports = class BuildPath
             callback? @modules
     
     else if @isFolder
-        console.log 'FOLDER' # TEMP 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        # Build all files in the folder.
+        options =
+            files:  true
+            dirs:   false
+            hidden: false
+            deep:   @deep
+        fsUtil.readDir @source, options, (err, paths) -> 
+            throw err if err?
+            
+            buildCount = 0
+            build = (path) -> 
+                (new BuildFile path, @namespace).build (code, buildFile) -> 
+                      modules.push buildFile
+                      buildCount += 1
+                      callback? modules if buildCount is paths.length
+            
+            build path for path in paths
+              
   

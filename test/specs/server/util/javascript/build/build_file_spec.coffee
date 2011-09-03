@@ -99,6 +99,15 @@ describe 'util/javascript/build/build_file', ->
       waitsFor (-> result?), 100
       runs -> 
         expect(result).toEqual buildFile.code
+
+    it 'returns the [BuildFile] instance', ->
+      buildFile = new BuildFile jsPath
+      result = null
+      buildFile.build (code, instance) -> result = instance
+      waitsFor (-> result?), 100
+      runs -> 
+        expect(result).toEqual buildFile
+
     
     it 'does not fail if no callback was passed', ->
       buildFile = new BuildFile jsPath
