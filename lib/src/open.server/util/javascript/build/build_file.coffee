@@ -29,13 +29,18 @@ module.exports = class BuildFile
           @name = _(@name).strLeft @extension
           @id   = "#{@namespace}/#{@name}"
           
-
+  
   ###
   An object containing built code strings.  This is populated via the 'build' method.
   - javascript:   The javascript (compiled from coffee-script if a .coffee file was specified)
   - coffeescript: The raw coffees-script value.
   ###
   code: undefined
+
+  ###
+  Flag indicating whether the file has been built (code has a value.)
+  ###
+  isBuilt: false
   
   ###
   Builds the code at the source path, storing the results
@@ -60,7 +65,7 @@ module.exports = class BuildFile
                                 #{code.javascript}
                               }
                               """
-        
         # Finish up.
+        @isBuilt = true
         callback? code
     

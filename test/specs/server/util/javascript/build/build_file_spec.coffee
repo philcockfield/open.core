@@ -20,6 +20,9 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile('foo.js', 'ns')
       expect(buildFile.namespace).toEqual 'ns'
 
+    it 'is not built by default', ->
+      expect(new BuildFile('foo.js').isBuilt).toEqual false
+    
     it 'trims (/) char from end of [namespace] property', ->
       buildFile = new BuildFile('foo.js', '/ns/')
       expect(buildFile.namespace).toEqual '/ns'
@@ -105,21 +108,24 @@ describe 'util/javascript/build/build_file', ->
       runs -> 
         expect(result.javascript).toEqual compiledCoffee
       
-      
     it 'compiles module property', ->
       buildFile = new BuildFile jsPath, 'ns'
       result = null
       buildFile.build (code) -> result = code
       waitsFor (-> result?), 100
       runs -> 
-        
         moduleProperty = """
                          "ns/file": function(exports, require, module) {
                            var jsFile = "file.js"
                          }
                          """
-      
         expect(result.moduleProperty).toEqual moduleProperty
-      
-      
+
+    it 'sets the isBuilt flag', ->
+      buildFile = new BuildFile jsPath, 'ns'
+      result = null
+      buildFile.build (code) -> result = code
+      waitsFor (-> result?), 100
+      runs -> 
+        expect(buildFile.isBuilt).toEqual true
       
