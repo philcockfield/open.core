@@ -1,5 +1,21 @@
-fs = require 'fs'
+fs           = require 'fs'
 CoffeeScript = require 'coffee-script'
+
+buildFile = (buildPath, callback) -> 
+      fs.readFile buildPath.source, (err, data) =>
+          throw err if err?
+          data = data.toString()
+          
+          # Store code values.
+          code = buildPath.code
+          code.javascript = data if buildPath.isJavascript is yes
+          if buildPath.isCoffee is yes
+              code.coffeescript = data
+              code.javascript = CoffeeScript.compile(data)
+
+          # Finish up.
+          callback()
+
 
 ###
 Represents a single path to to a javascript/coffee-script file, or folder, to build.
@@ -43,25 +59,10 @@ module.exports = class BuildPath
   ###
   build: (callback) -> 
     
-    # Setup initial conditions.
-    self = @
-    
     # Load the code file.
-    if @isFile is yes
-      fs.readFile @source, (err, data) =>
-          throw err if err?
-          code = data.toString()
-          
-          # Store code values.
-          @code.javascript = code if @isJavascript is yes
-          if self.isCoffee is yes
-              @code.coffeescript = code
-              @code.javascript = CoffeeScript.compile(code)
-            
-
-          # Finish up.
-          callback? self.code
-          return
+    if @isFile is yes then buildFile @, => callback? @code
+    else if @isFolder
+      console.log 'FOLDER' # TEMP 
         
         
     
