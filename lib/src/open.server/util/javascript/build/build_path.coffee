@@ -18,8 +18,7 @@ module.exports = class BuildPath
       # Setup initial conditions.
       @deep      = definition.deep ?= true
       @source    = definition.source ?= null
-      @namespace = definition.namespace ?= null
-      @namespace = BuildFile.formatNamespace(@namespace)
+      @namespace = BuildFile.formatNamespace(definition.namespace)
       @code      = {}
       
       # Set path-type flags.
@@ -48,6 +47,10 @@ module.exports = class BuildPath
 
     if @isFile is yes
         # Build the single code file.
+        
+        console.log '@namespace', @namespace
+        console.log '@source', @source
+        
         buildFile = new BuildFile @source, @namespace
         buildFile.build => 
             

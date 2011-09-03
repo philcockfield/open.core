@@ -70,5 +70,7 @@ module.exports = class BuildFile
 
 
 # Static methods.
-BuildFile.formatNamespace = (ns) -> _(ns).rtrim('/') if ns?
+BuildFile.formatNamespace = (ns) -> 
+    return '' unless ns?
+    _(ns).rtrim('/') if ns?
     

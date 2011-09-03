@@ -33,10 +33,6 @@ describe 'util/javascript/build/build_file', ->
       expect(new BuildFile('/foo.bar.coffee').name).toEqual 'foo.bar'
       expect(new BuildFile('/path/foo.coffee').name).toEqual 'foo'
     
-    it 'exposes CommonJS module id : [namespace] + [file-name]', ->
-      buildFile = new BuildFile('foo.coffee', 'ns')
-      expect(buildFile.id).toEqual 'ns/foo'
-    
     describe 'namespace', ->
       it 'exposes [namespace] as property', ->
         buildFile = new BuildFile('foo.js', 'ns')
@@ -46,9 +42,20 @@ describe 'util/javascript/build/build_file', ->
         buildFile = new BuildFile('foo.js', '/ns/')
         expect(buildFile.namespace).toEqual '/ns'
       
-      it 'works with null namespace', ->
+      it 'converts a null namespace to an empty-string', ->
         buildFile = new BuildFile('foo.coffee', null)
-        expect(buildFile.namespace).toEqual null
+        expect(buildFile.namespace).toEqual ''
+
+      it 'converts an undefined namespace to an empty-string', ->
+        buildFile = new BuildFile('foo.coffee')
+        expect(buildFile.namespace).toEqual ''
+
+    
+    describe 'id', ->
+      it 'exposes CommonJS module id : [namespace] + [file-name]', ->
+        buildFile = new BuildFile('foo.coffee', 'ns')
+        expect(buildFile.id).toEqual 'ns/foo'
+      
     
     describe 'path type flags', ->
       it 'is a javascript file', ->
