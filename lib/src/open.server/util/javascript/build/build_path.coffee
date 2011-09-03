@@ -1,4 +1,5 @@
 fs = require 'fs'
+CoffeeScript = require 'coffee-script'
 
 ###
 Represents a single path to to a javascript/coffee-script file, or folder, to build.
@@ -20,6 +21,7 @@ module.exports = class BuildPath
       @deep      = definition.deep ?= true
       @source    = definition.source ?= null
       @namespace = definition.namespace ?= null
+      @code      = {}
       
       # Set path-type flags.
       if @source?
@@ -32,7 +34,7 @@ module.exports = class BuildPath
   ###
   The built code.  This is populated via the 'build' method.
   ###
-  code: { }
+  code: {}
   
   ###
   Builds the code at the source path, storing the results
@@ -49,11 +51,17 @@ module.exports = class BuildPath
       fs.readFile @source, (err, data) ->
           throw err if err?
           code = data.toString()
-    
-          if self.isJavascript is yes
-            self.code.javascript = code
-            callback? self.code
-            return
+          
+          # Store code values.
+          self.code.javascript = code if self.isJavascript is yes
+          if self.isCoffee is yes
+              self.code.coffeescript = code
+              self.code.javascript = CoffeeScript.compile(code)
+            
+
+          # Finish up.
+          callback? self.code
+          return
         
         
     

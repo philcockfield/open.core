@@ -71,31 +71,51 @@ describe 'util/javascript/build/build_path', ->
         expect(buildPath.isFile).toEqual true
       
   describe '[build] method', ->
-    describe 'building a .js file', ->
-      def = {
-        source: "#{SAMPLE_PATH}/file.js"
-      }
-      buildPath = null
-      jsFile = fs.readFileSync(def.source).toString()
-      beforeEach -> buildPath = new BuildPath def
+    describe 'building a files', ->
+      def1 = { source: "#{SAMPLE_PATH}/file.js" }
+      def2 = { source: "#{SAMPLE_PATH}/file.coffee" }
+      jsFile     = fs.readFileSync(def1.source).toString()
+      coffeeFile = fs.readFileSync(def2.source).toString()
+          
       
       it 'stores the raw javascript on the code object', ->
+        buildPath = new BuildPath def1
         result = null
         buildPath.build (code) -> result = code
         waitsFor (-> result?), 100
         runs -> 
           expect(result.javascript).toEqual jsFile
+      
+      it 'returns code object property', ->
+        buildPath = new BuildPath def1
+        result = null
+        buildPath.build (code) -> result = code
+        waitsFor (-> result?), 100
+        runs -> 
+          expect(result).toEqual buildPath.code
+        
+      it 'stores raw coffee-script on the code object', ->
+        buildPath = new BuildPath def2
+        result = null
+        buildPath.build (code) -> result = code
+        waitsFor (-> result?), 100
+        runs -> 
+          expect(result.coffeescript).toEqual coffeeFile
+      
+      it 'compiles coffee-script to javascript and stores it on the code object', ->
+        compiled = """
+                    (function() {
+                      var coffeeFile;
+                      coffeeFile = 'file.coffee';
+                    }).call(this);
+                    
+                   """
+        
+        buildPath = new BuildPath def2
+        result = null
+        buildPath.build (code) -> result = code
+        waitsFor (-> result?), 100
+        runs -> 
+          expect(result.javascript).toEqual compiled
         
         
-      
-      
-          
-      
-      
-      
-      
-        
-        
-      
-        
-  
