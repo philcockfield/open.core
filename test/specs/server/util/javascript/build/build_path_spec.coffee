@@ -28,6 +28,9 @@ describe 'util/javascript/build/build_path', ->
         
       it 'null namespace by default', ->
         expect(buildPath.namespace).toEqual null
+
+      it 'formats namspace', ->
+        expect(new BuildPath(namespace:'/ns//').namespace).toEqual '/ns'
       
       it 'has no modules by default', ->
         expect(buildPath.modules).toEqual []
@@ -73,6 +76,16 @@ describe 'util/javascript/build/build_path', ->
           buildFile = modules[0]
           expect(buildFile.path).toEqual def2.source
           expect(buildFile.isBuilt).toEqual true
+      
+      it 'passes namespace to BuildFile module', ->
+        buildPath = new BuildPath def2, 'ns'
+        modules = null
+        buildPath.build (m) -> modules = m
+        waitsFor (-> modules?), 100
+        runs -> 
+          expect(modules[0].namespace).toEqual 'ns'
+        
+      
       
       
       

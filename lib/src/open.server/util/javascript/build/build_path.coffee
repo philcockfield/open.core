@@ -19,6 +19,7 @@ module.exports = class BuildPath
       @deep      = definition.deep ?= true
       @source    = definition.source ?= null
       @namespace = definition.namespace ?= null
+      @namespace = BuildFile.formatNamespace(@namespace)
       @code      = {}
       
       # Set path-type flags.
@@ -47,7 +48,7 @@ module.exports = class BuildPath
 
     if @isFile is yes
         # Build the single code file.
-        buildFile = new BuildFile(@source)
+        buildFile = new BuildFile @source, @namespace
         buildFile.build => 
             
             # Add the built code file to the modules collection.

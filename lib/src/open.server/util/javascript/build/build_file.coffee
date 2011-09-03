@@ -14,7 +14,7 @@ module.exports = class BuildFile
           
           # Setup initial conditions.
           @code         = {}
-          @namespace    = _(@namespace).rtrim('/') if @namespace?
+          @namespace    = BuildFile.formatNamespace(@namespace)
           @isJavascript = _(@path).endsWith '.js'
           @isCoffee     = _(@path).endsWith '.coffee'
           throw "File type not supported: #{@path}" if not @isJavascript and not @isCoffee
@@ -67,3 +67,8 @@ module.exports = class BuildFile
         # Finish up.
         @isBuilt = true
         callback? code
+
+
+# Static methods.
+BuildFile.formatNamespace = (ns) -> _(ns).rtrim('/') if ns?
+    
