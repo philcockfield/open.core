@@ -1,7 +1,7 @@
 fs     = require 'fs'
 fsUtil = core.util.fs
 
-describe 'util/javascript/build/build_path', ->
+describe 'util/javascript/build/build_file', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample"
   BuildFile = null
 
@@ -15,6 +15,24 @@ describe 'util/javascript/build/build_path', ->
     it 'exposes [filePath] as property', ->
       buildFile = new BuildFile('foo.js')
       expect(buildFile.filePath).toEqual 'foo.js'
+
+    it 'exposes [namespace] as property', ->
+      buildFile = new BuildFile('foo.js', 'ns')
+      expect(buildFile.namespace).toEqual 'ns'
+
+    it 'exposes [extension] as property', ->
+      expect(new BuildFile('foo.js').extension).toEqual '.js'
+      expect(new BuildFile('foo.coffee').extension).toEqual '.coffee'
+    
+    it 'exposes the file name (without the .js extension)', ->
+      expect(new BuildFile('foo.bar.js').name).toEqual 'foo.bar'
+      expect(new BuildFile('/foo.bar.js').name).toEqual 'foo.bar'
+      expect(new BuildFile('/path/foo.js').name).toEqual 'foo'
+    
+    it 'exposes the file name (without the .coffee extension)', ->
+      expect(new BuildFile('foo.coffee').name).toEqual 'foo'
+      expect(new BuildFile('/foo.bar.coffee').name).toEqual 'foo.bar'
+      expect(new BuildFile('/path/foo.coffee').name).toEqual 'foo'
     
     describe 'path type flags', ->
       it 'is a javascript file', ->
@@ -79,6 +97,11 @@ describe 'util/javascript/build/build_path', ->
       waitsFor (-> result?), 100
       runs -> 
         expect(result.javascript).toEqual compiled
+      
+      # it 'compiles module property', ->
+        # TODO 
+        
+      
       
       
       

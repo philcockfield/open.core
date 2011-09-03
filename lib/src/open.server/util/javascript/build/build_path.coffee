@@ -26,8 +26,8 @@ module.exports = class BuildPath
       # Set path-type flags.
       hasExtension = (extension) => _(@source).endsWith extension
       if @source?
-          @isFile       = hasExtension('.js') or hasExtension('.coffee')
-          @isFolder     = not @isFile
+          @isFile   = hasExtension('.js') or hasExtension('.coffee')
+          @isFolder = not @isFile
       @deep = false if @isFile
       
   ###
@@ -44,15 +44,14 @@ module.exports = class BuildPath
   ###
   build: (callback) -> 
     
-    # Load the code file.
     if @isFile is yes
-      new BuildFile(@source).build (code) => 
-          _.extend @code, code
-          callback? @code
-      
+        # Load the code file.
+        new BuildFile(@source).build (code) => 
+            _.extend @code, code
+            callback? @code
     
     else if @isFolder
-      console.log 'FOLDER' # TEMP 
+        console.log 'FOLDER' # TEMP 
         
         
     

@@ -7,13 +7,26 @@ Represents a single javascript/coffee-script file, or a complete folder, to buil
 module.exports = class BuildFile
   ###
   Constructor.
-  @param filePath: The path to the code file to build.
+  @param filePath:  The path to the code file to build.
+  @param namespace: The namespace the file resides within.
   ###
-  constructor: (@filePath) -> 
+  constructor: (@filePath, @namespace) -> 
+          
+          # Setup initial conditions.
           @code         = {}
           @isJavascript = _(@filePath).endsWith '.js'
           @isCoffee     = _(@filePath).endsWith '.coffee'
           throw "File type not supported: #{@filePath}" if not @isJavascript and not @isCoffee
+          
+          # Store the extension.
+          @extension = '.coffee' if @isCoffee
+          @extension = '.js' if @isJavascript
+          
+          # Extract the file name (without extension).
+          @name = @filePath
+          @name = _(@name).strRightBack '/'
+          @name = _(@name).strLeft @extension
+          
 
   ###
   An object containing built code strings.  This is populated via the 'build' method.
@@ -31,14 +44,14 @@ module.exports = class BuildFile
     fs.readFile @filePath, (err, data) =>
         throw err if err?
         data = data.toString()
-
+    
         # Store code values.
         code = @code
         code.javascript = data if @isJavascript is yes
         if @isCoffee is yes
             code.coffeescript = data
             code.javascript = CoffeeScript.compile(data)
-
+    
         # Finish up.
         callback? code
     
