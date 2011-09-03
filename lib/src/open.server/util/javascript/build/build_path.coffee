@@ -1,5 +1,3 @@
-fs           = require 'fs'
-CoffeeScript = require 'coffee-script'
 BuildFile    = require './build_file'
 
 ###
@@ -9,11 +7,11 @@ module.exports = class BuildPath
   ###
   Constructor.
   @param definition: The definition of the path to build.
-                         {
-                            source:     The path to a folder or single file.
-                            namespace:  The CommonJS namespace the source files reside within.
-                            deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
-                         }
+                 {
+                    source:     The path to a folder or single file.
+                    namespace:  The CommonJS namespace the source files reside within.
+                    deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
+                 }
   ###
   constructor: (definition = {}) -> 
       
@@ -29,31 +27,47 @@ module.exports = class BuildPath
           @isFile   = hasExtension('.js') or hasExtension('.coffee')
           @isFolder = not @isFile
       @deep = false if @isFile
-      
-  ###
-  An object containing built code strings.  This is populated via the 'build' method.
-  - javascript:   The javascript (compiled from coffee-script if a .coffee file was specified)
-  - coffeescript: The raw coffees-script value.
-  ###
-  code: undefined
+
   
   ###
-  Builds the code at the source path, storing the results
-  in the 'code' property.
-  @param callback(code): Invoked when complete. Returns the 'code' property object.
+  Gets the collection of build modules.
+  ###
+  modules: []
+
+  
+  ###
+  Builds the code at the source path, storing the results in the 'modules' property.
+  @param callback(modules): Invoked when complete. 
+                            Returns the 'modules' collection.
   ###
   build: (callback) -> 
     
+    # Reset the modules collection.
+    @modules = []
+
     if @isFile is yes
-        # Load the code file.
-        new BuildFile(@source).build (code) => 
-            _.extend @code, code
-            callback? @code
+        # Build the single code file.
+        buildFile = new BuildFile(@source)
+        buildFile.build => 
+            
+            # Add the built code file to the modules collection.
+            @modules.push buildFile
+            callback? @modules
     
     else if @isFolder
         console.log 'FOLDER' # TEMP 
-        
-        
-    
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   

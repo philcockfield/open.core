@@ -12,20 +12,12 @@ describe 'util/javascript/build/build_file', ->
     expect(BuildFile).toBeDefined()
 
   describe 'constructor', ->
-    it 'exposes [filePath] as property', ->
+    it 'exposes [path] as property', ->
       buildFile = new BuildFile('foo.js')
-      expect(buildFile.filePath).toEqual 'foo.js'
-
-    it 'exposes [namespace] as property', ->
-      buildFile = new BuildFile('foo.js', 'ns')
-      expect(buildFile.namespace).toEqual 'ns'
+      expect(buildFile.path).toEqual 'foo.js'
 
     it 'is not built by default', ->
       expect(new BuildFile('foo.js').isBuilt).toEqual false
-    
-    it 'trims (/) char from end of [namespace] property', ->
-      buildFile = new BuildFile('foo.js', '/ns/')
-      expect(buildFile.namespace).toEqual '/ns'
 
     it 'exposes [extension] as property', ->
       expect(new BuildFile('foo.js').extension).toEqual '.js'
@@ -44,6 +36,19 @@ describe 'util/javascript/build/build_file', ->
     it 'exposes CommonJS module id : [namespace] + [file-name]', ->
       buildFile = new BuildFile('foo.coffee', 'ns')
       expect(buildFile.id).toEqual 'ns/foo'
+    
+    describe 'namespace', ->
+      it 'exposes [namespace] as property', ->
+        buildFile = new BuildFile('foo.js', 'ns')
+        expect(buildFile.namespace).toEqual 'ns'
+    
+      it 'trims (/) char from end of [namespace] property', ->
+        buildFile = new BuildFile('foo.js', '/ns/')
+        expect(buildFile.namespace).toEqual '/ns'
+      
+      it 'works with null namespace', ->
+        buildFile = new BuildFile('foo.coffee', null)
+        expect(buildFile.namespace).toEqual null
     
     describe 'path type flags', ->
       it 'is a javascript file', ->

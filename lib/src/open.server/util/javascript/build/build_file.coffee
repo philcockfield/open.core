@@ -7,28 +7,27 @@ Represents a single javascript/coffee-script file, or a complete folder, to buil
 module.exports = class BuildFile
   ###
   Constructor.
-  @param filePath:  The path to the code file to build.
+  @param path:      The path to the code file to build.
   @param namespace: The namespace the file resides within.
   ###
-  constructor: (@filePath, @namespace) -> 
+  constructor: (@path, @namespace) -> 
           
           # Setup initial conditions.
           @code         = {}
           @namespace    = _(@namespace).rtrim('/') if @namespace?
-          @isJavascript = _(@filePath).endsWith '.js'
-          @isCoffee     = _(@filePath).endsWith '.coffee'
-          throw "File type not supported: #{@filePath}" if not @isJavascript and not @isCoffee
+          @isJavascript = _(@path).endsWith '.js'
+          @isCoffee     = _(@path).endsWith '.coffee'
+          throw "File type not supported: #{@path}" if not @isJavascript and not @isCoffee
           
           # Store the extension.
           @extension = '.coffee' if @isCoffee
           @extension = '.js' if @isJavascript
           
           # Extract the file name (without extension).
-          @name = @filePath
+          @name = @path
           @name = _(@name).strRightBack '/'
           @name = _(@name).strLeft @extension
           @id   = "#{@namespace}/#{@name}"
-          
   
   ###
   An object containing built code strings.  This is populated via the 'build' method.
@@ -48,7 +47,7 @@ module.exports = class BuildFile
   @param callback(code): Invoked when complete. Returns the 'code' property object.
   ###
   build: (callback) -> 
-    fs.readFile @filePath, (err, data) =>
+    fs.readFile @path, (err, data) =>
         throw err if err?
         data = data.toString()
     
@@ -68,4 +67,3 @@ module.exports = class BuildFile
         # Finish up.
         @isBuilt = true
         callback? code
-    

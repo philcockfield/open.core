@@ -29,6 +29,9 @@ describe 'util/javascript/build/build_path', ->
       it 'null namespace by default', ->
         expect(buildPath.namespace).toEqual null
       
+      it 'has no modules by default', ->
+        expect(buildPath.modules).toEqual []
+      
     describe 'storing options as properties', ->
       it 'stores source path as property', ->
         buildPath = new BuildPath source:'foo'
@@ -54,50 +57,63 @@ describe 'util/javascript/build/build_path', ->
         expect(buildPath.isFile).toEqual true
       
   describe '[build] method', ->
-    describe 'building a files', ->
-      def1 = { source: "#{SAMPLE_PATH}/file.js" }
-      def2 = { source: "#{SAMPLE_PATH}/file.coffee" }
-      jsFile     = fs.readFileSync(def1.source).toString()
-      coffeeFile = fs.readFileSync(def2.source).toString()
-      
-      it 'stores the raw javascript on the code object', ->
-        buildPath = new BuildPath def1
-        result = null
-        buildPath.build (code) -> result = code
-        waitsFor (-> result?), 100
-        runs -> 
-          expect(result.javascript).toEqual jsFile
-      
-      it 'returns code object property', ->
-        buildPath = new BuildPath def1
-        result = null
-        buildPath.build (code) -> result = code
-        waitsFor (-> result?), 100
-        runs -> 
-          expect(result).toEqual buildPath.code
-        
-      it 'stores raw coffee-script on the code object', ->
+    def1 = { source: "#{SAMPLE_PATH}/file.js" }
+    def2 = { source: "#{SAMPLE_PATH}/file.coffee" }
+    jsFile     = fs.readFileSync(def1.source).toString()
+    coffeeFile = fs.readFileSync(def2.source).toString()
+
+    describe 'building single files', ->
+      it 'stores a built [BuildFile] instance in the modules collection', ->
         buildPath = new BuildPath def2
-        result = null
-        buildPath.build (code) -> result = code
-        waitsFor (-> result?), 100
+        modules = null
+        buildPath.build (m) -> modules = m
+        waitsFor (-> modules?), 100
         runs -> 
-          expect(result.coffeescript).toEqual coffeeFile
+          expect(modules.length).toEqual 1
+          buildFile = modules[0]
+          expect(buildFile.path).toEqual def2.source
+          expect(buildFile.isBuilt).toEqual true
       
-      it 'compiles coffee-script to javascript and stores it on the code object', ->
-        compiled = """
-                    (function() {
-                      var coffeeFile;
-                      coffeeFile = 'file.coffee';
-                    }).call(this);
-                    
-                   """
-        
-        buildPath = new BuildPath def2
-        result = null
-        buildPath.build (code) -> result = code
-        waitsFor (-> result?), 100
-        runs -> 
-          expect(result.javascript).toEqual compiled
-        
-        
+      
+      
+      # it 'stores the raw javascript on the code object', ->
+      #   buildPath = new BuildPath def1
+      #   result = null
+      #   buildPath.build (code) -> result = code
+      #   waitsFor (-> result?), 100
+      #   runs -> 
+      #     expect(result.javascript).toEqual jsFile
+      # 
+      # it 'returns code object property', ->
+      #   buildPath = new BuildPath def1
+      #   result = null
+      #   buildPath.build (code) -> result = code
+      #   waitsFor (-> result?), 100
+      #   runs -> 
+      #     expect(result).toEqual buildPath.code
+      #   
+      # it 'stores raw coffee-script on the code object', ->
+      #   buildPath = new BuildPath def2
+      #   result = null
+      #   buildPath.build (code) -> result = code
+      #   waitsFor (-> result?), 100
+      #   runs -> 
+      #     expect(result.coffeescript).toEqual coffeeFile
+      # 
+      # it 'compiles coffee-script to javascript and stores it on the code object', ->
+      #   compiled = """
+      #               (function() {
+      #                 var coffeeFile;
+      #                 coffeeFile = 'file.coffee';
+      #               }).call(this);
+      #               
+      #              """
+      #   
+      #   buildPath = new BuildPath def2
+      #   result = null
+      #   buildPath.build (code) -> result = code
+      #   waitsFor (-> result?), 100
+      #   runs -> 
+      #     expect(result.javascript).toEqual compiled
+      #   
+      #   
