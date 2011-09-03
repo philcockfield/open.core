@@ -1,6 +1,33 @@
 fsUtil    = require '../../fs'
 BuildFile = require './build_file'
 
+
+buildSingleFile = (buildPath, callback) -> 
+        buildFile = new BuildFile buildPath.source, buildPath.namespace
+        buildFile.build => 
+            
+            # Add the built code file to the modules collection.
+            buildPath.modules.push buildFile
+            callback()
+
+buildFilesInFolder = (buildPath, callback) -> 
+        # Build all files in the folder (shallow).
+        options =
+            files:  true
+            dirs:   false
+            hidden: false
+            deep:   buildPath.deep
+        fsUtil.readDir buildPath.source, options, (err, paths) -> 
+            throw err if err?
+            buildCount = 0
+            build = (path) -> 
+                (new BuildFile path, buildPath.namespace).build (code, buildFile) -> 
+                      buildPath.modules.push buildFile
+                      buildCount += 1
+                      callback() if buildCount is paths.length
+            build path for path in paths
+
+
 ###
 Represents a path to a javascript/coffee-script file, or a complete folder, to build.
 ###
@@ -47,31 +74,11 @@ module.exports = class BuildPath
     @modules = modules = []
 
     if @isFile is yes
-        # Build the single code file.
-        buildFile = new BuildFile @source, @namespace
-        buildFile.build => 
-            
-            # Add the built code file to the modules collection.
-            @modules.push buildFile
-            callback? @modules
+        buildSingleFile @, -> callback? modules
     
     else if @isFolder
-        # Build all files in the folder.
-        options =
-            files:  true
-            dirs:   false
-            hidden: false
-            deep:   @deep
-        fsUtil.readDir @source, options, (err, paths) -> 
-            throw err if err?
-            
-            buildCount = 0
-            build = (path) -> 
-                (new BuildFile path, @namespace).build (code, buildFile) -> 
-                      modules.push buildFile
-                      buildCount += 1
-                      callback? modules if buildCount is paths.length
-            
-            build path for path in paths
+        buildFilesInFolder @, -> callback? modules
+        
+
               
   
