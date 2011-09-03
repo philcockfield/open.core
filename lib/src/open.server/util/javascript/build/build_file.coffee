@@ -53,7 +53,14 @@ module.exports = class BuildFile
         if @isCoffee is yes
             code.coffeescript = data
             code.javascript = CoffeeScript.compile(data)
-    
+        
+        # Compose the Common-JS module property.
+        code.moduleProperty = """
+                              "#{@id}": function(exports, require, module) {
+                                #{code.javascript}
+                              }
+                              """
+        
         # Finish up.
         callback? code
     

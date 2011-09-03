@@ -61,6 +61,13 @@ describe 'util/javascript/build/build_file', ->
     coffeePath = "#{SAMPLE_PATH}/file.coffee"
     jsFile     = fs.readFileSync(jsPath).toString()
     coffeeFile = fs.readFileSync(coffeePath).toString()
+    compiledCoffee = """
+                (function() {
+                  var coffeeFile;
+                  coffeeFile = 'file.coffee';
+                }).call(this);
+                
+               """
     
     it 'stores the raw javascript on the code object', ->
       buildFile = new BuildFile jsPath
@@ -91,26 +98,28 @@ describe 'util/javascript/build/build_file', ->
         expect(result.coffeescript).toEqual coffeeFile
     
     it 'compiles coffee-script to javascript and stores it on the code object', ->
-      compiled = """
-                  (function() {
-                    var coffeeFile;
-                    coffeeFile = 'file.coffee';
-                  }).call(this);
-                  
-                 """
-      
       buildFile = new BuildFile coffeePath
       result = null
       buildFile.build (code) -> result = code
       waitsFor (-> result?), 100
       runs -> 
-        expect(result.javascript).toEqual compiled
+        expect(result.javascript).toEqual compiledCoffee
       
       
-      # it 'compiles module property', ->
-        # TODO 
+    it 'compiles module property', ->
+      buildFile = new BuildFile jsPath, 'ns'
+      result = null
+      buildFile.build (code) -> result = code
+      waitsFor (-> result?), 100
+      runs -> 
         
+        moduleProperty = """
+                         "ns/file": function(exports, require, module) {
+                           var jsFile = "file.js"
+                         }
+                         """
       
+        expect(result.moduleProperty).toEqual moduleProperty
       
       
       
