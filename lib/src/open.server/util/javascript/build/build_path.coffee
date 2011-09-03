@@ -11,27 +11,37 @@ buildSingleFile = (buildPath, callback) ->
             callback()
 
 buildFilesInFolder = (buildPath, callback) -> 
-        # Build all files in the folder (shallow).
+        
+        # Setup initial conditions.
+        modules = buildPath.modules
+
+        returnSorted = -> 
+            buildPath.modules = _(modules).sortBy (item) -> item.id
+            callback()
+        
+        # Build all files in the folder.
         options =
               files:  true
               dirs:   false
               hidden: false
               deep:   buildPath.deep
         
-        console.log 'buildPath.source', buildPath.source
-        console.log 'buildPath.deep', buildPath.deep
-        
+        # Get the complete list of files to build.
         fsUtil.readDir buildPath.source, options, (err, paths) -> 
-            
-            console.log 'paths', paths
-            
             throw err if err?
-            buildCount = 0
+            count = 0
             build = (path) -> 
-                (new BuildFile path, buildPath.namespace).build (code, buildFile) -> 
-                      buildPath.modules.push buildFile
-                      buildCount += 1
-                      callback() if buildCount is paths.length
+                
+                # Calcualte the namespace.
+                ns = _(path).strRight buildPath.source
+                ns = _(ns).strLeftBack '/'
+                ns = buildPath.namespace + ns
+                
+                # Run the file-builder.
+                (new BuildFile path, ns).build (code, buildFile) -> 
+                      modules.push buildFile
+                      count += 1
+                      returnSorted() if count is paths.length
             build path for path in paths
 
 
@@ -79,19 +89,10 @@ module.exports = class BuildPath
   build: (callback) -> 
     
     # Reset the modules collection.
-    @modules = modules = []
+    @modules = []
 
     if @isFile is yes
-        buildSingleFile @, -> callback? modules
+        buildSingleFile @, => callback? @modules
     
     else if @isFolder
-        buildFilesInFolder @, => 
-            
-            
-            callback? modules
-
-
-
-
-
-
+        buildFilesInFolder @, => callback? @modules

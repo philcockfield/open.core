@@ -60,9 +60,9 @@ describe 'util/javascript/build/build_path', ->
         expect(buildPath.isFile).toEqual true
       
   describe '[build] method', ->
-    def1 = { source: "#{SAMPLE_PATH}/file.js", namespace:'ns1' }
-    def2 = { source: "#{SAMPLE_PATH}/file.coffee", namespace:'ns2' }
-    def3 = { source: SAMPLE_PATH, namespace:'ns'  }
+    def1       = { source: "#{SAMPLE_PATH}/file1.js",     namespace:'ns1' }
+    def2       = { source: "#{SAMPLE_PATH}/file2.coffee", namespace:'ns2' }
+    def3       = { source: SAMPLE_PATH, namespace:'ns'  }
     jsFile     = fs.readFileSync(def1.source).toString()
     coffeeFile = fs.readFileSync(def2.source).toString()
 
@@ -95,33 +95,31 @@ describe 'util/javascript/build/build_path', ->
           expect(modules).toEqual buildPath.modules
     
     describe 'building a folder', ->
-      # it 'build all files in folder, but not child folders (deep = false)', ->
-      #   def3.deep = false
-      #   buildPath = new BuildPath def3
-      #   modules = null
-      #   buildPath.build (m) -> modules = m
-      #   waitsFor (-> modules?), 100
-      #   runs -> 
-      #     expect(modules.length).toEqual 2
-      #     for m in modules
-      #       expect(m.isBuilt).toEqual true
+      it 'build all files in folder, but not child folders (deep = false)', ->
+        def3.deep = false
+        buildPath = new BuildPath def3
+        modules = null
+        buildPath.build (m) -> modules = m
+        waitsFor (-> modules?), 100
+        runs -> 
+          expect(modules.length).toEqual 2
+          for m in modules
+            expect(m.isBuilt).toEqual true
 
-      # it 'builds all descendent children (deep = true)', ->
-      #   def3.deep = true
-      #   buildPath = new BuildPath def3
-      #   modules = null
-      #   buildPath.build (m) -> modules = m
-      #   waitsFor (-> modules?), 100
-      #   runs -> 
-      #     
-      #     console.log 'modules.length', modules.length
-      #     
-      #     # console.log ''
-      #     # console.log 'modules', modules
-      #     
-      #     expect(modules.length).toEqual 5
-      #   
-      #   
+      it 'builds all descendent children and stores them alphabetically (deep = true)', ->
+        def3.deep = true
+        buildPath = new BuildPath def3
+        modules = null
+        buildPath.build (m) -> modules = m
+        waitsFor (-> modules?), 100
+        runs -> 
+          expect(modules.length).toEqual 5
+          
+          expect(modules[0].id).toEqual 'ns/file1'
+          expect(modules[1].id).toEqual 'ns/file2'
+          expect(modules[2].id).toEqual 'ns/folder1/child1'
+          expect(modules[3].id).toEqual 'ns/folder1/foo/bar'
+          expect(modules[4].id).toEqual 'ns/folder2/baz'
         
         
 

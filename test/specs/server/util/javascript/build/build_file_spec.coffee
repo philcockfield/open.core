@@ -72,8 +72,8 @@ describe 'util/javascript/build/build_file', ->
         expect(-> new BuildFile '/foo.txt').toThrow()
   
   describe '[build] method', ->
-    jsPath     = "#{SAMPLE_PATH}/file.js"
-    coffeePath = "#{SAMPLE_PATH}/file.coffee"
+    jsPath     = "#{SAMPLE_PATH}/file1.js"
+    coffeePath = "#{SAMPLE_PATH}/file2.coffee"
     jsFile     = fs.readFileSync(jsPath).toString()
     coffeeFile = fs.readFileSync(coffeePath).toString()
     compiledCoffee = """
@@ -136,8 +136,8 @@ describe 'util/javascript/build/build_file', ->
       waitsFor (-> result?), 100
       runs -> 
         moduleProperty = """
-                         "ns/file": function(exports, require, module) {
-                           var jsFile = "file.js"
+                         "ns/file1": function(exports, require, module) {
+                           var jsFile = "file1.js"
                          }
                          """
         expect(result.moduleProperty).toEqual moduleProperty
