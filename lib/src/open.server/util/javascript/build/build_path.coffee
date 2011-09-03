@@ -48,15 +48,15 @@ module.exports = class BuildPath
     
     # Load the code file.
     if @isFile is yes
-      fs.readFile @source, (err, data) ->
+      fs.readFile @source, (err, data) =>
           throw err if err?
           code = data.toString()
           
           # Store code values.
-          self.code.javascript = code if self.isJavascript is yes
+          @code.javascript = code if @isJavascript is yes
           if self.isCoffee is yes
-              self.code.coffeescript = code
-              self.code.javascript = CoffeeScript.compile(code)
+              @code.coffeescript = code
+              @code.javascript = CoffeeScript.compile(code)
             
 
           # Finish up.
