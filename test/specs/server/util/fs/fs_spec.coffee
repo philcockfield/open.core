@@ -137,7 +137,7 @@ describe 'util/fs', ->
           expect(includesPath(result, "file2.txt")).toEqual true
 
       describe 'deep read', ->
-        it 'reads deep file path with no folders in result set', ->
+        it 'reads deep file path with no folders in result set (dirs:false)', ->
           result = null
           fsUtil.readDir path, files:true, dirs:false, deep:true, (err, paths) -> result = paths
           waitsFor -> result?
@@ -151,12 +151,6 @@ describe 'util/fs', ->
             expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
             expect(includesPath(result, "file1.txt")).toEqual true
             expect(includesPath(result, "file2.txt")).toEqual true
-
-            # expect(includesPath(result, '.hidden')).toEqual false
-            # expect(includesPath(result, 'dir')).toEqual false
-            # expect(includesPath(result, ".hidden.txt")).toEqual true
-            # expect(includesPath(result, "file1.txt")).toEqual true
-            # expect(includesPath(result, "file2.txt")).toEqual true
       
         it 'reads deep file path with hidden files', ->
           result = null
@@ -243,11 +237,15 @@ describe 'util/fs', ->
         expect(includesPath(result, "file2.txt")).toEqual true
 
       describe 'deep read', ->
-        it 'reads only the current level if deep but dirs:false', ->
+        it 'reads deep file path with no folders in result set (dirs:false)', ->
           result = fsUtil.readDirSync path, dirs:false, deep:true
           expect(includesPath(result, '.hidden')).toEqual false
-          expect(includesPath(result, 'dir')).toEqual false
+          expect(includesPath(result, '.hidden/file.txt')).toEqual true
           expect(includesPath(result, ".hidden.txt")).toEqual true
+          expect(includesPath(result, 'dir')).toEqual false
+          expect(includesPath(result, 'dir/file.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true
+          expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
           expect(includesPath(result, "file1.txt")).toEqual true
           expect(includesPath(result, "file2.txt")).toEqual true
               
