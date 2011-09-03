@@ -20,6 +20,10 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile('foo.js', 'ns')
       expect(buildFile.namespace).toEqual 'ns'
 
+    it 'trims (/) char from end of [namespace] property', ->
+      buildFile = new BuildFile('foo.js', '/ns/')
+      expect(buildFile.namespace).toEqual '/ns'
+
     it 'exposes [extension] as property', ->
       expect(new BuildFile('foo.js').extension).toEqual '.js'
       expect(new BuildFile('foo.coffee').extension).toEqual '.coffee'
@@ -33,6 +37,10 @@ describe 'util/javascript/build/build_file', ->
       expect(new BuildFile('foo.coffee').name).toEqual 'foo'
       expect(new BuildFile('/foo.bar.coffee').name).toEqual 'foo.bar'
       expect(new BuildFile('/path/foo.coffee').name).toEqual 'foo'
+    
+    it 'exposes CommonJS module id : [namespace] + [file-name]', ->
+      buildFile = new BuildFile('foo.coffee', 'ns')
+      expect(buildFile.id).toEqual 'ns/foo'
     
     describe 'path type flags', ->
       it 'is a javascript file', ->
@@ -97,6 +105,7 @@ describe 'util/javascript/build/build_file', ->
       waitsFor (-> result?), 100
       runs -> 
         expect(result.javascript).toEqual compiled
+      
       
       # it 'compiles module property', ->
         # TODO 

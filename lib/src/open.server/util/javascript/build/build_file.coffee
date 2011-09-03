@@ -14,6 +14,7 @@ module.exports = class BuildFile
           
           # Setup initial conditions.
           @code         = {}
+          @namespace    = _(@namespace).rtrim('/') if @namespace?
           @isJavascript = _(@filePath).endsWith '.js'
           @isCoffee     = _(@filePath).endsWith '.coffee'
           throw "File type not supported: #{@filePath}" if not @isJavascript and not @isCoffee
@@ -26,6 +27,7 @@ module.exports = class BuildFile
           @name = @filePath
           @name = _(@name).strRightBack '/'
           @name = _(@name).strLeft @extension
+          @id   = "#{@namespace}/#{@name}"
           
 
   ###
