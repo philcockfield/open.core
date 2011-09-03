@@ -7,8 +7,9 @@ buildSingleFile = (buildPath, callback) ->
         buildFile.build => 
             
             # Add the built code file to the modules collection.
-            buildPath.modules.push buildFile
-            callback()
+            modules = buildPath.modules
+            modules.push buildFile
+            callback modules
 
 buildFilesInFolder = (buildPath, callback) -> 
         
@@ -16,8 +17,8 @@ buildFilesInFolder = (buildPath, callback) ->
         modules = buildPath.modules
 
         returnSorted = -> 
-            buildPath.modules = _(modules).sortBy (item) -> item.id
-            callback()
+            modules = _(modules).sortBy (item) -> item.id
+            callback modules
         
         # Build all files in the folder.
         options =
@@ -90,9 +91,13 @@ module.exports = class BuildPath
     
     # Reset the modules collection.
     @modules = []
+    
+    returnModules = (modules) -> 
+        @modules = modules
+        callback? modules
 
     if @isFile is yes
-        buildSingleFile @, => callback? @modules
+        buildSingleFile @, (modules) => returnModules modules
     
     else if @isFolder
-        buildFilesInFolder @, => callback? @modules
+        buildFilesInFolder @, (modules) => returnModules modules
