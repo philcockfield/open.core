@@ -137,16 +137,26 @@ describe 'util/fs', ->
           expect(includesPath(result, "file2.txt")).toEqual true
 
       describe 'deep read', ->
-        it 'reads only the current level if deep but dirs:false', ->
+        it 'reads deep file path with no folders in result set', ->
           result = null
-          fsUtil.readDir path, dirs:false, deep:true, (err, paths) -> result = paths
+          fsUtil.readDir path, files:true, dirs:false, deep:true, (err, paths) -> result = paths
           waitsFor -> result?
           runs ->
             expect(includesPath(result, '.hidden')).toEqual false
-            expect(includesPath(result, 'dir')).toEqual false
+            expect(includesPath(result, '.hidden/file.txt')).toEqual true
             expect(includesPath(result, ".hidden.txt")).toEqual true
+            expect(includesPath(result, 'dir')).toEqual false
+            expect(includesPath(result, 'dir/file.txt')).toEqual true
+            expect(includesPath(result, 'dir/child/grandchild1.txt')).toEqual true
+            expect(includesPath(result, 'dir/child/grandchild2.txt')).toEqual true
             expect(includesPath(result, "file1.txt")).toEqual true
             expect(includesPath(result, "file2.txt")).toEqual true
+
+            # expect(includesPath(result, '.hidden')).toEqual false
+            # expect(includesPath(result, 'dir')).toEqual false
+            # expect(includesPath(result, ".hidden.txt")).toEqual true
+            # expect(includesPath(result, "file1.txt")).toEqual true
+            # expect(includesPath(result, "file2.txt")).toEqual true
       
         it 'reads deep file path with hidden files', ->
           result = null
@@ -178,7 +188,6 @@ describe 'util/fs', ->
             expect(includesPath(result, "file1.txt")).toEqual true
             expect(includesPath(result, "file2.txt")).toEqual true
 
-                  
         it 'reads deep file path with folders only', ->
           result = null
           fsUtil.readDir path, deep:true, files:false, (err, paths) -> result = paths

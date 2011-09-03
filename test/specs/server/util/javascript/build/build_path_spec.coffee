@@ -95,17 +95,35 @@ describe 'util/javascript/build/build_path', ->
           expect(modules).toEqual buildPath.modules
     
     describe 'building a folder', ->
-      it 'build all files in folder, but not child folders (deep = false)', ->
-        def3.deep = false
-        buildPath = new BuildPath def3
+      # it 'build all files in folder, but not child folders (deep = false)', ->
+      #   def3.deep = false
+      #   buildPath = new BuildPath def3
+      #   modules = null
+      #   buildPath.build (m) -> modules = m
+      #   waitsFor (-> modules?), 100
+      #   runs -> 
+      #     expect(modules.length).toEqual 2
+      #     for m in modules
+      #       expect(m.isBuilt).toEqual true
+
+      # it 'builds all descendent children (deep = true)', ->
+      #   def3.deep = true
+      #   buildPath = new BuildPath def3
+      #   modules = null
+      #   buildPath.build (m) -> modules = m
+      #   waitsFor (-> modules?), 100
+      #   runs -> 
+      #     
+      #     console.log 'modules.length', modules.length
+      #     
+      #     # console.log ''
+      #     # console.log 'modules', modules
+      #     
+      #     expect(modules.length).toEqual 5
+      #   
+      #   
         
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
-        runs -> 
-          expect(modules.length).toEqual 2
-          for m in modules
-            expect(m.isBuilt).toEqual true
+        
 
 
 

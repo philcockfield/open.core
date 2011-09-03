@@ -13,11 +13,18 @@ buildSingleFile = (buildPath, callback) ->
 buildFilesInFolder = (buildPath, callback) -> 
         # Build all files in the folder (shallow).
         options =
-            files:  true
-            dirs:   false
-            hidden: false
-            deep:   buildPath.deep
+              files:  true
+              dirs:   false
+              hidden: false
+              deep:   buildPath.deep
+        
+        console.log 'buildPath.source', buildPath.source
+        console.log 'buildPath.deep', buildPath.deep
+        
         fsUtil.readDir buildPath.source, options, (err, paths) -> 
+            
+            console.log 'paths', paths
+            
             throw err if err?
             buildCount = 0
             build = (path) -> 
@@ -26,6 +33,7 @@ buildFilesInFolder = (buildPath, callback) ->
                       buildCount += 1
                       callback() if buildCount is paths.length
             build path for path in paths
+
 
 
 ###
@@ -77,8 +85,13 @@ module.exports = class BuildPath
         buildSingleFile @, -> callback? modules
     
     else if @isFolder
-        buildFilesInFolder @, -> callback? modules
-        
+        buildFilesInFolder @, => 
+            
+            
+            callback? modules
 
-              
-  
+
+
+
+
+
