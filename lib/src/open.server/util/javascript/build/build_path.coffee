@@ -1,24 +1,9 @@
 fs           = require 'fs'
 CoffeeScript = require 'coffee-script'
-
-buildFile = (buildPath, callback) -> 
-      fs.readFile buildPath.source, (err, data) =>
-          throw err if err?
-          data = data.toString()
-          
-          # Store code values.
-          code = buildPath.code
-          code.javascript = data if buildPath.isJavascript is yes
-          if buildPath.isCoffee is yes
-              code.coffeescript = data
-              code.javascript = CoffeeScript.compile(data)
-
-          # Finish up.
-          callback()
-
+BuildFile    = require './build_file'
 
 ###
-Represents a single path to to a javascript/coffee-script file, or folder, to build.
+Represents a path to a javascript/coffee-script file, or a complete folder, to build.
 ###
 module.exports = class BuildPath
   ###
@@ -29,7 +14,6 @@ module.exports = class BuildPath
                             namespace:  The CommonJS namespace the source files reside within.
                             deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
                          }
-  
   ###
   constructor: (definition = {}) -> 
       
@@ -40,17 +24,18 @@ module.exports = class BuildPath
       @code      = {}
       
       # Set path-type flags.
+      hasExtension = (extension) => _(@source).endsWith extension
       if @source?
-          @isJavascript = _(@source).endsWith '.js'
-          @isCoffee     = _(@source).endsWith '.coffee'
-          @isFolder     = not @isJavascript and not @isCoffee
-          @isFile       = not @isFolder
+          @isFile       = hasExtension('.js') or hasExtension('.coffee')
+          @isFolder     = not @isFile
       @deep = false if @isFile
       
   ###
-  The built code.  This is populated via the 'build' method.
+  An object containing built code strings.  This is populated via the 'build' method.
+  - javascript:   The javascript (compiled from coffee-script if a .coffee file was specified)
+  - coffeescript: The raw coffees-script value.
   ###
-  code: {}
+  code: undefined
   
   ###
   Builds the code at the source path, storing the results
@@ -60,7 +45,12 @@ module.exports = class BuildPath
   build: (callback) -> 
     
     # Load the code file.
-    if @isFile is yes then buildFile @, => callback? @code
+    if @isFile is yes
+      new BuildFile(@source).build (code) => 
+          _.extend @code, code
+          callback? @code
+      
+    
     else if @isFolder
       console.log 'FOLDER' # TEMP 
         

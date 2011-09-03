@@ -22,7 +22,6 @@ describe 'util/javascript/build/build_path', ->
       it 'does not perform a deep build if the path is a file', ->
         buildPath = new BuildPath source:'foo.js'
         expect(buildPath.deep).toEqual false
-
       
       it 'null source by default', ->
         expect(buildPath.source).toEqual null
@@ -44,24 +43,8 @@ describe 'util/javascript/build/build_path', ->
         expect(buildPath.deep).toEqual false
     
     describe 'path type flags', ->
-      it 'is a javascript file', ->
-        buildPath = new BuildPath source:'/foo/bar.js'
-        expect(buildPath.isJavascript).toEqual true
-        expect(buildPath.isCoffee).toEqual false
-        expect(buildPath.isFolder).toEqual false
-        expect(buildPath.isFile).toEqual true
-        
-      it 'is a coffee-script file', ->
-        buildPath = new BuildPath source:'/foo/bar.coffee'
-        expect(buildPath.isJavascript).toEqual false
-        expect(buildPath.isCoffee).toEqual true
-        expect(buildPath.isFolder).toEqual false
-        expect(buildPath.isFile).toEqual true
-        
-      it 'is a folder file', ->
+      it 'is a folder', ->
         buildPath = new BuildPath source:'/foo/bar'
-        expect(buildPath.isJavascript).toEqual false
-        expect(buildPath.isCoffee).toEqual false
         expect(buildPath.isFolder).toEqual true
         expect(buildPath.isFile).toEqual false
 
@@ -76,7 +59,6 @@ describe 'util/javascript/build/build_path', ->
       def2 = { source: "#{SAMPLE_PATH}/file.coffee" }
       jsFile     = fs.readFileSync(def1.source).toString()
       coffeeFile = fs.readFileSync(def2.source).toString()
-          
       
       it 'stores the raw javascript on the code object', ->
         buildPath = new BuildPath def1
