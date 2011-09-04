@@ -4,6 +4,11 @@ describe 'util/javascript/build/builder', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
   FOLDER_1_PATH = "#{SAMPLE_PATH}/folder1"
   FOLDER_2_PATH = "#{SAMPLE_PATH}/folder2"
+  paths = [
+      { path:FOLDER_1_PATH, namespace:'ns1' }
+      { path:FOLDER_2_PATH, namespace:'ns2' }
+  ]
+
   Builder     = null
   BuildPath   = null
   
@@ -62,36 +67,37 @@ describe 'util/javascript/build/builder', ->
       expect(_.includes(value, 'if (!this.require) {')).toEqual true
     
     
-      
+  describe '[files] method', ->
+        
+        
+  
   describe 'build', ->
-    # it 'invokes callback immediately when there are no paths', ->
-    #   builder = new Builder()
-    #   called = false
-    #   builder.build -> called = true
-    #   expect(called).toEqual true
-    # 
-    # it 'builds the collection of paths', ->
-    #     builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
-    #     done = no
-    #     builder.build (m) -> done = yes
-    #     waitsFor (-> done is yes), 100
-    #     runs -> 
-    #       paths = builder.paths
-    #       expect(paths[0].isBuilt()).toEqual true
-    #       expect(paths[1].isBuilt()).toEqual true
-    # 
-    # it 'sets the [isBuilt] flag to true', ->
-    #     builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
-    #     done = no
-    #     builder.build (m) -> done = yes
-    #     waitsFor (-> done is yes), 100
-    #     runs -> 
-    #       expect(builder.isBuilt).toEqual true
+    it 'invokes callback immediately when there are no paths', ->
+      builder = new Builder()
+      called = false
+      builder.build -> called = true
+      expect(called).toEqual true
+    
+    it 'builds the collection of paths', ->
+        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+        done = no
+        builder.build (m) -> done = yes
+        waitsFor (-> done is yes), 100
+        runs -> 
+          paths = builder.paths
+          expect(paths[0].isBuilt()).toEqual true
+          expect(paths[1].isBuilt()).toEqual true
+    
+    it 'sets the [isBuilt] flag to true', ->
+        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+        done = no
+        builder.build (m) -> done = yes
+        waitsFor (-> done is yes), 100
+        runs -> 
+          expect(builder.isBuilt).toEqual true
       
     it 'saves the modules to the [code] property', ->
-      
-        
-        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+        builder = new Builder(paths)
         done = no
         builder.build (m) -> done = yes
         waitsFor (-> done is yes), 100

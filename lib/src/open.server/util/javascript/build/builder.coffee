@@ -11,23 +11,26 @@ buildPaths = (paths, callback) ->
             callback() if count is paths.length
     build path for path in paths
 
-allModules = (paths) ->
+allFiles = (paths) ->
+    files = []
     
-    console.log 'paths.length', paths.length
+    # Extract the complete set of files.
+    for buildPath in paths
+      for buildFile in buildPath.files
+          files.push buildFile
     
-    # for path in paths
-    #   for module in modules
-    
-    # foos = _(paths).map (path) -> path.modules
-    
-    # console.log 'foos.length', foos.length
-    
-    # for foo in foos 
-    #     console.log ' > ', foo
-    
-    # for path in paths
-      # console.log ' > id: ', path
-    
+    # Return the sorted set of files.
+    _(files).sortBy (file) -> file.id
+
+
+moduleProperties = (files) -> 
+    props = ''
+    for file, i in files
+        props += file.code.moduleProperty
+        unless i is files.length - 1
+          props += ',' 
+          props += '\n'
+    props
 
 
 
@@ -87,17 +90,14 @@ module.exports = class Builder
     
     # Builds the set of paths.
     buildPaths @paths, =>
-        
-        modules = allModules(@paths)
+        files = allFiles(@paths)
+        props = moduleProperties(files)
         
         @code = """
                require.define({
-                 
+               #{moduleProperties(files)}
                });        
                """
-        
-        
-        
         
         # Finish up.
         @isBuilt = true
