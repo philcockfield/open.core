@@ -20,16 +20,27 @@ describe 'util/javascript/build/builder', ->
         expect(builder.includeRequire).toEqual false
       
     
-    it 'converts the paths parameter into BuildPath instances', ->
-      paths = [
-        { source: '/foo/1.coffee', namespace: 'foo' }
-        { source: '/foo/2.coffee', namespace: 'foo' }
-      ]
-      builder = new Builder(paths)
-      for path in builder.paths
-        expect(path instanceof BuildPath).toEqual true 
+    describe 'paths', ->
+      it 'converts the paths parameter into BuildPath instances', ->
+        paths = [
+          { source: '/foo/1.coffee', namespace: 'foo' }
+          { source: '/foo/2.coffee', namespace: 'foo' }
+        ]
+        builder = new Builder(paths)
+        for path in builder.paths
+          expect(path instanceof BuildPath).toEqual true 
+      
+      it 'has no paths when empty array passed to constructor', ->
+        builder = new Builder([])
+        expect(builder.paths).toEqual []
+
+      it 'has no paths when nothing is passed to constructor', ->
+        builder = new Builder()
+        expect(builder.paths).toEqual []
       
       
+
+    
     
     
     
