@@ -6,6 +6,8 @@ module.exports =
   libs: (callback) ->
         core = require 'open.server'
         libs = "#{core.paths.public}/javascripts/libs"
+        
+        # Note: Order is important.  Underscore must come before Backbone.
         paths = [
           "jquery-1.6.2.js"
           "underscore-1.1.6.js"

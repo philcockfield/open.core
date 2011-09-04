@@ -101,10 +101,10 @@ module.exports = class Compiler
 
           # Minify the javascript.
           minify = (c) ->
-               minifier.compress c, (min)->
-                  min = prependHeader self, min
-                  self.minified = min
-                  callback?(min)
+                min = minifier.compress c, (min)
+                min = prependHeader self, min
+                self.minified = min
+                callback?(min)
 
           # Get the raw javascript.
           if code?

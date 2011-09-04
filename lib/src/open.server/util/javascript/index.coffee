@@ -11,3 +11,6 @@ module.exports =
 
   # Classes
   Compiler:         require './compiler'
+  Builder:          require './build/builder'
+  BuildPath:        require './build/build_path'
+  BuildFile:        require './build/build_file'

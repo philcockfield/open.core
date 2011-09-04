@@ -99,7 +99,7 @@ module.exports =
                     returnPaths filteredPaths
 
       # Execution.
-      if flags.deep is yes and flags.includeDirs
+      if flags.deep is yes 
           # Deep read (-- RECURSION --).
           # 1. Read the current level without folders.
           self.readDir path, dirs:false, deep:false, files:options.files, hidden:options.hidden, (err, result) -> 
@@ -118,7 +118,7 @@ module.exports =
                     returnPaths(result)
                   else
                       for folder in folders
-                          result.push folder # 3a. Add the folder itself.
+                          result.push folder if flags.includeDirs # 3a. Add the folder itself.
                           self.readDir folder, options, (err, paths) -> 
                               return if failed(err)
                               onFolderRead paths # 3b. Add each each child.
@@ -156,7 +156,7 @@ module.exports =
             return filterPathsSync files, fnFilter
       
       # Execution.
-      if flags.deep is yes and flags.includeDirs
+      if flags.deep is yes
           # Deep read (-- RECURSION --).
           # 1. Read the current level without folders.
           result = self.readDirSync path, dirs:false, deep:false, files:options.files, hidden:options.hidden
@@ -167,7 +167,7 @@ module.exports =
               return result
           else
               for folder in folders
-                  result.push folder # 3a. Add the folder itself.
+                  result.push folder if flags.includeDirs # 3a. Add the folder itself.
                   paths = self.readDirSync folder, options
                   result = _.union(result, paths) # 3b. Add each each child.
               
@@ -177,11 +177,4 @@ module.exports =
       else
           # Read the current level only.
           read()
-      
-      
-      
-      
-      
-      
-      
       

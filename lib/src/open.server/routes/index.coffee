@@ -20,9 +20,11 @@ module.exports =
           file = (name) -> 
                   name = _.strLeftBack(name, '-min')
                   "#{name}#{min}.js"
+          libFile = (name) -> "#{dir}/libs/#{file(name)}"
       
           switch req.params.package
-            when 'libs', 'libs-min' then file = "#{dir}/libs/#{file('libs')}"
+            when 'libs', 'libs-min' then file = libFile 'libs'
+            when 'require', 'require-min' then file = libFile 'require'
             else
               file = "#{dir}/#{file(package)}"
 
