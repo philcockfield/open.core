@@ -6,19 +6,19 @@ buildSingleFile = (buildPath, callback) ->
         buildFile = new BuildFile buildPath.path, buildPath.namespace
         buildFile.build => 
             
-            # Add the built code file to the modules collection.
-            modules = buildPath.modules
-            modules.push buildFile
-            callback modules
+            # Add the built code file to the [files] collection.
+            files = buildPath.files
+            files.push buildFile
+            callback files
 
 buildFilesInFolder = (buildPath, callback) -> 
         
         # Setup initial conditions.
-        modules = buildPath.modules
+        files = buildPath.files
 
         returnSorted = -> 
-            modules = _(modules).sortBy (item) -> item.id
-            callback modules
+            files = _(files).sortBy (item) -> item.id
+            callback files
         
         # Build all files in the folder.
         options =
@@ -40,7 +40,7 @@ buildFilesInFolder = (buildPath, callback) ->
                 
                 # Run the file-builder.
                 (new BuildFile path, ns).build (code, buildFile) -> 
-                      modules.push buildFile
+                      files.push buildFile
                       count += 1
                       returnSorted() if count is paths.length
             build path for path in paths
@@ -77,34 +77,34 @@ module.exports = class BuildPath
 
   
   ###
-  Gets the collection of build modules.
+  Gets the collection of [BuildFile]'s.
   ###
-  modules: []
+  files: []
 
   
   ###
-  Builds the code at the source path, storing the results in the 'modules' property.
-  @param callback(modules): Invoked when complete. 
-                            Returns the 'modules' collection.
+  Builds the code at the source path, storing the results in the 'files' property.
+  @param callback(files): Invoked when complete. 
+                            Returns the 'files' collection.
   ###
   build: (callback) -> 
     
-    # Reset the modules collection.
-    @modules = []
+    # Reset the [files] collection.
+    @files = []
     
-    returnModules = (modules) -> 
-        @modules = modules
-        callback? modules
+    returnFiles = (files) -> 
+        @files = files
+        callback? files
 
     if @isFile is yes
-        buildSingleFile @, (modules) => returnModules modules
+        buildSingleFile @, (files) => returnFiles files
     
     else if @isFolder
-        buildFilesInFolder @, (modules) => returnModules modules
+        buildFilesInFolder @, (files) => returnFiles files
 
   ###
   Determines whether the code for the path has been built.
   ###
   isBuilt: -> 
-    return false unless @modules?.length > 0
-    not _(@modules).any (m) -> m.isBuilt == false
+    return false unless @files?.length > 0
+    not _(@files).any (m) -> m.isBuilt == false

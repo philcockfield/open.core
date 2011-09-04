@@ -32,8 +32,8 @@ describe 'util/javascript/build/build_path', ->
       it 'formats namspace', ->
         expect(new BuildPath(namespace:'/ns//').namespace).toEqual '/ns'
       
-      it 'has no modules by default', ->
-        expect(buildPath.modules).toEqual []
+      it 'has no [files] by default', ->
+        expect(buildPath.files).toEqual []
       
     describe 'storing options as properties', ->
       it 'stores source path as property', ->
@@ -67,61 +67,61 @@ describe 'util/javascript/build/build_path', ->
     coffeeFile = fs.readFileSync(def2.path).toString()
 
     describe 'building single files', ->
-      it 'stores a built [BuildFile] instance in the modules collection', ->
+      it 'stores a built [BuildFile] instance in the [files] collection', ->
         buildPath = new BuildPath def2
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), 100
         runs -> 
-          expect(modules.length).toEqual 1
-          buildFile = modules[0]
+          expect(files.length).toEqual 1
+          buildFile = files[0]
           expect(buildFile.path).toEqual def2.path
           expect(buildFile.isBuilt).toEqual true
       
       it 'passes namespace to the [BuildFile] module', ->
         buildPath = new BuildPath def2
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), 100
         runs -> 
-          expect(modules[0].namespace).toEqual 'ns2'
+          expect(files[0].namespace).toEqual 'ns2'
 
-      it 'returns the [modules] property within the callback', ->
+      it 'returns the [files] property within the callback', ->
         buildPath = new BuildPath def2
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), 100
         runs -> 
-          expect(modules).toEqual buildPath.modules
+          expect(files).toEqual buildPath.files
     
     describe 'building a folder', ->
       it 'build all files in folder, but not child folders (deep = false)', ->
         def3.deep = false
         buildPath = new BuildPath def3
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), 100
         runs -> 
-          expect(modules.length).toEqual 2
-          for m in modules
+          expect(files.length).toEqual 2
+          for m in files
             expect(m.isBuilt).toEqual true
 
       it 'builds all descendent children and stores them alphabetically (deep = true)', ->
         def3.deep = true
         buildPath = new BuildPath def3
-        modules = null
-        buildPath.build (m) -> modules = m
-        waitsFor (-> modules?), 100
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), 100
         runs -> 
-          expect(modules.length).toEqual 5
+          expect(files.length).toEqual 5
           
-          expect(modules[0].id).toEqual 'ns/file1'
-          expect(modules[1].id).toEqual 'ns/file2'
-          expect(modules[2].id).toEqual 'ns/folder1/child1'
-          expect(modules[3].id).toEqual 'ns/folder1/foo/bar'
-          expect(modules[4].id).toEqual 'ns/folder2/baz'
+          expect(files[0].id).toEqual 'ns/file1'
+          expect(files[1].id).toEqual 'ns/file2'
+          expect(files[2].id).toEqual 'ns/folder1/child1'
+          expect(files[3].id).toEqual 'ns/folder1/foo/bar'
+          expect(files[4].id).toEqual 'ns/folder2/baz'
       
-      it 'resets the [modules] collection on each call to [build]', ->
+      it 'resets the [files] collection on each call to [build]', ->
         def3.deep = true
         buildPath = new BuildPath def3
         done = no
@@ -129,23 +129,23 @@ describe 'util/javascript/build/build_path', ->
           buildPath.build (m) -> done = yes
         waitsFor (-> done is yes), 100
         runs -> 
-          expect(buildPath.modules.length).toEqual 5
+          expect(buildPath.files.length).toEqual 5
 
 
   describe 'isBuilt', ->
-    it 'is not built when the modules is empty', ->
+    it 'is not built when the [files] is empty', ->
       buildPath = new BuildPath()
-      expect(buildPath.modules.length).toEqual 0
+      expect(buildPath.files.length).toEqual 0
       expect(buildPath.isBuilt()).toEqual false
       
     it 'is not built if one module does not have the [isBuilt] flag set to true', ->
       buildPath = new BuildPath()
-      buildPath.modules = [ { isBuilt: true }, { isBuilt: false } ]
+      buildPath.files = [ { isBuilt: true }, { isBuilt: false } ]
       expect(buildPath.isBuilt()).toEqual false
 
-    it 'is  built if all modules have the [isBuilt] flag set to true', ->
+    it 'is  built if all [files] have the [isBuilt] flag set to true', ->
       buildPath = new BuildPath()
-      buildPath.modules = [ { isBuilt: true }, { isBuilt: true } ]
+      buildPath.files = [ { isBuilt: true }, { isBuilt: true } ]
       expect(buildPath.isBuilt()).toEqual true
     
 
