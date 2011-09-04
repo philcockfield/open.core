@@ -103,7 +103,7 @@ module.exports = class BuildPath
         buildFilesInFolder @, (modules) => returnModules modules
 
   ###
-  Determines whether the path has been built.
+  Determines whether the code for the path has been built.
   ###
   isBuilt: -> 
     return false unless @modules?.length > 0

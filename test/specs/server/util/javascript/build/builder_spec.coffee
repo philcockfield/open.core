@@ -18,7 +18,6 @@ describe 'util/javascript/build/builder', ->
       it 'does not include CommonJS require code by default', ->
         builder = new Builder()
         expect(builder.includeRequire).toEqual false
-      
     
     describe 'paths', ->
       paths = [
@@ -30,6 +29,17 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         expect(builder.paths.length).toEqual 2
       
+      it 'converts single path object passed to constructor into an array', ->
+        builder = new Builder 
+                        source:'foo/1.coffee', 
+                        namespace: 'foo'
+        
+        expect(builder.paths[0].path).toEqual 'foo/1.coffee'
+        expect(builder.paths[0].namespace).toEqual 'foo'
+        
+        
+      
+      
       it 'converts the paths parameter into BuildPath instances', ->
         builder = new Builder(paths)
         for path in builder.paths
@@ -37,11 +47,8 @@ describe 'util/javascript/build/builder', ->
       
       it 'has no built paths upon construction', ->
         builder = new Builder(paths)
-        # for path in builder.paths
-        #   console.log ' >> ', path
-          # expect(path.isBuilt).toEqual false
-        
-      
+        for path in builder.paths
+          expect(path.isBuilt()).toEqual false
       
       it 'has no paths when empty array passed to constructor', ->
         builder = new Builder([])
@@ -52,4 +59,22 @@ describe 'util/javascript/build/builder', ->
         expect(builder.paths).toEqual []
       
   describe 'build', ->
+    # folder1Path
     
+    
+    it 'builds the collection of paths', ->
+        # buildPath = new Builder [ { source:  } ]
+        # done = no
+        # buildPath.build (m) -> 
+        #   buildPath.build (m) -> done = yes
+        # waitsFor (-> done is yes), 100
+        # runs -> 
+        #   expect(buildPath.modules.length).toEqual 5
+        #       
+        #       
+        #       
+        #       
+        #     
+        #     
+        #     
+        #     
