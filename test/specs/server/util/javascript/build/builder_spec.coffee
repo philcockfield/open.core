@@ -2,6 +2,8 @@ fs = core.util.fs
 
 describe 'util/javascript/build/builder', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
+  FOLDER_1_PATH = "#{SAMPLE_PATH}/folder1"
+  FOLDER_2_PATH = "#{SAMPLE_PATH}/folder2"
   Builder     = null
   BuildPath   = null
   
@@ -55,22 +57,27 @@ describe 'util/javascript/build/builder', ->
         expect(builder.paths).toEqual []
       
   describe 'build', ->
-    # folder1Path
-    
+    it 'invokes callback immediately when there are no paths', ->
+      builder = new Builder()
+      called = false
+      builder.build -> called = true
+      expect(called).toEqual true
     
     it 'builds the collection of paths', ->
-        # buildPath = new Builder [ { path:  } ]
-        # done = no
-        # buildPath.build (m) -> 
-        #   buildPath.build (m) -> done = yes
-        # waitsFor (-> done is yes), 100
-        # runs -> 
-        #   expect(buildPath.modules.length).toEqual 5
-        #       
-        #       
-        #       
-        #       
-        #     
-        #     
-        #     
-        #     
+        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+        done = no
+        builder.build (m) -> done = yes
+        waitsFor (-> done is yes), 100
+        runs -> 
+          paths = builder.paths
+          expect(paths[0].isBuilt()).toEqual true
+          expect(paths[1].isBuilt()).toEqual true
+          
+
+
+
+
+
+
+
+

@@ -1,5 +1,16 @@
 BuildPath = require './build_path'
 
+
+# Builds the collection of paths.    
+buildPaths = (paths, callback) -> 
+    count = 0
+    build = (path) -> 
+        path.build -> 
+            count += 1
+            callback() if count is paths.length
+    build path for path in paths
+
+
 ###
 Stitches together a set of javascript/coffee-script files
 into modules that are addressable via CommonJS [require] calls.
@@ -48,6 +59,17 @@ module.exports = class Builder
   @param callback(code): Invoked upon completion. Returns the 'code' property value.
   ###
   build: (callback) -> 
+    
+    # Setup initial conditions.
+    callback?() unless @paths.length > 0
+    
+    # Builds the set of paths.
+    buildPaths @paths, -> 
+        callback?()
+    
+    
+    
+    
     
     
     
