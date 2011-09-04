@@ -1,3 +1,4 @@
+fs        = require 'fs'
 BuildPath = require './build_path'
 
 
@@ -9,6 +10,25 @@ buildPaths = (paths, callback) ->
             count += 1
             callback() if count is paths.length
     build path for path in paths
+
+allModules = (paths) ->
+    
+    console.log 'paths.length', paths.length
+    
+    # for path in paths
+    #   for module in modules
+    
+    # foos = _(paths).map (path) -> path.modules
+    
+    # console.log 'foos.length', foos.length
+    
+    # for foo in foos 
+    #     console.log ' > ', foo
+    
+    # for path in paths
+      # console.log ' > id: ', path
+    
+
 
 
 ###
@@ -42,10 +62,12 @@ module.exports = class Builder
       @paths = _(paths).map (path) -> new BuildPath(path)
 
   
+  
   ###
   Gets the built code.  This is populated after the [build] method has completed.
   ###
   code: undefined
+  
   
   ###
   Gets or sets whether the code has been built.
@@ -64,12 +86,28 @@ module.exports = class Builder
     callback?() unless @paths.length > 0
     
     # Builds the set of paths.
-    buildPaths @paths, -> 
-        callback?()
+    buildPaths @paths, =>
+        
+        modules = allModules(@paths)
+        
+        @code = """
+               require.define({
+                 
+               });        
+               """
+        
+        
+        
+        
+        # Finish up.
+        @isBuilt = true
+        callback? @code
     
     
     
-    
-    
-    
-    
+# Static members.
+Builder.requireJs = fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
+
+
+
+
