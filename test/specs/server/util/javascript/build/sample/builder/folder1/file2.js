@@ -1,1 +1,2 @@
-var file = 'file2';
+var name = 'file2';
+console.log('Module name: ' + name);

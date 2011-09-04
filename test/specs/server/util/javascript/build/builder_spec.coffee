@@ -138,6 +138,9 @@ describe 'util/javascript/build/builder', ->
         waitsFor (-> code?), 100
         runs -> 
           expect(code).toEqual builder.code
+          
+          console.log 'code\n\n'
+          console.log code
       
     
 
