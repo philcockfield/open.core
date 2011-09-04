@@ -11,17 +11,6 @@ buildPaths = (paths, callback) ->
             callback() if count is paths.length
     build path for path in paths
 
-allFiles = (paths) ->
-    files = []
-    
-    # Extract the complete set of files.
-    for buildPath in paths
-      for buildFile in buildPath.files
-          files.push buildFile
-    
-    # Return the sorted set of files.
-    _(files).sortBy (file) -> file.id
-
 
 moduleProperties = (files) -> 
     props = ''
@@ -63,13 +52,27 @@ module.exports = class Builder
       
       # Convert paths to wrapper classes.
       @paths = _(paths).map (path) -> new BuildPath(path)
-
   
   
   ###
   Gets the built code.  This is populated after the [build] method has completed.
   ###
   code: undefined
+  
+  
+  ###
+  Gets the set of files.
+  ###
+  files: -> 
+      files = []
+    
+      # Extract the complete set of files.
+      for buildPath in @paths
+        for buildFile in buildPath.files
+            files.push buildFile
+    
+      # Return the sorted set of files.
+      _(files).sortBy (file) -> file.id
   
   
   ###
@@ -90,7 +93,7 @@ module.exports = class Builder
     
     # Builds the set of paths.
     buildPaths @paths, =>
-        files = allFiles(@paths)
+        files = @files(@paths)
         props = moduleProperties(files)
         
         @code = """

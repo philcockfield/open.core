@@ -4,10 +4,6 @@ describe 'util/javascript/build/builder', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
   FOLDER_1_PATH = "#{SAMPLE_PATH}/folder1"
   FOLDER_2_PATH = "#{SAMPLE_PATH}/folder2"
-  paths = [
-      { path:FOLDER_1_PATH, namespace:'ns1' }
-      { path:FOLDER_2_PATH, namespace:'ns2' }
-  ]
 
   Builder     = null
   BuildPath   = null
@@ -68,10 +64,34 @@ describe 'util/javascript/build/builder', ->
     
     
   describe '[files] method', ->
-        
-        
+    paths = [
+        { path:FOLDER_1_PATH, namespace:'ns2' }
+        { path:FOLDER_2_PATH, namespace:'ns1' }
+    ]
+
+    it 'retreives all files in all paths, ordered', ->
+      builder = new Builder(paths)
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        files = builder.files()
+        expect(files[0].id).toEqual 'ns1/file3'
+        expect(files[1].id).toEqual 'ns1/file4'
+        expect(files[2].id).toEqual 'ns2/file1'
+        expect(files[3].id).toEqual 'ns2/file2'
+    
+    it 'only adds files that have been built', ->
+      builder = new Builder(paths)
+      expect(builder.files().length).toEqual 0
+    
   
   describe 'build', ->
+    paths = [
+        { path:FOLDER_1_PATH, namespace:'ns1' }
+        { path:FOLDER_2_PATH, namespace:'ns2' }
+    ]
+
     it 'invokes callback immediately when there are no paths', ->
       builder = new Builder()
       called = false
@@ -103,8 +123,9 @@ describe 'util/javascript/build/builder', ->
         waitsFor (-> done is yes), 100
         runs -> 
           
-          console.log ''
-          console.log 'builder.code', builder.code
+          # TEMP 
+          # console.log ''
+          # console.log 'builder.code', builder.code
           
 
       
