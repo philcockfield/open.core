@@ -64,10 +64,12 @@ describe 'util/javascript/build/builder', ->
     
     
   describe '[files] method', ->
-    paths = [
-        { path:FOLDER_1_PATH, namespace:'ns2' }
-        { path:FOLDER_2_PATH, namespace:'ns1' }
-    ]
+    paths = null
+    beforeEach ->
+        paths = [
+            { path:FOLDER_1_PATH, namespace:'ns2' }
+            { path:FOLDER_2_PATH, namespace:'ns1' }
+        ]
 
     it 'retreives all files in all paths, ordered', ->
       builder = new Builder(paths)
@@ -87,10 +89,12 @@ describe 'util/javascript/build/builder', ->
     
   
   describe 'build', ->
-    paths = [
-        { path:FOLDER_1_PATH, namespace:'ns1' }
-        { path:FOLDER_2_PATH, namespace:'ns2' }
-    ]
+    paths = null
+    beforeEach ->
+        paths = [
+            { path:FOLDER_1_PATH, namespace:'ns1' }
+            { path:FOLDER_2_PATH, namespace:'ns2' }
+        ]
 
     it 'invokes callback immediately when there are no paths', ->
       builder = new Builder()
@@ -109,7 +113,7 @@ describe 'util/javascript/build/builder', ->
           expect(paths[1].isBuilt()).toEqual true
     
     it 'sets the [isBuilt] flag to true', ->
-        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+        builder = new Builder(paths)
         done = no
         builder.build (m) -> done = yes
         waitsFor (-> done is yes), 100
@@ -122,14 +126,10 @@ describe 'util/javascript/build/builder', ->
         builder.build (m) -> done = yes
         waitsFor (-> done is yes), 100
         runs -> 
-          
-          # TEMP 
-          # console.log ''
-          # console.log 'builder.code', builder.code
-          
-
-      
-    
+          code = builder.code
+          for file in builder.files()
+              includesCode = _(code).includes file.code.moduleProperty
+              expect(includesCode).toEqual true
 
 
 

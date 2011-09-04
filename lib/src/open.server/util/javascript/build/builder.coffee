@@ -17,8 +17,8 @@ moduleProperties = (files) ->
     for file, i in files
         props += file.code.moduleProperty
         unless i is files.length - 1
-          props += ',' 
-          props += '\n'
+            props += ',' 
+            props += '\n'
     props
 
 
@@ -98,7 +98,7 @@ module.exports = class Builder
         
         @code = """
                require.define({
-               #{moduleProperties(files)}
+               #{props}
                });        
                """
         
