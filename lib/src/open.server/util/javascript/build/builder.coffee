@@ -11,7 +11,7 @@ module.exports = class Builder
                   The array item object takes the form:
                   [
                      {
-                        source:     The path to a folder or single file.
+                        path:      The path to a folder or single file.
                         namespace:  The CommonJS namespace the source files reside within.
                         deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
                      }

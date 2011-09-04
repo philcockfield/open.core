@@ -3,7 +3,7 @@ BuildFile = require './build_file'
 
 
 buildSingleFile = (buildPath, callback) -> 
-        buildFile = new BuildFile buildPath.source, buildPath.namespace
+        buildFile = new BuildFile buildPath.path, buildPath.namespace
         buildFile.build => 
             
             # Add the built code file to the modules collection.
@@ -28,13 +28,13 @@ buildFilesInFolder = (buildPath, callback) ->
               deep:   buildPath.deep
         
         # Get the complete list of files to build.
-        fsUtil.readDir buildPath.source, options, (err, paths) -> 
+        fsUtil.readDir buildPath.path, options, (err, paths) -> 
             throw err if err?
             count = 0
             build = (path) -> 
                 
                 # Calcualte the namespace.
-                ns = _(path).strRight buildPath.source
+                ns = _(path).strRight buildPath.path
                 ns = _(ns).strLeftBack '/'
                 ns = buildPath.namespace + ns
                 
@@ -55,7 +55,7 @@ module.exports = class BuildPath
   Constructor.
   @param definition: The definition of the path to build.
                  {
-                    source:     The path to a folder or single file.
+                    path:       The path to a folder or single file.
                     namespace:  The CommonJS namespace the source files reside within.
                     deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
                  }
@@ -64,13 +64,13 @@ module.exports = class BuildPath
       
       # Setup initial conditions.
       @deep      = definition.deep ?= true
-      @source    = definition.source ?= null
+      @path      = definition.path ?= null
       @namespace = BuildFile.formatNamespace(definition.namespace)
       @code      = {}
       
       # Set path-type flags.
-      hasExtension = (extension) => _(@source).endsWith extension
-      if @source?
+      hasExtension = (extension) => _(@path).endsWith extension
+      if @path?
           @isFile   = hasExtension('.js') or hasExtension('.coffee')
           @isFolder = not @isFile
       @deep = false if @isFile

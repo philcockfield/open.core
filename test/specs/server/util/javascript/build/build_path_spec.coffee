@@ -20,11 +20,11 @@ describe 'util/javascript/build/build_path', ->
         expect(buildPath.deep).toEqual true
 
       it 'does not perform a deep build if the path is a file', ->
-        buildPath = new BuildPath source:'foo.js'
+        buildPath = new BuildPath path:'foo.js'
         expect(buildPath.deep).toEqual false
       
-      it 'null source by default', ->
-        expect(buildPath.source).toEqual null
+      it 'null path by default', ->
+        expect(buildPath.path).toEqual null
         
       it 'empty-string namespace by default', ->
         expect(buildPath.namespace).toEqual ''
@@ -37,8 +37,8 @@ describe 'util/javascript/build/build_path', ->
       
     describe 'storing options as properties', ->
       it 'stores source path as property', ->
-        buildPath = new BuildPath source:'foo'
-        expect(buildPath.source).toEqual 'foo'
+        buildPath = new BuildPath path:'foo'
+        expect(buildPath.path).toEqual 'foo'
       
       it 'stores namespace as property', ->
         buildPath = new BuildPath namespace:'ns'
@@ -50,21 +50,21 @@ describe 'util/javascript/build/build_path', ->
     
     describe 'path type flags', ->
       it 'is a folder', ->
-        buildPath = new BuildPath source:'/foo/bar'
+        buildPath = new BuildPath path:'/foo/bar'
         expect(buildPath.isFolder).toEqual true
         expect(buildPath.isFile).toEqual false
 
       it 'is a file', ->
-        buildPath = new BuildPath source:'/foo/bar.js'
+        buildPath = new BuildPath path:'/foo/bar.js'
         expect(buildPath.isFolder).toEqual false
         expect(buildPath.isFile).toEqual true
       
   describe '[build] method', ->
-    def1       = { source: "#{SAMPLE_PATH}/file1.js",     namespace:'ns1' }
-    def2       = { source: "#{SAMPLE_PATH}/file2.coffee", namespace:'ns2' }
-    def3       = { source: SAMPLE_PATH, namespace:'ns'  }
-    jsFile     = fs.readFileSync(def1.source).toString()
-    coffeeFile = fs.readFileSync(def2.source).toString()
+    def1       = { path: "#{SAMPLE_PATH}/file1.js",     namespace:'ns1' }
+    def2       = { path: "#{SAMPLE_PATH}/file2.coffee", namespace:'ns2' }
+    def3       = { path: SAMPLE_PATH, namespace:'ns'  }
+    jsFile     = fs.readFileSync(def1.path).toString()
+    coffeeFile = fs.readFileSync(def2.path).toString()
 
     describe 'building single files', ->
       it 'stores a built [BuildFile] instance in the modules collection', ->
@@ -75,7 +75,7 @@ describe 'util/javascript/build/build_path', ->
         runs -> 
           expect(modules.length).toEqual 1
           buildFile = modules[0]
-          expect(buildFile.path).toEqual def2.source
+          expect(buildFile.path).toEqual def2.path
           expect(buildFile.isBuilt).toEqual true
       
       it 'passes namespace to the [BuildFile] module', ->
