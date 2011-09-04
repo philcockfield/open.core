@@ -130,7 +130,16 @@ describe 'util/javascript/build/builder', ->
           for file in builder.files()
               includesCode = _(code).includes file.code.moduleProperty
               expect(includesCode).toEqual true
-
+    
+    it 'returns the code within the callback.', ->
+        builder = new Builder(paths)
+        code = null
+        builder.build (c) -> code = c
+        waitsFor (-> code?), 100
+        runs -> 
+          expect(code).toEqual builder.code
+      
+    
 
 
 
