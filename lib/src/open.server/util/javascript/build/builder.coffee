@@ -23,6 +23,7 @@ module.exports = class Builder
   constructor: (paths = [], options = {}) -> 
 
       # Setup initial conditions.
+      paths = [paths] unless _.isArray(paths)
       @includeRequire = options.includeRequire ?= false
       options.build ?= false
       

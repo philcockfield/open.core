@@ -33,12 +33,8 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder 
                         source:'foo/1.coffee', 
                         namespace: 'foo'
-        
-        expect(builder.paths[0].path).toEqual 'foo/1.coffee'
+        expect(builder.paths[0].source).toEqual 'foo/1.coffee'
         expect(builder.paths[0].namespace).toEqual 'foo'
-        
-        
-      
       
       it 'converts the paths parameter into BuildPath instances', ->
         builder = new Builder(paths)
