@@ -4,8 +4,10 @@ module.exports =
   @param callback: invoked upon completion.
   ###
   libs: (callback) ->
-        core = require 'open.server'
-        libs = "#{core.paths.public}/javascripts/libs"
+        core       = require 'open.server'
+        fs         = core.util.fs
+        sourceLibs = "#{__dirname}/libs.src"
+        targetLibs = "#{core.paths.public}/javascripts/libs"
         
         # Note: Order is important.  Underscore must come before Backbone.
         paths = [
@@ -15,15 +17,20 @@ module.exports =
           "backbone-0.5.1.js"
           "spin.js"
         ]
-        paths = _(paths).map (path) -> "#{__dirname}/libs.js/#{path}"
-
+        paths = _(paths).map (path) -> "#{sourceLibs}/#{path}"
+        
+        # Concatenate the JS libraries into a single file and save.
         options =
             paths: paths
-            standard: "#{libs}/libs.js"
-            minified: "#{libs}/libs-min.js"
-        
-        core.util.fs.concatenate.save options, -> 
-            callback?()
+            standard: "#{targetLibs}/libs.js"
+            minified: "#{targetLibs}/libs-min.js"
+        fs.concatenate.save options, -> 
+            
+            # Copy the [require.js] file.
+            fs.copy "#{sourceLibs}/require.js", "#{targetLibs}/require.js", -> 
+            
+                # Finish up.
+                callback?()
 
 
   ###

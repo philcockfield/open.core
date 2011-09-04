@@ -24,9 +24,11 @@ buildCore = (callback) ->
           console.log ''
           callback?()
 
+
 task 'specs', 'Run the Jasmine BDD specs', ->
   exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
+
 
 task 'build', 'Build and save all JavaScript files', ->
     buildLibs -> 

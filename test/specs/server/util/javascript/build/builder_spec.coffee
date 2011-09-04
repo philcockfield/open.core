@@ -55,6 +55,10 @@ describe 'util/javascript/build/builder', ->
       it 'has no paths when nothing is passed to constructor', ->
         builder = new Builder()
         expect(builder.paths).toEqual []
+
+  describe 'require', ->
+    
+    
       
   describe 'build', ->
     it 'invokes callback immediately when there are no paths', ->
