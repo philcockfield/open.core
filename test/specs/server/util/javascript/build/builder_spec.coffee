@@ -1,7 +1,7 @@
 fs = core.util.fs
 
 describe 'util/javascript/build/builder', ->
-  SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample"
+  SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
   Builder     = null
   BuildPath   = null
   
@@ -21,14 +21,27 @@ describe 'util/javascript/build/builder', ->
       
     
     describe 'paths', ->
+      paths = [
+        { source: '/foo/1.coffee', namespace: 'foo' }
+        { source: '/foo/2.coffee', namespace: 'foo' }
+      ]
+      
+      it 'adds paths to the [paths] property collection', ->
+        builder = new Builder(paths)
+        expect(builder.paths.length).toEqual 2
+      
       it 'converts the paths parameter into BuildPath instances', ->
-        paths = [
-          { source: '/foo/1.coffee', namespace: 'foo' }
-          { source: '/foo/2.coffee', namespace: 'foo' }
-        ]
         builder = new Builder(paths)
         for path in builder.paths
           expect(path instanceof BuildPath).toEqual true 
+      
+      it 'has no built paths upon construction', ->
+        builder = new Builder(paths)
+        # for path in builder.paths
+        #   console.log ' >> ', path
+          # expect(path.isBuilt).toEqual false
+        
+      
       
       it 'has no paths when empty array passed to constructor', ->
         builder = new Builder([])
@@ -38,10 +51,5 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder()
         expect(builder.paths).toEqual []
       
-      
-
+  describe 'build', ->
     
-    
-    
-    
-  

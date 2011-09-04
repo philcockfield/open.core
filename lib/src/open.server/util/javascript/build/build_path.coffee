@@ -101,3 +101,10 @@ module.exports = class BuildPath
     
     else if @isFolder
         buildFilesInFolder @, (modules) => returnModules modules
+
+  ###
+  Determines whether the path has been built.
+  ###
+  isBuilt: -> 
+    return false unless @modules?.length > 0
+    not _(@modules).any (m) -> m.isBuilt == false

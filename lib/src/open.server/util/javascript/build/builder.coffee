@@ -28,4 +28,25 @@ module.exports = class Builder
       
       # Convert paths to wrapper classes.
       @paths = _(paths).map (path) -> new BuildPath(path)
-      
+
+  
+  ###
+  Gets the built code.  This is populated after the [build] method has completed.
+  ###
+  code: undefined
+  
+  ###
+  Gets or sets whether the code has been built.
+  True after the [build] method has completed.
+  ###
+  isBuilt: false
+  
+  
+  ###
+  Builds the code.
+  @param callback(code): Invoked upon completion. Returns the 'code' property value.
+  ###
+  build: (callback) -> 
+    
+    
+    

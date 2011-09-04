@@ -120,9 +120,32 @@ describe 'util/javascript/build/build_path', ->
           expect(modules[2].id).toEqual 'ns/folder1/child1'
           expect(modules[3].id).toEqual 'ns/folder1/foo/bar'
           expect(modules[4].id).toEqual 'ns/folder2/baz'
-        
-        
+      
+      it 'resets the [modules] collection on each call to [build]', ->
+        def3.deep = true
+        buildPath = new BuildPath def3
+        done = no
+        buildPath.build (m) -> 
+          buildPath.build (m) -> done = yes
+        waitsFor (-> done is yes), 100
+        runs -> 
+          expect(buildPath.modules.length).toEqual 5
 
 
+  describe 'isBuilt', ->
+    it 'is not built when the modules is empty', ->
+      buildPath = new BuildPath()
+      expect(buildPath.modules.length).toEqual 0
+      expect(buildPath.isBuilt()).toEqual false
+      
+    it 'is not built if one module does not have the [isBuilt] flag set to true', ->
+      buildPath = new BuildPath()
+      buildPath.modules = [ { isBuilt: true }, { isBuilt: false } ]
+      expect(buildPath.isBuilt()).toEqual false
 
+    it 'is  built if all modules have the [isBuilt] flag set to true', ->
+      buildPath = new BuildPath()
+      buildPath.modules = [ { isBuilt: true }, { isBuilt: true } ]
+      expect(buildPath.isBuilt()).toEqual true
+    
 
