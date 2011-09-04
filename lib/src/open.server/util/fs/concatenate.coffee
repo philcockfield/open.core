@@ -40,19 +40,31 @@ module.exports =
   Concatenates the specified set of files together and saves them
   to the file system.
   @param options:
-            - paths:    Array of files to concatinate into the single file.
-            - standard: The path to save the uncompressed file to.
-            - minified: The path to save the compressed file to.
+            - paths:     Array of files to concatinate into the single file.
+            - standard:  The path to save the uncompressed file to.
+            - minified:  The path to save the compressed file to.
   @param callback invoked upon completion.
   ###
   save: (options = {}, callback) ->
-      core = require 'open.server'
+      
+      # Setup initial conditions.
+      core  = require 'open.server'
       paths = options.paths
+      
+      # Determine total number of files being saved.
+      total = 0
+      total += 1 if options.standard?
+      total += 1 if options.minified?
+      if total is 0
+          callback?() # No paths to save to.
+          return
+      
+      # Concatenate the files.
       @files paths, (code) =>
           saved = 0
           onSaved = ->
               saved += 1
-              callback?() if saved == 2
+              callback?() if saved is total
 
           save = (data, toFile) ->
               unless toFile?
@@ -62,7 +74,15 @@ module.exports =
                       throw err if err?
                       onSaved()
 
-          save code, options.standard
-          core.util.javascript.compress code, (min) =>
-                min = @headerComment(paths) + min
-                save min, options.minified
+          
+          # Save the uncompressed file.
+          if options.standard?
+              save code, options.standard
+          
+          # Save the minified the code.
+          if options.minified?
+              minifiedCode = core.util.javascript.compress code
+              minifiedCode = @headerComment(paths) + minifiedCode
+              save minifiedCode, options.minified
+
+

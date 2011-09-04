@@ -15,13 +15,15 @@ module.exports =
           "backbone-0.5.1.js"
           "spin.js"
         ]
-        paths = _(paths).map (path) -> "#{libs}/src/#{path}"
+        paths = _(paths).map (path) -> "#{__dirname}/libs.js/#{path}"
 
         options =
             paths: paths
             standard: "#{libs}/libs.js"
             minified: "#{libs}/libs-min.js"
-        core.util.fs.concatenate.save options, -> callback?()
+        
+        core.util.fs.concatenate.save options, -> 
+            callback?()
 
 
   ###
