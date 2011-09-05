@@ -21,15 +21,16 @@ module.exports = class Builder
                   ]
   @param options
       - includeRequireJS: Flag indicating if the CommonJS require script should be included (default: false).
+      - copyright:        (optional). A copyright notice to prepent at the head of the code.
   
   ###
   constructor: (paths = [], options = {}) -> 
 
       # Setup initial conditions.
-      paths = [paths] unless _.isArray(paths)
+      paths             = [paths] unless _.isArray(paths)
       @includeRequireJS = options.includeRequireJS ?= false
-      options.build ?= false
-      @code = {}
+      @copyright        = options.copyright ?= null
+      @code             = {}
       
       # Convert paths to wrapper classes.
       @paths = _(paths).map (path) -> new BuildPath(path)
@@ -93,8 +94,16 @@ module.exports = class Builder
                });
                """
         
+        # Compress the code.
+        minified = minifier.compress(code)
+        
+        # Prepend copyright.
+        if @copyright?
+            code = "#{@copyright}\n\n#{code}"
+            minified = "#{@copyright}\n\n#{minified}"
+        
         # Store the code function (with a minified version too).
-        @code = fnCode(code, minifier.compress(code))
+        @code = fnCode(code, minified)
         
         # Finish up.
         @isBuilt = true

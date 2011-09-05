@@ -21,6 +21,11 @@ describe 'util/javascript/build/builder', ->
       it 'does not include CommonJS require code by default', ->
         builder = new Builder()
         expect(builder.includeRequireJS).toEqual false
+      
+      it 'does not have a copyright notice by default', ->
+        builder = new Builder()
+        expect(builder.copyright).toEqual null
+      
     
     describe 'paths', ->
       paths = [
@@ -162,7 +167,18 @@ describe 'util/javascript/build/builder', ->
           waitsFor (-> code?), 100
           runs -> 
             expect(code(true)).toEqual builder.code.minified
-
+      
+    it 'prepends copyright to both versions of the standard code', ->
+        COPYRIGHT = '(c) Copyright'
+        builder = new Builder(paths, copyright:COPYRIGHT)
+        code = null
+        builder.build (c) -> code = c
+        waitsFor (-> code?), 100
+        runs -> 
+          expect(_(code.standard).startsWith(COPYRIGHT)).toEqual true
+          expect(_(code.minified).startsWith(COPYRIGHT)).toEqual true
+      
+    
     describe 'require.js', ->
       it 'loads [require.js] as static property of class', ->
         expect(_.includes(Builder.requireJS, 'if (!this.require) {')).toEqual true

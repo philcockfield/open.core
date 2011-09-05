@@ -50,9 +50,6 @@ module.exports =
       core      = require 'open.server'
       dir    = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
-      # output =
-      #     standard:   "#{folder}/core.js"
-      #     minified: "#{folder}/core-min.js"
 
       # Construct paths.
       clientPath = core.paths.client
