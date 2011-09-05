@@ -20,14 +20,14 @@ module.exports = class Builder
                      }
                   ]
   @param options
-      - includeRequire: Flag indicating if the CommonJS require script should be included (default: false).
+      - includeRequireJS: Flag indicating if the CommonJS require script should be included (default: false).
   
   ###
   constructor: (paths = [], options = {}) -> 
 
       # Setup initial conditions.
       paths = [paths] unless _.isArray(paths)
-      @includeRequire = options.includeRequire ?= false
+      @includeRequireJS = options.includeRequireJS ?= false
       options.build ?= false
       @code = {}
       
@@ -81,14 +81,16 @@ module.exports = class Builder
         props = moduleProperties(files)
         
         # Build the uncompressed code.
-        @code.standard = """
+        code = if @includeRequireJS then Builder.requireJS else ''
+        code += """
                require.define({
                #{props}
                });
                """
+        @code.standard = code
         
         # Store a minified version of the code.
-        @code.minified = minifier.compress(@code.standard)
+        @code.minified = minifier.compress(code)
         
         # Finish up.
         @isBuilt = true
@@ -150,6 +152,6 @@ moduleProperties = (files) ->
 
 
 # -- STATIC members.
-Builder.requireJs = fsUtil.fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
+Builder.requireJS = fsUtil.fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
 
 

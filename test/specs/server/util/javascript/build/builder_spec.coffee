@@ -20,7 +20,7 @@ describe 'util/javascript/build/builder', ->
     describe 'defaults', ->
       it 'does not include CommonJS require code by default', ->
         builder = new Builder()
-        expect(builder.includeRequire).toEqual false
+        expect(builder.includeRequireJS).toEqual false
     
     describe 'paths', ->
       paths = [
@@ -56,11 +56,6 @@ describe 'util/javascript/build/builder', ->
       it 'has no paths when nothing is passed to constructor', ->
         builder = new Builder()
         expect(builder.paths).toEqual []
-
-  describe 'require.js', ->
-    it 'loads [require.js] as static property of class', ->
-      value = Builder.requireJs
-      expect(_.includes(value, 'if (!this.require) {')).toEqual true
     
     
   describe '[files] method', ->
@@ -141,7 +136,6 @@ describe 'util/javascript/build/builder', ->
         minified = builder.code.minified
         expect(minified).toEqual fnCompress(builder.code.standard)
     
-    
     it 'returns the code within the callback.', ->
         builder = new Builder(paths)
         code = null
@@ -149,7 +143,28 @@ describe 'util/javascript/build/builder', ->
         waitsFor (-> code?), 100
         runs -> 
           expect(code).toEqual builder.code
-  
+
+    describe 'require.js', ->
+      it 'loads [require.js] as static property of class', ->
+        expect(_.includes(Builder.requireJS, 'if (!this.require) {')).toEqual true
+    
+      it 'does not include the require JS in the built code', ->
+        builder = new Builder(paths)
+        code = null
+        builder.build (c) -> code = c
+        waitsFor (-> code?), 100
+        runs -> 
+          includes = _(code.standard).includes(Builder.requireJS)
+          expect(includes).toEqual false
+    
+      it 'includes the require JS in the built code', ->
+        builder = new Builder(paths, { includeRequireJS: true })
+        code = null
+        builder.build (c) -> code = c
+        waitsFor (-> code?), 100
+        runs -> 
+          includes = _(code.standard).includes(Builder.requireJS)
+          expect(includes).toEqual true
 
   describe 'save', ->
     paths = null
@@ -191,7 +206,7 @@ describe 'util/javascript/build/builder', ->
           expect(fileContent).toEqual builder.code.minified
           
     it 'does not re-build the code if already built', ->
-        builder = new Builder(paths)
+        builder = new Builder(paths, { includeRequireJS: true })
         spyOn(builder, 'build').andCallThrough()
         
         done = no
