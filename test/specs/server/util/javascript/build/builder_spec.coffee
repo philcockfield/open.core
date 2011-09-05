@@ -138,11 +138,21 @@ describe 'util/javascript/build/builder', ->
         waitsFor (-> code?), 100
         runs -> 
           expect(code).toEqual builder.code
-          
-          console.log 'code\n\n'
-          console.log code
-      
-    
+  
+  
+
+  # describe 'save', ->
+  #   paths = null
+  #   beforeEach ->
+  #       paths = [
+  #           { path:FOLDER_1_PATH, namespace:'ns1' }
+  #           { path:FOLDER_2_PATH, namespace:'ns2' }
+  #       ]
+  # 
+  #   it 'saves the uncompressed file to disk', ->
+  #     
+  #   
+
 
 
 

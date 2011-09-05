@@ -49,6 +49,7 @@ module.exports = class Builder
       paths = [paths] unless _.isArray(paths)
       @includeRequire = options.includeRequire ?= false
       options.build ?= false
+      @code = {}
       
       # Convert paths to wrapper classes.
       @paths = _(paths).map (path) -> new BuildPath(path)
@@ -56,6 +57,9 @@ module.exports = class Builder
   
   ###
   Gets the built code.  This is populated after the [build] method has completed.
+  Object structure:
+        - standard:  The uncompressed code.
+        - minified:  The compressed code.
   ###
   code: undefined
   
@@ -106,7 +110,20 @@ module.exports = class Builder
         @isBuilt = true
         callback? @code
     
-    
+  
+  ###
+  Builds and saves the code to the specified location.
+  @param paths
+            - standard: The path to save the uncompressed version of the code to.
+            - minified: The path to save the compressed version fo the code to.
+  @param callback - invoked upon completion.
+  ###
+  save: (paths = {}, callback) -> 
+      
+      
+      
+      
+
     
 # Static members.
 Builder.requireJs = fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
