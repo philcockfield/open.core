@@ -115,7 +115,7 @@ describe 'util/javascript/build/builder', ->
       runs -> 
         expect(builder.isBuilt).toEqual true
       
-    it 'stores the modules to within the [code] property', ->
+    it 'stores the code modules within the genearted [code] property', ->
       builder = new Builder(paths)
       done = no
       builder.build (m) -> done = yes
@@ -136,13 +136,34 @@ describe 'util/javascript/build/builder', ->
         minified = builder.code.minified
         expect(minified).toEqual fnCompress(builder.code.standard)
     
-    it 'returns the code within the callback.', ->
+    it 'returns the [code] function within the callback', ->
         builder = new Builder(paths)
         code = null
         builder.build (c) -> code = c
         waitsFor (-> code?), 100
         runs -> 
           expect(code).toEqual builder.code
+          expect(code instanceof Function).toEqual true 
+
+    describe '[code] function', ->
+      it 'returns the standard code', ->
+          builder = new Builder(paths)
+          code = null
+          builder.build (c) -> code = c
+          waitsFor (-> code?), 100
+          runs -> 
+            expect(code()).toEqual builder.code.standard
+            expect(code(false)).toEqual builder.code.standard
+
+      it 'returns the minified code', ->
+          builder = new Builder(paths)
+          code = null
+          builder.build (c) -> code = c
+          waitsFor (-> code?), 100
+          runs -> 
+            expect(code(true)).toEqual builder.code.minified
+
+      
 
     describe 'require.js', ->
       it 'loads [require.js] as static property of class', ->

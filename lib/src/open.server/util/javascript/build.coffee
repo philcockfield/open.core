@@ -48,11 +48,11 @@ module.exports =
   ###
   all: (options = {}) ->
       core      = require 'open.server'
-      folder    = "#{core.paths.public}/javascripts"
+      dir    = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
-      output =
-          standard:   "#{folder}/core.js"
-          minified: "#{folder}/core-min.js"
+      # output =
+      #     standard:   "#{folder}/core.js"
+      #     minified: "#{folder}/core-min.js"
 
       # Construct paths.
       clientPath = core.paths.client
@@ -64,13 +64,12 @@ module.exports =
       builder = new core.util.javascript.Builder(paths, includeRequireJS:true)
       
       builder.build (code) -> 
-        
-        if options.save is yes
-          builder.save dir:folder, name: 'core', -> 
-            options.callback?()
+          if options.save is yes
+            builder.save dir:dir, name: 'core', -> 
+              options.callback?()
           
-        else
-          options.callback?()
+          else
+            options.callback?()
       
       
       

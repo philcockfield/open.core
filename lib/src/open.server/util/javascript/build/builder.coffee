@@ -37,9 +37,13 @@ module.exports = class Builder
   
   ###
   Gets the built code.  This is populated after the [build] method has completed.
-  Object structure:
-        - standard:  The uncompressed code.
-        - minified:  The compressed code.
+    It is a [Function] with two properties:
+      - standard: the uncompressed code.
+      - minified: the compressed code.
+    The function can be invoked like so:
+      fn(minified):
+        - minified: true  - returns the compressed code.
+        - minified: false - returns the uncompressed code.
   ###
   code: undefined
   
@@ -79,6 +83,8 @@ module.exports = class Builder
     buildPaths @paths, =>
         files = @files(@paths)
         props = moduleProperties(files)
+        fnCode = (minified) -> 
+               if minified then fnCode.minified else fnCode.standard
         
         # Build the uncompressed code.
         code = if @includeRequireJS then Builder.requireJS else ''
@@ -87,12 +93,13 @@ module.exports = class Builder
                #{props}
                });
                """
-        @code.standard = code
+        fnCode.standard = code
         
         # Store a minified version of the code.
-        @code.minified = minifier.compress(code)
+        fnCode.minified = minifier.compress(code)
         
         # Finish up.
+        @code = fnCode
         @isBuilt = true
         callback? @code
 
