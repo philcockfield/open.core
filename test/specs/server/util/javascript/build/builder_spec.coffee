@@ -179,6 +179,16 @@ describe 'util/javascript/build/builder', ->
         runs -> 
           fileContent = fsUtil.fs.readFileSync("#{DIR}/sample.foo.js").toString()
           expect(fileContent).toEqual builder.code.standard
+
+    it 'saves the compressed file to disk', ->
+        builder = new Builder(paths)
+        done = no
+        builder.save dir:DIR + '///', name:'sample', -> done = yes
+        waitsFor (-> done is yes), 100
+        runs -> 
+          fileContent = fsUtil.fs.readFileSync("#{DIR}/sample-min.js").toString()
+          fileContent = core.util.javascript.minifier.compress(fileContent)
+          expect(fileContent).toEqual builder.code.minified
           
     it 'does not re-build the code if already built', ->
         builder = new Builder(paths)
@@ -191,6 +201,7 @@ describe 'util/javascript/build/builder', ->
         runs -> 
           expect(builder.build.callCount).toEqual 1
         
+
 
 
 

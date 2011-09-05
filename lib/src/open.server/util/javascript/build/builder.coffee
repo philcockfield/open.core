@@ -115,7 +115,7 @@ module.exports = class Builder
       save = () => 
           files = [
             { path: "#{dir}/#{name}.js",              data:@code.standard  }
-            # { path: "#{dir}/#{name}#{minSuffix}.js",  data:@code.minified  }
+            { path: "#{dir}/#{name}#{minSuffix}.js",  data:@code.minified  }
           ]
           fsUtil.writeFiles files, (err) -> 
               throw err if err?
