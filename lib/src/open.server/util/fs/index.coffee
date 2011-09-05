@@ -3,6 +3,7 @@ Module Exports
 ###
 module.exports = index =
   concatenate: require './concatenate'
+  fs:          require 'fs'
 
 # Copy common methods onto the index.
 _.extend index, 

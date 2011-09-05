@@ -23,7 +23,11 @@ describe 'util/fs', ->
 
   it 'is available from the util module', ->
     expect(test.server.util.fs).toBeDefined()
-
+  
+  it 'exposes the native [fs] modules as a property', ->
+    expect(fsUtil.fs).toEqual fs
+  
+  
   describe 'parentDir', ->
     it 'retrieves the parent directory', ->
       path = '/foo/bar/bas.txt'

@@ -1,5 +1,6 @@
 fs        = require 'fs'
 BuildPath = require './build_path'
+minifier  = require '../minifier'
 
 
 # Builds the collection of paths.    
@@ -100,11 +101,15 @@ module.exports = class Builder
         files = @files(@paths)
         props = moduleProperties(files)
         
-        @code = """
+        # Build the uncompressed code.
+        @code.standard = """
                require.define({
                #{props}
                });        
                """
+        
+        # Store a minified version of the code.
+        @code.minified = minifier.compress(@code.standard)
         
         # Finish up.
         @isBuilt = true
@@ -112,16 +117,19 @@ module.exports = class Builder
     
   
   ###
-  Builds and saves the code to the specified location.
-  @param paths
-            - standard: The path to save the uncompressed version of the code to.
-            - minified: The path to save the compressed version fo the code to.
+  Builds and saves the code to the specified location(s).
+  @param options
+            - dir:       The path to directory to save the files in.
+            - name:      The file name (without an extension).
+            - minSuffix: The minified suffix (default: -min)
   @param callback - invoked upon completion.
   ###
-  save: (paths = {}, callback) -> 
+  save: (options = {}, callback) -> 
       
+      # Setup initial conditions.
+      minSuffix = options.minSuffix ?= '-min'
       
-      
+      console.log 'options', options
       
 
     

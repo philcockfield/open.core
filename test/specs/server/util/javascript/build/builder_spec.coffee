@@ -1,4 +1,4 @@
-fs = core.util.fs
+fsUtil = core.util.fs
 
 describe 'util/javascript/build/builder', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
@@ -103,33 +103,44 @@ describe 'util/javascript/build/builder', ->
       expect(called).toEqual true
     
     it 'builds the collection of paths', ->
-        builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
-        done = no
-        builder.build (m) -> done = yes
-        waitsFor (-> done is yes), 100
-        runs -> 
-          paths = builder.paths
-          expect(paths[0].isBuilt()).toEqual true
-          expect(paths[1].isBuilt()).toEqual true
+      builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        paths = builder.paths
+        expect(paths[0].isBuilt()).toEqual true
+        expect(paths[1].isBuilt()).toEqual true
     
     it 'sets the [isBuilt] flag to true', ->
-        builder = new Builder(paths)
-        done = no
-        builder.build (m) -> done = yes
-        waitsFor (-> done is yes), 100
-        runs -> 
-          expect(builder.isBuilt).toEqual true
+      builder = new Builder(paths)
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        expect(builder.isBuilt).toEqual true
       
-    it 'saves the modules to the [code] property', ->
-        builder = new Builder(paths)
-        done = no
-        builder.build (m) -> done = yes
-        waitsFor (-> done is yes), 100
-        runs -> 
-          code = builder.code
-          for file in builder.files()
-              includesCode = _(code).includes file.code.moduleProperty
-              expect(includesCode).toEqual true
+    it 'stores the modules to within the [code] property', ->
+      builder = new Builder(paths)
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        code = builder.code.standard
+        for file in builder.files()
+            includesCode = _(code).includes file.code.moduleProperty
+            expect(includesCode).toEqual true
+    
+    it 'stores the minified version of the code', ->
+      builder = new Builder(paths)
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        fnCompress = core.util.javascript.minifier.compress
+        minified = builder.code.minified
+        expect(minified).toEqual fnCompress(builder.code.standard)
+    
     
     it 'returns the code within the callback.', ->
         builder = new Builder(paths)
@@ -139,19 +150,32 @@ describe 'util/javascript/build/builder', ->
         runs -> 
           expect(code).toEqual builder.code
   
-  
 
-  # describe 'save', ->
-  #   paths = null
-  #   beforeEach ->
-  #       paths = [
-  #           { path:FOLDER_1_PATH, namespace:'ns1' }
-  #           { path:FOLDER_2_PATH, namespace:'ns2' }
-  #       ]
-  # 
-  #   it 'saves the uncompressed file to disk', ->
-  #     
-  #   
+  describe 'save', ->
+    paths = null
+    DIR   = "#{SAMPLE_PATH}/save"
+    
+    beforeEach ->
+        paths = [
+            { path:FOLDER_1_PATH, namespace:'ns1' }
+            { path:FOLDER_2_PATH, namespace:'ns2' }
+        ]
+        # fs.deleteSync DIR
+        
+  
+    # it 'saves the uncompressed file to disk', ->
+    #     builder = new Builder(paths)
+    #     done = no
+    #     builder.save dir:DIR, name:'sample', -> done = yes
+    #     waitsFor (-> done is yes), 100
+    #     runs -> 
+    #       
+    #       fileContent = fsUtil.fs.readFileSync("#{DIR}/sample.js").toString()
+    #       
+    #       expect(fileContent).toEqual builder.code.standard
+          
+          
+    
 
 
 
