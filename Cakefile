@@ -18,8 +18,8 @@ buildCore = (callback) ->
   core.util.javascript.build.all
       save: true
       callback: (result) ->
-          # console.log ' - Packed file:   ', result.paths.packed
-          # console.log ' - Minified file: ', result.paths.minified
+          console.log ' - Standard file: ', result.paths.standard
+          console.log ' - Minified file: ', result.paths.minified
           logDone()
           console.log ''
           callback?()

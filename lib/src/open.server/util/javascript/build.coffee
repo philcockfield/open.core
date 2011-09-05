@@ -62,55 +62,11 @@ module.exports =
       ]
       
       builder = new core.util.javascript.Builder(paths, includeRequireJS:true)
-      
       builder.build (code) -> 
           if options.save is yes
-            builder.save dir:dir, name: 'core', -> 
-              options.callback?()
+            builder.save dir:dir, name: 'core', (code)-> 
+              options.callback? code
           
           else
-            options.callback?()
-      
-      
-      
-      
-      # Compile and save.
-      # compiler  = new core.util.javascript.Compiler paths, header: copyright
-      # if options.save == true
-      #   compiler.save
-      #         packed:         output.packed
-      #         minified:       output.minified
-      #         callback:       options.callback
-      # else
-      #   compiler.build (code) ->
-      #         code.paths = output
-      #         options.callback?(code)
+            options.callback? code
 
-
-  # all: (options = {}) ->
-  #     core      = require 'open.server'
-  #     folder    = "#{core.paths.public}/javascripts"
-  #     copyright = core.copyright(asComment: true)
-  #     output =
-  #         packed:   "#{folder}/core.js"
-  #         minified: "#{folder}/core-min.js"
-  # 
-  #     # Construct paths.
-  #     clientPath = core.paths.client
-  #     paths = [
-  #       { source: "#{clientPath}/core",     target: '/open.client/core' }
-  #       { source: "#{clientPath}/controls", target: '/open.client/controls' }
-  #     ]
-  #     
-  #     # Compile and save.
-  #     compiler  = new core.util.javascript.Compiler paths, header: copyright
-  #     if options.save == true
-  #       compiler.save
-  #             packed:         output.packed
-  #             minified:       output.minified
-  #             callback:       options.callback
-  #     else
-  #       compiler.build (code) ->
-  #             code.paths = output
-  #             options.callback?(code)
-  # 
