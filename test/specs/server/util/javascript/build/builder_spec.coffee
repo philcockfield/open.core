@@ -22,9 +22,9 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder()
         expect(builder.includeRequireJS).toEqual false
       
-      it 'does not have a copyright notice by default', ->
+      it 'does not have a [header] notice by default', ->
         builder = new Builder()
-        expect(builder.copyright).toEqual null
+        expect(builder.header).toEqual null
       
     
     describe 'paths', ->
@@ -168,9 +168,9 @@ describe 'util/javascript/build/builder', ->
           runs -> 
             expect(code(true)).toEqual builder.code.minified
       
-    it 'prepends copyright to both versions of the standard code', ->
+    it 'prepends copyright to both versions of the standard code as the header', ->
         COPYRIGHT = '(c) Copyright'
-        builder = new Builder(paths, copyright:COPYRIGHT)
+        builder = new Builder(paths, header:COPYRIGHT)
         code = null
         builder.build (c) -> code = c
         waitsFor (-> code?), 100

@@ -21,7 +21,7 @@ module.exports = class Builder
                   ]
   @param options
       - includeRequireJS: Flag indicating if the CommonJS require script should be included (default: false).
-      - copyright:        (optional). A copyright notice to prepent at the head of the code.
+      - header:          (optional). A notice to prepend to the head of the code (eg. a copyright notice).
   
   ###
   constructor: (paths = [], options = {}) -> 
@@ -29,7 +29,7 @@ module.exports = class Builder
       # Setup initial conditions.
       paths             = [paths] unless _.isArray(paths)
       @includeRequireJS = options.includeRequireJS ?= false
-      @copyright        = options.copyright ?= null
+      @header           = options.header ?= null
       @code             = {}
       
       # Convert paths to wrapper classes.
@@ -97,10 +97,10 @@ module.exports = class Builder
         # Compress the code.
         minified = minifier.compress(code)
         
-        # Prepend copyright.
-        if @copyright?
-            code = "#{@copyright}\n\n#{code}"
-            minified = "#{@copyright}\n\n#{minified}"
+        # Prepend the header if there is one.
+        if @header?
+            code = "#{@header}\n\n#{code}"
+            minified = "#{@header}\n\n#{minified}"
         
         # Store the code function (with a minified version too).
         @code = fnCode(code, minified)
