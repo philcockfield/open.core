@@ -1,27 +1,6 @@
-fs        = require 'fs'
+fsUtil    = require '../../fs'
 BuildPath = require './build_path'
 minifier  = require '../minifier'
-
-
-# Builds the collection of paths.    
-buildPaths = (paths, callback) -> 
-    count = 0
-    build = (path) -> 
-        path.build -> 
-            count += 1
-            callback() if count is paths.length
-    build path for path in paths
-
-
-moduleProperties = (files) -> 
-    props = ''
-    for file, i in files
-        props += file.code.moduleProperty
-        unless i is files.length - 1
-            props += ',' 
-            props += '\n'
-    props
-
 
 
 ###
@@ -105,7 +84,7 @@ module.exports = class Builder
         @code.standard = """
                require.define({
                #{props}
-               });        
+               });
                """
         
         # Store a minified version of the code.
@@ -114,8 +93,8 @@ module.exports = class Builder
         # Finish up.
         @isBuilt = true
         callback? @code
-    
-  
+
+
   ###
   Builds and saves the code to the specified location(s).
   @param options
@@ -128,14 +107,49 @@ module.exports = class Builder
       
       # Setup initial conditions.
       minSuffix = options.minSuffix ?= '-min'
+      dir       = _.rtrim(options.dir, '/')
+      name      = options.name
+      name      = _(name).strLeftBack('.js') if _(name).endsWith('.js')
       
-      console.log 'options', options
+      # Save files.
+      save = () => 
+          files = [
+            { path: "#{dir}/#{name}.js",              data:@code.standard  }
+            # { path: "#{dir}/#{name}#{minSuffix}.js",  data:@code.minified  }
+          ]
+          fsUtil.writeFiles files, (err) -> 
+              throw err if err?
+              callback?()
       
+      # Build the code (if required).
+      if @isBuilt then save()
+      else @build -> save()
+        
 
-    
-# Static members.
-Builder.requireJs = fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
+
+# -- PRIVATE members.
+
+# Builds the collection of paths.    
+buildPaths = (paths, callback) -> 
+    count = 0
+    build = (path) -> 
+        path.build -> 
+            count += 1
+            callback() if count is paths.length
+    build path for path in paths
 
 
+moduleProperties = (files) -> 
+    props = ''
+    for file, i in files
+        props += file.code.moduleProperty
+        unless i is files.length - 1
+            props += ',' 
+            props += '\n'
+    props
+
+
+# -- STATIC members.
+Builder.requireJs = fsUtil.fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
 
 

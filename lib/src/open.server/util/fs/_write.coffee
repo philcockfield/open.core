@@ -49,7 +49,7 @@ module.exports =
 
 
   ###
-  Writes the collection of file to disk providing a single
+  Writes the collection of files to disk providing a single
   callback when complete.
   @param files: An array of files definitions taking the following form:
                 [
