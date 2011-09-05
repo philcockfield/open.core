@@ -72,7 +72,8 @@ module.exports = class Builder
   
   ###
   Builds the code.
-  @param callback(code): Invoked upon completion. Returns the 'code' property value.
+  @param callback(code): Invoked upon completion. 
+                         Returns the 'code' property value.
   ###
   build: (callback) -> 
     
@@ -83,9 +84,7 @@ module.exports = class Builder
     buildPaths @paths, =>
         files = @files(@paths)
         props = moduleProperties(files)
-        fnCode = (minified) -> 
-               if minified then fnCode.minified else fnCode.standard
-        
+
         # Build the uncompressed code.
         code = if @includeRequireJS then Builder.requireJS else ''
         code += """
@@ -93,13 +92,11 @@ module.exports = class Builder
                #{props}
                });
                """
-        fnCode.standard = code
         
-        # Store a minified version of the code.
-        fnCode.minified = minifier.compress(code)
+        # Store the code function (with a minified version too).
+        @code = fnCode(code, minifier.compress(code))
         
         # Finish up.
-        @code = fnCode
         @isBuilt = true
         callback? @code
 
@@ -110,7 +107,9 @@ module.exports = class Builder
             - dir:       The path to directory to save the files in.
             - name:      The file name (without an extension).
             - minSuffix: (optional). The minified suffix (default: -min)
-  @param callback - invoked upon completion.
+  @param callback(code): Invoked upon completion. 
+                         Returns the 'code' property value (a function), which contains an
+                         extra property of [paths] where the file was saved.
   ###
   save: (options = {}, callback) -> 
       
@@ -122,13 +121,22 @@ module.exports = class Builder
       
       # Save files.
       save = () => 
+          code = @code
           files = [
-            { path: "#{dir}/#{name}.js",              data:@code.standard  }
-            { path: "#{dir}/#{name}#{minSuffix}.js",  data:@code.minified  }
+            { path: "#{dir}/#{name}.js",              data: code.standard  }
+            { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
           ]
           fsUtil.writeFiles files, (err) -> 
               throw err if err?
-              callback?()
+              
+              # Create a return object with paths attached.
+              code = fnCode(code.standard, code.minified)
+              code.paths =  
+                  standard: files[0].path
+                  minified: files[1].path
+              
+              # Finish up.
+              callback? code
       
       # Build the code (if required).
       if @isBuilt then save()
@@ -156,6 +164,15 @@ moduleProperties = (files) ->
             props += ',' 
             props += '\n'
     props
+
+
+fnCode = (standardCode, minifiedCode) -> 
+      fn = (minified) -> 
+            if minified then minifiedCode else standardCode
+      fn.standard = standardCode
+      fn.minified = minifiedCode
+      fn
+
 
 
 # -- STATIC members.

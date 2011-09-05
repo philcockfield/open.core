@@ -163,8 +163,6 @@ describe 'util/javascript/build/builder', ->
           runs -> 
             expect(code(true)).toEqual builder.code.minified
 
-      
-
     describe 'require.js', ->
       it 'loads [require.js] as static property of class', ->
         expect(_.includes(Builder.requireJS, 'if (!this.require) {')).toEqual true
@@ -236,6 +234,25 @@ describe 'util/javascript/build/builder', ->
         waitsFor (-> done is yes), 100
         runs -> 
           expect(builder.build.callCount).toEqual 1
+
+    it 'returns a [code] function object', ->
+        builder = new Builder(paths)
+        result = null
+        builder.save dir:DIR, name:'sample', (code) -> result = code
+        waitsFor (-> result?), 100
+        runs -> 
+          expect(result(true)).toEqual builder.code.minified
+
+    it 'stores the save paths on the returned [code] object', ->
+        builder = new Builder(paths)
+        result = null
+        builder.save dir:DIR, name:'sample', (code) -> result = code
+        waitsFor (-> result?), 100
+        runs -> 
+          expect(result.paths.standard).toEqual "#{DIR}/sample.js"
+          expect(result.paths.minified).toEqual "#{DIR}/sample-min.js"
+          
+
         
 
 
