@@ -48,7 +48,7 @@ module.exports =
   ###
   all: (options = {}) ->
       core      = require 'open.server'
-      dir    = "#{core.paths.public}/javascripts"
+      dir       = "#{core.paths.public}/javascripts"
       copyright = core.copyright(asComment: true)
 
       # Construct paths.
@@ -58,7 +58,7 @@ module.exports =
         { path: "#{clientPath}/controls", namespace: 'open.client/controls' }
       ]
       
-      builder = new core.util.javascript.Builder(paths, includeRequireJS:true)
+      builder = new core.util.javascript.Builder(paths, includeRequireJS:true, copyright:copyright)
       builder.build (code) -> 
           if options.save is yes
             builder.save dir:dir, name: 'core', (code)-> 
