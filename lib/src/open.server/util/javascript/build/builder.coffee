@@ -100,7 +100,7 @@ module.exports = class Builder
   @param options
             - dir:       The path to directory to save the files in.
             - name:      The file name (without an extension).
-            - minSuffix: The minified suffix (default: -min)
+            - minSuffix: (optional). The minified suffix (default: -min)
   @param callback - invoked upon completion.
   ###
   save: (options = {}, callback) -> 
