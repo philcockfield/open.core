@@ -1,44 +1,44 @@
 {
-	"name": "open.core",
-	"version": "0.1.60",
-	"description": "Common utility functionality used between multiple applications.",
-	"homepage": "https://github.com/philcockfield/open.core",
-	"author": {
-		"name": "Phil Cockfield",
-		"url": "https://github.com/philcockfield"
-	},
-	"main": "./index.js",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:philcockfield/open.core.git"
-	},
-	"dependencies": {
-		"express": "2.4.0",
-		"stylus": ">= 0.13.5",
-		"nib": ">= 0.0.8",
-		"jade": ">= 0.0.1",
-		"coffee-script": ">= 1.1.1",
-		"jasmine-node": ">= 1.0.6",
-		"stitch": ">= 0.3.2",
-		"underscore": ">=1.1.6",
-		"underscore.string": ">=1.1.5",
-		"backbone": ">=0.3.3",
-		"jquery": ">=1.5.1",
-		"uglify-js": ">= 1.0.3",
-		"rimraf": ">= 1.0.2",
-		"node-uuid": ">= 1.2.0"
-	},
-	"keywords": [
-		"utility",
-		"core",
-		"foundation",
-		"library",
-		"common"
-	],
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://github.com/philcockfield/open.core/blob/master/README.md"
-		}
-	]
+  "name": "open.core",
+  "version": "0.1.60",
+  "description": "Common utility functionality used between multiple applications.",
+  "homepage": "https://github.com/philcockfield/open.core",
+  "author": {
+    "name": "Phil Cockfield",
+    "url": "https://github.com/philcockfield"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:philcockfield/open.core.git"
+  },
+  "dependencies": {
+    "express": "2.4.0",
+    "stylus": ">= 0.13.5",
+    "nib": ">= 0.0.8",
+    "jade": ">= 0.0.1",
+    "coffee-script": ">= 1.1.1",
+    "jasmine-node": ">= 1.0.6",
+    "stitch": ">= 0.3.2",
+    "underscore": ">=1.1.6",
+    "underscore.string": ">=1.1.5",
+    "backbone": ">=0.3.3",
+    "jquery": ">=1.5.1",
+    "uglify-js": ">= 1.0.3",
+    "rimraf": ">= 1.0.2",
+    "node-uuid": ">= 1.2.0"
+  },
+  "keywords": [
+    "utility",
+    "core",
+    "foundation",
+    "library",
+    "common"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/philcockfield/open.core/blob/master/README.md"
+    }
+  ]
 }

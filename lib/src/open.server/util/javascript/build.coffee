@@ -4,7 +4,7 @@ module.exports =
   @param callback: invoked upon completion.
   ###
   libs: (callback) ->
-        core       = require 'open.server'
+        core       = require 'open.core'
         fs         = core.util.fs
         sourceLibs = "#{__dirname}/libs.src"
         targetLibs = "#{core.paths.public}/javascripts/libs"
@@ -47,18 +47,18 @@ module.exports =
                                   - minified: false - returns the unminified, packed code.
   ###
   all: (options = {}) ->
-      core      = require 'open.server'
-      dir       = "#{core.paths.public}/javascripts"
+      core      = require 'open.core'
       copyright = core.copyright(asComment: true)
 
       # Construct paths.
+      dir        = "#{core.paths.public}/javascripts"
       clientPath = core.paths.client
       paths = [
         { path: "#{clientPath}/core",     namespace: 'open.client/core' }
         { path: "#{clientPath}/controls", namespace: 'open.client/controls' }
       ]
       
-      builder = new core.util.javascript.Builder(paths, includeRequireJS:true, copyright:copyright)
+      builder = new core.util.javascript.Builder(paths, includeRequireJS:true, header:copyright)
       builder.build (code) -> 
           if options.save is yes
             builder.save dir:dir, name: 'core', (code)-> 
