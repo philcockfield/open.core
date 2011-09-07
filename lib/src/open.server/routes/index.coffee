@@ -8,11 +8,21 @@ module.exports =
       core    = require 'open.server'
       app     = core.app
       paths   = core.paths
+      send    = core.util.send
 
       # Helpers.
       minRequested = (req)-> _(req.params.package).endsWith '-min'
 
       # Routes.
+      app.get "#{core.baseUrl}/:stylesheet?.css", (req, res) ->
+          stylesheet = req.params.stylesheet
+          switch stylesheet
+            when 'normalize' then path = 'libs'
+            else path = 'core'
+          send.cssFile res, "#{paths.stylesheets}/#{path}/#{stylesheet}.css"
+        
+
+      
       app.get "#{core.baseUrl}/:package?.js", (req, res) ->
           package = req.params.package
           min  = if minRequested(req) then '-min' else ''
@@ -21,13 +31,13 @@ module.exports =
                   name = _.strLeftBack(name, '-min')
                   "#{name}#{min}.js"
           libFile = (name) -> "#{dir}/libs/#{file(name)}"
-          
-          console.log 'package', package
       
-          switch req.params.package
+          # Look for lib files.
+          switch package
             when 'libs', 'libs-min' then file = libFile 'libs'
             when 'require', 'require-min' then file = libFile 'require'
             else
+              # Not a lib file, return the core java-script.
               file = "#{dir}/core/#{file(package)}"
 
-          core.util.send.scriptFile res, file
+          send.scriptFile res, file
