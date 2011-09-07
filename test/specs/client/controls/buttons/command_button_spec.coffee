@@ -15,8 +15,16 @@ describe 'controls/buttons/command_button', ->
     expect(button.el.get(0).tagName).toEqual 'BUTTON'
   
   it 'has CSS classes', ->
-    expect(button.el.get(0).className).toEqual 'core_cmd'
+    expect(button.el.get(0).className).toEqual 'core_cmd core_size_m'
   
+  describe 'size', ->
+    it 'is a medium (m) sized button by default', ->
+      expect(button.size()).toEqual 'm'
+    
+    it 'changes the size to large (l)', ->
+      button.size 'l'
+      expect(button.size()).toEqual 'l'
+      expect(button.el.hasClass('core_size_l')).toEqual true
   
   
   
