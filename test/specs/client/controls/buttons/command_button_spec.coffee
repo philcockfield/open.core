@@ -20,7 +20,6 @@ describe 'controls/buttons/command_button', ->
   describe 'size', ->
     it 'is a medium (m) sized button by default', ->
       expect(button.size()).toEqual 'm'
-      console.log 'button.el', button.el
     
     it 'changes the size to large (l)', ->
       button.size 'l'

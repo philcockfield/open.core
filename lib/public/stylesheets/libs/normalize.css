@@ -96,11 +96,11 @@ textarea {
    ========================================================================== */
 
 a {
-    color: #00e;
+    color: #00B7FF;
+    text-decoration: none;
 }
 
 a:visited {
-    color: #551a8b;
 }
 
 /*
@@ -119,6 +119,10 @@ a:focus {
 a:hover,
 a:active {
     outline: 0;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 

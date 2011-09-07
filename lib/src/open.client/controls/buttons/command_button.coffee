@@ -33,13 +33,6 @@ module.exports = (core, Button) ->
         
         # Finish up.
         onSizeChanged null, @size()
-              
-        
-        # Set default values.
-        # console.log 'params', params
-        
-        # @size params.size ?= 'm'
-        
     
     render: -> 
       @html @label()
