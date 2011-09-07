@@ -1,4 +1,3 @@
-controls = require 'open.client/controls/index'
 Textbox = controls.Textbox
 
 describe 'client/controls/textbox', ->

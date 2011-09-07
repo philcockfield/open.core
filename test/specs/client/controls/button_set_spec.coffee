@@ -1,6 +1,3 @@
-controls = require 'open.client/controls'
-
-
 describe 'controls/button_set', ->
   ButtonSet = controls.ButtonSet
   Button    = controls.Button

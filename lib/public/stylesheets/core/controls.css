@@ -1,36 +1,3 @@
-  body {
-    font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
-  }
-  div.core_bevel_highlight {
-    height: 1px;
-    background: #fff;
-  }
-  .core_text_emboss {
-    text-shadow: 0px 1px 0px #fff;
-  }
-  .core_abs_fill {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-  }
- {
-
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  line-height: 1;
-  color: #000;
-  background: #fff;
-  border-collapse: separate;
-  border-spacing: 0;
-  vertical-align: middle;
-  text-align: left;
-  font-weight: normal;
-  vertical-align: middle;
-}
 body {
   font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -48,202 +15,60 @@ div.core_bevel_highlight {
   right: 0px;
   bottom: 0px;
 }
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-font,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-family: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-}
-body {
-  line-height: 1;
-  color: #000;
-  background: #fff;
-}
-ol,
-ul {
-  list-style: none;
-}
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  vertical-align: middle;
-}
-caption,
-th,
-td {
-  text-align: left;
-  font-weight: normal;
-  vertical-align: middle;
-}
-a img {
-  border: none;
-}
-div,
-span,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-pre,
-a,
-abbr,
-acronym,
-address,
-code,
-del,
-dfn,
-em,
-img,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-caption,
-tbody,
-tfoot,
-thead,
-tr {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-family: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-}
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  vertical-align: middle;
-}
-caption,
-th,
-td {
-  text-align: left;
-  font-weight: normal;
-  vertical-align: middle;
-}
-a img {
-  border: none;
-}
-article,
-aside,
-canvas,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section,
-summary {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  display: block;
-}
-body {
-  font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-div.core_bevel_highlight {
-  height: 1px;
-  background: #fff;
-}
-.core_text_emboss {
-  text-shadow: 0px 1px 0px #fff;
-}
-.core_abs_fill {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-div.core_textbox {
-  BORDER_COLOR: #808080;
-  PADDING: 5px;
+span.core_textbox {
   position: relative;
   display: inline-block;
   margin: 0px;
   paddding: 0px;
+  vertical-align: bottom;
+  min-height: 30px;
+  min-width: 38px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: solid 1px #808080;
+  background: #fff;
+  -webkit-box-shadow: #e6e6e6 0px 3px 2px inset;
+  -moz-box-shadow: #e6e6e6 0px 3px 2px inset;
+  box-shadow: #e6e6e6 0px 3px 2px inset;
+}
+span.core_textbox span.core_inner {
+  position: absolute;
+  left: 5px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+span.core_textbox span.core_inner input,
+span.core_textbox span.core_inner textarea {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  outline: none;
+}
+span.core_textbox span.core_inner textarea {
+  resize: none;
+}
+span.core_textbox span.core_inner span.core_watermark {
+  position: absolute;
+  left: 0px;
+  top: 8px;
+  right: 0px;
+  bottom: 0px;
+  color: #b3b3b3;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 8pt;
+}
+.foo_button {
   background: #ffa500;
-  font-size: 30pt;
 }

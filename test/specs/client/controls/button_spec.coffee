@@ -1,9 +1,7 @@
 describe 'controls/button', ->
-  controls = null
   Button = null
   button = null
   beforeEach ->
-      controls = require 'open.client/controls/index'
       Button = controls.Button
       button = new Button()
   
