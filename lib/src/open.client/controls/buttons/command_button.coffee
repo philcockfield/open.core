@@ -5,11 +5,14 @@ module.exports = (core, Button) ->
   ###
   class CommandButton extends Button
     constructor: (params = {}) -> 
-        super _.extend params, tagName:'button', className: 'core_btn_cmd'
+        super _.extend params, tagName: 'button', className: 'core_cmd'
         @render()
         
     
     render: -> 
       @html @label()
     
+
+
+
     
