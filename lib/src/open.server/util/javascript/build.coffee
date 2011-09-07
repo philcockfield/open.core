@@ -51,7 +51,7 @@ module.exports =
       copyright = core.copyright(asComment: true)
 
       # Construct paths.
-      dir        = "#{core.paths.public}/javascripts"
+      dir = "#{core.paths.public}/javascripts/core"
       clientPath = core.paths.client
       paths = [
         { path: "#{clientPath}/core",     namespace: 'open.client/core' }

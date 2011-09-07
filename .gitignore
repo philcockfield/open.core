@@ -7,3 +7,4 @@ logs/*
 pids/*
 _tmp/*
 _textmate/*
+lib/public/javascripts/core/*

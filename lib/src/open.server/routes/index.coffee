@@ -26,6 +26,6 @@ module.exports =
             when 'libs', 'libs-min' then file = libFile 'libs'
             when 'require', 'require-min' then file = libFile 'require'
             else
-              file = "#{dir}/#{file(package)}"
+              file = "#{dir}/core/#{file(package)}"
 
           core.util.send.scriptFile res, file
