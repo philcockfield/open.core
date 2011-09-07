@@ -10,6 +10,6 @@ module.exports = (core, Button) ->
         
     
     render: -> 
-      @html 'Button'
+      @html @label()
     
     

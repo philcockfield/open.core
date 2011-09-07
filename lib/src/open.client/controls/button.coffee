@@ -53,10 +53,6 @@ module.exports = class Button extends core.mvc.View
             self.down false
             self.click()
         
-        
-        
-            
-            
             
 
   ###
