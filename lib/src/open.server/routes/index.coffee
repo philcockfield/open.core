@@ -21,6 +21,8 @@ module.exports =
                   name = _.strLeftBack(name, '-min')
                   "#{name}#{min}.js"
           libFile = (name) -> "#{dir}/libs/#{file(name)}"
+          
+          console.log 'package', package
       
           switch req.params.package
             when 'libs', 'libs-min' then file = libFile 'libs'

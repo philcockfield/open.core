@@ -50,8 +50,8 @@ module.exports = (app, options = {}) ->
               url:        "#{baseUrl}/specs"
               specsDir:   "#{core.paths.test}/specs/client/"
               sourceUrls: [
-                "#{baseUrl}/javascripts/libs/libs.js"
-                "#{baseUrl}/javascripts/core.js" ]
+                "#{baseUrl}/libs.js"
+                "#{baseUrl}/core.js" ]
 
 
     app.configure 'production', ->
