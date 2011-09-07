@@ -69,3 +69,6 @@ button.core_cmd.active {
   -moz-box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
   box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
 }
+button.core_cmd.core_size_l {
+  color: #f00;
+}

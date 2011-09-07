@@ -20,11 +20,18 @@ describe 'controls/buttons/command_button', ->
   describe 'size', ->
     it 'is a medium (m) sized button by default', ->
       expect(button.size()).toEqual 'm'
+      console.log 'button.el', button.el
     
     it 'changes the size to large (l)', ->
       button.size 'l'
       expect(button.size()).toEqual 'l'
       expect(button.el.hasClass('core_size_l')).toEqual true
-  
-  
+      expect(button.el.hasClass('core_size_m')).toEqual false
+    # 
+    it 'sets size from constructor parameter', ->
+      button = new CommandButton size:'l'
+      expect(button.size()).toEqual 'l'
+      expect(button.el.hasClass('core_size_l')).toEqual true
+    
+    
   

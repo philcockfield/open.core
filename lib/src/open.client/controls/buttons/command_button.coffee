@@ -10,24 +10,35 @@ module.exports = (core, Button) ->
         Gets or sets the size of the button (default 'm' - medium).
         Size options are: s, m, l.
         ###
-        size: null
+        size: 'm'
     
     constructor: (params = {}) -> 
         
         # Setup initial conditions.
+        self = @
         super _.extend params, tagName: 'button', className: 'core_cmd'
         @render()
         
-        # Wire up events.
-        @size.onChanged (e) =>
+        # Event handlers.
+        onSizeChanged = (oldValue, newValue) -> 
               # Update the CSS class that defines the size of the button.
-              toggle = (size, toggle) => 
-                    @el.toggleClass('core_size_' + size, toggle) if size?
-              toggle e.oldValue, false
-              toggle e.newValue, true
+              toggle = (size, toggle) -> 
+                    self.el.toggleClass('core_size_' + size, toggle) if size?
+              toggle oldValue, false
+              toggle newValue, true
+        
+        
+        # Wire up events.
+        @size.onChanged (e) -> onSizeChanged(e.oldValue, e.newValue)
+        
+        # Finish up.
+        onSizeChanged null, @size()
+              
         
         # Set default values.
-        @size params.size ?= 'm'
+        # console.log 'params', params
+        
+        # @size params.size ?= 'm'
         
     
     render: -> 
