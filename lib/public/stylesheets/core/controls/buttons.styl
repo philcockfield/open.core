@@ -1,5 +1,54 @@
 @import '../functions'
 
+
+// Functions  --------------------------
+
+-reset()
+  // Reset button related properties so that
+  // a, button, and input's are supported.
+  margin: 0
+  user-select: none
+  display: inline-block
+  text-decoration: none
+
+
+command-button(bg = #7fbf4d, height = 28px)
+  -reset()
+  dark = bg - 10%
+  background: bg
+  background: linear-gradient(height top, bg, dark)
+  border: 1px solid dark - 5%
+  border-bottom: 1px solid dark
+  border-radius: 3px
+  box-shadow: inset 0 1px 0 0 lighten(bg, 10%)
+  font-family: DEFAULT_FONT_FAMILY
+  font-size: 11px
+  font-weight: bold
+  line-height: 1
+  padding: 7px 15px 8px 15px
+  text-align: center
+  text-shadow: 0 -1px 0 darken(bg, 15%)
+  color: #fff
+
+  &:hover
+  &.hover
+    dark -= 5%
+    background: dark
+    background: linear-gradient(height top, bg, dark)
+    cursor: pointer
+
+  &:active
+  &.active
+    dark -= 5%
+    border: 1px solid dark
+    border-bottom: 1px solid dark
+    background: linear-gradient(height bottom, bg, dark)
+    box-shadow: inset 0 0 8px 4px rgba(black, 0.15), 0 1px 0 0 #eee
+
+
+
+// Styles --------------------------
+
 .core_btn_cmd
   SILVER  = darken(white, 3%)
   BLUE    = #00bdf3
@@ -13,14 +62,14 @@
   
   // Color variants.
   &.core_color_silver > button
-    smooth-button(SILVER)
+    command-button(SILVER)
     textEmboss()
     color darken(white, 60%)
     border-color darken(white, 30%)
     font-weight normal
 
   &.core_color_blue > button
-    smooth-button(BLUE)
+    command-button(BLUE)
     font-weight normal
   
   // Size variants.
