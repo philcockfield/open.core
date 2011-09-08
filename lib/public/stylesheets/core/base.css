@@ -1,0 +1,18 @@
+@import "../libs/normalize.css";
+body {
+  font: 15px "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+div.core_bevel_highlight {
+  height: 1px;
+  background: #fff;
+}
+.core_text_emboss {
+  text-shadow: 0px 1px 0px #fff;
+}
+.core_abs_fill {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}

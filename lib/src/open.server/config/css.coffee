@@ -11,6 +11,7 @@ module.exports =
               .include(paths.stylesheets)
               .include("#{paths.stylesheets}/core")
               .include("#{paths.stylesheets}/core/controls")
+              .include("#{paths.stylesheets}/core/controls/buttons")
               .use(nib())
       use stylus.middleware
               src:     paths.public
