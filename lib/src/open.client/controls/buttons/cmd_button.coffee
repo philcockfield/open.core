@@ -7,10 +7,16 @@ module.exports = (core, Button) ->
     defaults:
         
         ###
-        Gets or sets the size of the button (default 'm' - medium).
-        Size options are: s, m, l.
+        The size of the button (default 'm' - medium).
+        Size options: s, m, l.
         ###
         size: 'm'
+        
+        ###
+        The color of the button (default 'blue').
+        Color options: silver, blue, green.
+        ###
+        color: 'silver'
     
     constructor: (params = {}) -> 
         
@@ -20,22 +26,26 @@ module.exports = (core, Button) ->
         @render()
         
         # Event handlers.
-        onSizeChanged = (e) -> 
-              # Update the CSS class that defines the size of the button.
-              toggle = (size, toggle) -> 
-                    self.el.toggleClass('core_size_' + size, toggle) if size?
-              toggle e.oldValue, false
-              toggle e.newValue, true
-        
+        toggleClass = (e, classPrefix) -> 
+                  toggle = (value, toggle) -> 
+                        self.el.toggleClass(classPrefix + value, toggle) if value?
+                  toggle e.oldValue, false
+                  toggle e.newValue, true
+
+        onSizeChanged     = (e) -> toggleClass e, 'core_size_'
+        onColorChanged    = (e) -> toggleClass e, 'core_color_'
         onSelectedChanged = (e) -> self.el.toggleClass 'active', e.newValue
         
         # Wire up events.
         @size.onChanged     onSizeChanged
+        @color.onChanged    onColorChanged
         @selected.onChanged onSelectedChanged
         
         # Finish up.
-        onSizeChanged     newValue:@size(), oldValue:null
-        onSelectedChanged newValue:@selected()
+        onSizeChanged     newValue: @size()
+        onColorChanged    newValue: @color()
+        onSelectedChanged newValue: @selected()
+        
     
     render: -> 
       @html @label()

@@ -16,7 +16,7 @@ describe 'controls/buttons/cmd_button', ->
   
   describe 'CSS classes', ->
     it 'has default classes', ->
-      expect(button.el.get(0).className).toEqual 'core_cmd core_size_m'
+      expect(button.el.get(0).className).toEqual 'core_cmd core_size_m core_color_silver'
     
     describe 'selected state - [active] class', ->
       beforeEach ->
@@ -41,17 +41,36 @@ describe 'controls/buttons/cmd_button', ->
   describe 'size', ->
     it 'is a medium (m) sized button by default', ->
       expect(button.size()).toEqual 'm'
+      expect(button.el.hasClass('core_size_m')).toEqual true
     
-    it 'changes the size to large (l)', ->
+    it 'changes the size and CSS class to large (l)', ->
       button.size 'l'
       expect(button.size()).toEqual 'l'
       expect(button.el.hasClass('core_size_l')).toEqual true
       expect(button.el.hasClass('core_size_m')).toEqual false
-    # 
+
     it 'sets size from constructor parameter', ->
       button = new CmdButton size:'l'
       expect(button.size()).toEqual 'l'
       expect(button.el.hasClass('core_size_l')).toEqual true
+    
+
+  xdescribe 'color', ->
+    it 'is [silver] by default', ->
+      expect(button.color()).toEqual 'silver'
+      expect(button.el.hasClass('core_color_silver')).toEqual true
+
+    it 'changes the color and CSS class to [blue]', ->
+      button.size 'blue'
+      expect(button.color()).toEqual 'blue'
+      expect(button.el.hasClass('core_color_blue')).toEqual true
+      expect(button.el.hasClass('core_color_silver')).toEqual false
+    
+    it 'sets color from constructor parameter', ->
+      button = new CmdButton color: 'blue'
+      expect(button.color()).toEqual 'blue'
+      expect(button.el.hasClass('core_color_blue')).toEqual true
+
     
     
   
