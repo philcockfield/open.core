@@ -11,8 +11,8 @@ describe 'controls/buttons/cmd_button', ->
   it 'dervies from [Button]', ->
     expect(button instanceof controls.Button).toEqual true 
   
-  it 'is a <button> element', ->
-    expect(button.el.get(0).tagName).toEqual 'BUTTON'
+  it 'is a SPAN element', ->
+    expect(button.el.get(0).tagName).toEqual 'SPAN'
   
   describe 'CSS classes', ->
     it 'has default classes', ->
@@ -23,20 +23,20 @@ describe 'controls/buttons/cmd_button', ->
           button = new CmdButton canToggle:true
 
       it 'does not have [active] class when not selected', ->
-        expect(button.el.hasClass 'active').toEqual false
+        expect(button._btn.hasClass 'active').toEqual false
       
       it 'has [active] class when selected', ->
         button.selected true
-        expect(button.el.hasClass 'active').toEqual true
+        expect(button._btn.hasClass 'active').toEqual true
 
       it 'removes [active] class when de-selected', ->
         button.selected true
         button.selected false
-        expect(button.el.hasClass 'active').toEqual false
+        expect(button._btn.hasClass 'active').toEqual false
 
       it 'has [active] class when selected is set in constructor', ->
         button = new CmdButton canToggle:true, selected:true
-        expect(button.el.hasClass 'active').toEqual true
+        expect(button._btn.hasClass 'active').toEqual true
   
   describe 'size', ->
     it 'is a medium (m) sized button by default', ->
@@ -55,13 +55,13 @@ describe 'controls/buttons/cmd_button', ->
       expect(button.el.hasClass('core_size_l')).toEqual true
     
 
-  xdescribe 'color', ->
+  describe 'color', ->
     it 'is [silver] by default', ->
       expect(button.color()).toEqual 'silver'
       expect(button.el.hasClass('core_color_silver')).toEqual true
 
     it 'changes the color and CSS class to [blue]', ->
-      button.size 'blue'
+      button.color 'blue'
       expect(button.color()).toEqual 'blue'
       expect(button.el.hasClass('core_color_blue')).toEqual true
       expect(button.el.hasClass('core_color_silver')).toEqual false

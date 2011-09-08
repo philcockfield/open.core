@@ -5,24 +5,15 @@ module.exports = (core, Button) ->
   ###
   class CmdButton extends Button
     defaults:
-        ###
-        The size of the button (default 'm' - medium).
-        Size options: s, m, l.
-        ###
-        size: 'm'
-        
-        ###
-        The color of the button (default 'blue').
-        Color options: silver, blue, green.
-        ###
-        color: 'silver'
+        size: 'm'        # The size of the button (default 'm' - medium). Options: s, m, l.
+        color: 'silver'  # The color of the button (default 'blue'). Options: silver, blue, green.
     
     
     constructor: (params = {}) -> 
         
         # Setup initial conditions.
         self = @
-        super _.extend params, tagName: 'button', className: 'core_btn_cmd'
+        super _.extend params, tagName: 'span', className: 'core_btn_cmd'
         @render()
         
         # Event handlers.
@@ -34,12 +25,14 @@ module.exports = (core, Button) ->
 
         onSizeChanged     = (e) -> toggleClass e, 'core_size_'
         onColorChanged    = (e) -> toggleClass e, 'core_color_'
-        onSelectedChanged = (e) -> self.el.toggleClass 'active', e.newValue
+        onSelectedChanged = (e) -> self._btn.toggleClass 'active', e.newValue
         
         # Wire up events.
         @size.onChanged     onSizeChanged
         @color.onChanged    onColorChanged
         @selected.onChanged onSelectedChanged
+        
+        # TODO - text changed - update button.
         
         # Finish up.
         onSizeChanged     newValue: @size()
@@ -47,7 +40,9 @@ module.exports = (core, Button) ->
         onSelectedChanged newValue: @selected()
     
     
-    render: -> @html @label()
+    render: -> 
+        @_btn = $("<button>#{@label()}</button>")
+        @html @_btn
 
 
 

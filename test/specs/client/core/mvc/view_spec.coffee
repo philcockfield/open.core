@@ -49,7 +49,6 @@ describe 'mvc/view', ->
     it 'has a custom class name', ->
       view = new View( className: 'foo bar' )
       expect(view.el.get(0).className).toEqual 'foo bar'
-    
   
   describe 'html', ->
     it 'insert HTML within the view', ->
@@ -78,3 +77,9 @@ describe 'mvc/view', ->
       view.visible true
       expect(view.el.css('display')).toEqual ''
   
+  describe 'helper functions', ->
+    it 'exposes Backbone [make] method', ->
+      expect(view.make).toEqual view._.view.make
+    
+
+

@@ -45,7 +45,8 @@ module.exports = class View extends Model
       @visible.onChanged (e) => syncVisibility(@, e.newValue)
       
       # Assign public methods.
-      @$ = view.$
+      @$    = view.$
+      @make = view.make
 
 
 
