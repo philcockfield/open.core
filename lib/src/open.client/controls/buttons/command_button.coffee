@@ -20,19 +20,22 @@ module.exports = (core, Button) ->
         @render()
         
         # Event handlers.
-        onSizeChanged = (oldValue, newValue) -> 
+        onSizeChanged = (e) -> 
               # Update the CSS class that defines the size of the button.
               toggle = (size, toggle) -> 
                     self.el.toggleClass('core_size_' + size, toggle) if size?
-              toggle oldValue, false
-              toggle newValue, true
+              toggle e.oldValue, false
+              toggle e.newValue, true
         
+        onSelectedChanged = (e) -> self.el.toggleClass 'active', e.newValue
         
         # Wire up events.
-        @size.onChanged (e) -> onSizeChanged(e.oldValue, e.newValue)
+        @size.onChanged     onSizeChanged
+        @selected.onChanged onSelectedChanged
         
         # Finish up.
-        onSizeChanged null, @size()
+        onSizeChanged     newValue:@size(), oldValue:null
+        onSelectedChanged newValue:@selected()
     
     render: -> 
       @html @label()
