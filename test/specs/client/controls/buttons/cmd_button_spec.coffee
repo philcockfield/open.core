@@ -1,12 +1,12 @@
-describe 'controls/buttons/command_button', ->
-  CommandButton = null
+describe 'controls/buttons/cmd_button', ->
+  CmdButton = null
   button = null
   beforeEach ->
-      CommandButton = controls.CommandButton
-      button = new CommandButton()
+      CmdButton = controls.CmdButton
+      button = new CmdButton()
   
   it 'exists', ->
-    expect(CommandButton).toBeDefined()
+    expect(CmdButton).toBeDefined()
     
   it 'dervies from [Button]', ->
     expect(button instanceof controls.Button).toEqual true 
@@ -20,7 +20,7 @@ describe 'controls/buttons/command_button', ->
     
     describe 'selected state - [active] class', ->
       beforeEach ->
-          button = new CommandButton canToggle:true
+          button = new CmdButton canToggle:true
 
       it 'does not have [active] class when not selected', ->
         expect(button.el.hasClass 'active').toEqual false
@@ -35,7 +35,7 @@ describe 'controls/buttons/command_button', ->
         expect(button.el.hasClass 'active').toEqual false
 
       it 'has [active] class when selected is set in constructor', ->
-        button = new CommandButton canToggle:true, selected:true
+        button = new CmdButton canToggle:true, selected:true
         expect(button.el.hasClass 'active').toEqual true
   
   describe 'size', ->
@@ -49,7 +49,7 @@ describe 'controls/buttons/command_button', ->
       expect(button.el.hasClass('core_size_m')).toEqual false
     # 
     it 'sets size from constructor parameter', ->
-      button = new CommandButton size:'l'
+      button = new CmdButton size:'l'
       expect(button.size()).toEqual 'l'
       expect(button.el.hasClass('core_size_l')).toEqual true
     

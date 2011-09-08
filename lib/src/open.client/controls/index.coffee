@@ -10,6 +10,6 @@ module.exports =
   # Buttons.
   Button:        Button
   ButtonSet:     ButtonSet
-  CommandButton: use('buttons/command_button') core, Button
+  CmdButton: use('buttons/cmd_button') core, Button
   
   

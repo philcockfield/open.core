@@ -3,7 +3,7 @@ module.exports = (core, Button) ->
   ###
   A 'command' style button.
   ###
-  class CommandButton extends Button
+  class CmdButton extends Button
     defaults:
         
         ###
