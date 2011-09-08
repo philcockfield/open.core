@@ -16,7 +16,7 @@ describe 'controls/buttons/cmd_button', ->
   
   describe 'CSS classes', ->
     it 'has default classes', ->
-      expect(button.el.get(0).className).toEqual 'core_cmd core_size_m core_color_silver'
+      expect(button.el.get(0).className).toEqual 'core_btn_cmd core_size_m core_color_silver'
     
     describe 'selected state - [active] class', ->
       beforeEach ->

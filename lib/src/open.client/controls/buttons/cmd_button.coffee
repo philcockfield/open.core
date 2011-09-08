@@ -5,7 +5,6 @@ module.exports = (core, Button) ->
   ###
   class CmdButton extends Button
     defaults:
-        
         ###
         The size of the button (default 'm' - medium).
         Size options: s, m, l.
@@ -18,11 +17,12 @@ module.exports = (core, Button) ->
         ###
         color: 'silver'
     
+    
     constructor: (params = {}) -> 
         
         # Setup initial conditions.
         self = @
-        super _.extend params, tagName: 'button', className: 'core_cmd'
+        super _.extend params, tagName: 'button', className: 'core_btn_cmd'
         @render()
         
         # Event handlers.
@@ -45,11 +45,11 @@ module.exports = (core, Button) ->
         onSizeChanged     newValue: @size()
         onColorChanged    newValue: @color()
         onSelectedChanged newValue: @selected()
-        
     
-    render: -> 
-      @html @label()
     
+    render: -> @html @label()
+
+
 
 
 
