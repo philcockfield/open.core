@@ -71,6 +71,19 @@ describe 'controls/buttons/cmd_button', ->
       expect(button.color()).toEqual 'blue'
       expect(button.el.hasClass('core_color_blue')).toEqual true
 
+  describe 'text', ->
+    beforeEach ->
+      button = new CmdButton label:'foo'
+    
+    it 'sets the text on the BUTTON element upon construction', ->
+      expect(button._btn.text()).toEqual 'foo'
+
+    it 'changes the text in the BUTTON element', ->
+      button.label 'bar'
+      
+      expect(button._btn.text()).toEqual 'bar'
+
+    
     
     
   

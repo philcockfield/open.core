@@ -31,8 +31,7 @@ module.exports = (core, Button) ->
         @size.onChanged     onSizeChanged
         @color.onChanged    onColorChanged
         @selected.onChanged onSelectedChanged
-        
-        # TODO - text changed - update button.
+        @label.onChanged (e) => @_btn.text e.newValue
         
         # Finish up.
         onSizeChanged     newValue: @size()
