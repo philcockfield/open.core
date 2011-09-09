@@ -80,10 +80,6 @@ describe 'controls/buttons/cmd_button', ->
 
     it 'changes the text in the BUTTON element', ->
       button.label 'bar'
-      
       expect(button._btn.text()).toEqual 'bar'
-
-    
-    
     
   

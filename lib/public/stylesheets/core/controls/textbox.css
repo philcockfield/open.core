@@ -9,7 +9,7 @@
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border: solid 1px #808080;
+  border: solid 1px #999;
   background: #fff;
   -webkit-box-shadow: #e6e6e6 0px 3px 2px inset;
   -moz-box-shadow: #e6e6e6 0px 3px 2px inset;
@@ -37,18 +37,19 @@
   padding: 0px;
   border: none;
   outline: none;
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
 }
 .core_textbox span.core_inner textarea {
   resize: none;
 }
 .core_textbox span.core_inner span.core_watermark {
   position: absolute;
-  left: 0px;
+  left: 2px;
   top: 8px;
   right: 0px;
   bottom: 0px;
   color: #b3b3b3;
   font-style: italic;
   font-weight: normal;
-  font-size: 8pt;
+  font-size: 10pt;
 }
