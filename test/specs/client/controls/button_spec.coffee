@@ -55,6 +55,10 @@ describe 'controls/button', ->
     it 'passes className to base class', ->
       button = new Button(className: 'foo bar')
       expect(button.element.className).toEqual 'foo bar'
+    
+    it 'syncs CSS classes upon construction', ->
+      button = new Button(selected:true)
+      expect(button.el.hasClass('core_selected')).toEqual true
   
     
   describe 'click (method and event)', ->
@@ -105,14 +109,29 @@ describe 'controls/button', ->
         button.click()
         expect(button.selected()).toEqual false
   
-    describe 'when canToggle is false', ->
+    describe 'when [canToggle] is false', ->
       beforeEach ->
         button.canToggle false
       
       it 'does not change selected value', ->
         button.click()
         expect(button.selected()).toEqual false
-    
+  
+  describe '[selected] and [down] state', ->
+    beforeEach -> 
+        button.canToggle true
+        
+    it 'is not down when selected (on mouse events)', ->
+      button.el.mousedown()
+      button.el.mouseup()
+      expect(button.selected()).toEqual true
+      expect(button.down()).toEqual false
+      
+    it 'is not down when selected (on [click] method)', ->
+      button.click()
+      expect(button.selected()).toEqual true
+      expect(button.down()).toEqual false
+
   describe 'onClick : event handler helper', ->
     it 'wires up event handler', ->
       onClickCount = 0
@@ -245,8 +264,7 @@ describe 'controls/button', ->
       button.toggle()
       expect(button.selected()).toEqual false
 
-    
-    
+
   describe 'handleStateChanged (overridable method)', ->
     beforeEach ->
         spyOn(button, 'handleStateChanged').andCallThrough()
@@ -271,6 +289,16 @@ describe 'controls/button', ->
       button.el.mouseup()
       expect(button.handleStateChanged).toHaveBeenCalled()
 
+    it 'is called on [selected] set to true', ->
+      button.canToggle true
+      button.selected true
+      expect(button.handleStateChanged).toHaveBeenCalled()
+
+    it 'is called on [selected] set to false', ->
+      button.canToggle true
+      button.selected true
+      button.selected false
+      expect(button.handleStateChanged.callCount).toEqual 2
 
   describe 'handleSelectedChanged (overridable method)', ->
     args = null
@@ -293,6 +321,52 @@ describe 'controls/button', ->
       expect(args.selected).toEqual false
 
       
+  describe 'CSS classes on state change', ->
+    it 'calls [_syncClasses] when state changed', ->
+      spyOn button, '_syncClasses'
+      button._stateChanged 'mouseover'
+      expect(button._syncClasses).toHaveBeenCalled()
+    
+    describe 'selected class', ->
+      beforeEach -> button.canToggle true
+      it 'has [core_selected] class (from click)', ->
+        button.click()
+        expect(button.el.hasClass('core_selected')).toEqual true
+
+      it 'has [core_selected] class (from [selected] property changed)', ->
+        button.selected true
+        expect(button.el.hasClass('core_selected')).toEqual true
+        
+      it 'does not have [core_selected] class (from click)', ->
+        button.click()
+        button.click()
+        expect(button.el.hasClass('core_selected')).toEqual false
+
+      it 'does not have [core_selected] class (from [selected] property changed)', ->
+        button.selected true
+        button.selected false
+        expect(button.el.hasClass('core_selected')).toEqual false
+
+    describe 'over class', ->
+      it 'has [core_over] class', ->
+        button.el.mouseover()
+        expect(button.el.hasClass('core_over')).toEqual true
+        
+      it 'does not have [core_over] class', ->
+        button.el.mouseover()
+        button.el.mouseout()
+        expect(button.el.hasClass('core_over')).toEqual false
+    
+    describe 'down class', ->
+      it 'has [core_down] class', ->
+        button.el.mousedown()
+        expect(button.el.hasClass('core_down')).toEqual true
+        
+      it 'does not have [core_down] class', ->
+        button.el.mousedown()
+        button.el.mouseup()
+        expect(button.el.hasClass('core_down')).toEqual false
+        
 
 
 

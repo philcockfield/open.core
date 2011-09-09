@@ -82,7 +82,10 @@ describe 'controls/buttons/cmd_button', ->
       button.label 'bar'
       expect(button._btn.text()).toEqual 'bar'
 
-
+      
+    
+    
+    
       
       
     

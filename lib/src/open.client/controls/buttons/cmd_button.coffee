@@ -42,10 +42,5 @@ module.exports = (core, Button) ->
     render: -> 
         @_btn = $("<button>#{@label()}</button>")
         @html @_btn
-    
-    handleStateChanged: (e) -> 
-        @el.toggleClass 'core_over', @over()
-        @el.toggleClass 'core_down', @down() or @selected()
-
 
     

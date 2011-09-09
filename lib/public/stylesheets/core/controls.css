@@ -98,7 +98,8 @@
   background: linear-gradient(top, #fff 0%, #ccc 100%);
   cursor: pointer;
 }
-.core_btn_cmd.core_color_silver.core_down > button {
+.core_btn_cmd.core_color_silver.core_down > button,
+.core_btn_cmd.core_color_silver.core_selected > button {
   border: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #fff), color-stop(1, #ccc));
@@ -144,7 +145,8 @@
   background: linear-gradient(top, #00bdf3 0%, #0084aa 100%);
   cursor: pointer;
 }
-.core_btn_cmd.core_color_blue.core_down > button {
+.core_btn_cmd.core_color_blue.core_down > button,
+.core_btn_cmd.core_color_blue.core_selected > button {
   border: 1px solid #0097c2;
   border-bottom: 1px solid #0097c2;
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #00bdf3), color-stop(1, #0097c2));

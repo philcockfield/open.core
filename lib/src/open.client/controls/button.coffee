@@ -32,28 +32,29 @@ module.exports = class Button extends core.mvc.View
       
       # Mouse events.
       do -> 
-        el = self.el
-        stateChanged = self._stateChanged
+          el = self.el
+          stateChanged = self._stateChanged
       
-        el.mouseenter (e) => 
-            self.over true
-            stateChanged('mouseenter')
+          el.mouseenter (e) => 
+              self.over true
+              stateChanged('mouseenter')
 
-        el.mouseleave (e) => 
-            self.over false
-            #  Reset down state (in case the mouse went out of scope but the button was not released).
-            self.down false
-            stateChanged('mouseleave')
+          el.mouseleave (e) => 
+              self.over false
+              #  Reset down state (in case the mouse went out of scope but the button was not released).
+              self.down false
+              stateChanged('mouseleave')
         
-        el.mousedown (e) => 
-            self.down true
-            stateChanged('mousedown')
+          el.mousedown (e) => 
+              self.down true
+              stateChanged('mousedown')
     
-        el.mouseup (e) => 
-            self.down false
-            self.click()
-        
-            
+          el.mouseup (e) => 
+              self.down false
+              self.click()
+      
+      # Finish up.
+      @_syncClasses()
 
   ###
   Indicates to the button that it has been clicked.
@@ -143,7 +144,18 @@ module.exports = class Button extends core.mvc.View
   ###
   PRIVATE MEMBERS
   ###
+  _syncClasses: -> 
+      toggle = (name, fn) => @el.toggleClass 'core_' + name, fn()
+      toggle 'selected', @selected
+      toggle 'over',     @over
+      toggle 'down',     @down
+      
   _stateChanged: (state) => 
+      
+      # Update button state.
+      @_syncClasses()
+      
+      # Alert listeners.
       args = 
           source: @
           state: state

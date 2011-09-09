@@ -58,4 +58,3 @@ module.exports = class View extends Model
       if html?
         el.html html
       el.html()
-

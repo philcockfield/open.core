@@ -80,6 +80,4 @@ describe 'mvc/view', ->
   describe 'helper functions', ->
     it 'exposes Backbone [make] method', ->
       expect(view.make).toEqual view._.view.make
-    
-
 
