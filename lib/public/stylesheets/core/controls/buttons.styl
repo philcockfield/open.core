@@ -12,29 +12,26 @@
   text-decoration: none
 
 
-command-button(bg = #7fbf4d, height = 28px)
+command-button(bg = #7fbf4d, highlight=40%, darken=10%)
   -reset()
-  dark = bg - 10%
+  dark = bg - darken
   background: bg
-  background: linear-gradient(height top, bg, dark)
+  background: linear-gradient(top, bg, dark)
   border: 1px solid dark - 5%
   border-bottom: 1px solid dark
   border-radius: 4px
-  box-shadow: inset 0 1px 0 0 lighten(bg, 10%)
+  box-shadow: inset 0 1px 0 0 lighten(bg, highlight)
   font-family: DEFAULT_FONT_FAMILY
-  font-size: 11px
-  font-weight: bold
   line-height: 1
   padding: 7px 15px 8px 15px
   text-align: center
   text-shadow: 0 -1px 0 darken(bg, 15%)
-  color: #fff
 
   &:hover
   &.hover
     dark -= 5%
     background: dark
-    background: linear-gradient(height top, bg, dark)
+    background: linear-gradient(top, bg, dark)
     cursor: pointer
 
   &:active
@@ -42,9 +39,8 @@ command-button(bg = #7fbf4d, height = 28px)
     dark -= 5%
     border: 1px solid dark
     border-bottom: 1px solid dark
-    background: linear-gradient(height bottom, bg, dark)
+    background: linear-gradient(bottom, bg, dark)
     box-shadow: inset 0 0 8px 4px rgba(black, 0.15), 0 1px 0 0 #eee
-
 
 
 // Styles --------------------------
@@ -62,15 +58,14 @@ command-button(bg = #7fbf4d, height = 28px)
   
   // Color variants.
   &.core_color_silver > button
-    command-button(SILVER)
+    command-button(SILVER, 85%, 15%)
     textEmboss()
     color darken(white, 60%)
     border-color darken(white, 30%)
-    font-weight normal
 
   &.core_color_blue > button
-    command-button(BLUE)
-    font-weight normal
+    command-button(BLUE, 30%, 20%)
+    color white
   
   // Size variants.
   &.core_size_s > button
