@@ -50,6 +50,23 @@ describe 'mvc/view', ->
       view = new View( className: 'foo bar' )
       expect(view.el.get(0).className).toEqual 'foo bar'
   
+  describe 'enabled', ->
+    it 'does not have the [disabled] CSS class by default', ->
+      expect(view.el.hasClass('core_disabled')).toEqual false
+    
+    it 'has the [disabled] CSS class when not enabled', ->
+      view.enabled false
+      expect(view.el.hasClass('core_disabled')).toEqual true
+  
+    it 'has the [disabled] CSS class when disabled at construction', ->
+      view = new View(enabled: false)
+      expect(view.el.hasClass('core_disabled')).toEqual true
+  
+    it 'does not have the [disabled] CSS class when re-enabled', ->
+      view.enabled false
+      view.enabled true
+      expect(view.el.hasClass('core_disabled')).toEqual false
+  
   describe 'html', ->
     it 'insert HTML within the view', ->
       view.html '<p>foo</p>'

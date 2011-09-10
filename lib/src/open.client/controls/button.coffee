@@ -54,7 +54,7 @@ module.exports = class Button extends core.mvc.View
               self.click()
       
       # Finish up.
-      @_syncClasses()
+      syncClasses @
 
   ###
   Indicates to the button that it has been clicked.
@@ -140,20 +140,13 @@ module.exports = class Button extends core.mvc.View
   ###
   handleSelectedChanged: (args) -> # No-op.
 
-
+      
   ###
   PRIVATE MEMBERS
   ###
-  _syncClasses: -> 
-      toggle = (name, fn) => @el.toggleClass 'core_' + name, fn()
-      toggle 'selected', @selected
-      toggle 'over',     @over
-      toggle 'down',     @down
-      
   _stateChanged: (state) => 
-      
       # Update button state.
-      @_syncClasses()
+      syncClasses @
       
       # Alert listeners.
       args = 
@@ -162,6 +155,13 @@ module.exports = class Button extends core.mvc.View
       @trigger 'stateChanged', args
       @handleStateChanged args
       
-      
 
+###
+PRIVATE
+###
+syncClasses = (view) -> 
+    toggle = (name, fn) => view.el.toggleClass 'core_' + name, fn()
+    toggle 'selected', view.selected
+    toggle 'over',     view.over
+    toggle 'down',     view.down
 

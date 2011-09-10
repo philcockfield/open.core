@@ -10,6 +10,7 @@
     user-select: none
     display: inline-block
     text-decoration: none
+    cursor: default
 
 command-button(bg, highlight=40%, darken=10%)
     -reset()
@@ -30,7 +31,6 @@ command-button-over(bg, darken=20%)
     dark = bg - darken
     background: dark
     background: linear-gradient(top, bg, dark)
-    cursor: pointer
 
 command-button-down(bg, darken=20%)
     dark = bg - darken

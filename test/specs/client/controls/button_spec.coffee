@@ -322,11 +322,6 @@ describe 'controls/button', ->
 
       
   describe 'CSS classes on state change', ->
-    it 'calls [_syncClasses] when state changed', ->
-      spyOn button, '_syncClasses'
-      button._stateChanged 'mouseover'
-      expect(button._syncClasses).toHaveBeenCalled()
-    
     describe 'selected class', ->
       beforeEach -> button.canToggle true
       it 'has [core_selected] class (from click)', ->

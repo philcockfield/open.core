@@ -68,6 +68,7 @@
   user-select: none;
   display: inline-block;
   text-decoration: none;
+  cursor: default;
   background: #fff;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #d9d9d9));
   background: -webkit-linear-gradient(top, #fff 0%, #d9d9d9 100%);
@@ -96,7 +97,6 @@
   background: -webkit-linear-gradient(top, #fff 0%, #ccc 100%);
   background: -moz-linear-gradient(top, #fff 0%, #ccc 100%);
   background: linear-gradient(top, #fff 0%, #ccc 100%);
-  cursor: pointer;
 }
 .core_btn_cmd.core_color_silver.core_down > button,
 .core_btn_cmd.core_color_silver.core_selected > button {
@@ -118,6 +118,7 @@
   user-select: none;
   display: inline-block;
   text-decoration: none;
+  cursor: default;
   background: #00bdf3;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #00bdf3), color-stop(1, #0097c2));
   background: -webkit-linear-gradient(top, #00bdf3 0%, #0097c2 100%);
@@ -144,7 +145,6 @@
   background: -webkit-linear-gradient(top, #00bdf3 0%, #0084aa 100%);
   background: -moz-linear-gradient(top, #00bdf3 0%, #0084aa 100%);
   background: linear-gradient(top, #00bdf3 0%, #0084aa 100%);
-  cursor: pointer;
 }
 .core_btn_cmd.core_color_blue.core_down > button,
 .core_btn_cmd.core_color_blue.core_selected > button {

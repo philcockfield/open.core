@@ -1,10 +1,5 @@
 common = require 'open.client/core/mvc/_common'
-Model = common.using 'model'
-
-
-syncVisibility = (view, visible) -> 
-      display = if visible then '' else 'none'
-      view.el.css 'display', display
+Model  = common.using 'model'
 
 
 ###
@@ -42,11 +37,16 @@ module.exports = class View extends Model
       @el = $(@element)
 
       # Wire up events.
-      @visible.onChanged (e) => syncVisibility(@, e.newValue)
+      @visible.onChanged (e) => syncVisibility @, e.newValue
+      @enabled.onChanged (e) => syncClasses @
       
       # Assign public methods.
       @$    = view.$
       @make = view.make
+      
+      # Finish up.
+      syncClasses @
+      
 
 
 
@@ -58,3 +58,14 @@ module.exports = class View extends Model
       if html?
         el.html html
       el.html()
+
+
+###
+PRIVATE
+###
+syncClasses = (view) -> 
+    view.el.toggleClass 'core_disabled', not view.enabled()
+    
+syncVisibility = (view, visible) -> 
+      display = if visible then '' else 'none'
+      view.el.css 'display', display
