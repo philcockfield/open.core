@@ -166,17 +166,20 @@ describe 'mvc/view', ->
           replaceEl.attr 'id', ''
           view.replace replaceEl
           expect(view.el.attr('id')).not.toBeDefined()
-
+        
         it 'does not set an ID to white-space', ->
           replaceEl.attr 'id', '   '
           view.replace replaceEl
           expect(view.el.attr('id')).not.toBeDefined()
         
-        it 'does not effect the Views [id]', ->
+        it 'copies the ID to the View', ->
+          view.replace replaceEl
+          expect(view.id).toEqual 'my_id'
+        
+        it 'does not effect the Views [id] if one has already been set', ->
           view = new MyView id:'foo'
           view.replace replaceEl
           expect(view.id).toEqual 'foo'
-          expect(view.cid).not.toEqual 'my_id'
       
       describe 'copying CSS classes', ->
         it 'copies both [foo] and [bar] classes from the replaced element', ->

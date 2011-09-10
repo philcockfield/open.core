@@ -93,6 +93,7 @@ module.exports = class View extends Model
           return unless id?
           return  if _(id).isBlank()
           self.el.attr 'id', id
+          self.id = id unless self.id?
       
       # Set default values - copy [data-*] values from source element.
       do -> 
