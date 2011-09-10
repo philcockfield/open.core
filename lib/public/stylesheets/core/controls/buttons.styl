@@ -25,7 +25,6 @@ command-button(bg, highlight=40%, darken=10%)
     line-height: 1
     padding: 7px 15px 8px 15px
     text-align: center
-    text-shadow: 0 -1px 0 darken(bg, 15%)
 
 command-button-over(bg, darken=20%)
     dark = bg - darken
@@ -66,7 +65,11 @@ command-button-down(bg, darken=20%)
     &.core_down > button, &.core_selected > button
         command-button-down(SILVER, 20%)
         border-color darken(white, 35%)
-
+    &.core_disabled > button
+        background darken(SILVER, 10%)
+        color darken(white, 30%)
+        box-shadow none
+    
   // - Blue.
   &.core_color_blue 
     > button
@@ -76,6 +79,10 @@ command-button-down(bg, darken=20%)
         command-button-over(BLUE, 30%)
     &.core_down > button, &.core_selected > button
         command-button-down(BLUE, 20%)
+    &.core_disabled > button
+        background BLUE
+        color darken(BLUE, 25%)
+        box-shadow none
 
 
   // Size variants.
@@ -89,4 +96,3 @@ command-button-down(bg, darken=20%)
   &.core_size_l > button
     font-size 17pt
     padding 12px 34px
-  

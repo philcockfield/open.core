@@ -86,7 +86,6 @@
   line-height: 1;
   padding: 7px 15px 8px 15px;
   text-align: center;
-  text-shadow: 0 -1px 0 #d9d9d9;
   text-shadow: 0px 1px 0px #fff;
   color: #666;
   border-color: #b3b3b3;
@@ -110,6 +109,13 @@
   -moz-box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
   box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
   border-color: #a6a6a6;
+}
+.core_btn_cmd.core_color_silver.core_disabled > button {
+  background: #e6e6e6;
+  color: #b3b3b3;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .core_btn_cmd.core_color_blue > button {
   margin: 0;
@@ -136,7 +142,6 @@
   line-height: 1;
   padding: 7px 15px 8px 15px;
   text-align: center;
-  text-shadow: 0 -1px 0 #00a1cf;
   color: #fff;
 }
 .core_btn_cmd.core_color_blue.core_over > button {
@@ -157,6 +162,13 @@
   -webkit-box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
   -moz-box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
   box-shadow: inset 0 0 8px 4px rgba(0,0,0,0.15), 0 1px 0 0 #eee;
+}
+.core_btn_cmd.core_color_blue.core_disabled > button {
+  background: #00bdf3;
+  color: #008eb6;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .core_btn_cmd.core_size_s > button {
   font-size: 8pt;

@@ -65,7 +65,7 @@ PRIVATE
 ###
 syncClasses = (view) -> 
     view.el.toggleClass 'core_disabled', not view.enabled()
-    
+
 syncVisibility = (view, visible) -> 
       display = if visible then '' else 'none'
       view.el.css 'display', display
