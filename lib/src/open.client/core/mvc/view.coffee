@@ -66,24 +66,40 @@ module.exports = class View extends Model
               - DOM element
               - jQuery object
               - MVC View
+
+  This method:
+    - copies all CSS classes from the replaced element.
+    - sets default property values specified in the [data-defaults] attribute
+      of the replaced element, eg:
+          
+          data-defaults=" enabled:false, foo:'bar' "
+
   ###
   replace: (el) -> 
       
       # Setup initial conditions.
       self = @
-      el = util.toJQuery(el)
-      if el?
-          # Copy CSS classes.
-          classes = el.attr('class')?.split(/\s+/)
-          self.el.addClass(name) for name in classes if classes?
-
-          # Set default values.
-          
-
-          # Replace the element with the View's element.
-          el.replaceWith @el
-          
-          
+      el   = util.toJQuery(el)
+      return @ unless el?
+      
+      
+      # Copy CSS classes.
+      classes = el.attr('class')?.split(/\s+/)
+      self.el.addClass(name) for name in classes if classes?
+      
+      # Set default values.
+      do -> 
+        # Retrieve the data attributes.
+        atts = (d for d of el.data())
+        return unless atts.length > 0
+        
+        # Write each value to the view.
+        for name in atts
+            prop = self[name]
+            prop(el.data(name)) if (prop instanceof Function)
+        
+      # Replace the element with the View's element.
+      el.replaceWith @el
       
       # Finish up.
       @

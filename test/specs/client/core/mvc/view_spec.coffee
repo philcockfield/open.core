@@ -112,6 +112,8 @@ describe 'mvc/view', ->
       html = """
              <div>
                 <span class="foo    bar"></span>
+                <span class="prop1" data-foo="456" data-enabled="false"></span>
+                <span class="prop2" data-noProp="value"></span>
              </div>      
              """
       page = null
@@ -162,14 +164,14 @@ describe 'mvc/view', ->
           view.replace $('<div class="my_view">EMPTY</div>')
           expect(view.el.attr('class')).toEqual 'my_view'
           
-      describe 'copying [data-defaults] property values', ->
-        it 'writes an existing property value', ->
-        
-        it 'creates a new property value', ->
+      describe 'copying [data-*] property values', ->
+        it 'writes existing property values', ->
+          view.replace page.find('.prop1')
+          expect(view.foo()).toEqual 456
           
-        
-          
-        
+        it 'ignore [data-*] values that are not properties of the View', ->
+          view.replace page.find('.prop2')
+          expect(view.noProp).not.toBeDefined()
         
         
         
