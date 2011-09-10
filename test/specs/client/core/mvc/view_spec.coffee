@@ -1,9 +1,13 @@
 describe 'mvc/view', ->
-  View = null
-  view = null
+  MyView = null
+  View   = null
+  view   = null
   beforeEach ->
     View = core.mvc.View
-    view = new View()
+    class MyView extends View
+      defaults: 
+        foo: 123
+    view = new MyView()
 
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled View, -> new View()
@@ -22,6 +26,7 @@ describe 'mvc/view', ->
     it 'is visible by default', ->
       expect(view.visible()).toEqual true
   
+
   describe 'el', ->
     it 'has an el which is a jQuery object', ->
       expect(view.html instanceof Function).toEqual true
@@ -34,6 +39,7 @@ describe 'mvc/view', ->
       view = new View(el:span)
       expect(view.el.get(0)).toEqual span
   
+
   describe 'tagName', ->
     it 'is a DIV by default', ->
       expect(view.el.get(0).tagName).toEqual 'DIV'
@@ -42,6 +48,7 @@ describe 'mvc/view', ->
       view = new View( tagName:'li' )
       expect(view.el.get(0).tagName).toEqual 'LI'
   
+
   describe 'classname', ->
     it 'has no class name by default', ->
       expect(view.el.get(0).className).toEqual ''
@@ -50,6 +57,7 @@ describe 'mvc/view', ->
       view = new View( className: 'foo bar' )
       expect(view.el.get(0).className).toEqual 'foo bar'
   
+
   describe 'enabled', ->
     it 'does not have the [disabled] CSS class by default', ->
       expect(view.el.hasClass('core_disabled')).toEqual false
@@ -66,6 +74,7 @@ describe 'mvc/view', ->
       view.enabled false
       view.enabled true
       expect(view.el.hasClass('core_disabled')).toEqual false
+
   
   describe 'html', ->
     it 'insert HTML within the view', ->
@@ -93,8 +102,84 @@ describe 'mvc/view', ->
       view.visible false
       view.visible true
       expect(view.el.css('display')).toEqual ''
-  
+      
+
   describe 'helper functions', ->
     it 'exposes Backbone [make] method', ->
       expect(view.make).toEqual view._.view.make
+
+    describe '[replace] method', ->
+      html = """
+             <div>
+                <span class="foo    bar"></span>
+             </div>      
+             """
+      page = null
+      beforeEach ->
+          page = $(html)
+          view.el.addClass 'my_view'
+          view.el.html 'MyView'
+      
+      it 'calls [toJQuery] conversion util', ->
+        selector = null
+        spyOn(core.util, 'toJQuery') # .andCallFake (args) -> selector = args
+        view.replace '#foo'
+        expect(core.util.toJQuery.mostRecentCall.args[0]).toEqual '#foo'
+      
+      it 'returns the view element', ->
+        expect(view.replace('.foo')).toEqual view
+      
+      describe 'replacing the DOM element', ->
+        it 'puts the [view.el] in the DOM', ->
+          view.replace page.find('span.foo')
+          expect(page.find('.my_view').length).toEqual 1
+
+        it 'removes the replaced element from the DOM', ->
+          expect(page.find('span.foo').length).toEqual 1
+          view.replace page.find('span.foo')
+          expect(page.find('span.foo').length).toEqual 0
+
+        it 'does not fail of the element does not exist', ->
+          replaceEl = $('does-not-exist')
+          expect(replaceEl.length).toEqual 0
+          view.replace replaceEl
+        
+      describe 'copying CSS classes', ->
+        it 'copies both [foo] and [bar] classes from the replaced element', ->
+          view.replace page.find('span.foo')
+          expect(view.el.hasClass('foo')).toEqual true
+          expect(view.el.hasClass('bar')).toEqual true
+
+        it 'retains the original [my_view] classes from the view', ->
+          view.replace page.find('span.foo')
+          expect(view.el.hasClass('my_view')).toEqual true
+        
+        it 'has no classes to copy', ->
+          view.replace $('<div>EMPTY</div>')
+          expect(view.el.attr('class')).toEqual 'my_view'
+
+        it 'has existing class to copy', ->
+          view.replace $('<div class="my_view">EMPTY</div>')
+          expect(view.el.attr('class')).toEqual 'my_view'
+          
+      describe 'copying [data-defaults] property values', ->
+        it 'writes an existing property value', ->
+        
+        it 'creates a new property value', ->
+          
+        
+          
+        
+        
+        
+        
+      
+      
+      
+      
+      
+
+
+
+
 

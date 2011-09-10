@@ -1,4 +1,5 @@
 common = require 'open.client/core/mvc/_common'
+util   = common.util
 Model  = common.using 'model'
 
 
@@ -46,8 +47,6 @@ module.exports = class View extends Model
       
       # Finish up.
       syncClasses @
-      
-
 
 
   ###
@@ -59,6 +58,36 @@ module.exports = class View extends Model
         el.html html
       el.html()
 
+
+  ###
+  Replaces the given element with the view.
+  @param el: The element to replace, this can be a:
+              - CSS selector (string)
+              - DOM element
+              - jQuery object
+              - MVC View
+  ###
+  replace: (el) -> 
+      
+      # Setup initial conditions.
+      self = @
+      el = util.toJQuery(el)
+      if el?
+          # Copy CSS classes.
+          classes = el.attr('class')?.split(/\s+/)
+          self.el.addClass(name) for name in classes if classes?
+
+          # Set default values.
+          
+
+          # Replace the element with the View's element.
+          el.replaceWith @el
+          
+          
+      
+      # Finish up.
+      @
+      
 
 ###
 PRIVATE

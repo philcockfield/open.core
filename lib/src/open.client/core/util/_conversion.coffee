@@ -50,8 +50,6 @@ module.exports =
       
       # Setup initial conditions.
       return value if not value?
-      # throwNotSupported = -> throw 'Cannot convert to jQuery object: ' + value
-      # throwNotSupported() if not value?
       
       # Perform conversion.
       return value if (value instanceof jQuery) 
