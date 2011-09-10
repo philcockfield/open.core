@@ -82,28 +82,36 @@ module.exports = class View extends Model
       el   = util.toJQuery(el)
       return @ unless el?
       
-      
-      # Copy CSS classes.
+      # Copy CSS classes from source element.
       classes = el.attr('class')?.split(/\s+/)
       self.el.addClass(name) for name in classes if classes?
-      
-      # Set default values.
+
+      # Copy ID from source element.
       do -> 
-        # Retrieve the data attributes.
-        atts = (d for d of el.data())
-        return unless atts.length > 0
+          return if self.el.attr('id')? # Don't override the View element's existing ID.
+          id = el.attr('id')
+          return unless id?
+          return  if _(id).isBlank()
+          self.el.attr 'id', id
+      
+      # Set default values - copy [data-*] values from source element.
+      do -> 
+          # Retrieve the data attributes.
+          atts = (d for d of el.data())
+          return unless atts.length > 0
         
-        # Write each value to the view.
-        for name in atts
-            prop = self[name]
-            prop(el.data(name)) if (prop instanceof Function)
+          # Write each value to the view (if it has a corresponding prop-function).
+          for name in atts
+              prop = self[name]
+              prop(el.data(name)) if (prop instanceof Function)
         
       # Replace the element with the View's element.
       el.replaceWith @el
       
       # Finish up.
       @
-      
+
+
 
 ###
 PRIVATE
