@@ -24,10 +24,10 @@ module.exports = class Model extends Backbone.Model
                       param = {}
                       param[name] = value
                       self.set param, options
-          
+                
                 # Read value from backing model.
                 self.get(name)
-
+        
         # Add defaults as Property functions.
         self.addProps @defaults
         
@@ -35,6 +35,7 @@ module.exports = class Model extends Backbone.Model
         do => 
             init = (method) -> 
                   _.extend method, Backbone.Events
+                  method.onStart    = (handler) -> method.bind 'start', handler
                   method.onComplete = (handler) -> method.bind 'complete', handler
             init @fetch
             init @save
@@ -42,9 +43,8 @@ module.exports = class Model extends Backbone.Model
         
         # Property aliases.
         @atts = @attributes
-        
-
-
+  
+  
   ###
   Adds one or more [Property] functions to the object.
   @param props :    Object literal describing the properties to add
@@ -67,6 +67,13 @@ module.exports = class Model extends Backbone.Model
                               - success  : {bool} Flag indicating if the operation was successful
                               - error    : {bool} Flag indicating if the operation was in error.
   # See backbone.js documentation for more details.
+  
+  Listening to events.
+    This function fires 'start' and 'complete' events, eg: model.fetch.bind 'start', (e) -> 
+    Alternatively you can use the [onStart] and [onComplete] event handler methods, eg:
+        
+        model.fetch.onComplete (e) -> 
+        
   ###
   fetch: (options) -> @_sync @, 'fetch', options
   

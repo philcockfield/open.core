@@ -248,5 +248,21 @@ describe 'mvc/model', ->
         expect(args.success).toEqual true
         expect(args.error).toEqual false
 
+      it 'invokes callback on error', ->
+        args = null
+        model.fetch.onComplete (e) -> args = e
+        model.fetch()
+        fetchArgs.error('model', 'res')
+        
+        expect(args.source).toEqual model
+        expect(args.response).toEqual 'res'
+        expect(args.success).toEqual false
+        expect(args.error).toEqual true
 
-    
+    describe 'handler: onStart', ->
+      it 'invokes callback upon starting a fetch operation', ->
+        args = null
+        model.fetch.onStart (e) -> args = e
+        model.fetch()
+        expect(args.source).toEqual model
+
