@@ -30,8 +30,8 @@ describe 'mvc/template', ->
 
   describe 'passing property values to the constructor', ->
     it 'adds a parameter as a property of the template', ->
-      tmpl = new Sample myProp:123
-      expect(tmpl.myProp).toEqual 123
+      tmpl = new Sample myProp: 'hello'
+      expect(tmpl.myProp).toEqual 'hello'
     
     it 'does not overwrite an existing property', ->
       tmpl = new Sample foo:123

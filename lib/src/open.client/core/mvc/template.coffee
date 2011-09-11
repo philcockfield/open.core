@@ -6,7 +6,7 @@ module.exports = class Template
   ###
   Constructor.
   @param props: An object containing values to attach as properties to the template.
-                This allows these values to be accessed within a template.
+                Pass values that you want to access within a template.
                 For example, if the template was constructed like this:
                 
                   tmpl = new MyTemplate( foo:123 )
@@ -23,16 +23,16 @@ module.exports = class Template
   ###
   constructor: (props = {}) ->
       
-      # Copy property values.
-      for name of props
-          @[name] = props[name] unless @[name]?
-      
       # Replace members with template wrappers.
       exclude = ['constructor']
       for key of @
         unless (_(exclude).any (item)-> item == key) # Ignore excluded members.
             value = @[key]
             @[key] = @toTemplate(value) if _(value).isString()
+
+      # Copy property values passed to constructor.
+      for name of props
+          @[name] = props[name] unless @[name]?
 
 
   ###
