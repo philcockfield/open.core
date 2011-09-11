@@ -39,6 +39,10 @@ module.exports = class Model extends Backbone.Model
             init @fetch
             init @save
             init @destroy
+        
+        # Property aliases.
+        @atts = @attributes
+        
 
 
   ###

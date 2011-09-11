@@ -25,6 +25,10 @@ describe 'mvc/model', ->
   it 'calls constructor on Base', ->
     ensure.parentConstructorWasCalled Model, -> new Model()
   
+  it 'exposes [atts] alias to [attributes] property', ->
+    expect(model.atts).toEqual model.attributes
+  
+  
   describe 'adding [defaults] as Property functions', ->
     it 'takes the elements in "defaults" and converts them to Property functions', ->
       for key of model.defaults
