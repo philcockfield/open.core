@@ -65,7 +65,6 @@ audio:not([controls]) {
 
 html {
     font-size: 100%; /* 1 */
-    overflow-y: scroll; /* 2 */
     -webkit-text-size-adjust: 100%; /* 3 */
     -ms-text-size-adjust: 100%; /* 3 */
 }
@@ -441,3 +440,4 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+

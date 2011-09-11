@@ -27,3 +27,16 @@ describe 'mvc/template', ->
     
     tmpl = new CustomEngine()
     expect(tmpl.root).toEqual fn
+
+  describe 'passing property values to the constructor', ->
+    it 'adds a parameter as a property of the template', ->
+      tmpl = new Sample myProp:123
+      expect(tmpl.myProp).toEqual 123
+    
+    it 'does not overwrite an existing property', ->
+      tmpl = new Sample foo:123
+      expect(tmpl.foo).not.toEqual 123
+      expect(tmpl.foo instanceof Function).toEqual true
+      
+    
+    
