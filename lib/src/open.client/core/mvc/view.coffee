@@ -69,11 +69,7 @@ module.exports = class View extends Model
 
   This method:
     - copies all CSS classes from the replaced element.
-    - sets default property values specified in the [data-defaults] attribute
-      of the replaced element, eg:
-          
-          data-defaults=" enabled:false, foo:'bar' "
-
+    - sets default property values specified in data-{propName} attributes.
   ###
   replace: (el) -> 
       
