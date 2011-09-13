@@ -159,7 +159,7 @@ describe 'mvc/module', ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> { foo:123 }
       expect(Module.requireMvcIndex(module.require.view).foo).toEqual 123
     
-    it 'invokes the [index] function, passing in the [module] as the first argument', ->
+    it 'invokes the [index] as a function, passing in the [module] as the first argument', ->
       arg = null
       fnIndex = -> 
           return (m) -> arg = m
