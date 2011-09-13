@@ -46,9 +46,14 @@ class Module extends Base
   index: null # Set in Init method.
   
   ###
-  An index of helper methods for requiring modules within the MVC folder structure of the module.
+  An index of helper methods for requiring sub-modules within the MVC folder structure of the module.
+  This is an index of functions:
+     - model
+     - view
+     - controller
+  
   For example, to retrieve a module named 'foo' within the /models folder:
-    foo = module.require.model('foo')
+      foo = module.require.model('foo')
   ###    
   require: null # Set in constructor.
   
@@ -62,7 +67,8 @@ class Module extends Base
   init: (options = {}) -> 
       
       # Construct MVC index.
-      get = (fn) -> fn '', throw:false
+      # get = (fn) -> fn '', throw:false
+      get = Module.requireMvcIndex
       @index =
           models:      get @require.model
           views:       get @require.view
@@ -73,7 +79,24 @@ class Module extends Base
 
 
 # STATIC METHODS
-# Module.getPart = (module) -> 
+
+###
+Attempts to get the index within the specified MVC folder.
+CONVENTION: 
+    If the index returns a function, rather than a simple object-literal
+    the module assumes it wants to be initialized with this, the parent module
+    and invokes it passing the module as the parameter.
+
+@param fnRequirePart: The require-part function (see module.require.*)
+@returns the index or null if the MVC part does not have an index defined.
+###
+Module.requireMvcIndex = (fnRequirePart) -> 
+    
+    # Silently try to get the 'index' of the MVC part.
+    index = fnRequirePart '', throw: false
+    
+    
+
 
 # EXPORT
 module.exports = Module

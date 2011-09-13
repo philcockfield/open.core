@@ -108,13 +108,13 @@ describe 'mvc/module', ->
         expect(options.within).toEqual $(elBody)
       
   
-  describe 'index (the MVC conventional structure)', ->
+  describe 'index of the MVC conventional structure', ->
     beforeEach ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> 
             return 'models_modules' if name is 'modules/foo/models/'
             return 'views_modules' if name is 'modules/foo/views/'
             return 'controllers_modules' if name is 'modules/foo/controllers/'
-
+      
     describe 'calling index for each MVC folder', ->
       it 'stores the [models] index', ->
         module.init()
@@ -128,6 +128,23 @@ describe 'mvc/module', ->
         module.init()
         expect(module.index.controllers).toEqual 'controllers_modules'
     
+    describe 'getting the [index] of each MVC part via the static [requireMvcIndex] method', ->
+      spyCalls = null
+      beforeEach ->
+        spyOn(Module, 'requireMvcIndex').andCallThrough()
+        module.init()
+        spyCalls = Module.requireMvcIndex.calls
+      
+      it 'calls [requireMvcIndex] for model', ->
+        expect(spyCalls[0].args[0]).toEqual module.require.model
+
+      it 'calls [requireMvcIndex] for view', ->
+        expect(spyCalls[1].args[0]).toEqual module.require.view
+
+      it 'calls [requireMvcIndex] for controller', ->
+        expect(spyCalls[2].args[0]).toEqual module.require.controller
+        
+        
 
 
 
