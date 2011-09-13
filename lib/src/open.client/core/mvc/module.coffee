@@ -3,7 +3,7 @@ Base     = using 'base'
 common   = using '/mvc/_common'
 util     = using 'util'
 
-module.exports = class Module extends Base
+class Module extends Base
   tryRequire: util.tryRequire
   
   ###
@@ -13,15 +13,17 @@ module.exports = class Module extends Base
   constructor: (@modulePath) -> 
       super
       _require = (dir) => 
-          return (name = '', options = {}) => 
+          
+          # Require statement scoped within the given directory.
+          requirePart = (name = '', options = {}) => 
               options.throw ?= true
               @tryRequire "#{@modulePath}/#{dir}/#{name}", options
-      
-      ###
-      An index of helper methods for requiring modules within the MVC folder structure of the module.
-      For example, to retrieve a module named 'foo' within the /models folder:
-        foo = module.require.model('foo')
-      ###    
+          
+          # Store reference to the module on the [require] function.
+          requirePart.module = @
+          requirePart
+          
+      # Store [require] part functions.
       @require = 
           model:      _require 'models'
           view:       _require 'views'
@@ -35,6 +37,22 @@ module.exports = class Module extends Base
   rootView: null
   
   ###
+  An index of the convention based MVC structures within the module.
+  The object has the form:
+    - models
+    - views
+    - controllers
+  ###
+  index: null # Set in Init method.
+  
+  ###
+  An index of helper methods for requiring modules within the MVC folder structure of the module.
+  For example, to retrieve a module named 'foo' within the /models folder:
+    foo = module.require.model('foo')
+  ###    
+  require: null # Set in constructor.
+  
+  ###
   Initializes the module (overridable).
   @param options
           - within: The CSS selector, DOM element, JQuery Object or [View] to initialize 
@@ -46,9 +64,17 @@ module.exports = class Module extends Base
       # Construct MVC index.
       get = (fn) -> fn '', throw:false
       @index =
-          models: get @require.model
-          views: get @require.view
+          models:      get @require.model
+          views:       get @require.view
           controllers: get @require.controller
   
       # Translate [within] option to jQuery object.
       options.within = util.toJQuery(options.within)
+
+
+# STATIC METHODS
+# Module.getPart = (module) -> 
+
+# EXPORT
+module.exports = Module
+

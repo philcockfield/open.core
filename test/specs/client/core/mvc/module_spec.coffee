@@ -22,8 +22,7 @@ describe 'mvc/module', ->
     expect(module.modulePath).toEqual 'modules/foo'
   
   
-  
-  describe 'require', ->
+  describe '[require] mvc part methods', ->
     args = null
     beforeEach ->
         args = null
@@ -44,6 +43,17 @@ describe 'mvc/module', ->
       module.require.controller 'bar'
       expect(args.name).toEqual 'modules/foo/controllers/bar'
       expect(args.options.throw).toEqual true
+    
+    describe 'storing module reference on MVC part function', ->
+      it 'store modules on [model] require function', ->
+        expect(module.require.model.module).toEqual module
+
+      it 'store modules on [view] require function', ->
+        expect(module.require.view.module).toEqual module
+
+      it 'store modules on [controller] require function', ->
+        expect(module.require.controller.module).toEqual module
+    
     
   describe 'init', ->
     args = []
@@ -96,31 +106,27 @@ describe 'mvc/module', ->
         options = within: elBody
         module.init(options)
         expect(options.within).toEqual $(elBody)
-        
       
-        
-      
-      
-    
   
-  describe 'index', ->
+  describe 'index (the MVC conventional structure)', ->
     beforeEach ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> 
             return 'models_modules' if name is 'modules/foo/models/'
             return 'views_modules' if name is 'modules/foo/views/'
             return 'controllers_modules' if name is 'modules/foo/controllers/'
 
-    it 'stores the [models] index', ->
-      module.init()
-      expect(module.index.models).toEqual 'models_modules'
+    describe 'calling index for each MVC folder', ->
+      it 'stores the [models] index', ->
+        module.init()
+        expect(module.index.models).toEqual 'models_modules'
 
-    it 'stores the [views] index', ->
-      module.init()
-      expect(module.index.views).toEqual 'views_modules'
+      it 'stores the [views] index', ->
+        module.init()
+        expect(module.index.views).toEqual 'views_modules'
 
-    it 'stores the [controllers] index', ->
-      module.init()
-      expect(module.index.controllers).toEqual 'controllers_modules'
+      it 'stores the [controllers] index', ->
+        module.init()
+        expect(module.index.controllers).toEqual 'controllers_modules'
     
 
 
