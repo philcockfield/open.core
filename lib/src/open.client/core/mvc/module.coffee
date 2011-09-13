@@ -67,7 +67,6 @@ class Module extends Base
   init: (options = {}) -> 
       
       # Construct MVC index.
-      # get = (fn) -> fn '', throw:false
       get = Module.requireMvcIndex
       @index =
           models:      get @require.model
@@ -94,7 +93,14 @@ Module.requireMvcIndex = (fnRequirePart) ->
     
     # Silently try to get the 'index' of the MVC part.
     index = fnRequirePart '', throw: false
+    return index unless index?
     
+    # If the [index] is a funciton, it is expected that this is an initialization
+    # function.  Invoke it passing in the module.
+    index(fnRequirePart.module) if _.isFunction(index)
+    
+    # Finish up.
+    index
     
 
 

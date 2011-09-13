@@ -144,7 +144,33 @@ describe 'mvc/module', ->
       it 'calls [requireMvcIndex] for controller', ->
         expect(spyCalls[2].args[0]).toEqual module.require.controller
         
-        
+  describe '[requireMvcIndex] static method', ->
+    it 'does not fail when the MVC part does not exist', ->
+      spyOn(module, 'tryRequire').andCallThrough()
+      expect(-> Module.requireMvcIndex(module.require.model)).not.toThrow()
+      expect(module.tryRequire.mostRecentCall.args[1].throw).toEqual false
+
+    it 'returns null if the MVC part does not exist', ->
+      fnRequire = -> undefined
+      result = Module.requireMvcIndex(fnRequire)
+      expect(result).toEqual undefined
+    
+    it 'does nothing if the [index] is a simple object', ->
+      spyOn(module, 'tryRequire').andCallFake (name, options) -> { foo:123 }
+      expect(Module.requireMvcIndex(module.require.view).foo).toEqual 123
+    
+    it 'invokes the [index] function, passing in the [module] as the first argument', ->
+      arg = null
+      fnIndex = -> 
+          return (m) -> arg = m
+      fnIndex.module = module
+
+      Module.requireMvcIndex(fnIndex)
+      expect(arg).toEqual module
+      
+      
+      
+      
 
 
 
