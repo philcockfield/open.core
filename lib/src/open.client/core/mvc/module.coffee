@@ -3,7 +3,7 @@ Base     = using 'base'
 common   = using '/mvc/_common'
 util     = using 'util'
 
-module.exports = class Module extends Base
+class Module extends Base
   tryRequire: util.tryRequire
   
   ###
@@ -13,15 +13,17 @@ module.exports = class Module extends Base
   constructor: (@modulePath) -> 
       super
       _require = (dir) => 
-          return (name = '', options = {}) => 
+          
+          # Require statement scoped within the given directory.
+          requirePart = (name = '', options = {}) => 
               options.throw ?= true
               @tryRequire "#{@modulePath}/#{dir}/#{name}", options
-      
-      ###
-      An index of helper methods for requiring modules within the MVC folder structure of the module.
-      For example, to retrieve a module named 'foo' within the /models folder:
-        foo = module.require.model('foo')
-      ###    
+          
+          # Store reference to the module on the [require] function.
+          requirePart.module = @
+          requirePart
+          
+      # Store [require] part functions.
       @require = 
           model:      _require 'models'
           view:       _require 'views'
@@ -35,6 +37,27 @@ module.exports = class Module extends Base
   rootView: null
   
   ###
+  An index of the convention based MVC structures within the module.
+  The object has the form:
+    - models
+    - views
+    - controllers
+  ###
+  index: null # Set in Init method.
+  
+  ###
+  An index of helper methods for requiring sub-modules within the MVC folder structure of the module.
+  This is an index of functions:
+     - model
+     - view
+     - controller
+  
+  For example, to retrieve a module named 'foo' within the /models folder:
+      foo = module.require.model('foo')
+  ###    
+  require: null # Set in constructor.
+  
+  ###
   Initializes the module (overridable).
   @param options
           - within: The CSS selector, DOM element, JQuery Object or [View] to initialize 
@@ -43,12 +66,69 @@ module.exports = class Module extends Base
   ###
   init: (options = {}) -> 
       
+      # Setup initial conditions.
+      req = @require
+      
       # Construct MVC index.
-      get = (fn) -> fn '', throw:false
-      @index =
-          models: get @require.model
-          views: get @require.view
-          controllers: get @require.controller
-  
+      mvcIndex = () => 
+          get         = Module.requirePart
+          models      = get req.model
+          views       = get req.view
+          controllers = get req.controller
+      
+          # Assign conventional views (if they exist).
+          if views?
+              getView = (name) -> get req.view, name
+              views.Root = getView 'root'
+              views.Tmpl = getView 'tmpl'
+
+          # Return the index structure.
+          index =
+              models:      models
+              views:       views
+              controllers: controllers
+      @index = mvcIndex()
+      
       # Translate [within] option to jQuery object.
       options.within = util.toJQuery(options.within)
+
+
+# STATIC METHODS
+
+###
+Attempts to get an MVC part using the given require function - 
+invoking it as a module init if it's a function
+CONVENTION: 
+    If the index returns a function, rather than a simple object-literal
+    the module assumes it wants to be initialized with this, the parent module
+    and invokes it passing the module as the parameter.
+
+@param fnRequire: The require-part function (see module.require.*)
+@param name:      The name of the module.  Default is [index] (empty string).
+@returns the module or null if the MVC part does not exist.
+###
+Module.requirePart = (fnRequire, name = '') -> 
+    
+    # Silently try to get the module.
+    part = fnRequire name, throw: false
+    return part unless part?
+    
+    # If the [part] is a funciton, it is expected that this is an initialization
+    # function.  Invoke it passing in the module.
+    # Perform this within a try-catch block, because if it is just exporting a class
+    # then invoking the function will fail.
+    try
+        part = part(fnRequire.module) if _.isFunction(part)
+    catch error
+        # Ignore - was an exported class only
+        # Did not implement the module-init pattern.
+      
+    
+    # Finish up.
+    part
+    
+
+
+# EXPORT
+module.exports = Module
+

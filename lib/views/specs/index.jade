@@ -11,7 +11,10 @@ html(lang="en")
     // Source files (under test).
     - each path in sourceUrls
       script(type='text/javascript', src="#{path}")
-
+    
+    // Sample code (compile into CommonJS modules).
+    script(type='text/javascript', src="#{sampleCode}")
+    
     // Helper files.
     - each path in helperPaths
       script(type='text/javascript', src="#{url}/specs/#{path}")
