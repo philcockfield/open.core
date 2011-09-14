@@ -67,7 +67,7 @@ class Module extends Base
   init: (options = {}) -> 
       
       # Construct MVC index.
-      get = Module.requireMvcIndex
+      get = Module.requirePart
       @index =
           models:      get @require.model
           views:       get @require.view
@@ -80,24 +80,26 @@ class Module extends Base
 # STATIC METHODS
 
 ###
-Attempts to get the index within the specified MVC folder.
+Attempts to get an MVC part using the given require function - 
+invoking it as a module init if it's a function
 CONVENTION: 
     If the index returns a function, rather than a simple object-literal
     the module assumes it wants to be initialized with this, the parent module
     and invokes it passing the module as the parameter.
 
-@param fnRequirePart: The require-part function (see module.require.*)
-@returns the index or null if the MVC part does not have an index defined.
+@param fnRequire: The require-part function (see module.require.*)
+@param name:      The name of the module.  Default is [index] (empty string).
+@returns the module or null if the MVC part does not exist.
 ###
-Module.requireMvcIndex = (fnRequirePart) -> 
+Module.requirePart = (fnRequire, name = '') -> 
     
     # Silently try to get the 'index' of the MVC part.
-    index = fnRequirePart '', throw: false
+    index = fnRequire name, throw: false
     return index unless index?
     
     # If the [index] is a funciton, it is expected that this is an initialization
     # function.  Invoke it passing in the module.
-    index(fnRequirePart.module) if _.isFunction(index)
+    index = index(fnRequire.module) if _.isFunction(index)
     
     # Finish up.
     index

@@ -128,36 +128,36 @@ describe 'mvc/module', ->
         module.init()
         expect(module.index.controllers).toEqual 'controllers_modules'
     
-    describe 'getting the [index] of each MVC part via the static [requireMvcIndex] method', ->
+    describe 'getting the [index] of each MVC part via the static [requirePart] method', ->
       spyCalls = null
       beforeEach ->
-        spyOn(Module, 'requireMvcIndex').andCallThrough()
+        spyOn(Module, 'requirePart').andCallThrough()
         module.init()
-        spyCalls = Module.requireMvcIndex.calls
+        spyCalls = Module.requirePart.calls
       
-      it 'calls [requireMvcIndex] for model', ->
+      it 'calls [requirePart] for model', ->
         expect(spyCalls[0].args[0]).toEqual module.require.model
 
-      it 'calls [requireMvcIndex] for view', ->
+      it 'calls [requirePart] for view', ->
         expect(spyCalls[1].args[0]).toEqual module.require.view
 
-      it 'calls [requireMvcIndex] for controller', ->
+      it 'calls [requirePart] for controller', ->
         expect(spyCalls[2].args[0]).toEqual module.require.controller
         
-  describe '[requireMvcIndex] static method', ->
+  describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
       spyOn(module, 'tryRequire').andCallThrough()
-      expect(-> Module.requireMvcIndex(module.require.model)).not.toThrow()
+      expect(-> Module.requirePart(module.require.model)).not.toThrow()
       expect(module.tryRequire.mostRecentCall.args[1].throw).toEqual false
 
     it 'returns null if the MVC part does not exist', ->
       fnRequire = -> undefined
-      result = Module.requireMvcIndex(fnRequire)
+      result = Module.requirePart(fnRequire)
       expect(result).toEqual undefined
     
     it 'does nothing if the [index] is a simple object', ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> { foo:123 }
-      expect(Module.requireMvcIndex(module.require.view).foo).toEqual 123
+      expect(Module.requirePart(module.require.view).foo).toEqual 123
     
     it 'invokes the [index] as a function, passing in the [module] as the first argument', ->
       arg = null
@@ -165,16 +165,32 @@ describe 'mvc/module', ->
           return (m) -> arg = m
       fnIndex.module = module
 
-      Module.requireMvcIndex(fnIndex)
+      Module.requirePart(fnIndex)
       expect(arg).toEqual module
+  
+  describe 'setting default [views]', ->
+    module1 = null
+    views   = null
+    beforeEach ->
+        Module1 = require('core/test/modules/module1')
+        module1 = new Module1()
+        module1.init()
+        views = module1.index.views
     
+    it 'has a [views] index', ->
+      expect(views).toBeDefined()
+
+    it 'initializes the [views] index with the module', ->
+      expect(views.module).toEqual module1
     
-    it 'LOAD MODULE', ->
+    # it 'has a [root] view', ->
+    #   # TEMP 
+    #   console.log 'module1', module1
+    #   console.log 'module1.views', module1.index.views
       
-      foo = require 'core/test/foo'
-      console.log 'foo', foo
-      
     
+    
+  
     
       
       
