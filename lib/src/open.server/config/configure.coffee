@@ -49,6 +49,7 @@ module.exports = (app, options = {}) ->
               title:      'Open.Core Specs'
               url:        "#{baseUrl}/specs"
               specsDir:   "#{core.paths.test}/specs/client/"
+              samplesDir: "#{core.paths.test}/specs/client/samples"
               sourceUrls: [
                 "#{baseUrl}/libs.js"
                 "#{baseUrl}/core.js" ]
