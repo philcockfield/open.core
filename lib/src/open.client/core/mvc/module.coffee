@@ -66,13 +66,29 @@ class Module extends Base
   ###
   init: (options = {}) -> 
       
+      # Setup initial conditions.
+      req = @require
+      
       # Construct MVC index.
-      get = Module.requirePart
-      @index =
-          models:      get @require.model
-          views:       get @require.view
-          controllers: get @require.controller
-  
+      mvcIndex = () => 
+          get         = Module.requirePart
+          models      = get req.model
+          views       = get req.view
+          controllers = get req.controller
+      
+          # Assign conventional views (if they exist).
+          if views?
+              getView = (name) -> get req.view, name
+              views.Root = getView 'root'
+              views.Tmpl = getView 'tmpl'
+
+          # Return the index structure.
+          index =
+              models:      models
+              views:       views
+              controllers: controllers
+      @index = mvcIndex()
+      
       # Translate [within] option to jQuery object.
       options.within = util.toJQuery(options.within)
 
@@ -93,16 +109,23 @@ CONVENTION:
 ###
 Module.requirePart = (fnRequire, name = '') -> 
     
-    # Silently try to get the 'index' of the MVC part.
-    index = fnRequire name, throw: false
-    return index unless index?
+    # Silently try to get the module.
+    part = fnRequire name, throw: false
+    return part unless part?
     
-    # If the [index] is a funciton, it is expected that this is an initialization
+    # If the [part] is a funciton, it is expected that this is an initialization
     # function.  Invoke it passing in the module.
-    index = index(fnRequire.module) if _.isFunction(index)
+    # Perform this within a try-catch block, because if it is just exporting a class
+    # then invoking the function will fail.
+    try
+        part = part(fnRequire.module) if _.isFunction(part)
+    catch error
+        # Ignore - was an exported class only
+        # Did not implement the module-init pattern.
+      
     
     # Finish up.
-    index
+    part
     
 
 

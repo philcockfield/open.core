@@ -183,17 +183,14 @@ describe 'mvc/module', ->
     it 'initializes the [views] index with the module', ->
       expect(views.module).toEqual module1
     
-    # it 'has a [root] view', ->
-    #   # TEMP 
-    #   console.log 'module1', module1
-    #   console.log 'module1.views', module1.index.views
-      
+    it 'has a [Root] view, initialized with the partent module', ->
+      expect(views.Root).toBeDefined()
+      expect(views.Root.module).toEqual module1
     
-    
-  
-    
-      
-      
+    it 'has a [tmpl] object', ->
+      Tmpl = views.Tmpl
+      tmpl = new Tmpl
+      expect(tmpl.root instanceof Function).toEqual true 
       
 
 
