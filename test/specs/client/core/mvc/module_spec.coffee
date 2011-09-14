@@ -191,6 +191,17 @@ describe 'mvc/module', ->
       Tmpl = views.Tmpl
       tmpl = new Tmpl
       expect(tmpl.root instanceof Function).toEqual true 
+    
+    it 'does not have any default views', ->
+        Module2 = require('core/test/modules/module2')
+        module2 = new Module2()
+        module2.init()
+        views = module2.index.views
+        expect(views).toBeDefined()
+        expect(views.root).not.toBeDefined()
+        expect(views.tmpl).not.toBeDefined()
+      
+    
       
 
 
