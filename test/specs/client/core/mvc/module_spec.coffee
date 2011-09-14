@@ -167,7 +167,15 @@ describe 'mvc/module', ->
 
       Module.requireMvcIndex(fnIndex)
       expect(arg).toEqual module
+    
+    
+    it 'LOAD MODULE', ->
       
+      foo = require 'core/test/foo'
+      console.log 'foo', foo
+      
+    
+    
       
       
       
