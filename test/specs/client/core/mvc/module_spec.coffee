@@ -304,3 +304,9 @@ describe 'mvc/module', ->
         expect(views.Tmpl).toEqual 'Tmpl set in index'
 
 
+# TODO 
+# Put require method direclty on module ??
+#     Item: module.require.model('item', init:true)
+# 
+# 
+

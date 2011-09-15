@@ -95,10 +95,10 @@ class Module extends Base
           setView 'Root', 'root'
           setView 'Tmpl', 'tmpl'
           
-          # Assign as properties.
-          @models      = models
-          @views       = views
-          @controllers = controllers
+          # Assign as properties (don't overwrite an existing property).
+          @models      = models      unless @models?
+          @views       = views       unless @views?
+          @controllers = controllers unless @controllers?
       
       # Translate [within] option to jQuery object.
       options.within = util.toJQuery(options.within)
