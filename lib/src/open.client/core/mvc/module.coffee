@@ -88,9 +88,15 @@ class Module extends Base
           controllers = getIndex req.controller
       
           # Assign conventional views (if they exist).
-          getView = (name) -> get req.view, name
-          views.Root = getView 'root' unless views.Root?
-          views.Tmpl = getView 'tmpl' unless views.Tmpl?
+          setView = (prop, name) -> 
+                        return if views[prop]?
+                        view = get req.view, name
+                        views[prop] = view if view?
+                        
+          setView 'Root', 'root'
+          setView 'Tmpl', 'tmpl'
+          # views.Root = getView 'root' unless views.Root?
+          # views.Tmpl = getView 'tmpl' unless views.Tmpl?
           
           # Assign as properties.
           @models      = models
