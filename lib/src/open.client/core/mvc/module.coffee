@@ -71,16 +71,18 @@ class Module extends Base
       
       # Construct MVC index.
       do => 
-          get         = Module.requirePart
-          models      = get req.model
-          views       = get req.view
-          controllers = get req.controller
+          get      = Module.requirePart
+          getIndex = (fnRequire) ->  
+                            index = get(fnRequire, '')
+                            index ?= {}
+          models      = getIndex req.model
+          views       = getIndex req.view
+          controllers = getIndex req.controller
       
           # Assign conventional views (if they exist).
-          if views?
-              getView = (name) -> get req.view, name
-              views.Root = getView 'root'
-              views.Tmpl = getView 'tmpl'
+          getView = (name) -> get req.view, name
+          views.Root = getView 'root'
+          views.Tmpl = getView 'tmpl'
           
           # Assign as properties.
           @models      = models

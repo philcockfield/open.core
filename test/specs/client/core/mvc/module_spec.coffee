@@ -144,6 +144,7 @@ describe 'mvc/module', ->
       it 'calls [requirePart] for controller', ->
         expect(spyCalls[2].args[0]).toEqual module.require.controller
         
+  
   describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
       spyOn(module, 'tryRequire').andCallThrough()
@@ -168,45 +169,106 @@ describe 'mvc/module', ->
       Module.requirePart(fnIndex)
       expect(arg).toEqual module
   
-  describe 'setting default [views]', ->
-    module1 = null
-    views   = null
-    beforeEach ->
-        Module1 = require('core/test/modules/module1')
-        module1 = new Module1()
-        module1.init()
-        views = module1.views
-    
-    it 'has a [views] index', ->
-      expect(views).toBeDefined()
+  describe 'module with no Models, Views or Controllers', ->
+    describe 'with no sub-folders', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module1')
+          module = new Module()
+          module.init()
 
-    it 'initializes the [views] index with the module', ->
-      expect(views.module).toEqual module1
+      it 'has empty [Models] object', ->
+        expect(module.models).toEqual {}
+
+      it 'has empty [Views] object', ->
+        expect(module.views).toEqual {}
+
+      it 'has empty [Controllers] object', ->
+        expect(module.controllers).toEqual {}
     
-    it 'has a [Root] view, initialized with the partent module', ->
-      expect(views.Root).toBeDefined()
-      expect(views.Root.module).toEqual module1
+    describe 'with sub-folders', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module2')
+          module = new Module()
+          module.init()
+
+      it 'has empty [Models] object', ->
+        expect(module.models).toEqual {}
+
+      it 'has empty [Views] object', ->
+        expect(module.views).toEqual {}
+
+      it 'has empty [Controllers] object', ->
+        expect(module.controllers).toEqual {}
+  
+  
+  describe 'setting default [Views]', ->
+    describe 'Module with [Index] and default [Views]', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module3')
+          module = new Module()
+          module.init()
+          views = module.views
     
-    it 'has a [tmpl] object', ->
-      Tmpl = views.Tmpl
-      tmpl = new Tmpl
-      expect(tmpl.root instanceof Function).toEqual true 
-    
-    it 'does not have any default views', ->
-        Module2 = require('core/test/modules/module2')
-        module2 = new Module2()
-        module2.init()
-        views = module2.views
+      it 'has a [views] index', ->
         expect(views).toBeDefined()
-        expect(views.root).not.toBeDefined()
-        expect(views.tmpl).not.toBeDefined()
+    
+      it 'initializes the [views] index with the module', ->
+        expect(views.module).toEqual module
+    
+      it 'has a [Root] view, initialized with the parent module', ->
+        expect(views.Root).toBeDefined()
+        expect(views.Root.module).toEqual module
+    
+      it 'has a [tmpl] object', ->
+        Tmpl = views.Tmpl
+        tmpl = new Tmpl
+        expect(tmpl.root instanceof Function).toEqual true 
+      
+      it 'has a non-default [View] specified within the [Index]', ->
+        expect(views.myView).toBeDefined()
+        expect(views.myView.module).toEqual module
       
     
+    describe 'Module with [Index] and no default [Views]', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module4')
+          module = new Module()
+          module.init()
+          views = module.views
       
-
-
-
-
+      it 'does not have any default views', ->
+          expect(views.root).not.toBeDefined()
+          expect(views.tmpl).not.toBeDefined()
+      
+      it 'has a non-default [View] specified within the [Index]', ->
+        expect(views.myView).toBeDefined()
+        expect(views.myView.module).toEqual module
+    
+    describe 'Module with no [Index] and default [Views]', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module5')
+          module = new Module()
+          module.init()
+          views = module.views
+      
+      it 'has a [Root] view, initialized with the parent module', ->
+        expect(views.Root).toBeDefined()
+        expect(views.Root.module).toEqual module
+      
+      it 'has a [tmpl] object', ->
+        Tmpl = views.Tmpl
+        tmpl = new Tmpl
+        expect(tmpl.root instanceof Function).toEqual true 
 
 
 
