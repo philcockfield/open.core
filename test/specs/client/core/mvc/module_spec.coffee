@@ -126,7 +126,7 @@ describe 'mvc/module', ->
         expect(options.within).toEqual $(elBody)
       
   
-  describe 'index of the MVC conventional structure', ->
+  describe 'index of the MVC conventional structure (parts)', ->
     beforeEach ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> 
             return 'models_modules' if name is 'modules/foo/models/'
@@ -162,6 +162,28 @@ describe 'mvc/module', ->
       it 'calls [requirePart] for controller', ->
         expect(spyCalls[2].args[0]).toEqual module.require.controller
         
+  
+  describe 'no overwriting existing MVC properties set by the module', ->
+    module = null
+    beforeEach ->
+        class MyModule extends Module
+          constructor: -> 
+              super 'core/test/modules/module1'
+              @models      = 'models'
+              @views       = 'views'
+              @controllers = 'controllers'
+        module = new MyModule()
+        module.init()
+    
+    it 'does not overwrite [models] property', ->
+      expect(module.models).toEqual 'models'
+      
+    it 'does not overwrite [views] property', ->
+      expect(module.views).toEqual 'views'
+      
+    it 'does not overwrite [controllers] property', ->
+      expect(module.controllers).toEqual 'controllers'
+      
   
   describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
@@ -305,8 +327,13 @@ describe 'mvc/module', ->
 
 
 # TODO 
-# Put require method direclty on module ??
-#     Item: module.require.model('item', init:true)
+###
+Put require method direclty on module ??
+    Item: module.require.model('item', init:true)
+
+- Throw error in constructor if path not passed
+###
+# 
 # 
 # 
 
