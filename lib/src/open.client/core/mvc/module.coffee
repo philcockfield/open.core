@@ -70,7 +70,7 @@ class Module extends Base
       req = @require
       
       # Construct MVC index.
-      mvcIndex = () => 
+      do => 
           get         = Module.requirePart
           models      = get req.model
           views       = get req.view
@@ -81,13 +81,11 @@ class Module extends Base
               getView = (name) -> get req.view, name
               views.Root = getView 'root'
               views.Tmpl = getView 'tmpl'
-
-          # Return the index structure.
-          index =
-              models:      models
-              views:       views
-              controllers: controllers
-      @index = mvcIndex()
+          
+          # Assign as properties.
+          @models      = models
+          @views       = views
+          @controllers = controllers
       
       # Translate [within] option to jQuery object.
       options.within = util.toJQuery(options.within)

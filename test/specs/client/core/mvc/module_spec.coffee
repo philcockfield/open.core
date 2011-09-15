@@ -118,15 +118,15 @@ describe 'mvc/module', ->
     describe 'calling index for each MVC folder', ->
       it 'stores the [models] index', ->
         module.init()
-        expect(module.index.models).toEqual 'models_modules'
+        expect(module.models).toEqual 'models_modules'
 
       it 'stores the [views] index', ->
         module.init()
-        expect(module.index.views).toEqual 'views_modules'
+        expect(module.views).toEqual 'views_modules'
 
       it 'stores the [controllers] index', ->
         module.init()
-        expect(module.index.controllers).toEqual 'controllers_modules'
+        expect(module.controllers).toEqual 'controllers_modules'
     
     describe 'getting the [index] of each MVC part via the static [requirePart] method', ->
       spyCalls = null
@@ -175,7 +175,7 @@ describe 'mvc/module', ->
         Module1 = require('core/test/modules/module1')
         module1 = new Module1()
         module1.init()
-        views = module1.index.views
+        views = module1.views
     
     it 'has a [views] index', ->
       expect(views).toBeDefined()
@@ -196,7 +196,7 @@ describe 'mvc/module', ->
         Module2 = require('core/test/modules/module2')
         module2 = new Module2()
         module2.init()
-        views = module2.index.views
+        views = module2.views
         expect(views).toBeDefined()
         expect(views.root).not.toBeDefined()
         expect(views.tmpl).not.toBeDefined()
