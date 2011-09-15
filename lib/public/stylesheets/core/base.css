@@ -1,7 +1,3 @@
-@import "../libs/normalize.css";
-body {
-  font: 15px "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
-}
 div.core_bevel_highlight {
   height: 1px;
   background: #fff;

@@ -2,51 +2,6 @@ fsUtil    = require '../../fs'
 BuildFile = require './build_file'
 
 
-buildSingleFile = (buildPath, callback) -> 
-        buildFile = new BuildFile buildPath.path, buildPath.namespace
-        buildFile.build => 
-            
-            # Add the built code file to the [files] collection.
-            files = buildPath.files
-            files.push buildFile
-            callback files
-
-buildFilesInFolder = (buildPath, callback) -> 
-        
-        # Setup initial conditions.
-        files = buildPath.files
-
-        returnSorted = -> 
-            files = _(files).sortBy (item) -> item.id
-            callback files
-        
-        # Build all files in the folder.
-        options =
-              files:  true
-              dirs:   false
-              hidden: false
-              deep:   buildPath.deep
-        
-        # Get the complete list of files to build.
-        fsUtil.readDir buildPath.path, options, (err, paths) -> 
-            throw err if err?
-            count = 0
-            build = (path) -> 
-                
-                # Calcualte the namespace.
-                ns = _(path).strRight buildPath.path
-                ns = _(ns).strLeftBack '/'
-                ns = buildPath.namespace + ns
-                
-                # Run the file-builder.
-                (new BuildFile path, ns).build (code, buildFile) -> 
-                      files.push buildFile
-                      count += 1
-                      returnSorted() if count is paths.length
-            build path for path in paths
-
-
-
 ###
 Represents a path to a javascript/coffee-script file, or a complete folder, to build.
 ###
@@ -69,9 +24,9 @@ module.exports = class BuildPath
       @code      = {}
       
       # Set path-type flags.
-      hasExtension = (extension) => _(@path).endsWith extension
       if @path?
-          @isFile   = hasExtension('.js') or hasExtension('.coffee')
+          # @isFile   = hasExtension('.js') or hasExtension('.coffee')
+          @isFile   = hasSupportedExtension @path
           @isFolder = not @isFile
       @deep = false if @isFile
 
@@ -108,3 +63,62 @@ module.exports = class BuildPath
   isBuilt: -> 
     return false unless @files?.length > 0
     not _(@files).any (m) -> m.isBuilt == false
+
+
+
+# PRIVATE
+hasExtension = (path, extension) => _(path).endsWith extension
+hasSupportedExtension = (path) -> 
+    hasExtension(path, '.js') or hasExtension(path, '.coffee')
+
+
+buildSingleFile = (buildPath, callback) -> 
+        buildFile = new BuildFile buildPath.path, buildPath.namespace
+        buildFile.build => 
+            
+            # Add the built code file to the [files] collection.
+            files = buildPath.files
+            files.push buildFile
+            callback files
+
+buildFilesInFolder = (buildPath, callback) -> 
+        
+        # Setup initial conditions.
+        files = buildPath.files
+
+        returnSorted = -> 
+            files = _(files).sortBy (item) -> item.id
+            callback files
+        
+        # Build all files in the folder.
+        options =
+              files:  true
+              dirs:   false
+              hidden: false
+              deep:   buildPath.deep
+        
+        # Get the complete list of files to build.
+        fsUtil.readDir buildPath.path, options, (err, paths) -> 
+            throw err if err?
+            
+            # Ensure only supported files types are included.
+            paths = _(paths).map (p) -> p if hasSupportedExtension(p)
+            paths = _(paths).compact()
+            
+            # Build each file.
+            count = 0
+            build = (path) -> 
+                
+                # Calcualte the namespace.
+                ns = _(path).strRight buildPath.path
+                ns = _(ns).strLeftBack '/'
+                ns = buildPath.namespace + ns
+                
+                # Run the file-builder.
+                (new BuildFile path, ns).build (code, buildFile) -> 
+                      files.push buildFile
+                      count += 1
+                      returnSorted() if count is paths.length
+            build path for path in paths
+
+

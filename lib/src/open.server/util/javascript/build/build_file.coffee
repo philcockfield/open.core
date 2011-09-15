@@ -12,6 +12,8 @@ module.exports = class BuildFile
   ###
   constructor: (@path, @namespace) -> 
           
+          # console.log '@path', @path
+          
           # Setup initial conditions.
           @code         = {}
           @namespace    = BuildFile.formatNamespace(@namespace)
