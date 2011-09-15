@@ -15,7 +15,8 @@ class Module extends Base
       # Setup initial conditions.
       throw 'Module path not specified' if not @modulePath? or _.isBlank(@modulePath)
       super
-      
+        
+      # Setup the module part [require] functions.
       req = (dir) => 
           
           # Curry function. Require statement scoped within the given directory.
@@ -35,7 +36,8 @@ class Module extends Base
           requirePart.module = @
           requirePart
           
-      # Store [require] part functions.
+      
+      # Store [require] part functions as object structure.
       @require = 
           model:      req 'models'
           view:       req 'views'
@@ -84,19 +86,20 @@ class Module extends Base
   ###
   init: (options = {}) -> 
       
-      # Setup initial conditions.
-      req = @require
+      # Translate [within] option to jQuery object.
+      options.within = util.toJQuery(options.within)
       
       # Construct MVC index.
+      req = @require
       do => 
           get      = Module.requirePart
           getIndex = (fnRequire) ->  
                             index = get(fnRequire, '')
-                            index ?= {}
+                            index ?= {} # Empty object representing [index] if there was not module.
           models      = getIndex req.model
           views       = getIndex req.view
           controllers = getIndex req.controller
-      
+          
           # Assign conventional views (if they exist).
           setView = (prop, name) -> 
                         return if views[prop]? # View has already been setup.
@@ -110,8 +113,6 @@ class Module extends Base
           @views       = views       unless @views?
           @controllers = controllers unless @controllers?
       
-      # Translate [within] option to jQuery object.
-      options.within = util.toJQuery(options.within)
 
 
 # STATIC METHODS
@@ -156,6 +157,8 @@ Module.initPart = (parentModule, childModule) ->
         # Ignore - was an exported class only
         # It did not implement the module-init pattern.
     childModule
+
+
 
 # EXPORT
 module.exports = Module
