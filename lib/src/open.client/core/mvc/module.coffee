@@ -12,9 +12,9 @@ class Module extends Base
   ###
   constructor: (@modulePath) -> 
       super
-      _require = (dir) => 
+      req = (dir) => 
           
-          # Require statement scoped within the given directory.
+          # Curry function. Require statement scoped within the given directory.
           requirePart = (name = '', options = {}) => 
               # Retrieve the module.
               options.throw ?= true
@@ -33,9 +33,9 @@ class Module extends Base
           
       # Store [require] part functions.
       @require = 
-          model:      _require 'models'
-          view:       _require 'views'
-          controller: _require 'controllers'
+          model:      req 'models'
+          view:       req 'views'
+          controller: req 'controllers'
 
   
   ###
@@ -59,6 +59,12 @@ class Module extends Base
      - model
      - view
      - controller
+  Each MVC function takes the parameters:
+  @param name: The name of the module (folder).
+  @param options
+            - init:  Flag indicating if the [parent module-init] pattern should be invoked (default: false)
+            - throw: Flag indicating if the errors should be thrown (default: false)
+            - log:   Flag indicating if errors should be written to the console (default: false)
   
   For example, to retrieve a module named 'foo' within the /models folder:
       foo = module.require.model('foo')
