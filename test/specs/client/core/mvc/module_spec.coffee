@@ -11,16 +11,21 @@ describe 'mvc/module', ->
   
   it 'extends core.Base', ->
     expect(module instanceof core.Base).toEqual true 
-  
-  it 'calls super', ->
-    ensure.parentConstructorWasCalled Module, -> new Module()
     
   it 'exposes the tryRequire utility method', ->
     expect(module.tryRequire).toEqual core.tryRequire
   
   it 'exposes the base require path', ->
     expect(module.modulePath).toEqual 'modules/foo'
-  
+
+  describe 'constructor', ->
+    it 'calls super', ->
+      ensure.parentConstructorWasCalled Module, -> new Module('modules/foo')
+    
+    it 'throw if a module path was not specified', ->
+      expect(-> new Module()).toThrow()
+      expect(-> new Module('')).toThrow()
+      expect(-> new Module('   ')).toThrow()
   
   describe '[require] mvc part methods', ->
     args = null
@@ -331,7 +336,6 @@ describe 'mvc/module', ->
 Put require method direclty on module ??
     Item: module.require.model('item', init:true)
 
-- Throw error in constructor if path not passed
 ###
 # 
 # 

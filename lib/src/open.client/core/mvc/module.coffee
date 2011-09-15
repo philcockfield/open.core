@@ -11,7 +11,11 @@ class Module extends Base
   @param modulePath: The path to the module.
   ###
   constructor: (@modulePath) -> 
+      
+      # Setup initial conditions.
+      throw 'Module path not specified' if not @modulePath? or _.isBlank(@modulePath)
       super
+      
       req = (dir) => 
           
           # Curry function. Require statement scoped within the given directory.
