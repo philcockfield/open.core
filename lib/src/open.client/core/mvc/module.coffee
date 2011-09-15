@@ -89,14 +89,11 @@ class Module extends Base
       
           # Assign conventional views (if they exist).
           setView = (prop, name) -> 
-                        return if views[prop]?
+                        return if views[prop]? # View has already been setup.
                         view = get req.view, name
-                        views[prop] = view if view?
-                        
+                        views[prop] = view if view? # Only assign the property if the view was found.
           setView 'Root', 'root'
           setView 'Tmpl', 'tmpl'
-          # views.Root = getView 'root' unless views.Root?
-          # views.Tmpl = getView 'tmpl' unless views.Tmpl?
           
           # Assign as properties.
           @models      = models
