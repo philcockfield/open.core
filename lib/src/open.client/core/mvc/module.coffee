@@ -81,8 +81,8 @@ class Module extends Base
       
           # Assign conventional views (if they exist).
           getView = (name) -> get req.view, name
-          views.Root = getView 'root'
-          views.Tmpl = getView 'tmpl'
+          views.Root = getView 'root' unless views.Root?
+          views.Tmpl = getView 'tmpl' unless views.Tmpl?
           
           # Assign as properties.
           @models      = models

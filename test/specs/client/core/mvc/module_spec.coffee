@@ -270,8 +270,25 @@ describe 'mvc/module', ->
         tmpl = new Tmpl
         expect(tmpl.root instanceof Function).toEqual true 
 
+    describe 'Module with [Index] and default [Views], but default views setup by Index', ->
+      module  = null
+      views   = null
+      beforeEach ->
+          Module = require('core/test/modules/module6')
+          module = new Module()
+          module.init()
+          views = module.views
+      
+      it 'does not overwrite a default [Root] view already setup by the [Index]', ->
+        expect(views.Root).toEqual 'Root set in index'
+
+      it 'does not overwrite a default [Tmpl] view already setup by the [Index]', ->
+        expect(views.Tmpl).toEqual 'Tmpl set in index'
 
 
+
+# TODO 
+#  - elegant way of calling (module.require) to that it invokes the module with itself (init)
 
 
 
