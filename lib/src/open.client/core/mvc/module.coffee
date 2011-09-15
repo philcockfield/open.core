@@ -35,13 +35,18 @@ class Module extends Base
           # Store reference to the module on the [require] function.
           requirePart.module = @
           requirePart
-          
       
+      # Store [require] part functions as director properties structure.
+      @model      = req 'models'
+      @view       = req 'views'
+      @controller = req 'controllers'
+
       # Store [require] part functions as object structure.
       @require = 
-          model:      req 'models'
-          view:       req 'views'
-          controller: req 'controllers'
+          model:      @model
+          view:       @view
+          controller: @controller
+
 
   
   ###
@@ -60,12 +65,7 @@ class Module extends Base
   index: null # Set in Init method.
   
   ###
-  An index of helper methods for requiring sub-modules within the MVC folder structure of the module.
-  This is an index of functions:
-     - model
-     - view
-     - controller
-  Each MVC function takes the parameters:
+  A require function scoped to retrieve [Models] within the module.
   @param name: The name of the module (folder).
   @param options
             - init:  Flag indicating if the [parent module-init] pattern should be invoked (default: false)
@@ -73,9 +73,18 @@ class Module extends Base
             - log:   Flag indicating if errors should be written to the console (default: false)
   
   For example, to retrieve a module named 'foo' within the /models folder:
-      foo = module.require.model('foo')
+      foo = module.model('foo')
   ###    
-  require: null # Set in constructor.
+  model: null # Set in constructor.
+  
+  # A require function scoped to retrieve [Views] within the module. (see 'model' method comments for more).
+  # (Set in constructor)
+  view: null
+  
+  # A require function scoped to retrieve [Controllers] within the module. (see 'model' method comments for more).
+  # (Set in constructor)
+  controller: null 
+  
   
   ###
   Initializes the module (overridable).
@@ -125,7 +134,8 @@ CONVENTION:
     the module assumes it wants to be initialized with this, the parent module
     and invokes it passing the module as the parameter.
 
-@param fnRequire: The require-part function (see module.require.*)
+@param fnRequire: The require-part function 
+                  (see [module.require.*] method)
 @param name:      The name of the module.  Default is [index] (empty string).
 @returns the module or null if the MVC part does not exist.
 ###

@@ -35,19 +35,29 @@ describe 'mvc/module', ->
                 args = { name:name, options:options }
         
     it 'pulls a require from the [model] folder', ->
-      module.require.model 'bar'
+      module.model 'bar'
       expect(args.name).toEqual 'modules/foo/models/bar'
       expect(args.options.throw).toEqual true
   
     it 'pulls a require from the [view] folder', ->
-      module.require.view 'bar'
+      module.view 'bar'
       expect(args.name).toEqual 'modules/foo/views/bar'
       expect(args.options.throw).toEqual true
   
     it 'pulls a require from the [controllers] folder', ->
-      module.require.controller 'bar'
+      module.controller 'bar'
       expect(args.name).toEqual 'modules/foo/controllers/bar'
       expect(args.options.throw).toEqual true
+    
+    describe 'MVC part functions as object structure', ->
+      it 'aliases the [model] method', ->
+        expect(module.require.model).toEqual module.model
+        
+      it 'aliases the [view] method', ->
+        expect(module.require.view).toEqual module.view
+
+      it 'aliases the [controller] method', ->
+        expect(module.require.controller).toEqual module.controller
     
     describe 'init-module pattern', ->
       module  = null
@@ -59,23 +69,23 @@ describe 'mvc/module', ->
         expect(module.views).not.toBeDefined()
 
       it 'does not initializes the [required module] with the [parent module] by default', ->
-        myView = module.require.view 'my_view'
+        myView = module.view 'my_view'
         expect(myView instanceof Function).toEqual true 
       
       it 'initializes the [required module] with the [parent module]', ->
-        myView = module.require.view 'my_view', init:true
+        myView = module.view 'my_view', init:true
         expect(myView.module).toEqual module
     
     
     describe 'storing module reference on MVC part function', ->
       it 'store modules on [model] require function', ->
-        expect(module.require.model.module).toEqual module
+        expect(module.model.module).toEqual module
 
       it 'store modules on [view] require function', ->
-        expect(module.require.view.module).toEqual module
+        expect(module.view.module).toEqual module
 
       it 'store modules on [controller] require function', ->
-        expect(module.require.controller.module).toEqual module
+        expect(module.controller.module).toEqual module
     
     
   describe 'init', ->
@@ -159,13 +169,13 @@ describe 'mvc/module', ->
         spyCalls = Module.requirePart.calls
       
       it 'calls [requirePart] for model', ->
-        expect(spyCalls[0].args[0]).toEqual module.require.model
+        expect(spyCalls[0].args[0]).toEqual module.model
 
       it 'calls [requirePart] for view', ->
-        expect(spyCalls[1].args[0]).toEqual module.require.view
+        expect(spyCalls[1].args[0]).toEqual module.view
 
       it 'calls [requirePart] for controller', ->
-        expect(spyCalls[2].args[0]).toEqual module.require.controller
+        expect(spyCalls[2].args[0]).toEqual module.controller
         
   
   describe 'no overwriting existing MVC properties set by the module', ->
@@ -193,7 +203,7 @@ describe 'mvc/module', ->
   describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
       spyOn(module, 'tryRequire').andCallThrough()
-      expect(-> Module.requirePart(module.require.model)).not.toThrow()
+      expect(-> Module.requirePart(module.model)).not.toThrow()
       expect(module.tryRequire.mostRecentCall.args[1].throw).toEqual false
 
     it 'returns null if the MVC part does not exist', ->
@@ -203,7 +213,7 @@ describe 'mvc/module', ->
     
     it 'does nothing if the [index] is a simple object', ->
       spyOn(module, 'tryRequire').andCallFake (name, options) -> { foo:123 }
-      expect(Module.requirePart(module.require.view).foo).toEqual 123
+      expect(Module.requirePart(module.view).foo).toEqual 123
     
     it 'invokes the [index] as a function, passing in the [module] as the first argument', ->
       arg = null
