@@ -119,11 +119,12 @@ class Module extends Base
           setIndex = (propName, fnRequire) => 
                   return if @[propName]?
                   getIndex = (fnRequire) ->  
-                              index = get(fnRequire, '')
-                              index ?= {} # Empty object representing [index] if there was not module.
+                                  index = get(fnRequire, '')
+                                  index ?= {} # Empty object representing [index] if there was no module.
                   @[propName] = getIndex fnRequire
-          setIndex 'models', @model
-          setIndex 'views', @view
+          
+          setIndex 'models',      @model
+          setIndex 'views',       @view
           setIndex 'controllers', @controller
           
           # Assign conventional views (if they exist).
