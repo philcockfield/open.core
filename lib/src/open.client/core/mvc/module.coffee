@@ -16,8 +16,16 @@ class Module extends Base
           
           # Require statement scoped within the given directory.
           requirePart = (name = '', options = {}) => 
+              # Retrieve the module.
               options.throw ?= true
-              @tryRequire "#{@modulePath}/#{dir}/#{name}", options
+              part = @tryRequire "#{@modulePath}/#{dir}/#{name}", options
+              
+              # Invoke the [module-init] pattern if required.
+              if part? and options.init ?= false
+                  part = Module.initPart @, part
+              
+              # Finish up.
+              part
           
           # Store reference to the module on the [require] function.
           requirePart.module = @
@@ -112,22 +120,29 @@ Module.requirePart = (fnRequire, name = '') ->
     # Silently try to get the module.
     part = fnRequire name, throw: false
     return part unless part?
-    
-    # If the [part] is a funciton, it is expected that this is an initialization
-    # function.  Invoke it passing in the module.
-    # Perform this within a try-catch block, because if it is just exporting a class
-    # then invoking the function will fail.
-    try
-        part = part(fnRequire.module) if _.isFunction(part)
-    catch error
-        # Ignore - was an exported class only
-        # Did not implement the module-init pattern.
-      
-    
+
+    # If the [part] is a function, it is expected that this is an initialization function.
+    # Invoke it passing in the module.
+    part = Module.initPart(fnRequire.module, part)
+
     # Finish up.
     part
     
 
+###
+Implements the parent [module-init] pattern.
+@param parentModule: The parent module.
+@param childModule: The child module to initialize.
+###
+Module.initPart = (parentModule, childModule) -> 
+    # Perform this within a try-catch block, because if it is just exporting a class
+    # then invoking the function will fail.
+    try
+        childModule = childModule(parentModule) if _.isFunction(childModule)
+    catch error
+        # Ignore - was an exported class only
+        # It did not implement the module-init pattern.
+    childModule
 
 # EXPORT
 module.exports = Module

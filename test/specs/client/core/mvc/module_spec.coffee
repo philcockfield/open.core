@@ -44,6 +44,24 @@ describe 'mvc/module', ->
       expect(args.name).toEqual 'modules/foo/controllers/bar'
       expect(args.options.throw).toEqual true
     
+    describe 'init-module pattern', ->
+      module  = null
+      beforeEach ->
+          Module = require('core/test/modules/module4')
+          module = new Module()
+    
+      it 'does not have an initialized [views] index yet', ->
+        expect(module.views).not.toBeDefined()
+
+      it 'does not initializes the [required module] with the [parent module] by default', ->
+        myView = module.require.view 'my_view'
+        expect(myView instanceof Function).toEqual true 
+      
+      it 'initializes the [required module] with the [parent module]', ->
+        myView = module.require.view 'my_view', init:true
+        expect(myView.module).toEqual module
+    
+    
     describe 'storing module reference on MVC part function', ->
       it 'store modules on [model] require function', ->
         expect(module.require.model.module).toEqual module
@@ -281,16 +299,8 @@ describe 'mvc/module', ->
       
       it 'does not overwrite a default [Root] view already setup by the [Index]', ->
         expect(views.Root).toEqual 'Root set in index'
-
+      
       it 'does not overwrite a default [Tmpl] view already setup by the [Index]', ->
         expect(views.Tmpl).toEqual 'Tmpl set in index'
-
-
-
-# TODO 
-#  - elegant way of calling (module.require) to that it invokes the module with itself (init)
-
-
-
 
 
