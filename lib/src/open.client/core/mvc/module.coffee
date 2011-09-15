@@ -64,8 +64,15 @@ class Module extends Base
   ###
   index: null # Set in Init method.
   
+  
   ###
-  A require function scoped to retrieve [Models] within the module.
+  An index of the module-part require functions:
+    - model
+    - view
+    - controller
+  
+  Each MVC function takes the parameters:
+  
   @param name: The name of the module (folder).
   @param options
             - init:  Flag indicating if the [parent module-init] pattern should be invoked (default: false)
@@ -73,17 +80,22 @@ class Module extends Base
             - log:   Flag indicating if errors should be written to the console (default: false)
   
   For example, to retrieve a module named 'foo' within the /models folder:
+      foo = module.require.model('foo')
+      
+        or
+      
       foo = module.model('foo')
   ###    
-  model: null # Set in constructor.
+  require: null # (Set in constructor)
+
+  # A require function scoped to retrieve [Models] within the module. (see 'require.*' method comments for more).
+  model: null      # (Set in constructor)
   
   # A require function scoped to retrieve [Views] within the module. (see 'model' method comments for more).
-  # (Set in constructor)
-  view: null
+  view: null       # (Set in constructor)
   
   # A require function scoped to retrieve [Controllers] within the module. (see 'model' method comments for more).
-  # (Set in constructor)
-  controller: null 
+  controller: null # (Set in constructor)
   
   
   ###
@@ -101,27 +113,27 @@ class Module extends Base
       # Construct MVC index.
       req = @require
       do => 
-          get      = Module.requirePart
-          getIndex = (fnRequire) ->  
-                            index = get(fnRequire, '')
-                            index ?= {} # Empty object representing [index] if there was not module.
-          models      = getIndex req.model
-          views       = getIndex req.view
-          controllers = getIndex req.controller
+          get = Module.requirePart
+          
+          # Assign as properties (don't overwrite an existing property).
+          setIndex = (propName, fnRequire) => 
+                  return if @[propName]?
+                  getIndex = (fnRequire) ->  
+                              index = get(fnRequire, '')
+                              index ?= {} # Empty object representing [index] if there was not module.
+                  @[propName] = getIndex fnRequire
+          setIndex 'models', @model
+          setIndex 'views', @view
+          setIndex 'controllers', @controller
           
           # Assign conventional views (if they exist).
-          setView = (prop, name) -> 
-                        return if views[prop]? # View has already been setup.
+          setView = (prop, name) => 
+                        return if @views[prop]? # View has already been setup.
                         view = get req.view, name
-                        views[prop] = view if view? # Only assign the property if the view was found.
+                        @views[prop] = view if view? # Only assign the property if the view was found.
           setView 'Root', 'root'
           setView 'Tmpl', 'tmpl'
           
-          # Assign as properties (don't overwrite an existing property).
-          @models      = models      unless @models?
-          @views       = views       unless @views?
-          @controllers = controllers unless @controllers?
-      
 
 
 # STATIC METHODS
