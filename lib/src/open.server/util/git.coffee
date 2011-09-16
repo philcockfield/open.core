@@ -100,12 +100,11 @@ module.exports =
       @commit commit, add:true, => push()
     else
       push()
-    
-    
-      
+  
+  
   ###
   Peforms a pull by executing a 'fetch' then 'merge' operation.
-  Note: This is required, as opposed to a simple 'pull' because there is
+  Note: 'Fetch then Merge' is required, as opposed to a simple 'pull' because there is
         currently a bug in Git where pull will not work when the working-directory
         is changed.
   @param options

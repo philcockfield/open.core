@@ -4,7 +4,7 @@ module.exports =
   @param callback: invoked upon completion.
   ###
   libs: (callback) ->
-        core       = require 'open.core'
+        core       = require 'open.server'
         fs         = core.util.fs
         sourceLibs = "#{__dirname}/libs.src"
         targetLibs = "#{core.paths.public}/javascripts/libs"
@@ -47,7 +47,7 @@ module.exports =
                                   - minified: false - returns the unminified, packed code.
   ###
   all: (options = {}) ->
-      core      = require 'open.core'
+      core      = require 'open.server'
       copyright = core.copyright(asComment: true)
 
       # Construct paths.
