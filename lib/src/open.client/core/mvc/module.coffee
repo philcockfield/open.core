@@ -44,14 +44,13 @@ module.exports = Module = class Module extends Base
       @model      = req 'models'
       @view       = req 'views'
       @controller = req 'controllers'
-
+      
       # Store [require] part functions as object structure.
       @require = 
           model:      @model
           view:       @view
           controller: @controller
-
-
+  
   
   ###
   The root view of the module (convention).
@@ -110,38 +109,43 @@ module.exports = Module = class Module extends Base
                     converts whatever type of value to a jQuery element.
   ###
   init: (options = {}) -> 
+      options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
+      createMvcIndex @
+
+###
+  PRIVATE
+###
+createMvcIndex = (module) -> 
+
+      # Setup initial conditions.
+      req = module.require
+      get = Module.requirePart
       
-      # Translate [within] option to jQuery object.
-      options.within = util.toJQuery(options.within)
+      # Assign as properties (don't overwrite an existing property).
+      setIndex = (propName, fnRequire) => 
+              return if module[propName]?
+              getIndex = (fnRequire) ->  
+                              index = get(fnRequire, '')
+                              index ?= {} # Empty object representing [index] if there was no module.
+              module[propName] = getIndex fnRequire
       
-      # Construct MVC index.
-      req = @require
-      do => 
-          get = Module.requirePart
-          
-          # Assign as properties (don't overwrite an existing property).
-          setIndex = (propName, fnRequire) => 
-                  return if @[propName]?
-                  getIndex = (fnRequire) ->  
-                                  index = get(fnRequire, '')
-                                  index ?= {} # Empty object representing [index] if there was no module.
-                  @[propName] = getIndex fnRequire
-          
-          setIndex 'models',      @model
-          setIndex 'views',       @view
-          setIndex 'controllers', @controller
-          
-          # Assign conventional views (if they exist).
-          setView = (prop, name) => 
-                        return if @views[prop]? # View has already been setup.
-                        view = get req.view, name
-                        @views[prop] = view if view? # Only assign the property if the view was found.
-          setView 'Root', 'root'
-          setView 'Tmpl', 'tmpl'
-          
+      setIndex 'models',      module.model
+      setIndex 'views',       module.view
+      setIndex 'controllers', module.controller
+      
+      # Assign default views (if they exist).
+      setView = (prop, name) => 
+                    return if module.views[prop]? # View has already been setup.
+                    view = get req.view, name
+                    module.views[prop] = view if view? # Only assign the property if the view was found.
+      setView 'Root', 'root'
+      setView 'Tmpl', 'tmpl'
 
 
-# STATIC METHODS
+
+###
+  STATIC METHODS
+###
 
 ###
 Attempts to get an MVC part using the given require function - 
