@@ -68,15 +68,18 @@ describe 'mvc/module', ->
     
       it 'does not have an initialized [views] index yet', ->
         expect(module.views).not.toBeDefined()
-
-      it 'does not initializes the [required module] with the [parent module] by default', ->
-        myView = module.view 'my_view'
-        expect(myView instanceof Function).toEqual true 
       
-      it 'initializes the [required module] with the [parent module]', ->
+      it 'initializes the required [MVC Part] with the [parent module]', ->
         myView = module.view 'my_view', init:true
         expect(myView.module).toEqual module
-    
+
+      it 'does not initialize the required [MVC Part] with the [parent module]', ->
+        myView = module.view 'my_view', init:false
+        expect(myView instanceof Function).toEqual true 
+
+      it 'initializes the required [MVC Part] with the [parent module] by default', ->
+        myView = module.view 'my_view'
+        expect(myView.module).toEqual module
     
     describe 'storing module reference on MVC part function', ->
       it 'store modules on [model] require function', ->

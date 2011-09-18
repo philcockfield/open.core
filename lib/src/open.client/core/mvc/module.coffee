@@ -30,7 +30,7 @@ module.exports = Module = class Module extends Base
               part = @tryRequire "#{@modulePath}/#{dir}/#{name}", options
               
               # Invoke the [module-init] pattern if required.
-              if part? and options.init ?= false
+              if part? and options.init ?= true
                   part = Module.initPart @, part
               
               # Finish up.
