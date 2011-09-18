@@ -1,10 +1,3 @@
-fireEvent = (eventName, prop, args) => 
-    args.property = prop
-    fire = (obj) => obj.trigger eventName, args
-    fire prop
-    fire prop.fn
-    args
-
 ###
 A function which is used as a property.
 Create an instance of this class and assign the 'fn' to a property on an object. 
@@ -118,9 +111,15 @@ module.exports = class Property
 
 
 
-
-
-
+###
+  PRIVATE
+###
+fireEvent = (eventName, prop, args) => 
+    args.property = prop
+    fire = (obj) => obj.trigger eventName, args
+    fire prop
+    fire prop.fn
+    args
 
 
 
