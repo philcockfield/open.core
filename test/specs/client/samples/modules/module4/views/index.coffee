@@ -1,4 +1,4 @@
 module.exports = (module) -> 
   index =
     module: module
-    myView: module.require.view('my_view', init:true)
+    myView: module.view('my_view', init:true)
