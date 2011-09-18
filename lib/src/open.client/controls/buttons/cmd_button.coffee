@@ -1,9 +1,10 @@
-module.exports = (core, Button) -> 
-  
-  ###
-  A 'command' style button.
-  ###
-  class CmdButton extends Button
+core   = require '../../core'
+Button = require '../button'
+
+###
+A 'command' style button.
+###
+module.exports = class CmdButton extends Button
     defaults:
         size: 'm'        # The size of the button (default 'm' - medium). Options: s, m, l.
         color: 'silver'  # The color of the button (default 'blue'). Options: silver, blue, green.
