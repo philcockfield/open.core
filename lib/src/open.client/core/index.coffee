@@ -1,12 +1,9 @@
-using = (module) -> require 'open.client/core/' + module
-util = using 'util'
+util = require './util'
 
 module.exports = core =
   title:      'Open.Core (Client)'
-  Base:       using 'base'
-  mvc:        using 'mvc'
+  Base:       require './base'
+  mvc:        require './mvc'
   util:       util
   tryRequire: util.tryRequire
-
-  
  

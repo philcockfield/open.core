@@ -1,4 +1,4 @@
-describe 'client', ->
+describe 'core/index', ->
   it 'exists', ->
     expect(require('open.client/core')).toBeDefined()
   
@@ -18,7 +18,5 @@ describe 'client', ->
     it 'has tryRequire', -> 
       expect(core.tryRequire).toBeDefined()
       expect(core.tryRequire).toEqual core.util.tryRequire
-    
-    
 
     
