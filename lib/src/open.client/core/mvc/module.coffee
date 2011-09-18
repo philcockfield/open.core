@@ -1,7 +1,6 @@
-using = (module) -> require 'open.client/core/' + module
-Base     = using 'base'
-common   = using '/mvc/_common'
-util     = using 'util'
+Base     = require '../base'
+common   = require './_common'
+util     = require '../util'
 
 class Module extends Base
   tryRequire: util.tryRequire

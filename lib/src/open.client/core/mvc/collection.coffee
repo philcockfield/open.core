@@ -1,4 +1,4 @@
-common = require 'open.client/core/mvc/_common'
+common = require './_common'
 
 ###
 Base class for Collections.
