@@ -17,7 +17,8 @@ describe 'mvc/module', ->
   
   it 'exposes the base require path', ->
     expect(module.modulePath).toEqual 'modules/foo'
-
+  
+  
   describe 'constructor', ->
     it 'calls super', ->
       ensure.parentConstructorWasCalled Module, -> new Module('modules/foo')
@@ -341,13 +342,4 @@ describe 'mvc/module', ->
         expect(views.Tmpl).toEqual 'Tmpl set in index'
 
 
-# TODO 
-###
-Put require method direclty on module ??
-    Item: module.require.model('item', init:true)
-
-###
-# 
-# 
-# 
 

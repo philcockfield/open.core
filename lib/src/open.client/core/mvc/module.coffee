@@ -2,16 +2,21 @@ Base     = require '../base'
 common   = require './_common'
 util     = require '../util'
 
-class Module extends Base
+module.exports = Module = class Module extends Base
   tryRequire: util.tryRequire
   
   ###
   Constructor.
-  @param modulePath: The path to the module.
+  @param module: The CommonJS module (used to derive the path), or the path itself.
   ###
-  constructor: (@modulePath) -> 
+  constructor: (module) -> 
       
       # Setup initial conditions.
+      if module.id?
+        # throw 'CommonJS module not specified' unless module.id?
+        @modulePath = _(module.id).strLeftBack '/'
+      else
+        @modulePath = module
       throw 'Module path not specified' if not @modulePath? or _.isBlank(@modulePath)
       super
         
@@ -182,6 +187,4 @@ Module.initPart = (parentModule, childModule) ->
 
 
 
-# EXPORT
-module.exports = Module
 
