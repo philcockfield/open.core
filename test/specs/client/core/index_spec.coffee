@@ -2,7 +2,7 @@ describe 'core/index', ->
   it 'exists', ->
     expect(require('open.client/core')).toBeDefined()
   
-  describe 'index properties', ->
+  describe 'default core index properties', ->
     it 'has title', ->
       expect(_.isString(core.title)).toEqual true
     
@@ -18,5 +18,11 @@ describe 'core/index', ->
     it 'has tryRequire', -> 
       expect(core.tryRequire).toBeDefined()
       expect(core.tryRequire).toEqual core.util.tryRequire
-
+    
+  describe 'init()', ->
+    beforeEach ->
+        core.init()
+    
+    it 'has controls after initialization', ->
+      expect(core.controls).toEqual require 'open.client/controls'
     
