@@ -1,4 +1,4 @@
-core = require 'open.client/core'
+core = require '../../core'
 
 module.exports = class TextboxTmpl extends core.mvc.Template
   root: 

@@ -1,4 +1,4 @@
-core = require 'open.client/core'
+core = require '../core'
 
 ###
 Manages a set of toggle buttons providing single-selection 
@@ -19,24 +19,24 @@ module.exports = class ButtonSet extends core.Base
       
       # Collection API.
       @length = 0
-      @buttons = new core.mvc.Collection()
+      @items = new core.mvc.Collection()
       
 
   ###
   Gets the collection of buttons being managed.
   ###
-  buttons: undefined  # Set in constructor.
+  items: undefined  # Set in constructor.
 
   
   ###
   Retrieves the collection of toggle-buttons that are currently in a selected state.
   ###
-  selected: -> (@buttons.select (btn) -> btn.canToggle() and btn.selected())[0]
+  selected: -> (@items.select (btn) -> btn.canToggle() and btn.selected())[0]
 
   ###
   Selects the buttons that can be toggled.
   ###
-  togglable: -> @buttons.select (btn) -> btn.canToggle()
+  togglable: -> @items.select (btn) -> btn.canToggle()
 
 
   ###
@@ -49,11 +49,11 @@ module.exports = class ButtonSet extends core.Base
   add: (button, options = {}) -> 
       # Setup initial conditions.
       throw 'add: no button' unless button?
-      return button if @buttons.include(button)
+      return button if @items.include(button)
       
       # Add the button to the collection.
-      @buttons.add button, options
-      @length = @buttons.length
+      @items.add button, options
+      @length = @items.length
       
       # Handler pre-click.
       button.bind 'pre:click', (e) -> 
@@ -89,12 +89,12 @@ module.exports = class ButtonSet extends core.Base
   remove: (button, options = {}) -> 
       # Setup initial conditions.
       throw 'remove: no button' unless button?
-      return false if not @buttons.include(button)
+      return false if not @items.include(button)
       options._fireChanged ?= true
       
       # Add the button to the collection.
-      @buttons.remove button, options
-      @length = @buttons.length
+      @items.remove button, options
+      @length = @items.length
       
       # Unbind from events.
       button.unbind 'pre:click'
@@ -120,10 +120,9 @@ module.exports = class ButtonSet extends core.Base
       options._fireChanged = false
       
       # Remove all items from the buttons collection.
-      buttons = @buttons.select -> true
+      buttons = @items.select -> true
       for btn in buttons
           @remove btn, options
-          # @buttons.remove btn, options
         
       # Alert listeners.
       if not options.silent
@@ -138,7 +137,7 @@ module.exports = class ButtonSet extends core.Base
   @param button : The button to look for.
   @returns True if the button exists, otherwise False.
   ###
-  contains: (button) -> @buttons.include button
+  contains: (button) -> @items.include button
   
   
   ###

@@ -1,18 +1,22 @@
-using = (module) -> require 'open.client/core/' + module
-Base     = using 'base'
-common   = using '/mvc/_common'
-util     = using 'util'
+Base     = require '../base'
+common   = require './_common'
+util     = require '../util'
 
-class Module extends Base
+module.exports = Module = class Module extends Base
   tryRequire: util.tryRequire
   
   ###
   Constructor.
-  @param modulePath: The path to the module.
+  @param module: The CommonJS module (used to derive the path), or the path itself.
   ###
-  constructor: (@modulePath) -> 
+  constructor: (module) -> 
       
       # Setup initial conditions.
+      if module.id?
+        # throw 'CommonJS module not specified' unless module.id?
+        @modulePath = _(module.id).strLeftBack '/'
+      else
+        @modulePath = module
       throw 'Module path not specified' if not @modulePath? or _.isBlank(@modulePath)
       super
         
@@ -26,7 +30,7 @@ class Module extends Base
               part = @tryRequire "#{@modulePath}/#{dir}/#{name}", options
               
               # Invoke the [module-init] pattern if required.
-              if part? and options.init ?= false
+              if part? and options.init ?= true
                   part = Module.initPart @, part
               
               # Finish up.
@@ -40,14 +44,13 @@ class Module extends Base
       @model      = req 'models'
       @view       = req 'views'
       @controller = req 'controllers'
-
+      
       # Store [require] part functions as object structure.
       @require = 
           model:      @model
           view:       @view
           controller: @controller
-
-
+  
   
   ###
   The root view of the module (convention).
@@ -106,38 +109,43 @@ class Module extends Base
                     converts whatever type of value to a jQuery element.
   ###
   init: (options = {}) -> 
+      options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
+      createMvcIndex @
+
+###
+  PRIVATE
+###
+createMvcIndex = (module) -> 
+
+      # Setup initial conditions.
+      req = module.require
+      get = Module.requirePart
       
-      # Translate [within] option to jQuery object.
-      options.within = util.toJQuery(options.within)
+      # Assign as properties (don't overwrite an existing property).
+      setIndex = (propName, fnRequire) => 
+              return if module[propName]?
+              getIndex = (fnRequire) ->  
+                              index = get(fnRequire, '')
+                              index ?= {} # Empty object representing [index] if there was no module.
+              module[propName] = getIndex fnRequire
       
-      # Construct MVC index.
-      req = @require
-      do => 
-          get = Module.requirePart
-          
-          # Assign as properties (don't overwrite an existing property).
-          setIndex = (propName, fnRequire) => 
-                  return if @[propName]?
-                  getIndex = (fnRequire) ->  
-                                  index = get(fnRequire, '')
-                                  index ?= {} # Empty object representing [index] if there was no module.
-                  @[propName] = getIndex fnRequire
-          
-          setIndex 'models',      @model
-          setIndex 'views',       @view
-          setIndex 'controllers', @controller
-          
-          # Assign conventional views (if they exist).
-          setView = (prop, name) => 
-                        return if @views[prop]? # View has already been setup.
-                        view = get req.view, name
-                        @views[prop] = view if view? # Only assign the property if the view was found.
-          setView 'Root', 'root'
-          setView 'Tmpl', 'tmpl'
-          
+      setIndex 'models',      module.model
+      setIndex 'views',       module.view
+      setIndex 'controllers', module.controller
+      
+      # Assign default views (if they exist).
+      setView = (prop, name) => 
+                    return if module.views[prop]? # View has already been setup.
+                    view = get req.view, name
+                    module.views[prop] = view if view? # Only assign the property if the view was found.
+      setView 'Root', 'root'
+      setView 'Tmpl', 'tmpl'
 
 
-# STATIC METHODS
+
+###
+  STATIC METHODS
+###
 
 ###
 Attempts to get an MVC part using the given require function - 
@@ -183,6 +191,4 @@ Module.initPart = (parentModule, childModule) ->
 
 
 
-# EXPORT
-module.exports = Module
 

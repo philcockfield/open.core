@@ -1,15 +1,14 @@
-core = require 'open.client/core'
-use = (name) -> require 'open.client/controls/' + name
+core = require '../core'
 
-Button    = use 'button'
-ButtonSet = use 'button_set'
+Button    = require './button'
+ButtonSet = require './button_set'
 
 module.exports = 
-  Textbox:    use 'textbox'
+  Textbox:    require './textbox'
   
   # Buttons.
   Button:        Button
   ButtonSet:     ButtonSet
-  CmdButton: use('buttons/cmd_button') core, Button
+  CmdButton:     require './buttons/cmd_button'
   
   

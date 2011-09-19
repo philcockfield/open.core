@@ -1,8 +1,7 @@
-using = (module) -> require 'open.client/core/util/' + module
-using 'jquery' # Load jQuery extensions.
+require './jquery'  # Cause jQuery extensions to be loaded.
 
 util =
-  Property:   using 'property'
+  Property: require './property'
 
   ###
   Executes a [require] call within a try/catch block.
@@ -23,5 +22,5 @@ util =
 
 
 # Export
-_.extend util, using('_conversion')
+_.extend util, require('./_conversion')
 module.exports = util

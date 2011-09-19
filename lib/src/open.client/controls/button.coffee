@@ -1,4 +1,4 @@
-core = require 'open.client/core'
+core = require '../core'
 
 ###
 A click-able button.

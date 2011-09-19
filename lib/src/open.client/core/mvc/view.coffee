@@ -1,6 +1,6 @@
-common = require 'open.client/core/mvc/_common'
+common = require './_common'
+Model  = require './model'
 util   = common.util
-Model  = common.using 'model'
 
 
 ###
