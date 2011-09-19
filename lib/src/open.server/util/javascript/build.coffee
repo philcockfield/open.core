@@ -11,11 +11,12 @@ module.exports =
         
         # Note: Order is important.  Underscore must come before Backbone.
         paths = [
-          "jquery-1.6.2.js"
-          "underscore-1.1.6.js"
-          "underscore.string-1.1.5.js"
-          "backbone-0.5.1.js"
-          "spin.js"
+          'jquery-1.6.2.js'
+          'underscore-1.1.6.js'
+          'underscore.string-1.1.5.js'
+          'backbone-0.5.1.js'
+          'spin.js'
+          'require.js'
         ]
         paths = _(paths).map (path) -> "#{sourceLibs}/#{path}"
         
@@ -58,7 +59,7 @@ module.exports =
         { path: "#{clientPath}/controls", namespace: 'open.client/controls' }
       ]
       
-      builder = new core.util.javascript.Builder(paths, includeRequireJS:true, header:copyright)
+      builder = new core.util.javascript.Builder(paths, header:copyright)
       builder.build (code) -> 
           if options.save is yes
             builder.save dir:dir, name: 'core', (code)-> 
