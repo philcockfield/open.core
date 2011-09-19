@@ -1,4 +1,72 @@
+Builder = require './build/builder'
+
+CoreBuilder: class CoreBuilder
+  constructor: (@save = true,  @dir = 'core') -> 
+      @core      = require 'open.server'
+      @dir       = "#{@core.paths.javascripts}/#{@dir}"
+      @copyright = @core.copyright(asComment: true)
+      
+      # Construct paths.
+      client = @core.paths.client
+      @path =
+        core:     { path: "#{client}/core",     namespace: 'open.client/core' }
+        controls: { path: "#{client}/controls", namespace: 'open.client/controls' }
+  
+  build: (options = {}, callback)-> 
+      
+      builder = new Builder( options.paths, header:@copyright )
+      builder.build (code) -> 
+          if options.save is yes
+            builder.save dir:@dir, name:options.name, (code) -> callback? code
+          else
+            callback? code
+  
+  coreControls: (callback) -> 
+    options =
+          paths: [ @path.core, @path.controls ]
+          name:  'core+controls'
+    @build options, callback
+  
+  core: (options = {}, callback) -> 
+    _.extend options, paths: [ @path.core ], name: 'core'
+    @build options, callback
+  
+  controls: (options = {}, callback) -> 
+    _.extend options, paths: [ @path.controls ], name: 'controls'
+    @build options, callback
+
+
 module.exports =
+  ###
+  Builds the entire client scripts to a single package.
+  @param options:
+            - save:         : flag indicating if the code should be saved to disk (default false).
+            - callback      : invoked upon completion (optional).
+                              Passes a function with two properties:
+                                - packed: the packed code
+                                - minified: the minified code if a minified path was specified
+                              The function can be invoked like so:
+                                fn(minified):
+                                  - minified: true - returns the minified code.
+                                  - minified: false - returns the unminified, packed code.
+  ###
+  all: (options = {}) -> 
+      callback = options.callback
+      builder = new CoreBuilder(options.save)
+      
+      builder.coreControls callback
+      
+      
+      # builder
+      
+      
+      
+      # .coreControls options
+      
+  
+  CoreBuilder: CoreBuilder
+
+
   ###
   Compiles the 3rd party libs to the /public/javascripts/libs folder.
   @param callback: invoked upon completion.
@@ -32,39 +100,4 @@ module.exports =
             
                 # Finish up.
                 callback?()
-
-
-  ###
-  Builds the entire client scripts to a single package.
-  @param options:
-            - save:         : flag indicating if the code should be saved to disk (default false).
-            - callback      : invoked upon completion (optional).
-                              Passes a function with two properties:
-                                - packed: the packed code
-                                - minified: the minified code if a minified path was specified
-                              The function can be invoked like so:
-                                fn(minified):
-                                  - minified: true - returns the minified code.
-                                  - minified: false - returns the unminified, packed code.
-  ###
-  all: (options = {}) ->
-      core      = require 'open.server'
-      copyright = core.copyright(asComment: true)
-
-      # Construct paths.
-      dir = "#{core.paths.public}/javascripts/core"
-      clientPath = core.paths.client
-      paths = [
-        { path: "#{clientPath}/core",     namespace: 'open.client/core' }
-        { path: "#{clientPath}/controls", namespace: 'open.client/controls' }
-      ]
-      
-      builder = new core.util.javascript.Builder(paths, header:copyright)
-      builder.build (code) -> 
-          if options.save is yes
-            builder.save dir:dir, name: 'core', (code)-> 
-              options.callback? code
-          
-          else
-            options.callback? code
 
