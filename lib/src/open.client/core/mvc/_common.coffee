@@ -1,8 +1,5 @@
-CORE_PATH = 'open.client/core'
-
 module.exports = 
-  using: (module) -> require "#{CORE_PATH}/mvc/#{module}"
-  util: require "#{CORE_PATH}/util"
+  util: require "../util"
 
   ###
   Provides common callback functionality for executing sync (server) method.

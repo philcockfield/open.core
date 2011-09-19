@@ -1,5 +1,4 @@
-common = require 'open.client/core/mvc/_common'
-View   = common.using 'view'
+common = require './_common'
 
 module.exports = class DataBinder
   constructor: (model, view) -> 

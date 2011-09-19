@@ -1,27 +1,5 @@
-core      = require 'open.client/core'
+core      = require '../../core'
 Template  = require './tmpl'
-
-textSyncer = (textProperty, input) -> 
-      # Syncer.
-      ignore = false
-      sync = (fn) -> 
-          ignore = true
-          fn()
-          ignore = false
-    
-      # Keep INPUT synchronized with [textbox.text] property.
-      syncInput = -> 
-            return if ignore
-            sync -> input.val textProperty()
-      syncInput() # Sync on load.
-      textProperty.onChanged syncInput
-    
-      # Keep [textbox.text] property synchronized with INPUT.
-      syncProperty = -> 
-            return if ignore
-            sync -> textProperty input.val()
-      input.keyup syncProperty
-      input.change syncProperty
 
 
 ###
@@ -128,10 +106,28 @@ module.exports = class Textbox extends core.mvc.View
   onEscape: (callback) -> @_.onPress 'escape', callback      
       
       
-      
-      
-      
-      
-      
-      
-      
+###
+  PRIVATE
+###      
+textSyncer = (textProperty, input) -> 
+      # Syncer.
+      ignore = false
+      sync = (fn) -> 
+          ignore = true
+          fn()
+          ignore = false
+    
+      # Keep INPUT synchronized with [textbox.text] property.
+      syncInput = -> 
+            return if ignore
+            sync -> input.val textProperty()
+      syncInput() # Sync on load.
+      textProperty.onChanged syncInput
+    
+      # Keep [textbox.text] property synchronized with INPUT.
+      syncProperty = -> 
+            return if ignore
+            sync -> textProperty input.val()
+      input.keyup syncProperty
+      input.change syncProperty
+
