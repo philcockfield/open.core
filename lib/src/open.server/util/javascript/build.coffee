@@ -2,39 +2,28 @@ Builder = require './build/builder'
 
 CoreBuilder: class CoreBuilder
   constructor: (@save = true,  @dir = 'core') -> 
-      @core      = require 'open.server'
-      @dir       = "#{@core.paths.javascripts}/#{@dir}"
-      @copyright = @core.copyright(asComment: true)
+      core       = require 'open.server'
+      @dir       = "#{core.paths.javascripts}/#{@dir}"
+      @copyright = core.copyright(asComment: true)
       
       # Construct paths.
-      client = @core.paths.client
+      client = core.paths.client
       @path =
         core:     { path: "#{client}/core",     namespace: 'open.client/core' }
         controls: { path: "#{client}/controls", namespace: 'open.client/controls' }
   
-  build: (options = {}, callback)-> 
-      
-      builder = new Builder( options.paths, header:@copyright )
-      builder.build (code) -> 
-          if options.save is yes
-            builder.save dir:@dir, name:options.name, (code) -> callback? code
+  build: (name, paths, callback)-> 
+      paths = [paths] unless _(paths).isArray()
+      builder = new Builder( paths, header:@copyright )
+      builder.build (code) => 
+          if @save is yes
+            builder.save dir:@dir, name:name, (code) -> callback? code
           else
             callback? code
   
-  coreControls: (callback) -> 
-    options =
-          paths: [ @path.core, @path.controls ]
-          name:  'core+controls'
-    @build options, callback
-  
-  core: (options = {}, callback) -> 
-    _.extend options, paths: [ @path.core ], name: 'core'
-    @build options, callback
-  
-  controls: (options = {}, callback) -> 
-    _.extend options, paths: [ @path.controls ], name: 'controls'
-    @build options, callback
-
+  coreControls: (callback) -> @build 'core+controls', [ @path.core, @path.controls ], callback
+  core:         (callback) -> @build 'core', @path.core, callback
+  controls:     (callback) -> @build 'controls', @path.controls, callback
 
 module.exports =
   ###
@@ -54,16 +43,15 @@ module.exports =
       callback = options.callback
       builder = new CoreBuilder(options.save)
       
-      builder.coreControls callback
-      
-      
-      # builder
-      
-      
-      
-      # .coreControls options
-      
+      builder.coreControls (coreControls) -> 
+        builder.core (core) -> 
+          builder.controls (controls) -> 
+            callback? coreControls
   
+  
+  ###
+  The core builder.
+  ###
   CoreBuilder: CoreBuilder
 
 
