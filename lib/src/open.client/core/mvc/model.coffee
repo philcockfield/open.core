@@ -31,6 +31,14 @@ module.exports = class Model extends Backbone.Model
         # Add defaults as Property functions.
         self.addProps @defaults
         
+        # Overide server interaction methods.
+        # NB: These are set in the constructor for each instance (and not on the class itself)
+        #     to avoid event hookups on these methods firing for all created model, not just
+        #     this particular instance.
+        @fetch   = (options) -> @_sync @, 'fetch', options
+        @save    = (options) -> @_sync @, 'save', options
+        @destroy = (options) -> @_sync @, 'destroy', options
+        
         # Extend members.
         do => 
             init = (method) -> 
@@ -75,17 +83,17 @@ module.exports = class Model extends Backbone.Model
         model.fetch.onComplete (e) -> 
         
   ###
-  fetch: (options) -> @_sync @, 'fetch', options
+  fetch: undefined   # Set in constructor
   
   # Saves the model on the server.
   # Params: same as fetch
   # See backbone.js documentation for more details.
-  save: (options) -> @_sync @, 'save', options
+  save: undefined   # Set in constructor
   
   # Destroys the model on the server.
   # Params: same as fetch
   # See backbone.js documentation for more details.
-  destroy: (options) -> @_sync @, 'destroy', options
+  destroy: undefined   # Set in constructor
   
   _sync: (model, methodName, options = {}) -> 
           fn = Backbone.Model.prototype[methodName]
