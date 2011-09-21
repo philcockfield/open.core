@@ -13,6 +13,7 @@ module.exports = Module = class Module extends Base
       
       # Setup initial conditions.
       super
+      _.extend @, Backbone.Events
       
       # Derive the module path.
       if module?.id?

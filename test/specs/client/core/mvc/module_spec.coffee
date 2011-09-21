@@ -18,6 +18,9 @@ describe 'mvc/module', ->
   it 'exposes the base require path', ->
     expect(module.modulePath).toEqual 'modules/foo'
   
+  it 'support eventing', ->
+    expect(-> module.bind 'name').not.toThrow()
+  
   
   describe 'constructor', ->
     it 'calls super', ->
