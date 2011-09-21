@@ -12,14 +12,18 @@ module.exports = Module = class Module extends Base
   constructor: (module) -> 
       
       # Setup initial conditions.
-      if module.id?
+      super
+      
+      # Derive the module path.
+      if module?.id?
         # throw 'CommonJS module not specified' unless module.id?
         @modulePath = _(module.id).strLeftBack '/'
       else
         @modulePath = module
-      throw 'Module path not specified' if not @modulePath? or _.isBlank(@modulePath)
-      super
-        
+      if not @modulePath? or _.isBlank(@modulePath)
+          throw 'Module path not specified. Pass either the path of the CommonJS module to [super].' 
+      
+      
       # Setup the module part [require] functions.
       req = (dir) => 
           
