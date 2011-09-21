@@ -1,4 +1,60 @@
+Builder = require './build/builder'
+
+CoreBuilder: class CoreBuilder
+  constructor: (@save = true,  @dir = 'core') -> 
+      core       = require 'open.server'
+      @dir       = "#{core.paths.javascripts}/#{@dir}"
+      @copyright = core.copyright(asComment: true)
+      
+      # Construct paths.
+      client = core.paths.client
+      @path =
+        core:     { path: "#{client}/core",     namespace: 'open.client/core' }
+        controls: { path: "#{client}/controls", namespace: 'open.client/controls' }
+  
+  build: (name, paths, callback)-> 
+      paths = [paths] unless _(paths).isArray()
+      builder = new Builder( paths, header:@copyright )
+      builder.build (code) => 
+          if @save is yes
+            builder.save dir:@dir, name:name, (code) -> callback? code
+          else
+            callback? code
+  
+  coreControls: (callback) -> @build 'core+controls', [ @path.core, @path.controls ], callback
+  core:         (callback) -> @build 'core', @path.core, callback
+  controls:     (callback) -> @build 'controls', @path.controls, callback
+
 module.exports =
+  ###
+  Builds the entire client scripts to a single package.
+  @param options:
+            - save:         : flag indicating if the code should be saved to disk (default false).
+            - callback      : invoked upon completion (optional).
+                              Passes a function with two properties:
+                                - packed: the packed code
+                                - minified: the minified code if a minified path was specified
+                              The function can be invoked like so:
+                                fn(minified):
+                                  - minified: true - returns the minified code.
+                                  - minified: false - returns the unminified, packed code.
+  ###
+  all: (options = {}) -> 
+      callback = options.callback
+      builder = new CoreBuilder(options.save)
+      
+      builder.coreControls (coreControls) -> 
+        builder.core (core) -> 
+          builder.controls (controls) -> 
+            callback? coreControls
+  
+  
+  ###
+  The core builder.
+  ###
+  CoreBuilder: CoreBuilder
+
+
   ###
   Compiles the 3rd party libs to the /public/javascripts/libs folder.
   @param callback: invoked upon completion.
@@ -11,11 +67,12 @@ module.exports =
         
         # Note: Order is important.  Underscore must come before Backbone.
         paths = [
-          "jquery-1.6.2.js"
-          "underscore-1.1.6.js"
-          "underscore.string-1.1.5.js"
-          "backbone-0.5.1.js"
-          "spin.js"
+          'jquery-1.6.2.js'
+          'underscore-1.1.6.js'
+          'underscore.string-1.1.5.js'
+          'backbone-0.5.1.js'
+          'spin.js'
+          'require.js'
         ]
         paths = _(paths).map (path) -> "#{sourceLibs}/#{path}"
         
@@ -31,39 +88,4 @@ module.exports =
             
                 # Finish up.
                 callback?()
-
-
-  ###
-  Builds the entire client scripts to a single package.
-  @param options:
-            - save:         : flag indicating if the code should be saved to disk (default false).
-            - callback      : invoked upon completion (optional).
-                              Passes a function with two properties:
-                                - packed: the packed code
-                                - minified: the minified code if a minified path was specified
-                              The function can be invoked like so:
-                                fn(minified):
-                                  - minified: true - returns the minified code.
-                                  - minified: false - returns the unminified, packed code.
-  ###
-  all: (options = {}) ->
-      core      = require 'open.server'
-      copyright = core.copyright(asComment: true)
-
-      # Construct paths.
-      dir = "#{core.paths.public}/javascripts/core"
-      clientPath = core.paths.client
-      paths = [
-        { path: "#{clientPath}/core",     namespace: 'open.client/core' }
-        { path: "#{clientPath}/controls", namespace: 'open.client/controls' }
-      ]
-      
-      builder = new core.util.javascript.Builder(paths, includeRequireJS:true, header:copyright)
-      builder.build (code) -> 
-          if options.save is yes
-            builder.save dir:dir, name: 'core', (code)-> 
-              options.callback? code
-          
-          else
-            options.callback? code
 

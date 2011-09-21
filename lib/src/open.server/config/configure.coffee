@@ -52,7 +52,7 @@ module.exports = (app, options = {}) ->
               samplesDir: "#{core.paths.test}/specs/client/samples"
               sourceUrls: [
                 "#{baseUrl}/libs.js"
-                "#{baseUrl}/core.js" ]
+                "#{baseUrl}/core+controls.js" ]
 
 
     app.configure 'production', ->
