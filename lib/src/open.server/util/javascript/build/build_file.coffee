@@ -12,8 +12,6 @@ module.exports = class BuildFile
   ###
   constructor: (@path, @namespace) -> 
           
-          # console.log '@path', @path
-          
           # Setup initial conditions.
           @code         = {}
           @namespace    = BuildFile.formatNamespace(@namespace)
@@ -62,7 +60,12 @@ module.exports = class BuildFile
         code.javascript = data if @isJavascript is yes
         if @isCoffee is yes
             code.coffeescript = data
-            code.javascript = CoffeeScript.compile(data)
+            try
+              code.javascript = CoffeeScript.compile(data)
+            catch error
+              throw "Failed to compile coffee-script file: [#{@path}].\n#{error}"
+              
+              
         
         # Compose the Common-JS module property.
         code.moduleProperty = """

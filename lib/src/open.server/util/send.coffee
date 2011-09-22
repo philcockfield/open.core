@@ -4,7 +4,7 @@ module.exports =
   @param response to write to.
   @param code to send.
   ###
-  script: (response, code) -> response.send code, 'Content-Type': 'text/javascript'
+  script: (response, script) -> response.send script, 'Content-Type': 'text/javascript'
 
   ###
   Writes the contents of the given JavaScript file to the response stream.
