@@ -64,15 +64,33 @@ describe 'controls/button_set', ->
       tab1.click()
       expect(tab1.selected()).toEqual true
   
+  describe 'item() method', ->
+    btn1 = null
+    btn2 = null
+    beforeEach ->
+        btn1 = buttons.add new Button(label: 'btn1')
+        btn2 = buttons.add new Button(label: 'btn2')
+
+    it 'returns the first button', ->
+      expect(buttons.item(0)).toEqual btn1
+      
+    it 'returns the second button', ->
+      expect(buttons.item(1)).toEqual btn2
+    
+    it 'returns null when index is out of bounds', ->
+      expect(buttons.item(-1)).toEqual null
+      expect(buttons.item(2)).toEqual null
+
+    it 'returns null when collection is empty', ->
+      buttons.clear()
+      expect(buttons.item(0)).toEqual null
+  
   describe 'selected (toggle button)', ->
     btn1 = null
     btn2 = null
     beforeEach ->
-        btn1 = new Button(label: 'btn1')
-        btn2 = new Button(label: 'btn2')
-
-        buttons.add btn1
-        buttons.add btn2
+        btn1 = buttons.add new Button(label: 'btn1')
+        btn2 = buttons.add new Button(label: 'btn2')
         buttons.add tab1
         buttons.add tab2
     
@@ -337,17 +355,13 @@ describe 'controls/button_set', ->
       it 'determines if a button is not contained within the set', ->
         buttons.add tab1
         expect(buttons.contains(tab2)).toEqual false
-        
-      
-      
-    
-    
-    
-    
-    
-      
-            
-    
-      
-      
-    
+
+
+
+
+
+
+
+
+
+

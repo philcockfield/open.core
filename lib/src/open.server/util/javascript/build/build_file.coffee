@@ -48,7 +48,6 @@ module.exports = class BuildFile
                           Returns
                             - the 'code' property object.
                             - a reference to this BuildFile instance.
-                        
   ###
   build: (callback) -> 
     fs.readFile @path, (err, data) =>

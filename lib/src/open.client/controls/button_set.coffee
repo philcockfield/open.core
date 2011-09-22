@@ -26,7 +26,14 @@ module.exports = class ButtonSet extends core.Base
   Gets the collection of buttons being managed.
   ###
   items: undefined  # Set in constructor.
-
+  
+  ###
+  Retrieves the button model from the [Items] collection at the specified index.
+  @param index: The index within the collection (0-based)
+  @returns the specified button, or null.
+  ###
+  item: (index) -> @items.models[index]
+  
   
   ###
   Retrieves the collection of toggle-buttons that are currently in a selected state.
