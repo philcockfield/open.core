@@ -107,10 +107,7 @@ describe 'mvc/model', ->
         waitsFor -> written == true
         runs -> 
           expect(model.bar()).toEqual 'hello'
-
-    
-      
-    
+  
   describe 'url', ->
     it 'can be overridden', ->
       class MyModel extends Model
@@ -133,7 +130,6 @@ describe 'mvc/model', ->
       model.destroy()
       expect(model._sync).toHaveBeenCalled()
     
-      
   describe 'fetch (and generic server method handler)', ->
     fetchArgs = null
     
@@ -160,7 +156,6 @@ describe 'mvc/model', ->
       expect(args.response).toEqual 'res'
       expect(args.success).toEqual true
       expect(args.error).toEqual false
-
     
     it 'invokes the error callback', ->
       count = 0
@@ -266,3 +261,15 @@ describe 'mvc/model', ->
         model.fetch()
         expect(args.source).toEqual model
 
+  describe '.identifier() method', ->
+    it 'returns the [id] when present', ->
+      model = new Model id:'foo'
+      expect(model.identifier()).toEqual 'foo'
+      
+    it 'returns the [cid] when the [id] has not been set', ->
+      model = new Model()
+      expect(model.identifier()).toEqual model.cid
+    
+    
+    
+    

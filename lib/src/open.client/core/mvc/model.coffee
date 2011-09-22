@@ -52,6 +52,10 @@ module.exports = class Model extends Backbone.Model
         # Property aliases.
         @atts = @attributes
   
+  ###
+  Retrieves the [id] if it exists, otherwise returns the [cid].
+  ###
+  identifier: -> @id ?= @cid
   
   ###
   Adds one or more [Property] functions to the object.
