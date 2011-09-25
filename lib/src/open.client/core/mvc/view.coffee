@@ -47,8 +47,8 @@ module.exports = class View extends Model
       
       # Finish up.
       syncClasses @
-
-
+  
+  
   ###
   Renders the given HTML within the view.
   ###
@@ -57,8 +57,14 @@ module.exports = class View extends Model
       if html?
         el.html html
       el.html()
-
-
+  
+  ###
+  Deterines whether the view element currently has focus.
+  @returns true if the element is focused, otherwise false.
+  ###
+  hasFocus: -> @el.is(':focus')
+  
+  
   ###
   Replaces the given element with the view.
   @param el: The element to replace, this can be a:
