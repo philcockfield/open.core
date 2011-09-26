@@ -146,10 +146,26 @@ module.exports = class ButtonSet extends core.Base
   ###
   contains: (button) -> @items.include button
   
+  ###
+  Retrieves the sibling immediately previous to the given button.
+  @param button : The button to retrieve the sibling of.
+  @returns the previous button, or null if there is no previous button.
+  ###
+  previous: (button) -> @items.models[@items.indexOf(button) - 1]
+
+  ###
+  Retrieves the sibling immediately next to the given button.
+  @param button : The button to retrieve the sibling of.
+  @returns the next button, or null if there is no next button.
+  ###
+  next: (button) -> 
+      index = @items.indexOf(button)
+      index += 1 unless index is -1
+      @items.models[index]
   
-  ###
-  PRIVATE Methods
-  ###
+  
+  # PRIVATE --------------------------------------------------------------------------
+    
   _fire: (event, args = {}) -> 
       args.source = @
       @trigger event, args

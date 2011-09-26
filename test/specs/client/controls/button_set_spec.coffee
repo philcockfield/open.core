@@ -357,7 +357,37 @@ describe 'controls/button_set', ->
         expect(buttons.contains(tab2)).toEqual false
 
 
-
+  describe 'siblings', ->
+    btn1 = null
+    btn2 = null
+    btn3 = null
+    
+    beforeEach ->
+        btn1 = buttons.add new Button()
+        btn2 = buttons.add new Button()
+        btn3 = buttons.add new Button()
+    
+    describe 'previous', ->
+      it 'returns the null when no button is passed', ->
+        expect(buttons.previous()).toEqual null
+      
+      it 'returns the null as the button previous to the first button', ->
+        expect(buttons.previous(btn1)).toEqual null
+      
+      it 'returns the previous button', ->
+        expect(buttons.previous(btn2)).toEqual btn1
+    
+    describe 'next', ->
+      it 'returns the null when no button is passed', ->
+        expect(buttons.next()).toEqual null
+      
+      it 'returns the null as the button next to the last button', ->
+        expect(buttons.next(btn3)).toEqual null
+      
+      it 'returns the next button', ->
+        expect(buttons.next(btn2)).toEqual btn3
+      
+      
 
 
 
