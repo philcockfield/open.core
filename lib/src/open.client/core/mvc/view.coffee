@@ -13,7 +13,6 @@ module.exports = class View extends Model
           - tagName   : (optional). The tag name for the View's root element (default: DIV)
           - className : (optional). The CSS class name for the root element.
           - el        : (optional). An explicit element to use.
-          
   ###
   constructor: (params = {}) ->
       # Setup initial conditions.
@@ -23,7 +22,7 @@ module.exports = class View extends Model
       @addProps
           enabled: true
           visible: true
-
+      
       # Create the wrapped Backbone View.
       view = new Backbone.View
                     tagName:   params.tagName
@@ -36,7 +35,7 @@ module.exports = class View extends Model
           atts: params
       @element = view.el
       @el = $(@element)
-
+      
       # Wire up events.
       @visible.onChanged (e) => syncVisibility @, e.newValue
       @enabled.onChanged (e) => syncClasses @
@@ -119,10 +118,9 @@ module.exports = class View extends Model
       @
 
 
+# PRIVATE --------------------------------------------------------------------------
 
-###
-PRIVATE
-###
+
 syncClasses = (view) -> 
     view.el.toggleClass 'core_disabled', not view.enabled()
 

@@ -5,11 +5,12 @@ Manages a set of toggle buttons providing single-selection
 behavior (for example, a tab set).
 
 Events:
-  - add
-  - remove
-  - clear
-  - selectionChanged
-
+  - add               : Fires when a button is added to the collection.
+  - remove            : Fires when a button is removed from the colletion.
+  - clear             : Fires when the collection of buttons is cleared.
+  - selectionChanged  : Fires when the selectin changes (does not fire on multiple clicks to the selected button).
+  - mouseUp           : Fires on the mouse-up event for each button (irrespective of whether the button is selected).
+  - mouseDown         : Fires on the mouse-down event for each button (irrespective of whether the button is selected).
 ###
 module.exports = class ButtonSet extends core.Base
   constructor: -> 
@@ -62,10 +63,15 @@ module.exports = class ButtonSet extends core.Base
       @items.add button, options
       @length = @items.length
       
-      # Handler pre-click.
+      # Handle pre-click.
       button.bind 'pre:click', (e) -> 
           # Do not allow a selected button to be de-selected.
           e.cancel = true if button.selected()
+      
+      # Bubble general mouse events.
+      fireMouse = (event, e) => @trigger event, args:e, button:button
+      button.el.mouseup   (e) -> fireMouse 'mouseUp', e
+      button.el.mousedown (e) -> fireMouse 'mouseDown', e
       
       # Handle button press.
       button.selected.onChanged (e) => 
@@ -106,6 +112,8 @@ module.exports = class ButtonSet extends core.Base
       # Unbind from events.
       button.unbind 'pre:click'
       button.selected.unbind 'changed'
+      button.el.unbind 'mouseup'
+      button.el.unbind 'mousedown'
       
       # Finish up.
       if not options.silent

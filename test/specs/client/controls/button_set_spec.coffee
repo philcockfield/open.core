@@ -386,10 +386,62 @@ describe 'controls/button_set', ->
       
       it 'returns the next button', ->
         expect(buttons.next(btn2)).toEqual btn3
-      
-      
 
 
+  describe 'mouse events', ->
+    btn1      = null
+    btn2      = null
+    fireCount = 0
+    args      = null
+    
+    beforeEach ->
+        fireCount = 0
+        args      = null
+        btn1      = buttons.add new Button()
+        btn2      = buttons.add new Button()
+        btn2.click()
+
+    describe '[mouseUp]', ->
+      beforeEach ->
+          buttons.bind 'mouseUp', (e) -> 
+                                  args = e
+                                  fireCount += 1
+      
+      it 'fires on the un-selected button', ->
+        btn1.el.mouseup()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+        
+      it 'fires on the selected button', ->
+        btn2.el.mouseup()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn2
+      
+      it 'removes event handler', ->
+        buttons.remove btn1
+        btn1.el.mouseup()
+        expect(fireCount).toEqual 0
+
+    describe '[mouseDown]', ->
+      beforeEach ->
+          buttons.bind 'mouseDown', (e) -> 
+                                  args = e
+                                  fireCount += 1
+      
+      it 'fires on the un-selected button', ->
+        btn1.el.mousedown()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+        
+      it 'fires on the selected button', ->
+        btn2.el.mousedown()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn2
+      
+      it 'removes event handler', ->
+        buttons.remove btn1
+        btn1.el.mousedown()
+        expect(fireCount).toEqual 0
 
 
 
