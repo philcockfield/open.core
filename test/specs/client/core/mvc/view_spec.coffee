@@ -104,11 +104,6 @@ describe 'mvc/view', ->
       view.visible true
       expect(view.el.css('display')).toEqual ''
       
-  describe 'focus', ->
-    it 'uses jQuery to determine focus', ->
-      spyOn(view.el, 'is')
-      view.hasFocus()
-      expect(view.el.is).toHaveBeenCalledWith(':focus')
   
   describe 'helper functions', ->
     it 'exposes Backbone [make] method', ->

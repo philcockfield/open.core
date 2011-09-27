@@ -62,7 +62,11 @@ module.exports = class View extends Model
   Deterines whether the view element currently has focus.
   @returns true if the element is focused, otherwise false.
   ###
-  hasFocus: -> @el.is(':focus')
+  hasFocus: -> 
+    
+    # Note: Checking against the [activeElement] is faster than doing
+    #       an [ @el.is(':focus') ] because it avoids a complete query of the DOM tree.
+    $(document.activeElement).get(0) is @el.get(0)
   
   
   ###
