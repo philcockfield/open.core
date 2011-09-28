@@ -1,7 +1,7 @@
 {exec}  = require 'child_process'
 fs      = require 'fs'
 
-root =
+module.exports = version =
   ###
   Increments to the next version.
   @param version to increment.
@@ -16,9 +16,9 @@ root =
 
   ###
   Increments the version of the given package.
-  @param package : to increment.
+  @param package : {object}. The [package.json] to increment.
   ###
-  incrementPackage: (package) -> package.version = root.next(package.version)
+  incrementPackage: (package) -> package.version = version.next(package.version)
 
 
   ###
@@ -33,7 +33,3 @@ root =
           value = package.dependencies[key]
           package.dependencies[key] = dependency.version
 
-
-
-# Export.
-module.exports = root

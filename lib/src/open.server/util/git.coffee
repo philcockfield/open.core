@@ -12,6 +12,7 @@ formatStrParam = (value, defaultValue) ->
 module.exports =
   ###
   Executes the given git command.
+  Do not specify the 'git' prefix, just the command.
   @param cmd      : Git command to execute.
   @param options
                   - dir     : (optional) The directory the git repository is in (default current).
@@ -23,6 +24,9 @@ module.exports =
       # Setup initial conditions.
       options = options[0] ?= {}
       dir = options.dir
+      
+      # Strip the 'git' prefix if the caller has included it.
+      cmd = _(cmd).strRight 'git '
       
       # Prepare the command to execute.
       if dir?
