@@ -54,7 +54,7 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
         log ' - Checking into GitHub', color.blue
         console.log ''
         git = core.util.git
-    
+        
         # 1. Stage the [package.json] file
         git.exec 'git add package.json', (err, stdout, stderr) ->
             onExec err, stdout, stderr
@@ -75,8 +75,5 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
             console.log stdout + stderr
             callback?()
     
-    
     # Execute.
     increment -> checkin -> publish -> logDone()
-    
-    
