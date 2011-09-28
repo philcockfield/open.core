@@ -7,6 +7,7 @@ paths =
     public:       "#{lib}/public"
     javascripts:  "#{lib}/public/javascripts"
     stylesheets:  "#{lib}/public/stylesheets"
+    images:       "#{lib}/public/images"
     views:        "#{lib}/views"
     src:          "#{lib}/src"
     server:       "#{lib}/src/open.server"
