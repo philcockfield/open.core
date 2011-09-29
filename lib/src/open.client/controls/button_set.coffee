@@ -120,9 +120,8 @@ module.exports = class ButtonSet extends core.Base
           @_fire 'remove' 
           @_fireChanged() if options._fireChanged
       true
-      
-        
-
+  
+  
   ###
   Removes all buttons from the set.
   @param options

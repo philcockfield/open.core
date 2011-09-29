@@ -20,17 +20,23 @@ abs-pos(left = 0, top = 0, right = 0, bottom = 0, unit=px)
 
 // Style functions.
 bevelHighlight()
-  absPosition(0, 0, 0, null)
+  abs-pos(0, 0, 0, null)
   height: 1px
   background: white
 
-textEmboss()
-  text-shadow: 0px 1px 0px white;
+textEmboss(color = white)
+  text-shadow: 0px 1px 0px color;
 
 noEmboss()
   text-shadow: none;
 
 noSelect()
   user-select none
+
+
+// iOS.
+ios-no-flash()
+  -webkit-tap-highlight-color rgba(0, 0, 0, 0)
+
 
 

@@ -1,7 +1,9 @@
 fs    = require 'fs'
 root  = fs.realpathSync("#{__dirname}/../../../..")
 lib   = "#{root}/lib"
-paths =
+
+
+module.exports = paths =
     root:         root
     lib:          lib
     public:       "#{lib}/public"
@@ -14,8 +16,10 @@ paths =
     client:       "#{lib}/src/open.client"
     test:         "#{root}/test"
     specs:        "#{root}/test/specs"
-module.exports = paths
+
 
 # Put the root modules into the global paths.
 # require.paths.unshift paths.client
 require.paths.unshift paths.src
+
+

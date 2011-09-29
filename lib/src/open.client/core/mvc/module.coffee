@@ -117,9 +117,10 @@ module.exports = Module = class Module extends Base
       options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
       createMvcIndex @
 
-###
-  PRIVATE
-###
+
+# PRIVATE --------------------------------------------------------------------------
+
+
 createMvcIndex = (module) -> 
 
       # Setup initial conditions.
@@ -147,10 +148,8 @@ createMvcIndex = (module) ->
       setView 'Tmpl', 'tmpl'
 
 
+# STATIC METHODS --------------------------------------------------------------------------
 
-###
-  STATIC METHODS
-###
 
 ###
 Attempts to get an MVC part using the given require function - 

@@ -48,8 +48,8 @@ module.exports = (app, options = {}) ->
         core.configure.specs app,
               title:      'Open.Core Specs'
               url:        "#{baseUrl}/specs"
-              specsDir:   "#{core.paths.test}/specs/client/"
-              samplesDir: "#{core.paths.test}/specs/client/samples"
+              specsDir:   "#{core.paths.specs}/client/"
+              samplesDir: "#{core.paths.specs}/client/samples"
               sourceUrls: [
                 "#{baseUrl}/libs.js"
                 "#{baseUrl}/core+controls.js" ]
