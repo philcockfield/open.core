@@ -13,6 +13,12 @@ global.color =
     reset  : "\033[0m"
 
 log = (message, color, explanation) ->
+        
+        # Check if the log has been silenced.
+        self = commonUtil.log
+        return if self.silent is yes
+        
+        # Write the message.
         color = '' unless color?
         if message?
           explanation ?= ''
@@ -20,12 +26,18 @@ log = (message, color, explanation) ->
         else
           console.log ''
 
-module.exports =
+module.exports = commonUtil = 
   # Client aliases.
   toBool: client.util.toBool
 
   ###
   Logs a message to the console optionally with a color.
+  
+  To suppress output to the log (for example, within specs) set the 
+  [silent] property of this function to true.
+  
+     eg. core.util.log.silent = true
+  
   @param message      : to write to the console.
   @param color        : (optional) the color to use.  Omit for standard (black).  See [global.color]
   @param explanation  : (optional) follow on text written in black.
