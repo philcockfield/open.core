@@ -14,9 +14,8 @@ global.color =
 
 log = (message, color, explanation) ->
         
-        # Check if the log has been silenced.
-        self = commonUtil.log
-        return if self.silent is yes
+        # Exit out if the log has been silenced.
+        return if commonUtil.log.silent is yes
         
         # Write the message.
         color = '' unless color?
