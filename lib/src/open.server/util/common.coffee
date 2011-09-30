@@ -12,15 +12,13 @@ global.color =
     cyan   : "\033[0;36m"
     reset  : "\033[0m"
 
-log = (message, color, explanation) ->
+log = (message, color = '', explanation = '') ->
         
         # Exit out if the log has been silenced.
         return if commonUtil.log.silent is yes
         
         # Write the message.
-        color = '' unless color?
         if message?
-          explanation ?= ''
           console.log "#{color}#{message}#{global.color.reset} #{explanation}"
         else
           console.log ''
