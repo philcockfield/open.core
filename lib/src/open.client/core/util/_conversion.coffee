@@ -51,12 +51,16 @@ module.exports =
       # Setup initial conditions.
       return value if not value?
       
-      # Perform conversion.
+      # Check whether the object is already a jQuery object, or is an MVC [View].
       return value if (value instanceof jQuery) 
-      return value.el if (value.el instanceof jQuery)
-      return $(value) if _.isString(value) or (value instanceof HTMLElement)
+      return value.el if (value.el instanceof jQuery) 
       
-      # Finish up.
-      throw 'Cannot convert to jQuery object: ' + value
+      # Not a known type - wrap it as a jQuery object.
+      return $(value)
+      
+
+
+
+
 
     

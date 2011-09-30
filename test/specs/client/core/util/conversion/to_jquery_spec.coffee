@@ -16,9 +16,6 @@ describe 'util/conversion/to_jquery', ->
   it 'translates an HTML DOM element to a jQuery object', ->
     elBody = $('body').get(0)
     expect(toJQuery(elBody)).toEqual $(elBody)
-  
-  it 'throws if value type not supported', ->
-    expect(-> toJQuery(12345)).toThrow()
 
   it 'returns value is not defined', ->
     expect(toJQuery()).toEqual undefined

@@ -80,11 +80,11 @@ describe 'mvc/view', ->
   describe 'html', ->
     it 'insert HTML within the view', ->
       view.html '<p>foo</p>'
-      expect(view.el.clone().wrap('<div></div>').parent().html()).toEqual '<div><p>foo</p></div>'
+      expect(view.el.html().toLowerCase()).toEqual '<p>foo</p>'
   
     it 'reads the views inner HTML', ->
       view.html '<p>foo</p>'
-      expect(view.html()).toEqual '<p>foo</p>'
+      expect(view.html().toLowerCase()).toEqual '<p>foo</p>'
        
   
   describe 'visible', ->
@@ -97,13 +97,17 @@ describe 'mvc/view', ->
   
     it 'changes the CSS display value to none', ->
       view.visible false
-      expect(view.el.css('display')).toEqual 'none'
+      
+      # NB: Allows comparison within IE8
+      attr = view.el.attr('style')
+      expect(_(attr).startsWith 'display: none').toEqual true
   
     it 'changes the CSS display value to empty string', ->
       view.visible false
       view.visible true
-      expect(view.el.css('display')).toEqual ''
       
+      display = view.el.css('display') or '' # IE8 work around.
+      expect(display).toEqual ''
   
   describe 'helper functions', ->
     it 'exposes Backbone [make] method', ->
