@@ -30,8 +30,8 @@ module.exports = commonUtil =
   ###
   Logs a message to the console optionally with a color.
   
-  To suppress output to the log (for example, within specs) set the 
-  [silent] property of this function to true.
+  To suppress output to the log (for example when testing code that emits log output) 
+  set the [silent] property of this function to true.
   
      eg. core.util.log.silent = true
   
@@ -56,12 +56,18 @@ module.exports = commonUtil =
   ###
   Default handler after the invoked 'exec' command.
   Prints output to console and exits process if failed.
+
+  To suppress output to the log (for example when testing code that emits log output) 
+  set the [silent] property of this function to true.
+  
+     eg. core.util.log.silent = true
+
   @param err    : the error (if any).
   @param stdout : the standard out.
   @param stderr : the standard error.
   ###
   onExec: (err, stdout, stderr) ->
-    console.log stdout if stdout
+    log stdout if stdout
     log(stderr, color.red) if stderr
     # Write the err message and kill the process.
     if err?
