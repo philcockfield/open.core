@@ -5,7 +5,10 @@ module.exports = index =
   cake:       require './cake'
   git:        require './git'
   html:       require './html'
+  test:       require './test'
+  
   Timer:      require './timer'
+  
 
 # Copy the common utility methods onto the index.
 _.extend index, require('./common')
