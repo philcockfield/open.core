@@ -37,9 +37,9 @@ module.exports = class ClientTestRunner
   
   
   ###
-  Starts the new node-process and runs the unit tests.
+  Starts a new node process and runs the unit tests in it. 
   The method looks for the word 'Started' in stdout.  Ensure the server reports it's startup state to the console.
-  @param callback : Function to invoke upon compltion.
+  @param callback : Function to invoke when complete.  See property on the object for results.
   ###
   run: (callback) -> 
       # Start a node process to serve the test-runner, specs and code.
