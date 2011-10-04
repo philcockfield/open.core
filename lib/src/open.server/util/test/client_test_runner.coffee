@@ -108,25 +108,28 @@ module.exports = class ClientTestRunner
           args.passed = get('.runner.passed').length is 1
           passedDesc = get '.runner.passed .description'
           failedDesc = get '.runner.failed .description'
-          args.text = if args.passed then passedDesc.html() else failedDesc.html()
-          # color = if args.passed then color.green e
+          args.text  = if args.passed then passedDesc.html() else failedDesc.html()
+          logColor   = if args.passed then color.green else color.red
           
           # Write results to console.
-          @log(" - #{args.text}", color.green) if args.passed
-          @log(" - #{args.text}", color.red) if not args.passed
+          @log " #{args.text}", logColor
           @log()
           exit()
   
   _setTotals: (args) -> 
-      text = args.text
+      match = (pattern) -> 
+                regex = new RegExp pattern, 'g'
+                matches = args.text.match regex
+                if matches? then matches[0] else null
       
       # Total number of tests.
-      total = (text.match /^\d+ specs/g)[0]
+      total = match '^\d+ specs'
       total = _(total).strLeft ' specs'
       @total = parseInt total
       
       # Total failures.
-      failed = (text.match /\d+ failures/g)[0]
+      failed = match '\d+ failures'
+      
       failed = _(failed).strLeft ' failures'
       @totalFailed = parseInt failed
       
@@ -134,7 +137,7 @@ module.exports = class ClientTestRunner
       @totalPassed = @total - @totalFailed
       
       # Elapsed time.
-      elapsed = (text.match /in \d+.?\d*s$/g)[0]
+      elapsed = match 'in \d+.?\d*s$'
       elapsed = _(elapsed).rtrim 's'
       elapsed = _(elapsed).strRight 'in '
       @elapsedSecs = parseFloat elapsed

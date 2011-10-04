@@ -154,14 +154,18 @@ module.exports = class Button extends core.mvc.View
           state: state
       @trigger 'stateChanged', args
       @handleStateChanged args
-      
+  
+  # The text that all CSS styles are prefixed with.
+  # This can be changed when overriding the button in different libraries.
+  _css_prefix: 'core'
+  
 
 ###
 PRIVATE
 ###
 syncClasses = (view) -> 
-    toggle = (name, fn) => view.el.toggleClass 'core_' + name, fn()
-    toggle 'selected', view.selected
-    toggle 'over',     view.over
-    toggle 'down',     view.down
+    toggle = (name, fn) => view.el.toggleClass view._css_prefix + name, fn()
+    toggle '_selected', view.selected
+    toggle '_over',     view.over
+    toggle '_down',     view.down
 

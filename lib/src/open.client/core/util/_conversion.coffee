@@ -38,7 +38,7 @@ module.exports =
       
   
   ###
-  Attempt to convert the given [view/element/string] to a jQuery object.
+  Attempts to convert the given [view/element/string] to a jQuery object.
   @param value : The value to convert.  This can be either a:
                   - jQuery object (returns same value)
                   - string (CSS selector)
