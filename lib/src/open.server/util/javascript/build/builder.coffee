@@ -135,6 +135,12 @@ module.exports = class Builder
             { path: "#{dir}/#{name}.js",              data: code.standard  }
             { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
           ]
+          
+          # Ensure code exists before saving.
+          for file in files
+            file.data ?= '// No code saved by builder.'
+          
+          # Write to disk.
           fsUtil.writeFiles files, (err) -> 
               throw err if err?
               
