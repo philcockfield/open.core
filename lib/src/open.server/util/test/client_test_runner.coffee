@@ -47,9 +47,18 @@ module.exports = class ClientTestRunner
         @_runSpecs (args) =>
             
             # Store result state as properties.
-            @passed  = args.passed
-            @summary = args.text
-            @_setTotals args
+            _(@).extend args
+
+            console.log ''
+            @log 'Properties', color.blue
+            console.log '@passed', @passed
+            console.log '@summary', @summary
+            console.log '@total', @total
+            console.log '@totalFailed', @totalFailed
+            console.log '@totalPassed', @totalPassed
+            console.log '@elapsedSecs', @elapsedSecs
+            console.log '@failures \n', @failures
+            console.log ''
             
             # Finish up.
             @dispose()
@@ -106,39 +115,103 @@ module.exports = class ClientTestRunner
           # Check the results
           get = (selector) -> $(browser.querySelector(selector))
           args.passed = get('.runner.passed').length is 1
+          args.failures = @_failures(browser) if args.passed is no
+          
           passedDesc = get '.runner.passed .description'
           failedDesc = get '.runner.failed .description'
-          args.text  = if args.passed then passedDesc.html() else failedDesc.html()
-          logColor   = if args.passed then color.green else color.red
+          args.summary  = if args.passed then passedDesc.html() else failedDesc.html()
+          @_setTotals args
           
           # Write results to console.
-          @log " #{args.text}", logColor
+          logColor = if args.passed then color.green else color.red
+          @log " #{args.summary}", logColor
           @log()
           exit()
   
   _setTotals: (args) -> 
-      match = (pattern) -> 
-                regex = new RegExp pattern, 'g'
-                matches = args.text.match regex
-                if matches? then matches[0] else null
       
-      # Total number of tests.
-      total = match '^\d+ specs'
-      total = _(total).strLeft ' specs'
-      @total = parseInt total
+      # Setup initial conditions.
+      text = _(args.summary).trim()
+      process = (matches, fnFormat) -> 
+                              return null unless matches? and matches[0]?
+                              fnFormat matches[0]
       
+      # Total specs.
+      args.total = process text.match(/^\d+ spec/g), (total) ->
+                              total = _(total).strLeft ' spec'
+                              parseInt total
       # Total failures.
-      failed = match '\d+ failures'
-      
-      failed = _(failed).strLeft ' failures'
-      @totalFailed = parseInt failed
-      
+      args.totalFailed = process text.match(/\d+ failure/g), (failed) -> 
+                              failed = _(failed).strLeft ' failure'
+                              parseInt failed
       # Total passed
-      @totalPassed = @total - @totalFailed
+      args.totalPassed = args.total - args.totalFailed
       
       # Elapsed time.
-      elapsed = match 'in \d+.?\d*s$'
-      elapsed = _(elapsed).rtrim 's'
-      elapsed = _(elapsed).strRight 'in '
-      @elapsedSecs = parseFloat elapsed
+      args.elapsedSecs = process text.match(/in \d+.?\d*s$/g), (elapsed) -> 
+                              elapsed = _(elapsed).rtrim 's'
+                              elapsed = _(elapsed).strRight 'in '
+                              parseFloat elapsed
       
+  
+  _failures: (browser) -> 
+      
+      # Setup initial conditions.
+      failures = []
+      elRoot = $(browser.querySelector('.jasmine_reporter'))
+      
+      # Extract the description.
+      description = (elParent) -> elParent.children('.description').html()
+      
+      # Extract details of failed specs.
+      specs = (elSuite) -> 
+            results = []
+            for elSpec in elSuite.children('.spec.failed')
+                    elSpec = $(elSpec)
+                    spec = 
+                        it:      description(elSpec)
+                        message: elSpec.find('.resultMessage.fail').html()
+                    results.push spec
+            results
+      
+      # RECURSIVE - Processes the 'failed suites' extracting details.
+      processSuite = (elParent, suites) -> 
+            for elFailedSuite in elParent.children('.suite.failed')
+                
+                # Create the suite object.
+                elFailedSuite = $(elFailedSuite)
+                suite = 
+                    describe:  description(elFailedSuite)
+                    specs:     specs(elFailedSuite)
+                    suites:    []
+                
+                # Append collection.
+                suites.push suite
+                
+                # Add sub-suites  <-- RECURSION.
+                processSuite elFailedSuite, suite.suites
+      
+      # Start processing at the root level of the results.
+      processSuite elRoot, failures
+      
+      # Finish up.
+      failures
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
