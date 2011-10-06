@@ -53,6 +53,7 @@ module.exports = class Button extends core.mvc.View
           el.mouseup (e) => 
               self.down false
               self.click()
+              console.log 'mouseup e', e
       
       # Finish up.
       syncClasses @

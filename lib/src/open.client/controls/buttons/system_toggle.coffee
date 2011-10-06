@@ -1,5 +1,6 @@
 Button = require '../button'
 
+
 ###
 Base class for Radio Buttons and Checkboxes.
 ###
@@ -12,10 +13,21 @@ module.exports = class SystemToggleButton extends Button
   
   # Renders to the DOM.
   render: -> 
-      className = @_className 'label'
-      @elLabel = $("<span class=\"#{className}\">#{@label()}</span>")
+      
+      # Insert INPUT element.
       @el.append @elInput
+      
+      # Insert label.
+      labelClass = @_className 'label'
+      @elLabel = $("<span class=\"#{labelClass}\">#{@label()}</span>")
       @el.append @elLabel
+      
+      # Wire up events.
+      @elInput.change (e) => 
+          console.log 'CHANGE EVENT', e, @selected()
+          # console.log 'e', e, @selected()
+      
+      # Finish up.
       syncInput @
   
   
@@ -43,13 +55,21 @@ module.exports = class SystemToggleButton extends Button
   
   
   # Overridden methods.
-  handleSelectedChanged: (args) -> syncInput @
+  handleStateChanged: (args) -> 
+        
+        console.log 'handleSelectedChanged', args
+        
+        syncInput @
   
 
 # PRIVATE STATIC --------------------------------------------------------------------------
 
 
-syncInput = (view) -> view.checked view.selected()
+syncInput = (view) -> 
+    
+    console.log 'SYNC INPUT'
+    
+    view.checked view.selected()
 
 
     
