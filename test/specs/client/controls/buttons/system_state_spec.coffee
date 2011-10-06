@@ -1,6 +1,7 @@
 describe 'controls/buttons/system_state', ->
-  SystemState = null
-  btn         = null
+  SampleButton = null
+  SystemState  = null
+  btn          = null
   
   beforeEach ->
       SystemState = require 'open.client/controls/buttons/system_state'
@@ -9,7 +10,7 @@ describe 'controls/buttons/system_state', ->
         constructor: (params) -> 
             @_css_prefix = 'custom'
             super params
-            @inputEl = $ '<INPUT type="radio" />'
+            @elInput = $ '<INPUT type="radio" />'
             @render()
       btn = new SampleButton()
       
@@ -17,7 +18,7 @@ describe 'controls/buttons/system_state', ->
   it 'exists', ->
     expect(SystemState).toBeDefined()
   
-  it 'can toggle', ->
+  it 'can toggle by default', ->
     expect(btn.canToggle()).toEqual true
 
   it 'has a label element', ->
@@ -33,14 +34,36 @@ describe 'controls/buttons/system_state', ->
       expect(btn.el.get(0).className).toEqual 'custom_system_state_btn'
   
   describe 'checked state', ->
+    describe 'state upon construction', ->
+      describe 'default (not selected)', ->
+        it 'is not selected upon construction', ->
+          expect(btn.selected()).toEqual false
+        
+        it 'has the INPUT element in a unchecked state at construction', ->
+          expect(btn.elInput.attr('checked')).toEqual undefined
+      
+      describe 'selected:true passed to constructor', ->
+        it 'is selected upon construction', ->
+          btn = new SampleButton selected:true
+          expect(btn.selected()).toEqual true
+      
+        it 'has the INPUT element in a checked state at construction', ->
+          btn = new SampleButton selected:true
+          expect(btn.elInput.attr('checked')).toEqual 'checked'
     
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+    describe 'changing the [selected] property', ->
+      it 'sets the checked state on the INPUT', ->
+        btn.selected true
+        expect(btn.elInput.attr('checked')).toEqual 'checked'
+        
+      it 'removes the checked state on the INPUT', ->
+        btn.selected true
+        btn.selected false
+        expect(btn.elInput.attr('checked')).toEqual undefined
+      
+    
+    
+
+
+
+

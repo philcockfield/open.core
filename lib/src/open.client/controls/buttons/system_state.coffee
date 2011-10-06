@@ -16,22 +16,29 @@ module.exports = class SystemStateButton extends Button
       @elLabel = $("<span class=\"#{cssClass}\">#{@label()}</span>")
       @el.append @elInput
       @el.append @elLabel
+      syncInput @
   
   
   # Gets the INPUT element.
   elInput: undefined # Set HTML element in constructor of overriding class.
   
   
-  # Updates the checked state of the INPUT element.  
-  # Override if using a non-standard INPUT element that does not respond to this jQuery call.
-  inputChecked: (selected) -> @elInput?.attr('checked', selected)
+  ###
+  Updates the checked state of the INPUT element.  
+  Override if using a non-standard INPUT element that does not respond to this jQuery call.
+  @param checked : Flag indicating the checked state to apply.
+  ###
+  isChecked: (checked) -> @elInput?.attr('checked', checked)
   
   
   # Overridden methods.
-  handleSelectedChanged: (args) -> @_syncInput()
+  handleSelectedChanged: (args) -> syncInput @
   
-  # Private methods.
-  _syncInput: -> @inputChecked @selected()
-      
-      
+
+# PRIVATE STATIC --------------------------------------------------------------------------
+
+
+syncInput = (view) -> view.isChecked view.selected()
+
+
     
