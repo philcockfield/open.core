@@ -6,14 +6,14 @@ Base class for Radio Buttons and Checkboxes.
 module.exports = class SystemToggleButton extends Button
   constructor: (params = {}) -> 
       super _.extend params, canToggle: true, tagName: 'span'
-      @el.addClass "#{@_css_prefix}_system_toggle_btn"
+      @el.addClass @_className('system_toggle_btn')
       @el.disableTextSelect() # Prevent text selection from double-click.
   
   
   # Renders to the DOM.
   render: -> 
-      cssClass = "#{@_css_prefix}_label"
-      @elLabel = $("<span class=\"#{cssClass}\">#{@label()}</span>")
+      className = @_className 'label'
+      @elLabel = $("<span class=\"#{className}\">#{@label()}</span>")
       @el.append @elInput
       @el.append @elLabel
       syncInput @

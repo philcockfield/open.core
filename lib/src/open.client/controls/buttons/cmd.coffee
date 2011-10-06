@@ -14,7 +14,7 @@ module.exports = class CmdButton extends Button
         
         # Setup initial conditions.
         self = @
-        super _.extend params, tagName: 'span', className: @_css_prefix + '_btn_cmd'
+        super _.extend params, tagName: 'span', className: @_className('btn_cmd')
         @render()
         
         # Event handlers.
@@ -24,8 +24,8 @@ module.exports = class CmdButton extends Button
                   toggle e.oldValue, false
                   toggle e.newValue, true
         
-        onSizeChanged     = (e) => toggleClass e, @_css_prefix + '_size_'
-        onColorChanged    = (e) => toggleClass e, @_css_prefix + '_color_'
+        onSizeChanged     = (e) => toggleClass e, @_className('size_')
+        onColorChanged    = (e) => toggleClass e, @_className('color_')
         onSelectedChanged = (e) => self._btn.toggleClass 'active', e.newValue
         
         # Wire up events.

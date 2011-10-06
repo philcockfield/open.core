@@ -161,8 +161,8 @@ module.exports = class Button extends core.mvc.View
 
 
 syncClasses = (view) -> 
-    toggle = (name, fn) => view.el.toggleClass view._css_prefix + name, fn()
-    toggle '_selected', view.selected
-    toggle '_over',     view.over
-    toggle '_down',     view.down
+    toggle = (name, fn) => view.el.toggleClass view._className(name), fn()
+    toggle 'selected', view.selected
+    toggle 'over',     view.over
+    toggle 'down',     view.down
 

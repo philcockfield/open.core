@@ -123,14 +123,15 @@ module.exports = class View extends Model
   
   # The text that all CSS styles are prefixed with.
   # This can be changed when overriding the button in different libraries.
-  _css_prefix: 'core'
+  # Do not include trailing underscore (_).
+  _cssPrefix: 'core'
   
   ###
   Produces a CSS class name by appending the given name on the controls CSS prefix.
   @param name: The CSS class name to append.
   @returns the CSS class name in the form "{prefix}_{name}".
   ###
-  _className: (name) -> "#{@_css_prefix}_#{name}"
+  _className: (name) -> "#{@_cssPrefix}_#{name}"
   
   
 

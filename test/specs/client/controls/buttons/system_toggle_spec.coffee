@@ -8,7 +8,7 @@ describe 'controls/buttons/system_toggle', ->
       
       class SampleButton extends SystemToggle
         constructor: (params) -> 
-            @_css_prefix = 'custom'
+            @_cssPrefix = 'custom'
             super params
             @elInput = $ '<INPUT type="radio" />'
             @render()

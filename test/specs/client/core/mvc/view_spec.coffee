@@ -10,7 +10,7 @@ describe 'mvc/view', ->
         text: null
       
       constructor: -> 
-          @_css_prefix = 'my'
+          @_cssPrefix = 'my'
           super
           
       
@@ -68,10 +68,10 @@ describe 'mvc/view', ->
     describe 'custom CSS prefix', ->
       it 'has the [core] CSS prefix by default', ->
         view = new View()
-        expect(view._css_prefix).toEqual 'core'
+        expect(view._cssPrefix).toEqual 'core'
       
       it 'generates a CSS class name', ->
-        view._css_prefix = 'my'
+        view._cssPrefix = 'my'
         expect(view._className('foo')).toEqual 'my_foo'
     
   
