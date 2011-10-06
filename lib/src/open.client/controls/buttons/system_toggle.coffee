@@ -23,12 +23,23 @@ module.exports = class SystemToggleButton extends Button
   elInput: undefined # Set HTML element in constructor of overriding class.
   
   
+  
   ###
   Updates the checked state of the INPUT element.  
   Override if using a non-standard INPUT element that does not respond to this jQuery call.
   @param checked : Flag indicating the checked state to apply.
+  @returns True if the INPUT element is checked, otherwise False.
   ###
-  isChecked: (checked) -> @elInput?.attr('checked', checked)
+  checked: (checked) -> 
+        return unless @elInput?
+        
+        # Write value.
+        if checked?
+            @elInput.attr('checked', checked)
+        
+        # Read value.
+        value = @elInput.attr 'checked'
+        if value is 'checked' then true else false
   
   
   # Overridden methods.
@@ -38,7 +49,7 @@ module.exports = class SystemToggleButton extends Button
 # PRIVATE STATIC --------------------------------------------------------------------------
 
 
-syncInput = (view) -> view.isChecked view.selected()
+syncInput = (view) -> view.checked view.selected()
 
 
     

@@ -33,7 +33,27 @@ describe 'controls/buttons/system_toggle', ->
     it 'has custom CSS class', ->
       expect(btn.el.get(0).className).toEqual 'custom_system_toggle_btn'
   
-  describe 'checked state', ->
+  describe 'checked() control state method', ->
+    describe 'reading the INPUT elements checked state', ->
+      it 'is checked', ->
+        btn.elInput.attr 'checked', true
+        expect(btn.checked()).toEqual true
+      
+      it 'is not checked', ->
+        btn.checked true
+        btn.elInput.attr 'checked', false
+        expect(btn.checked()).toEqual false
+    
+    describe 'writing the INPUT elements checked state', ->
+      it 'is checked', ->
+        btn.checked true
+        expect(btn.elInput.attr('checked')).toEqual 'checked'
+      
+      it 'is not checked', ->
+        btn.checked true
+        btn.checked false
+        expect(btn.elInput.attr('checked')).toEqual undefined
+    
     describe 'state upon construction', ->
       describe 'default (not selected)', ->
         it 'is not selected upon construction', ->
