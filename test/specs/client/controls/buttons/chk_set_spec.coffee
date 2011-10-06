@@ -9,7 +9,7 @@ describe 'controls/buttons/chk_set', ->
     expect(CheckboxSet).toBeDefined()
 
   it 'is a [ControlList]', ->
-    expect(chkSet instanceof controls.SystemToggleSet).toEqual true 
+    expect(chkSet instanceof controls.ControlList).toEqual true 
 
   it 'has a CSS class', ->
     expect(chkSet.el.hasClass('core_checkbox_set')).toEqual true
