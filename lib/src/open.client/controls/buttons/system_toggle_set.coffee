@@ -36,7 +36,7 @@ module.exports = class SystemToggleButtonSet extends ControlList
   
   ###
   Adds a new Button to the collection.
-  The button is created useing the type specified within the [ButtonType] property.
+  The button is created using the type specified within the [ButtonType] property.
   @param options : The options to pass to the Button's constructor.
   @returns the newly created Button.
   ###
