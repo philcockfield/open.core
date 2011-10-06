@@ -42,13 +42,23 @@ module.exports = class ClientTestRunner
   @param callback : Function to invoke when complete.  See property on the object for results.
   ###
   run: (callback) -> 
-      # Start a node process to serve the test-runner, specs and code.
+
+      # 1. Start a node process to serve the test-runner, specs and code.
+      @log "Starting node process to run client unit-tests"
       @_startNode => 
+        
+        # 2. Run the unit-tests.
         @_runSpecs (args) =>
             
             # Store result state as properties.
             _(@).extend args
-
+            
+            # Write summary to console.
+            logColor = if @passed then color.green else color.red
+            @log " #{@summary}", logColor
+            @log()
+            @_logFailures()
+            
             console.log ''
             @log 'Properties', color.blue
             console.log '@passed', @passed
@@ -71,7 +81,7 @@ module.exports = class ClientTestRunner
   dispose: -> @_killProcess()
   
   
-  # PRIVATE
+  # PRIVATE --------------------------------------------------------------------------
   
   
   log: (message, color = '', explanation = '') -> common.log(message, color, explanation) unless @silent is yes
@@ -83,7 +93,6 @@ module.exports = class ClientTestRunner
       env.PORT = @port
       
       # Start the process.
-      @log "Starting node process to run client unit-tests"
       @childProcess = child_process.spawn('node', [ @app ], { env:env })
       @childProcess.stdout.on 'data', (data) -> 
           started = _(data.toString().toLowerCase()).include 'started'
@@ -122,10 +131,7 @@ module.exports = class ClientTestRunner
           args.summary  = if args.passed then passedDesc.html() else failedDesc.html()
           @_setTotals args
           
-          # Write results to console.
-          logColor = if args.passed then color.green else color.red
-          @log " #{args.summary}", logColor
-          @log()
+          # Finish up.
           exit()
   
   _setTotals: (args) -> 
@@ -198,7 +204,36 @@ module.exports = class ClientTestRunner
       failures
       
       
-
+  _logFailures: -> 
+      
+      # Setup initial conditions.
+      return unless @failures? and @failures.length > 0
+      return if @silent is yes
+      
+      log = (leftPad, message, color = '', explanation = '') => 
+            
+            
+            message = _.lpad message, leftPad, ' '
+            
+            
+            @log message, color, explanation
+            
+      
+      indent = 5
+      
+      logFailures = (failures) -> 
+          
+          for suite in failures
+            
+            log indent, 'describe: ', color.blue, suite.describe
+            
+          
+      
+      logFailures @failures
+      
+      # log = @log
+      
+      
 
 
 

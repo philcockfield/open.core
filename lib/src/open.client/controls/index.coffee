@@ -1,14 +1,14 @@
-core = require '../core'
-
-Button    = require './button'
-ButtonSet = require './button_set'
+button = (name) -> require './buttons/' + name
 
 module.exports = 
   Textbox:    require './textbox'
   
   # Buttons.
-  Button:        Button
-  ButtonSet:     ButtonSet
-  CmdButton:     require './buttons/cmd_button'
+  Button:         require './button'
+  ButtonSet:      require './button_set'
+  CmdButton:      button 'cmd_button'
+  Checkbox:       button 'chk'
+  RadioButton:    button 'rdo'
+  RadioButtonSet: button 'rdo_set'
   
   

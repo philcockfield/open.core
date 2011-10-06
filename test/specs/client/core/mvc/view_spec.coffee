@@ -8,6 +8,12 @@ describe 'mvc/view', ->
       defaults: 
         foo: 123
         text: null
+      
+      constructor: -> 
+          @_css_prefix = 'my'
+          super
+          
+      
     view = new MyView()
 
   it 'calls constructor on Base', ->
@@ -50,22 +56,33 @@ describe 'mvc/view', ->
       expect(view.el.get(0).tagName).toEqual 'LI'
   
 
-  describe 'classname', ->
-    it 'has no class name by default', ->
-      expect(view.el.get(0).className).toEqual ''
+  describe 'css', ->
+    describe 'classname', ->
+      it 'has no class name by default', ->
+        expect(view.el.get(0).className).toEqual ''
   
-    it 'has a custom class name', ->
-      view = new View( className: 'foo bar' )
-      expect(view.el.get(0).className).toEqual 'foo bar'
+      it 'has a custom class name', ->
+        view = new View( className: 'foo bar' )
+        expect(view.el.get(0).className).toEqual 'foo bar'
+    
+    describe 'custom CSS prefix', ->
+      it 'has the [core] CSS prefix by default', ->
+        view = new View()
+        expect(view._css_prefix).toEqual 'core'
+      
+      it 'generates a CSS class name', ->
+        view._css_prefix = 'my'
+        expect(view._className('foo')).toEqual 'my_foo'
+    
   
 
   describe 'enabled', ->
     it 'does not have the [disabled] CSS class by default', ->
-      expect(view.el.hasClass('core_disabled')).toEqual false
+      expect(view.el.hasClass('my_disabled')).toEqual false
     
     it 'has the [disabled] CSS class when not enabled', ->
       view.enabled false
-      expect(view.el.hasClass('core_disabled')).toEqual true
+      expect(view.el.hasClass('my_disabled')).toEqual true
   
     it 'has the [disabled] CSS class when disabled at construction', ->
       view = new View(enabled: false)
@@ -74,7 +91,7 @@ describe 'mvc/view', ->
     it 'does not have the [disabled] CSS class when re-enabled', ->
       view.enabled false
       view.enabled true
-      expect(view.el.hasClass('core_disabled')).toEqual false
+      expect(view.el.hasClass('my_disabled')).toEqual false
 
   
   describe 'html', ->
@@ -228,13 +245,3 @@ describe 'mvc/view', ->
         
         
         
-      
-      
-      
-      
-      
-
-
-
-
-

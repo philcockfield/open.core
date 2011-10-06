@@ -20,8 +20,7 @@ module.exports =
             when 'normalize' then path = 'libs'
             else path = 'core'
           send.cssFile res, "#{paths.stylesheets}/#{path}/#{stylesheet}.css"
-        
-
+      
       
       app.get "#{core.baseUrl}/:package?.js", (req, res) ->
           package = req.params.package

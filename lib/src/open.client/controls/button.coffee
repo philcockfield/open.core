@@ -139,11 +139,11 @@ module.exports = class Button extends core.mvc.View
           - selected:  Flag indicating if the button is currenlty selected.
   ###
   handleSelectedChanged: (args) -> # No-op.
-
-      
-  ###
-  PRIVATE MEMBERS
-  ###
+  
+  
+  # PRIVATE --------------------------------------------------------------------------
+  
+  
   _stateChanged: (state) => 
       # Update button state.
       syncClasses @
@@ -154,15 +154,11 @@ module.exports = class Button extends core.mvc.View
           state: state
       @trigger 'stateChanged', args
       @handleStateChanged args
-  
-  # The text that all CSS styles are prefixed with.
-  # This can be changed when overriding the button in different libraries.
-  _css_prefix: 'core'
-  
 
-###
-PRIVATE
-###
+
+# PRIVATE STATIC --------------------------------------------------------------------------
+
+
 syncClasses = (view) -> 
     toggle = (name, fn) => view.el.toggleClass view._css_prefix + name, fn()
     toggle '_selected', view.selected

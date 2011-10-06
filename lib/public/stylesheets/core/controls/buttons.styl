@@ -1,7 +1,7 @@
 @import '../functions'
 
 
-// Functions  --------------------------
+// Functions  -----------------------------------------------------
 
 -reset()
     // Reset button related properties so that
@@ -39,7 +39,7 @@ command-button-down(bg, darken=20%)
     box-shadow: inset 0 0 8px 4px rgba(black, 0.15), 0 1px 0 0 #eee
 
 
-// Styles --------------------------
+// Command Button  -----------------------------------------------------
 
 .core_btn_cmd
   SILVER  = white
@@ -96,3 +96,32 @@ command-button-down(bg, darken=20%)
   &.core_size_l > button
     font-size 17pt
     padding 12px 34px
+
+
+// System State Buttons (Radio | Checkbox)  -----------------------------------------------------
+
+span.core_system_state_btn
+  position relative
+  cursor default
+  
+  span.core_label
+    margin-left 8px
+    margin-right 25px
+    font-family DEFAULT_FONT_FAMILY
+    font-size 11pt
+    color darken(white, 75%)
+    noSelect()
+
+// RadioSet.
+ul.core_radio_set
+  position relative
+  list-style-type none
+  background orange
+  margin 0px
+  padding 0px
+    
+
+
+
+
+

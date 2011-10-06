@@ -116,13 +116,29 @@ module.exports = class View extends Model
       
       # Finish up.
       @
+  
+  
+  # PRIVATE INSTANCE --------------------------------------------------------------------------
+  
+  
+  # The text that all CSS styles are prefixed with.
+  # This can be changed when overriding the button in different libraries.
+  _css_prefix: 'core'
+  
+  ###
+  Produces a CSS class name by appending the given name on the controls CSS prefix.
+  @param name: The CSS class name to append.
+  @returns the CSS class name in the form "{prefix}_{name}".
+  ###
+  _className: (name) -> "#{@_css_prefix}_#{name}"
+  
+  
 
-
-# PRIVATE --------------------------------------------------------------------------
+# PRIVATE STATIC --------------------------------------------------------------------------
 
 
 syncClasses = (view) -> 
-    view.el.toggleClass 'core_disabled', not view.enabled()
+    view.el.toggleClass view._className('disabled'), not view.enabled()
 
 syncVisibility = (view, visible) -> 
       display = if visible then '' else 'none'
