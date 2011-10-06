@@ -26,8 +26,14 @@ module.exports = class RadioButtonSet extends ControlList
       
       # Wire up events.
       @buttons.bind SELECTION_CHANGED, (e) => @trigger SELECTION_CHANGED, e
-      
-      
+  
+  
+  ###
+  Retrieves the currently selected toggle-button.
+  (passes through to the [selected] method on the [buttons] collection).
+  ###
+  selected: -> @buttons.selected()
+  
   
   ###
   Adds a Radio Button to the collection.

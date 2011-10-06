@@ -21,8 +21,8 @@ module.exports = class ButtonSet extends core.Base
       # Collection API.
       @length = 0
       @items = new core.mvc.Collection()
-      
-
+  
+  
   ###
   Gets the collection of buttons being managed.
   ###
@@ -37,16 +37,16 @@ module.exports = class ButtonSet extends core.Base
   
   
   ###
-  Retrieves the collection of toggle-buttons that are currently in a selected state.
+  Retrieves the currently selected toggle-button.
   ###
   selected: -> (@items.select (btn) -> btn.canToggle() and btn.selected())[0]
-
+  
   ###
   Selects the buttons that can be toggled.
   ###
   togglable: -> @items.select (btn) -> btn.canToggle()
-
-
+  
+  
   ###
   Adds a button to the set.
   @param button : The button to add.

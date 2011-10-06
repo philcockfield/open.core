@@ -18,6 +18,13 @@ describe 'controls/buttons/rdo_set', ->
   it 'has a [buttons] collection which is a [ButtonSet]', ->
     expect(radioSet.buttons instanceof controls.ButtonSet).toEqual true 
   
+  it 'retrieves the [selected] button', ->
+      rdo1 = radioSet.add()
+      rdo2 = radioSet.add()
+      rdo2.selected true
+      expect(radioSet.selected()).toEqual rdo2
+  
+  
   describe 'add() method', ->
     it 'returns a Radio Button', ->
       expect(radioSet.add() instanceof controls.RadioButton).toEqual true 
@@ -56,7 +63,6 @@ describe 'controls/buttons/rdo_set', ->
                                           fireCount += 1
       
       rdo2.click()
-      
       expect(fireCount).toEqual 1
       expect(args.button).toEqual rdo2
 
