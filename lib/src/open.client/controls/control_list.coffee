@@ -15,9 +15,7 @@ module.exports = class ControlList extends core.mvc.View
       
       # Wire up events.
       @orientation.onChanging (e) -> e.newValue = e.newValue.toLowerCase() # Ensure the value is lower-case.
-      @orientation.onChanged  (e) => 
-        syncClasses @
-        console.log 'o', @orientation()
+      @orientation.onChanged  (e) => syncClasses @
       
       # Finish up.
       syncClasses @

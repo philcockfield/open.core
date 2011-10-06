@@ -195,13 +195,15 @@ span.core_system_state_btn span.core_label {
   -moz-user-select: none;
   user-select: none;
 }
+span.core_system_state_btn span.core_label:hover {
+  text-decoration: underline;
+}
+ul.core_radio_set li {
+  margin-bottom: 8px;
+}
 ul.core_control_list {
   position: relative;
   list-style-type: none;
-  margin: 0px;
-  padding: 0px;
-}
-ul.core_control_list li {
   margin: 0px;
   padding: 0px;
 }

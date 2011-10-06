@@ -1,4 +1,4 @@
-describe 'controls/buttons/checkbox', ->
+describe 'controls/buttons/chk (Checkbox)', ->
   Checkbox = null
   chk         = null
   beforeEach ->
@@ -14,6 +14,9 @@ describe 'controls/buttons/checkbox', ->
   it 'sets the [elInput] to be a system checkbox', ->
     expect(chk.elInput.get(0).tagName.toLowerCase()).toEqual 'input'
     expect(chk.elInput.attr('type')).toEqual 'checkbox'
+
+  it 'has the checkbox CSS class', ->
+    expect(chk.el.hasClass('core_checkbox')).toEqual true
   
   
     
