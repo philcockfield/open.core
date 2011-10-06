@@ -34,35 +34,40 @@ module.exports = class Button extends core.mvc.View
       # Mouse events.
       do -> 
           el = self.el
-          stateChanged = self._stateChanged
+          stateChanged = (e, event) -> self._stateChanged event, srcElement: core.util.toJQuery(e.srcElement)
       
           el.mouseenter (e) => 
               self.over true
-              stateChanged('mouseenter')
+              stateChanged e, 'mouseenter'
 
           el.mouseleave (e) => 
               self.over false
               #  Reset down state (in case the mouse went out of scope but the button was not released).
               self.down false
-              stateChanged('mouseleave')
+              stateChanged e, 'mouseleave'
         
           el.mousedown (e) => 
               self.down true
-              stateChanged('mousedown')
+              stateChanged e, 'mousedown'
     
           el.mouseup (e) => 
               self.down false
-              self.click()
-              console.log 'mouseup e', e
+              self.click srcElement: e.srcElement
       
       # Finish up.
       syncClasses @
-
+  
+  
   ###
   Indicates to the button that it has been clicked.
   This causes the 'click' event to fire and state values to be updated.
+
   @param options
-          - silent : Flag indicating whether the click event should be suppressed (default false).
+          - silent :    (optional) Flag indicating whether the click event should be suppressed (default false).
+          - srcElement: (optional) The source element that caused the event to fire.
+                                   This is useful when sub-elements within the button (eg. something like an embedded checkbox)
+                                   cause the event to fire.  This value is passed as an argument in the [click] event.
+          
   @returns true if the click operation completed successfully, or false if it was cancelled.
   ###
   click: (options = {}) =>
@@ -70,6 +75,8 @@ module.exports = class Button extends core.mvc.View
       preArgs = 
           source: @
           cancel: false
+      srcElement = options.srcElement ?= @el
+      srcElement = core.util.toJQuery srcElement
 
       # Don't allow click is disabled.
       return if not @enabled()
@@ -80,22 +87,26 @@ module.exports = class Button extends core.mvc.View
       # Fire the pre-click event.
       if (fireEvent)
           @trigger('pre:click', preArgs);
-
+          
           # Check whether any listeners cancelled the click operation.
           if preArgs.cancel is yes
               @_stateChanged('click:cancelled')
               return false 
-
+      
       # Adjust the [selected] state
       @toggle() 
-
+      
       # Alert listeners.
-      @trigger('click', source: @) if fireEvent
+      if fireEvent
+        @trigger('click', source: @, srcElement:srcElement)
       
       # Finish up.
-      @_stateChanged('click')
+      @_stateChanged('click', srcElement:srcElement)
       true
 
+# TODO 
+# - test click event for srcElement (mousedown AND mouseup)
+# - test state changed event for srcElement
 
   ###
   Wires up the specified handler to the button's [click] event.
@@ -146,14 +157,15 @@ module.exports = class Button extends core.mvc.View
   # PRIVATE --------------------------------------------------------------------------
   
   
-  _stateChanged: (state) => 
+  _stateChanged: (state, options = {}) => 
       # Update button state.
       syncClasses @
       
       # Alert listeners.
       args = 
-          source: @
-          state: state
+          source:     @
+          state:      state
+          srcElement: options.srcElement
       @trigger 'stateChanged', args
       @handleStateChanged args
 

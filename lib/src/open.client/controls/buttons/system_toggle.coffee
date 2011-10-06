@@ -22,11 +22,6 @@ module.exports = class SystemToggleButton extends Button
       @elLabel = $("<span class=\"#{labelClass}\">#{@label()}</span>")
       @el.append @elLabel
       
-      # Wire up events.
-      @elInput.change (e) => 
-          console.log 'CHANGE EVENT', e, @selected()
-          # console.log 'e', e, @selected()
-      
       # Finish up.
       syncInput @
   
@@ -57,9 +52,39 @@ module.exports = class SystemToggleButton extends Button
   # Overridden methods.
   handleStateChanged: (args) -> 
         
-        console.log 'handleSelectedChanged', args
+        # Setup initial conditions.
+        state = args.state
+        return if state is 'mouseenter' or state is 'mouseleave' or state is 'mousedown'
         
-        syncInput @
+        console.log ''
+        console.log '++ handleSelectedChanged', args
+        
+        
+        # Determine if a click on sub-INPUT element (not the parent Button) caused the state change.
+        inputClicked = false
+        
+        srcElement = args.srcElement
+        if srcElement?
+            el = srcElement.get(0)
+            inputClicked = srcElement.get(0) is @elInput.get(0)
+            
+            
+            console.log 'tagName: ', srcElement.get(0).tagName
+            console.log 'inputClicked', inputClicked
+            console.log '@selected()', @selected()
+            console.log ''
+            
+            # console.log 'handleSelectedChanged', args, args.srcElement?.get(0).tagName
+        
+        if inputClicked is false
+        
+        # unless inputClicked
+            
+            foo = 3
+            console.log 'SYNC IT NOW!!!'
+            
+            
+            syncInput @
   
 
 # PRIVATE STATIC --------------------------------------------------------------------------

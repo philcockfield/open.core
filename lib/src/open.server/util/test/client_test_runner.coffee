@@ -59,16 +59,16 @@ module.exports = class ClientTestRunner
             @log()
             @_logFailures()
             
-            console.log ''
-            @log 'Properties', color.blue
-            console.log '@passed', @passed
-            console.log '@summary', @summary
-            console.log '@total', @total
-            console.log '@totalFailed', @totalFailed
-            console.log '@totalPassed', @totalPassed
-            console.log '@elapsedSecs', @elapsedSecs
-            console.log '@failures \n', @failures
-            console.log ''
+            # console.log ''
+            # @log 'Properties', color.blue
+            # console.log '@passed', @passed
+            # console.log '@summary', @summary
+            # console.log '@total', @total
+            # console.log '@totalFailed', @totalFailed
+            # console.log '@totalPassed', @totalPassed
+            # console.log '@elapsedSecs', @elapsedSecs
+            # console.log '@failures \n', @failures
+            # console.log ''
             
             # Finish up.
             @dispose()
@@ -205,40 +205,43 @@ module.exports = class ClientTestRunner
       
       
   _logFailures: -> 
+      INDENT = 2
       
       # Setup initial conditions.
       return unless @failures? and @failures.length > 0
       return if @silent is yes
+      @log ' Failures:', color.red
       
-      log = (leftPad, message, color = '', explanation = '') => 
-            
-            
-            message = _.lpad message, leftPad, ' '
-            
-            
+      indent = 3
+      log = (message, color = '', explanation = '') => 
+            pad = _.lpad '', indent
+            message = pad + message
             @log message, color, explanation
-            
-      
-      indent = 5
       
       logFailures = (failures) -> 
-          
+          # Log each suite of specs in the set.
           for suite in failures
+            log 'describe:', color.blue, suite.describe
             
-            log indent, 'describe: ', color.blue, suite.describe
+            # Log each spec in the suite.
+            indent += INDENT
+            for spec in suite.specs
+                log 'it', color.blue, spec.it
+                indent += INDENT
+                log spec.message, color.red
+                indent -= INDENT
+                
+            indent -= INDENT
             
-          
+            # Log child-suites. <== RECURSION.
+            if suite.suites.length > 0
+                indent += INDENT
+                logFailures suite.suites
+                
       
+      # Start logging the hierarchy of errors at the root.
       logFailures @failures
-      
-      # log = @log
-      
-      
-
-
-
-
-
+      @log()
 
 
 
