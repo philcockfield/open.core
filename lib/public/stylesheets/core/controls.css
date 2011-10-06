@@ -186,10 +186,10 @@ span.core_system_state_btn {
   cursor: default;
 }
 span.core_system_state_btn span.core_label {
-  margin-left: 8px;
-  margin-right: 25px;
+  position: relative;
+  margin: 0px 15px 0px 6px;
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #404040;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -199,6 +199,10 @@ ul.core_radio_set {
   position: relative;
   list-style-type: none;
   background: #ffa500;
+  margin: 0px;
+  padding: 0px;
+}
+ul.core_radio_set li {
   margin: 0px;
   padding: 0px;
 }

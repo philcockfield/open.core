@@ -1,7 +1,8 @@
 button = (name) -> require './buttons/' + name
 
 module.exports = 
-  Textbox:    require './textbox'
+  Textbox:        require './textbox'
+  ControlList:    require './control_list'
   
   # Buttons.
   Button:         require './button'
