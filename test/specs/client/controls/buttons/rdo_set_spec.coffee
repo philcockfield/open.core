@@ -44,7 +44,21 @@ describe 'controls/buttons/rdo_set', ->
       elRdo = li.children().get(0)
       expect(elRdo).toEqual rdo.el.get(0)
 
-
+  describe 'events', ->
+    it 'fires the [selectionChanged] event', ->
+      rdo1 = radioSet.add()
+      rdo2 = radioSet.add()
+      
+      args      = null
+      fireCount = 0
+      radioSet.bind 'selectionChanged', (e) -> 
+                                          args = e
+                                          fireCount += 1
+      
+      rdo2.click()
+      
+      expect(fireCount).toEqual 1
+      expect(args.button).toEqual rdo2
 
 
 

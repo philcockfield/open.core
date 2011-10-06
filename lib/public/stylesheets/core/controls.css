@@ -195,14 +195,20 @@ span.core_system_state_btn span.core_label {
   -moz-user-select: none;
   user-select: none;
 }
-ul.core_radio_set {
+ul.core_control_list {
   position: relative;
   list-style-type: none;
   background: #ffa500;
   margin: 0px;
   padding: 0px;
 }
-ul.core_radio_set li {
+ul.core_control_list li {
   margin: 0px;
   padding: 0px;
+}
+ul.core_control_list.core_x {
+  background: #f00;
+}
+ul.core_control_list.core_y {
+  background: #00f;
 }
