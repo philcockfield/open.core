@@ -1,10 +1,10 @@
-describe 'controls/buttons/system_state', ->
+describe 'controls/buttons/system_toggle', ->
   SampleButton = null
   SystemState  = null
   btn          = null
   
   beforeEach ->
-      SystemState = require 'open.client/controls/buttons/system_state'
+      SystemState = require 'open.client/controls/buttons/system_toggle'
       
       class SampleButton extends SystemState
         constructor: (params) -> 
@@ -28,10 +28,10 @@ describe 'controls/buttons/system_state', ->
   describe 'css classes', ->
     it 'has the default CSS class', ->
       btn = new SystemState()
-      expect(btn.el.get(0).className).toEqual 'core_system_state_btn'
+      expect(btn.el.get(0).className).toEqual 'core_system_toggle_btn'
   
     it 'has custom CSS class', ->
-      expect(btn.el.get(0).className).toEqual 'custom_system_state_btn'
+      expect(btn.el.get(0).className).toEqual 'custom_system_toggle_btn'
   
   describe 'checked state', ->
     describe 'state upon construction', ->

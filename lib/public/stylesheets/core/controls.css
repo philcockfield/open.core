@@ -181,11 +181,11 @@
   font-size: 17pt;
   padding: 12px 34px;
 }
-span.core_system_state_btn {
+span.core_system_toggle_btn {
   position: relative;
   cursor: default;
 }
-span.core_system_state_btn span.core_label {
+span.core_system_toggle_btn span.core_label {
   position: relative;
   margin: 0px 25px 0px 6px;
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
@@ -195,7 +195,7 @@ span.core_system_state_btn span.core_label {
   -moz-user-select: none;
   user-select: none;
 }
-span.core_system_state_btn span.core_label:hover {
+span.core_system_toggle_btn span.core_label:hover {
   text-decoration: underline;
 }
 ul.core_radio_set li {

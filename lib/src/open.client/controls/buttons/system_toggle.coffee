@@ -3,10 +3,10 @@ Button = require '../button'
 ###
 Base class for Radio Buttons and Checkboxes.
 ###
-module.exports = class SystemStateButton extends Button
+module.exports = class SystemToggleButton extends Button
   constructor: (params = {}) -> 
       super _.extend params, canToggle: true, tagName: 'span'
-      @el.addClass "#{@_css_prefix}_system_state_btn"
+      @el.addClass "#{@_css_prefix}_system_toggle_btn"
       @el.disableTextSelect() # Prevent text selection from double-click.
   
   
