@@ -73,6 +73,7 @@ module.exports = class Property
       if options.silent is no
         args = @fireChanging oldValue, value
         return if args.cancel is yes
+        value = args.newValue # Pick up any changes handlers may have made to the value.
       
       # Store the value.
       store = @_.store      

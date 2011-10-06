@@ -26,6 +26,12 @@ describe 'controls/buttons/rdo_set', ->
       rdo = radioSet.add()
       expect(radioSet.buttons.contains(rdo)).toEqual true
     
+    it 'calls the base add() method', ->
+      args = null
+      spyOn(RadioButtonSet.__super__, 'add').andCallFake (e) -> args = e
+      rdo = radioSet.add()
+      expect(args).toEqual rdo
+    
     it 'applies the given option to the new button', ->
       rdo = radioSet.add label:'foo'
       expect(rdo.label()).toEqual 'foo'

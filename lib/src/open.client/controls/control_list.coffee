@@ -4,9 +4,21 @@ core = require '../core'
 A vertical or horizontal set of controls stored in a UL.
 ###
 module.exports = class ControlList extends core.mvc.View
+  defaults:
+    orientation: 'y' # Gets or sets whether the list is vertical or horizontal. Values either 'x' or 'y'.
+  
   constructor: -> 
+
+      # Setup initial conditions.
       super tagName: 'ul', className: @_className('control_list')
       @controls = new core.mvc.Collection()
+      
+      # Wire up events.
+      @orientation.onChanging (e) -> e.newValue = e.newValue.toLowerCase() # Ensure the value is lower-case.
+      @orientation.onChanged  (e) => syncClasses @
+      
+      # Finish up.
+      syncClasses @
   
   
   ###
@@ -18,7 +30,7 @@ module.exports = class ControlList extends core.mvc.View
       
       # Store reference to contol in collection.
       @controls.add control
-
+      
       # Prepare for DOM.
       li = $('<li></li>')
       li.append control.el
@@ -26,3 +38,15 @@ module.exports = class ControlList extends core.mvc.View
       
       # Finish up.
       control
+
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+syncClasses = (view) -> 
+  toggle = (orientation) -> view.el.toggleClass view._className(orientation), (view.orientation() is orientation)
+  toggle 'x'
+  toggle 'y'
+  
+  
+  

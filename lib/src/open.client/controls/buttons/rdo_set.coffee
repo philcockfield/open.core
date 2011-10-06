@@ -11,10 +11,9 @@ module.exports = class RadioButtonSet extends ControlList
   RadioButton: RadioButton
   
   constructor: -> 
-      super tagName: 'ul'
+      super
       @el.addClass @_className('radio_set')
       @buttons = new ButtonSet()
-  
   
   ###
   Adds a Radio Button to the collection.
@@ -24,13 +23,8 @@ module.exports = class RadioButtonSet extends ControlList
   add: (options = {}) -> 
       
       # Create the radio button.
-      rdo = new @RadioButton options
+      rdo = super new @RadioButton options
       @buttons.add rdo
-      
-      # Prepare for DOM.
-      li = $('<li></li>')
-      li.append rdo.el
-      @el.append li
       
       # Finish up.
       rdo

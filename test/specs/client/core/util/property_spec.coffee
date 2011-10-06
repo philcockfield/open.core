@@ -165,6 +165,7 @@ describe 'util/property', ->
 
     describe 'Handler helper: onChanging', ->
       it 'binds to [changing] event', ->
+        args = null
         prop.fn.onChanging (e) -> args = e
         prop.fn 'abc'
         expect(prop.fn()).toEqual 'abc'
@@ -172,11 +173,16 @@ describe 'util/property', ->
         expect(args.newValue).toEqual 'abc'
 
       it 'cancels bound event', ->
-        prop.fn.onChanging (e) -> args.cancel = yes
+        prop.fn.onChanging (e) -> e.cancel = yes
         prop.fn 'abc'
         expect(prop.fn()).toEqual 123
+      
+      it 'mutates the values from the event handler', ->
+        prop.fn.onChanging (e) -> e.newValue += 1
+        prop.fn 2
+        expect(prop.fn()).toEqual 3
   
-    
+  
   describe 'event: changed', ->
     prop = null
     args = null
