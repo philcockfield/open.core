@@ -207,12 +207,9 @@ ul.core_control_list {
   margin: 0px;
   padding: 0px;
 }
-ul.core_control_list.core_x {
-  background: #f00;
-}
 ul.core_control_list.core_x li {
   display: inline;
 }
-ul.core_control_list.core_y {
-  background: #ffa500;
+ul.core_control_list.core_y li {
+  display: block;
 }

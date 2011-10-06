@@ -7,7 +7,7 @@ module.exports =
   # Buttons.
   Button:         require './button'
   ButtonSet:      require './button_set'
-  CmdButton:      button 'cmd_button'
+  CmdButton:      button 'cmd'
   Checkbox:       button 'chk'
   RadioButton:    button 'rdo'
   RadioButtonSet: button 'rdo_set'
