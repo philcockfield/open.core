@@ -1,12 +1,12 @@
 describe 'controls/buttons/system_toggle', ->
   SampleButton = null
-  SystemState  = null
+  SystemToggle  = null
   btn          = null
   
   beforeEach ->
-      SystemState = require 'open.client/controls/buttons/system_toggle'
+      SystemToggle = require 'open.client/controls/buttons/system_toggle'
       
-      class SampleButton extends SystemState
+      class SampleButton extends SystemToggle
         constructor: (params) -> 
             @_css_prefix = 'custom'
             super params
@@ -16,7 +16,7 @@ describe 'controls/buttons/system_toggle', ->
       
   
   it 'exists', ->
-    expect(SystemState).toBeDefined()
+    expect(SystemToggle).toBeDefined()
   
   it 'can toggle by default', ->
     expect(btn.canToggle()).toEqual true
@@ -27,7 +27,7 @@ describe 'controls/buttons/system_toggle', ->
   
   describe 'css classes', ->
     it 'has the default CSS class', ->
-      btn = new SystemState()
+      btn = new SystemToggle()
       expect(btn.el.get(0).className).toEqual 'core_system_toggle_btn'
   
     it 'has custom CSS class', ->
