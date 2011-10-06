@@ -201,6 +201,9 @@ span.core_system_toggle_btn span.core_label:hover {
 ul.core_radio_set li {
   margin-bottom: 8px;
 }
+ul.core_checkbox_set li {
+  margin-bottom: 8px;
+}
 ul.core_control_list {
   position: relative;
   list-style-type: none;
