@@ -14,9 +14,8 @@ describe 'controls/control_list', ->
   it 'is an unordered list (UL)', ->
     expect(list.el.get(0).tagName.toLowerCase()).toEqual 'ul'
   
-  it 'has default CSS classes', ->
+  it 'has the default CSS class', ->
     expect(list.el.hasClass('core_control_list')).toEqual true
-    expect(list.el.hasClass('core_y')).toEqual true
   
   it 'has a controls collection', ->
     expect(list.controls instanceof core.mvc.Collection).toEqual true 
@@ -53,15 +52,26 @@ describe 'controls/control_list', ->
       list.orientation 'Y'
       expect(list.orientation()).toEqual 'y'
     
-    it 'has a CSS class signifying horizontal orientation (X)', ->
-      list.orientation 'x'
-      expect(list.el.hasClass('core_x')).toEqual true
-      expect(list.el.hasClass('core_y')).toEqual false
+    describe 'orientation CSS classes', ->
+      it 'has a CSS class signifying horizontal orientation (X)', ->
+        list.orientation 'x'
+        expect(list.el.hasClass('core_x')).toEqual true
+        expect(list.el.hasClass('core_y')).toEqual false
       
-    it 'has a CSS class signifying vertical orientation (Y)', ->
-      list.orientation 'y'
-      expect(list.el.hasClass('core_x')).toEqual false
-      expect(list.el.hasClass('core_y')).toEqual true
+      it 'has a CSS class signifying vertical orientation (Y)', ->
+        list.orientation 'y'
+        expect(list.el.hasClass('core_x')).toEqual false
+        expect(list.el.hasClass('core_y')).toEqual true
+    
+      it 'has the vertical CSS class by default (Y)', ->
+        expect(list.el.hasClass('core_y')).toEqual true
+      
+      it 'constructs with the horizontal CSS class (X)', ->
+        list = new ControlList orientation:'x'
+        expect(list.el.hasClass('core_x')).toEqual true
+        
+      
+    
   
     
   

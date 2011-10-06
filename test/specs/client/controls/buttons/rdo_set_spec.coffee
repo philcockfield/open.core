@@ -61,7 +61,6 @@ describe 'controls/buttons/rdo_set', ->
       radioSet.bind 'selectionChanged', (e) -> 
                                           args = e
                                           fireCount += 1
-      
       rdo2.click()
       expect(fireCount).toEqual 1
       expect(args.button).toEqual rdo2

@@ -7,15 +7,17 @@ module.exports = class ControlList extends core.mvc.View
   defaults:
     orientation: 'y' # Gets or sets whether the list is vertical or horizontal. Values either 'x' or 'y'.
   
-  constructor: -> 
+  constructor: (params = {}) -> 
 
       # Setup initial conditions.
-      super tagName: 'ul', className: @_className('control_list')
+      super _.extend params, tagName: 'ul', className: @_className('control_list')
       @controls = new core.mvc.Collection()
       
       # Wire up events.
       @orientation.onChanging (e) -> e.newValue = e.newValue.toLowerCase() # Ensure the value is lower-case.
-      @orientation.onChanged  (e) => syncClasses @
+      @orientation.onChanged  (e) => 
+        syncClasses @
+        console.log 'o', @orientation()
       
       # Finish up.
       syncClasses @

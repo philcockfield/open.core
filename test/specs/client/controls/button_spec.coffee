@@ -34,6 +34,8 @@ describe 'controls/button', ->
     it 'has no text label by default', ->
       expect(button.label()).toEqual ''
 
+    it 'has no value by default', ->
+      expect(button.value()).toEqual null
 
   describe 'constructor', ->
     it 'recieves custom [label] from constructor', ->

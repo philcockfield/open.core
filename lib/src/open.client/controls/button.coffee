@@ -22,6 +22,7 @@ module.exports = class Button extends core.mvc.View
           selected:   params.selected  ?= false  # Gets or sets whether the toggle button is currently selected (checked state.  Only applicable when canToggle).
           over:       false                      # Gets whether the the mouse is currently over the button (Read-only.  Written to internally.)
           down:       false                      # Gets whether the button is currently in a depressed state (Read-only.  Written to internally.)
+          value:      null                       # Gets or sets a value to associate with the button. This is useful for things like RadioButtons and Checkboxes.
       
       # Wire up events.
       @selected.onChanged => 
