@@ -9,6 +9,7 @@ module.exports =
   ButtonSet:       require './button_set'
   CmdButton:       button 'cmd'
   Checkbox:        button 'chk'
+  CheckboxSet:     button 'chk_set'
   RadioButton:     button 'rdo'
   RadioButtonSet:  button 'rdo_set'
   SystemToggle:    button 'system_toggle'

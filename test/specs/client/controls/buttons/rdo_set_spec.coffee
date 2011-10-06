@@ -5,7 +5,6 @@ describe 'controls/buttons/rdo_set', ->
       RadioButtonSet = controls.RadioButtonSet
       radioSet = new RadioButtonSet()
   
-  
   it 'exists', ->
     expect(RadioButtonSet).toBeDefined()
 
