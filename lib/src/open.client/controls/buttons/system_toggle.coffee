@@ -54,43 +54,25 @@ module.exports = class SystemToggleButton extends Button
   
   
   # Overridden methods.
-  handleStateChanged: (args) -> 
-        
-        # Setup initial conditions.
-        state = args.state
-        return if state is 'mouseenter' or state is 'mouseleave' or state is 'mousedown'
-        
-        
-        # console.log 'STATE CHANGED', args, args.state
-        
+  handleSelectedChanged: (args) -> 
         
         # Determine if a click on sub-INPUT element (not the parent Button) caused the state change.
         inputClicked = false
-        
         srcElement = args.srcElement
         if srcElement?
             el = srcElement.get(0)
             inputClicked = srcElement.get(0) is @elInput.get(0)
             
-            # TEMP 
-            # console.log 'tagName: ', srcElement.get(0).tagName
-            # console.log 'inputClicked', inputClicked
-            # console.log '@selected()', @selected()
-            # console.log ''
         
-        if inputClicked is false
-            
-            foo = 3
-            # console.log 'SYNC IT NOW!!!'
-            
-            syncInput @
+        # Sync the INPUT element only if the state-change was not caused by a click event 
+        # on that element (if it was because of a click it will already be in the correct state).
+        syncInput @ if inputClicked is false
 
 
 # PRIVATE STATIC --------------------------------------------------------------------------
 
 
-syncInput = (view) -> 
-    view.checked view.selected()
+syncInput = (view) -> view.checked view.selected()
 
 
     

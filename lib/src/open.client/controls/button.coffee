@@ -33,12 +33,17 @@ module.exports = class Button extends core.mvc.View
       # Wire up events.
       @selected.onChanged (e) => 
           
-          # console.log 'selected.onChanged: e', e # TEMP 
-          
           isSelected = self.selected()
+          
+          # TODO Tests for these args.
+          args = 
+              source:     self
+              selected:   isSelected
+              srcElement: e.options.srcElement
+              
           self._stateChanged('selected')
-          self.handleSelectedChanged selected:isSelected
-          self.trigger('selected', source:self) if self.canToggle() and isSelected
+          self.handleSelectedChanged args
+          self.trigger('selected', args) if self.canToggle() and isSelected
       
       # Mouse events.
       do -> 
@@ -105,7 +110,7 @@ module.exports = class Button extends core.mvc.View
               return false 
       
       # Adjust the [selected] state
-      @toggle() 
+      @toggle srcElement:srcElement
       
       # Alert listeners.
       if fireEvent
@@ -136,7 +141,7 @@ module.exports = class Button extends core.mvc.View
   ###
   Toggles the selected state (if the button can toggle).
   @param options
-            srcElement: (optional). Used internally to pass event args from mouse events.
+            - srcElement : (optional). Used internally to pass event args from mouse events.
   @returns true if the button was toggled, or false if the button cannot toggle.
   ###
   toggle: (options = {}) => 
