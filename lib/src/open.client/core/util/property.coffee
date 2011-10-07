@@ -40,6 +40,7 @@ module.exports = class Property
                Do not specify (undefined) for read operations.
   @param options
             - silent : (optional) Flag indicating if events should be suppressed (default false).
+            - *      : Any other arguments that are to be passed through on the event
   ###
   fn: (value, options) => 
       @write(value, options) if value != undefined
@@ -61,6 +62,7 @@ module.exports = class Property
   @param value : The value to write.
   @param options
             - silent : (optional) Flag indicating if events should be suppressed (default false).
+            - *      : Any other arguments that are to be passed through on the event
   ###
   write: (value, options = {}) => 
       # Setup initial conditions.
@@ -71,7 +73,7 @@ module.exports = class Property
       
       # Pre-event.
       if options.silent is no
-        args = @fireChanging oldValue, value
+        args = @fireChanging oldValue, value, options
         return if args.cancel is yes
         value = args.newValue # Pick up any changes handlers may have made to the value.
       
@@ -80,7 +82,7 @@ module.exports = class Property
       if _.isFunction(store) then store(@name, value, options) else store[@name] = value
       
       # Post-event.
-      @fireChanged(oldValue, value) if options.silent is no
+      @fireChanged(oldValue, value, options) if options.silent is no
   
   
   ###
@@ -88,15 +90,15 @@ module.exports = class Property
   allowing listeners to cancel the change.
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
-  @param args     : Optional arguments that may have been passed through when writing to the property (eg. event srcElement).
+  @param options  : Any options that were passed through when writing to the property.
   @returns the event args.
   ###
-  fireChanging: (oldValue, newValue, args...) => 
+  fireChanging: (oldValue, newValue, options = {}) => 
       args = 
           oldValue: oldValue
           newValue: newValue
           cancel:   false
-          args:     args
+          options:  options
       fireEvent 'changing', @, args
       args
   
@@ -105,14 +107,14 @@ module.exports = class Property
   Fires the 'changed' event (from the [Property] instance, and the [fn] method).
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
-  @param args     : Optional arguments that may have been passed through when writing to the property (eg. event srcElement).
+  @param options  : Any options that were passed through when writing to the property.
   @returns the event args.
   ###
-  fireChanged: (oldValue, newValue, args...) => 
+  fireChanged: (oldValue, newValue, options = {}) =>
       fireEvent 'changed', @,
                     oldValue: oldValue
                     newValue: newValue
-                    args:     args
+                    options:  options
 
 
 # PRIVATE --------------------------------------------------------------------------
