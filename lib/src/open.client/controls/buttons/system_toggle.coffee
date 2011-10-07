@@ -56,10 +56,6 @@ module.exports = class SystemToggleButton extends Button
         state = args.state
         return if state is 'mouseenter' or state is 'mouseleave' or state is 'mousedown'
         
-        console.log ''
-        console.log '++ handleSelectedChanged', args
-        
-        
         # Determine if a click on sub-INPUT element (not the parent Button) caused the state change.
         inputClicked = false
         
@@ -69,10 +65,10 @@ module.exports = class SystemToggleButton extends Button
             inputClicked = srcElement.get(0) is @elInput.get(0)
             
             
-            console.log 'tagName: ', srcElement.get(0).tagName
-            console.log 'inputClicked', inputClicked
-            console.log '@selected()', @selected()
-            console.log ''
+            # console.log 'tagName: ', srcElement.get(0).tagName
+            # console.log 'inputClicked', inputClicked
+            # console.log '@selected()', @selected()
+            # console.log ''
             
             # console.log 'handleSelectedChanged', args, args.srcElement?.get(0).tagName
         
@@ -81,7 +77,7 @@ module.exports = class SystemToggleButton extends Button
         # unless inputClicked
             
             foo = 3
-            console.log 'SYNC IT NOW!!!'
+            # console.log 'SYNC IT NOW!!!'
             
             
             syncInput @
@@ -91,9 +87,6 @@ module.exports = class SystemToggleButton extends Button
 
 
 syncInput = (view) -> 
-    
-    console.log 'SYNC INPUT'
-    
     view.checked view.selected()
 
 

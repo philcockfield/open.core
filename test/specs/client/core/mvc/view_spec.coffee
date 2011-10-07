@@ -130,6 +130,43 @@ describe 'mvc/view', ->
     it 'exposes Backbone [make] method', ->
       expect(view.make).toEqual view._.view.make
     
+    describe '[append] method', ->
+      html = """
+             <div>
+                <span class="  foo    bar "></span>
+             </div>      
+             """
+      page = null
+      replaceEl = null
+      beforeEach ->
+          page = $(html)
+          view.el.addClass 'my_view'
+          view.el.html 'MyView'
+      
+      it 'calls [toJQuery] conversion util', ->
+        selector = null
+        spyOn(core.util, 'toJQuery') 
+        view.append '#foo'
+        expect(core.util.toJQuery.mostRecentCall.args[0]).toEqual '#foo'
+      
+      it 'appends the specified element', ->
+        el = page.children 'span.foo'
+        view.append el
+        expect(el.children(0).get(0)).toEqual view.el.get(0)
+      
+      it 'returns the view (when no match is found)', ->
+        expect(view.append()).toEqual view
+        
+      it 'returns the view (when a match is found)', ->
+        expect(view.append(page.children('span.foo'))).toEqual view
+      
+      it 'appends on construction', ->
+        el = page.children 'span.foo'        
+        view = new MyView(text:'appended!').append el
+        expect(view.text()).toEqual 'appended!'
+        expect(el.children(0).get(0)).toEqual view.el.get(0)
+      
+    
     describe '[replace] method', ->
       html = """
              <div>
@@ -148,7 +185,7 @@ describe 'mvc/view', ->
       
       it 'calls [toJQuery] conversion util', ->
         selector = null
-        spyOn(core.util, 'toJQuery') # .andCallFake (args) -> selector = args
+        spyOn(core.util, 'toJQuery') 
         view.replace '#foo'
         expect(core.util.toJQuery.mostRecentCall.args[0]).toEqual '#foo'
       

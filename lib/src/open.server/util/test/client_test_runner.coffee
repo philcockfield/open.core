@@ -44,7 +44,7 @@ module.exports = class ClientTestRunner
   run: (callback) -> 
 
       # 1. Start a node process to serve the test-runner, specs and code.
-      @log "Starting node process to run client unit-tests"
+      @log 'Starting', color.blue, 'node process to run client unit-tests' 
       @_startNode => 
         
         # 2. Run the unit-tests.
@@ -58,17 +58,6 @@ module.exports = class ClientTestRunner
             @log " #{@summary}", logColor
             @log()
             @_logFailures()
-            
-            # console.log ''
-            # @log 'Properties', color.blue
-            # console.log '@passed', @passed
-            # console.log '@summary', @summary
-            # console.log '@total', @total
-            # console.log '@totalFailed', @totalFailed
-            # console.log '@totalPassed', @totalPassed
-            # console.log '@elapsedSecs', @elapsedSecs
-            # console.log '@failures \n', @failures
-            # console.log ''
             
             # Finish up.
             @dispose()
@@ -237,7 +226,6 @@ module.exports = class ClientTestRunner
             if suite.suites.length > 0
                 indent += INDENT
                 logFailures suite.suites
-                
       
       # Start logging the hierarchy of errors at the root.
       logFailures @failures

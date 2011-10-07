@@ -118,6 +118,20 @@ module.exports = class View extends Model
       @
   
   
+  ###
+  Appends the given element with the view.
+  @param el: The element to replace, this can be a:
+              - CSS selector (string)
+              - DOM element
+              - jQuery object
+              - MVC View
+  ###
+  append: (el) -> 
+      el = util.toJQuery(el)
+      el.append(@.el) if el?
+      @
+  
+  
   # PRIVATE INSTANCE --------------------------------------------------------------------------
   
   

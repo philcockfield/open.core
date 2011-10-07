@@ -19,4 +19,4 @@ module.exports = class CheckboxSet extends ControlList
   @returns the newly created Button.
   ###
   add: (options = {}) -> 
-      btn = super new Checkbox options
+      btn = super new @ButtonType options
