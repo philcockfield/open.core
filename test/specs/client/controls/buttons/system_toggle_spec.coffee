@@ -81,14 +81,18 @@ describe 'controls/buttons/system_toggle', ->
         btn.selected false
         expect(btn.elInput.attr('checked')).toEqual undefined
       
-      it 'sets selected() to True when INPUT is checked', ->
-        btn.elInput.attr 'checked', true
-        expect(btn.selected()).toEqual true
-        
-      it 'sets selected() to False when INPUT is unchecked', ->
-        btn.selected true
-        btn.elInput.attr 'checked', false
-        expect(btn.selected()).toEqual false
+      # TEMP 
+      # NO LONGER RELEVANT
+      # Delete when the button is working from clicks that bubble up and include a srcElement in the args.
+      
+      # it 'sets selected() to True when INPUT is checked', ->
+      #   btn.elInput.attr 'checked', true
+      #   expect(btn.selected()).toEqual true
+      #   
+      # it 'sets selected() to False when INPUT is unchecked', ->
+      #   btn.selected true
+      #   btn.elInput.attr 'checked', false
+      #   expect(btn.selected()).toEqual false
         
       
       

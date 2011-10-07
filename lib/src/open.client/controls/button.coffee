@@ -1,3 +1,9 @@
+# TODO 
+# - test click event for srcElement (mousedown AND mouseup)
+# - test state changed event for srcElement args
+# - test args (srcElement) for selection changed (see selected event, and stateChanged and selectionChanged methods).
+
+
 core = require '../core'
 
 ###
@@ -25,7 +31,10 @@ module.exports = class Button extends core.mvc.View
           value:      null                       # Gets or sets a value to associate with the button. This is useful for things like RadioButtons and Checkboxes.
       
       # Wire up events.
-      @selected.onChanged => 
+      @selected.onChanged (e) => 
+          
+          # console.log 'selected.onChanged: e', e # TEMP 
+          
           isSelected = self.selected()
           self._stateChanged('selected')
           self.handleSelectedChanged selected:isSelected
@@ -34,22 +43,24 @@ module.exports = class Button extends core.mvc.View
       # Mouse events.
       do -> 
           el = self.el
-          stateChanged = (e, event) -> self._stateChanged event, srcElement: core.util.toJQuery(e.srcElement)
-      
+          stateChanged = (e, event) -> 
+                          srcElement = core.util.toJQuery(e.srcElement)
+                          self._stateChanged event, srcElement: srcElement
+          
           el.mouseenter (e) => 
               self.over true
               stateChanged e, 'mouseenter'
-
+          
           el.mouseleave (e) => 
               self.over false
               #  Reset down state (in case the mouse went out of scope but the button was not released).
               self.down false
               stateChanged e, 'mouseleave'
-        
+          
           el.mousedown (e) => 
               self.down true
               stateChanged e, 'mousedown'
-    
+          
           el.mouseup (e) => 
               self.down false
               self.click srcElement: e.srcElement
@@ -61,7 +72,7 @@ module.exports = class Button extends core.mvc.View
   ###
   Indicates to the button that it has been clicked.
   This causes the 'click' event to fire and state values to be updated.
-
+  
   @param options
           - silent :    (optional) Flag indicating whether the click event should be suppressed (default false).
           - srcElement: (optional) The source element that caused the event to fire.
@@ -103,11 +114,8 @@ module.exports = class Button extends core.mvc.View
       # Finish up.
       @_stateChanged('click', srcElement:srcElement)
       true
-
-# TODO 
-# - test click event for srcElement (mousedown AND mouseup)
-# - test state changed event for srcElement
-
+  
+  
   ###
   Wires up the specified handler to the button's [click] event.
   @param handler : Function to invoke when the button is clicked.
@@ -127,13 +135,15 @@ module.exports = class Button extends core.mvc.View
   
   ###
   Toggles the selected state (if the button can toggle).
+  @param options
+            srcElement: (optional). Used internally to pass event args from mouse events.
   @returns true if the button was toggled, or false if the button cannot toggle.
   ###
-  toggle: => 
+  toggle: (options = {}) => 
       return false if not @canToggle()
-      @selected(not @selected())
+      @selected(not @selected(), options)
       true
-    
+  
   
   ###
   Invoked when the state of the button has changed (ie. via a mouse event)
@@ -143,6 +153,7 @@ module.exports = class Button extends core.mvc.View
           - state:    String indicating what state caused the change.
   ###
   handleStateChanged: (args) => # No-op.
+  
   
   ###
   Invoked when the selection has changed.

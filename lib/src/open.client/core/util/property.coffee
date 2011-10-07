@@ -15,7 +15,7 @@ module.exports = class Property
             - default: (optional) The default value to use.
   ###
   constructor: (options = {}) -> 
-
+      
       # Store references.
       fn = @fn
       fn._parent = @
@@ -23,7 +23,7 @@ module.exports = class Property
       @_ = 
           store:    options.store
           default:  options.default ?= null
-
+      
       # Setup eventing.
       _.extend @, Backbone.Events
       _.extend fn, Backbone.Events
@@ -31,8 +31,8 @@ module.exports = class Property
       # Add handler helper methods.
       fn.onChanging = (handler) -> fn.bind 'changing', handler
       fn.onChanged  = (handler) -> fn.bind 'changed', handler
-
-
+  
+  
   ###
   The primary read/write function of the property.
   Expose this from your objects as a property-func.
@@ -44,8 +44,8 @@ module.exports = class Property
   fn: (value, options) => 
       @write(value, options) if value != undefined
       @read()
-
-
+  
+  
   ###
   Reads the property value.
   ###
@@ -54,8 +54,8 @@ module.exports = class Property
       if _.isFunction(store) then value = store(@name) else value = store[@name]
       value = @_.default if value == undefined
       value
-
-
+  
+  
   ###
   Writes the given value to the property.
   @param value : The value to write.
@@ -81,40 +81,43 @@ module.exports = class Property
       
       # Post-event.
       @fireChanged(oldValue, value) if options.silent is no
-
-
+  
+  
   ###
   Fires the 'changing' event (from the [Property] instance, and the [fn] method)
   allowing listeners to cancel the change.
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
+  @param args     : Optional arguments that may have been passed through when writing to the property (eg. event srcElement).
   @returns the event args.
   ###
-  fireChanging: (oldValue, newValue) => 
+  fireChanging: (oldValue, newValue, args...) => 
       args = 
           oldValue: oldValue
           newValue: newValue
           cancel:   false
+          args:     args
       fireEvent 'changing', @, args
       args
-
-
+  
+  
   ###
   Fires the 'changed' event (from the [Property] instance, and the [fn] method).
   @param oldValue : The value before the property is changing from.
   @param newValue : The new value the property is changing to.
+  @param args     : Optional arguments that may have been passed through when writing to the property (eg. event srcElement).
   @returns the event args.
   ###
-  fireChanged: (oldValue, newValue) => 
+  fireChanged: (oldValue, newValue, args...) => 
       fireEvent 'changed', @,
                     oldValue: oldValue
                     newValue: newValue
+                    args:     args
 
 
+# PRIVATE --------------------------------------------------------------------------
 
-###
-  PRIVATE
-###
+
 fireEvent = (eventName, prop, args) => 
     args.property = prop
     fire = (obj) => obj.trigger eventName, args

@@ -8,7 +8,7 @@ module.exports = class SystemToggleButton extends Button
   constructor: (params = {}) -> 
       super _.extend params, canToggle: true, tagName: 'span'
       @el.addClass @_className('system_toggle_btn')
-      @el.disableTextSelect() # Prevent text selection from double-click.
+      @el.disableTextSelect() # Prevent text selection occuring from double-click.
   
   
   # Renders to the DOM.
@@ -22,13 +22,17 @@ module.exports = class SystemToggleButton extends Button
       @elLabel = $("<span class=\"#{labelClass}\">#{@label()}</span>")
       @el.append @elLabel
       
+      
+      # Wire up events.
+      # @elInput?.change (e) -> 
+      #     console.log 'change e', e
+      
       # Finish up.
       syncInput @
   
   
   # Gets the INPUT element.
   elInput: undefined # Set HTML element in constructor of overriding class.
-  
   
   
   ###
@@ -56,6 +60,10 @@ module.exports = class SystemToggleButton extends Button
         state = args.state
         return if state is 'mouseenter' or state is 'mouseleave' or state is 'mousedown'
         
+        
+        # console.log 'STATE CHANGED', args, args.state
+        
+        
         # Determine if a click on sub-INPUT element (not the parent Button) caused the state change.
         inputClicked = false
         
@@ -64,24 +72,19 @@ module.exports = class SystemToggleButton extends Button
             el = srcElement.get(0)
             inputClicked = srcElement.get(0) is @elInput.get(0)
             
-            
+            # TEMP 
             # console.log 'tagName: ', srcElement.get(0).tagName
             # console.log 'inputClicked', inputClicked
             # console.log '@selected()', @selected()
             # console.log ''
-            
-            # console.log 'handleSelectedChanged', args, args.srcElement?.get(0).tagName
         
         if inputClicked is false
-        
-        # unless inputClicked
             
             foo = 3
             # console.log 'SYNC IT NOW!!!'
             
-            
             syncInput @
-  
+
 
 # PRIVATE STATIC --------------------------------------------------------------------------
 

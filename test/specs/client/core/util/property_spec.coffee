@@ -127,12 +127,21 @@ describe 'util/property', ->
         prop.fireChanging()
         expect(count).toEqual 1
       
-      it 'passes values as args in event', ->
-        prop.fireChanging(1, 2)
-        expect(args.oldValue).toEqual 1
-        expect(args.newValue).toEqual 2
+      it 'passes values as arguments in event', ->
+        args1 = {}
+        args2 = 'foo'
+        prop.fireChanging('old', 'new', args1, args2)
+        expect(args.oldValue).toEqual 'old'
+        expect(args.newValue).toEqual 'new'
         expect(args.cancel).toEqual false
         expect(args.property).toEqual prop
+        expect(args.args[0]).toEqual args1
+        expect(args.args[1]).toEqual args2
+      
+      it 'passes empty args array', ->
+        prop.fireChanging('old', 'new')
+        expect(args.args.length).toEqual 0
+
 
     describe '[changing] event when writing', ->
       it 'fires [changing] event when value is different', ->
@@ -204,11 +213,19 @@ describe 'util/property', ->
         prop.fireChanged()
         expect(count).toEqual 1
       
-      it 'passes values as args in event', ->
-        prop.fireChanged(1, 2)
-        expect(args.oldValue).toEqual 1
-        expect(args.newValue).toEqual 2
+      it 'passes values as arguments in event', ->
+        args1 = {}
+        args2 = 'foo'
+        prop.fireChanged('old', 'new', args1, args2)
+        expect(args.oldValue).toEqual 'old'
+        expect(args.newValue).toEqual 'new'
         expect(args.property).toEqual prop
+        expect(args.args[0]).toEqual args1
+        expect(args.args[1]).toEqual args2
+      
+      it 'passes empty event args array', ->
+        prop.fireChanged('old', 'new')
+        expect(args.args.length).toEqual 0
     
     describe '[changed] event when writing', ->
       it 'fires [changed] event when value is different', ->
