@@ -1,7 +1,3 @@
-# TODO 
-# - test args (srcElement) for selection changed (see selected event, and stateChanged and selectionChanged methods).
-
-
 core = require '../core'
 
 ###

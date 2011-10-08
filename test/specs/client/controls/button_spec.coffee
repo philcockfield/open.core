@@ -231,6 +231,11 @@ describe 'controls/button', ->
       button.canToggle false
       button.selected true
       expect(e).not.toBeDefined()
+    
+    it 'fires event args', ->
+      fireEvent 'mouseup'
+      expect(e.source).toEqual button
+      expect(e.srcElement).toEqual eventSrcElement
 
 
   describe 'onSelected : event handler helper', ->
@@ -420,14 +425,14 @@ describe 'controls/button', ->
     it 'invokes the [handleStateChanged] method before the [handleSelectedChanged] method before firing the [selectedChanged] event', ->
       button = new Button canToggle:true
       fired = []
-      button.bind 'selected', -> fired.push 'event'
+      button.bind 'selected', -> fired.push 'event:selected'
       spyOn(button, 'handleStateChanged').andCallFake -> fired.push 'handleStateChanged'
       spyOn(button, 'handleSelectedChanged').andCallFake -> fired.push 'handleSelectedChanged'
       
       button.selected true
       expect(fired[0]).toEqual 'handleStateChanged'
       expect(fired[1]).toEqual 'handleSelectedChanged'
-      expect(fired[2]).toEqual 'event'
+      expect(fired[2]).toEqual 'event:selected'
 
       
   describe 'CSS classes on state change', ->
