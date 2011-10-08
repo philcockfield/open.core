@@ -268,40 +268,66 @@ describe 'controls/button', ->
 
 
   describe 'handleStateChanged (overridable method)', ->
+    args = null
+    srcElement = null
     beforeEach ->
+        srcElement = $('<div>Custom Click Element</div>')
         spyOn(button, 'handleStateChanged').andCallThrough()
+        
+        @addMatchers
+            toHaveBeenCalledWithStateArgs: (expected) ->
+                
+                # Ensure the method was called.
+                return false if @actual.callCount is not 1
+                
+                # Ensure the complete set of arguments were passed to the method.
+                args = @actual.mostRecentCall.args[0]
+                return false unless args.state is expected
+                return false unless args.source is button
+                return false unless args.srcElement is srcElement
+                
+                # Passed
+                return true
+    
+    fire = (eventName) -> 
+        event = jQuery.Event(eventName)
+        # Set a custom element that caused the event to fire - not the button el.
+        # This ensures that the code is catching the actual sub-element that fired the event
+        # and not just sending back the button's DOM element.
+        event.srcElement = srcElement
+        button.el.trigger event
+    
+    it 'is called on [mouseenter]', ->
+      fire 'mouseenter'
+      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseenter')
+    
+    it 'is called on [mouseleave]', ->
+      fire 'mouseleave'
+      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseleave')
+    
+    it 'is called on [mousedown]', ->
+      fire 'mousedown'
+      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mousedown')
+    
+    it 'is called on [mouseup] - same as "click"', ->
+      fire 'mouseup'
+      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('click')
     
     it 'is called on [click]', ->
       button.click()
       expect(button.handleStateChanged).toHaveBeenCalled()
-
-    it 'is called on [mouseover]', ->
-      button.el.mouseover()
-      expect(button.handleStateChanged).toHaveBeenCalled()
-
-    it 'is called on [mouseout]', ->
-      button.el.mouseout()
-      expect(button.handleStateChanged).toHaveBeenCalled()
     
-    it 'is called on [mousedown]', ->
-      button.el.mousedown()
-      expect(button.handleStateChanged).toHaveBeenCalled()
-    
-    it 'is called on [mouseup]', ->
-      button.el.mouseup()
-      expect(button.handleStateChanged).toHaveBeenCalled()
-
     it 'is called on [selected] set to true', ->
       button.canToggle true
       button.selected true
       expect(button.handleStateChanged).toHaveBeenCalled()
-
+    
     it 'is called on [selected] set to false', ->
       button.canToggle true
       button.selected true
       button.selected false
       expect(button.handleStateChanged.callCount).toEqual 2
-
+  
   describe 'handleSelectedChanged (overridable method)', ->
     args = null
     beforeEach ->
