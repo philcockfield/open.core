@@ -183,8 +183,8 @@ module.exports = class Button extends core.mvc.View
           source:     @
           state:      state
           srcElement: options.srcElement
-      @trigger 'stateChanged', args
       @handleStateChanged args
+      @trigger 'stateChanged', args
 
 
 # PRIVATE STATIC --------------------------------------------------------------------------

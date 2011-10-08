@@ -267,27 +267,10 @@ describe 'controls/button', ->
       expect(button.selected()).toEqual false
 
 
-  describe 'handleStateChanged (overridable method)', ->
-    args = null
+  describe 'stateChange', ->
     srcElement = null
     beforeEach ->
         srcElement = $('<div>Custom Click Element</div>')
-        spyOn(button, 'handleStateChanged').andCallThrough()
-        
-        @addMatchers
-            toHaveBeenCalledWithStateArgs: (expected) ->
-                
-                # Ensure the method was called.
-                return false if @actual.callCount is not 1
-                
-                # Ensure the complete set of arguments were passed to the method.
-                args = @actual.mostRecentCall.args[0]
-                return false unless args.state is expected
-                return false unless args.source is button
-                return false unless args.srcElement is srcElement
-                
-                # Passed
-                return true
     
     fire = (eventName) -> 
         event = jQuery.Event(eventName)
@@ -297,38 +280,112 @@ describe 'controls/button', ->
         event.srcElement = srcElement
         button.el.trigger event
     
-    it 'is called on [mouseenter]', ->
-      fire 'mouseenter'
-      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseenter')
+    describe '[handleStateChanged] method (overridable)', ->
+      beforeEach ->
+          spyOn(button, 'handleStateChanged').andCallThrough()
+          @addMatchers
+              toHaveBeenCalledWithStateArgs: (expected) ->
+                  
+                  # Ensure the method was called.
+                  return false unless @actual.callCount is 1
+                  
+                  # Ensure the complete set of arguments were passed to the method.
+                  args = @actual.mostRecentCall.args[0]
+                  return false unless args.state is expected
+                  return false unless args.source is button
+                  return false unless args.srcElement is srcElement
+                  
+                  # Passed
+                  return true
+      
+      it 'is called on [mouseenter]', ->
+        fire 'mouseenter'
+        expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseenter')
+      
+      it 'is called on [mouseleave]', ->
+        fire 'mouseleave'
+        expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseleave')
+      
+      it 'is called on [mousedown]', ->
+        fire 'mousedown'
+        expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mousedown')
+      
+      it 'is called on [mouseup] - same as "click"', ->
+        fire 'mouseup'
+        expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('click')
+      
+      it 'is called on [click]', ->
+        button.click()
+        expect(button.handleStateChanged).toHaveBeenCalled()
+      
+      it 'is called on [selected] set to true', ->
+        button.canToggle true
+        button.selected true
+        expect(button.handleStateChanged).toHaveBeenCalled()
+      
+      it 'is called on [selected] set to false', ->
+        button.canToggle true
+        button.selected true
+        button.selected false
+        expect(button.handleStateChanged.callCount).toEqual 2
     
-    it 'is called on [mouseleave]', ->
-      fire 'mouseleave'
-      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseleave')
+    describe '[stateChanged] event', ->
+      args      = null
+      fireCount = 0
+      beforeEach ->
+          args      = null
+          fireCount = 0
+          button.bind 'stateChanged', (e) -> 
+                                        fireCount += 1
+                                        args = e
+          @addMatchers
+              toHaveBeenFiredWithStateArgs: (expected) ->
+                  
+                  # Ensure the method was called.
+                  return false unless fireCount is 1
+                  
+                  # Ensure the complete set of arguments were passed to the method.
+                  return false unless args.state is expected
+                  return false unless args.source is button
+                  return false unless args.srcElement is srcElement
+                  
+                  # Passed
+                  return true
+      
+      it 'is called on [mouseenter]', ->
+        fire 'mouseenter'
+        expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mouseenter')
+      
+      it 'is called on [mouseleave]', ->
+        fire 'mouseleave'
+        expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mouseleave')
+      
+      it 'is called on [mousedown]', ->
+        fire 'mousedown'
+        expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mousedown')
+      
+      it 'is called on [mouseup] - same as "click"', ->
+        fire 'mouseup'
+        expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('click')
+      
+      it 'is called on [click]', ->
+        button.click()
+        expect(fireCount).toEqual 1
     
-    it 'is called on [mousedown]', ->
-      fire 'mousedown'
-      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mousedown')
-    
-    it 'is called on [mouseup] - same as "click"', ->
-      fire 'mouseup'
-      expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('click')
-    
-    it 'is called on [click]', ->
-      button.click()
-      expect(button.handleStateChanged).toHaveBeenCalled()
-    
-    it 'is called on [selected] set to true', ->
-      button.canToggle true
-      button.selected true
-      expect(button.handleStateChanged).toHaveBeenCalled()
-    
-    it 'is called on [selected] set to false', ->
-      button.canToggle true
-      button.selected true
-      button.selected false
-      expect(button.handleStateChanged.callCount).toEqual 2
+    describe 'invocation order', ->
+      it 'invokes the [handleStateChanged] method before firing the [stateChanged] event', ->
+        
+        button = new Button()
+        fired = []
+        button.bind 'stateChanged', -> fired.push 'event'
+        spyOn(button, 'handleStateChanged').andCallFake -> fired.push 'method'
+        
+        button.click()
+        expect(fired[0]).toEqual 'event'
+        expect(fired[0]).toEqual 'method'
+      
   
-  describe 'handleSelectedChanged (overridable method)', ->
+  describe '[handleSelectedChanged] method (overridable)', ->
     args = null
     beforeEach ->
         args = null
