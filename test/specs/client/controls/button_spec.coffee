@@ -5,12 +5,23 @@ describe 'controls/button', ->
       Button = controls.Button
       button = new Button()
   
+  eventSrcElement = null
+  fireEvent = (eventName) -> 
+      event = jQuery.Event(eventName)
+      # Set a custom element that caused the event to fire - not the button el.
+      # This ensures that the code is catching the actual sub-element that fired the event
+      # and not just sending back the button's DOM element.
+      eventSrcElement = $('<div>Custom Click Element</div>')
+      event.srcElement = eventSrcElement
+      
+      # Fire the event.
+      button.el.trigger event
+  
   it 'exists', ->
     expect(Button).toBeDefined()
   
   it 'is an MVC view', ->
     expect(button instanceof core.mvc.View).toEqual true 
-
   
   describe 'default property values', ->
     it 'is enabled by default', ->
@@ -87,9 +98,10 @@ describe 'controls/button', ->
       button.click()
       expect(fireCount).toEqual 0
     
-    it 'returns the model as the event args', ->
-      button.click()
-      expect(args.source).toEqual button
+    describe '[click] event args', ->
+      beforeEach -> fireEvent 'mouseup'
+      it 'returns the [button] in the event args', -> expect(args.source).toEqual button
+      it 'returns the [srcElement] in the event args', -> expect(args.srcElement).toEqual eventSrcElement
     
   describe 'toggling Selected', ->
     describe 'when canToggle is true', ->
@@ -161,8 +173,9 @@ describe 'controls/button', ->
     preArgs = undefined
     clickArgs = undefined
     beforeEach ->
-            e = undefined
+            e         = undefined
             clickArgs = undefined
+            preArgs   = undefined
             button.bind 'pre:click', (e) -> preArgs = e
             button.onClick (e)-> clickArgs = e
   
@@ -190,7 +203,12 @@ describe 'controls/button', ->
       button.bind 'pre:click', (e) -> e.cancel = true
       result = button.click()
       expect(result).toEqual false
-      
+
+    describe '[pre:click] event args', ->
+      beforeEach -> fireEvent 'mouseup'
+      it 'returns the [button] in the event args', -> expect(preArgs.source).toEqual button
+      it 'is not cancelled by default', -> expect(preArgs.cancel).toEqual false
+      it 'returns the [srcElement] in the event args', -> expect(preArgs.srcElement).toEqual eventSrcElement
   
   describe '[selected] event', ->
     e = undefined
@@ -268,18 +286,6 @@ describe 'controls/button', ->
 
 
   describe 'stateChange', ->
-    srcElement = null
-    beforeEach ->
-        srcElement = $('<div>Custom Click Element</div>')
-    
-    fire = (eventName) -> 
-        event = jQuery.Event(eventName)
-        # Set a custom element that caused the event to fire - not the button el.
-        # This ensures that the code is catching the actual sub-element that fired the event
-        # and not just sending back the button's DOM element.
-        event.srcElement = srcElement
-        button.el.trigger event
-    
     describe '[handleStateChanged] method (overridable)', ->
       beforeEach ->
           spyOn(button, 'handleStateChanged').andCallThrough()
@@ -293,25 +299,25 @@ describe 'controls/button', ->
                   args = @actual.mostRecentCall.args[0]
                   return false unless args.state is expected
                   return false unless args.source is button
-                  return false unless args.srcElement is srcElement
+                  return false unless args.srcElement is eventSrcElement
                   
                   # Passed
                   return true
       
       it 'is called on [mouseenter]', ->
-        fire 'mouseenter'
+        fireEvent 'mouseenter'
         expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseenter')
       
       it 'is called on [mouseleave]', ->
-        fire 'mouseleave'
+        fireEvent 'mouseleave'
         expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mouseleave')
       
       it 'is called on [mousedown]', ->
-        fire 'mousedown'
+        fireEvent 'mousedown'
         expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('mousedown')
       
       it 'is called on [mouseup] - same as "click"', ->
-        fire 'mouseup'
+        fireEvent 'mouseup'
         expect(button.handleStateChanged).toHaveBeenCalledWithStateArgs('click')
       
       it 'is called on [click]', ->
@@ -347,25 +353,25 @@ describe 'controls/button', ->
                   # Ensure the complete set of arguments were passed to the method.
                   return false unless args.state is expected
                   return false unless args.source is button
-                  return false unless args.srcElement is srcElement
+                  return false unless args.srcElement is eventSrcElement
                   
                   # Passed
                   return true
       
       it 'is called on [mouseenter]', ->
-        fire 'mouseenter'
+        fireEvent 'mouseenter'
         expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mouseenter')
       
       it 'is called on [mouseleave]', ->
-        fire 'mouseleave'
+        fireEvent 'mouseleave'
         expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mouseleave')
       
       it 'is called on [mousedown]', ->
-        fire 'mousedown'
+        fireEvent 'mousedown'
         expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('mousedown')
       
       it 'is called on [mouseup] - same as "click"', ->
-        fire 'mouseup'
+        fireEvent 'mouseup'
         expect(button.handleStateChanged).toHaveBeenFiredWithStateArgs('click')
       
       it 'is called on [click]', ->
@@ -374,15 +380,14 @@ describe 'controls/button', ->
     
     describe 'invocation order', ->
       it 'invokes the [handleStateChanged] method before firing the [stateChanged] event', ->
-        
         button = new Button()
         fired = []
         button.bind 'stateChanged', -> fired.push 'event'
         spyOn(button, 'handleStateChanged').andCallFake -> fired.push 'method'
         
         button.click()
-        expect(fired[0]).toEqual 'event'
         expect(fired[0]).toEqual 'method'
+        expect(fired[1]).toEqual 'event'
       
   
   describe '[handleSelectedChanged] method (overridable)', ->

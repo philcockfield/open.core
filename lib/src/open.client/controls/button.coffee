@@ -89,15 +89,16 @@ module.exports = class Button extends core.mvc.View
   ###
   click: (options = {}) =>
       # Setup initial conditions.
-      preArgs = 
-          source: @
-          cancel: false
       srcElement = options.srcElement ?= @el
       srcElement = core.util.toJQuery srcElement
-
+      preArgs = 
+          source:     @
+          cancel:     false
+          srcElement: srcElement
+      
       # Don't allow click is disabled.
       return if not @enabled()
-
+      
       # Determine if event is required.
       fireEvent = not (options.silent == true)
       
