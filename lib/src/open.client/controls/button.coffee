@@ -1,6 +1,4 @@
 # TODO 
-# - test click event for srcElement (mousedown AND mouseup)
-# - test state changed event for srcElement args
 # - test args (srcElement) for selection changed (see selected event, and stateChanged and selectionChanged methods).
 
 
@@ -17,7 +15,7 @@ Events:
 module.exports = class Button extends core.mvc.View
   ###
   Constructor.
-  @param params : used to override default property values.
+  @param params : default property values.
   ###
   constructor: (params = {}) -> 
       self = @

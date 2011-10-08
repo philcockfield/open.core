@@ -355,7 +355,7 @@ describe 'controls/button', ->
                   return false unless args.source is button
                   return false unless args.srcElement is eventSrcElement
                   
-                  # Passed
+                  # Passed.
                   return true
       
       it 'is called on [mouseenter]', ->
@@ -400,15 +400,34 @@ describe 'controls/button', ->
     it 'is called on [click]', ->
       button.click()
       expect(button.handleSelectedChanged).toHaveBeenCalled()
-
+    
+    it 'is called on [selected] set to true', ->
+      button.selected true
+      expect(button.handleSelectedChanged).toHaveBeenCalled()
+    
     it 'passes args as selected', ->
-      button.click()
+      fireEvent 'mouseup'
       expect(args.selected).toEqual true
-
+      expect(args.source).toEqual button
+      expect(args.srcElement).toEqual eventSrcElement
+    
     it 'passes args as not selected', ->
       button.click()
       button.click()
       expect(args.selected).toEqual false
+  
+  describe 'invocation order', ->
+    it 'invokes the [handleStateChanged] method before the [handleSelectedChanged] method before firing the [selectedChanged] event', ->
+      button = new Button canToggle:true
+      fired = []
+      button.bind 'selected', -> fired.push 'event'
+      spyOn(button, 'handleStateChanged').andCallFake -> fired.push 'handleStateChanged'
+      spyOn(button, 'handleSelectedChanged').andCallFake -> fired.push 'handleSelectedChanged'
+      
+      button.selected true
+      expect(fired[0]).toEqual 'handleStateChanged'
+      expect(fired[1]).toEqual 'handleSelectedChanged'
+      expect(fired[2]).toEqual 'event'
 
       
   describe 'CSS classes on state change', ->
