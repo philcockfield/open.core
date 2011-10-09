@@ -17,12 +17,7 @@ html(lang='en')
     :coffeescript
       $ -> 
         TestHarness = require 'open.client/harness'
-        harness = new TestHarness()
-        console.log 'harness', harness
+        new TestHarness().init()
     
   body
-    
-    
-    
-    h1 Harness!
     

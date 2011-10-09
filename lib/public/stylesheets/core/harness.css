@@ -1,3 +1,24 @@
-body {
-  background: #ffa500;
+@import "http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css";
+.th_harness {
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
+}
+.th_harness .th_sidebar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 250px;
+  background: #f5f5f5;
+}
+.th_harness .th_main {
+  position: absolute;
+  left: 250px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-left: solid 1px #666;
+  -webkit-box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
+  background: #fff;
 }
