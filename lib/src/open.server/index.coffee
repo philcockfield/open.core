@@ -1,15 +1,13 @@
-require './config/libs'
-paths           = require './config/paths'
-configure       = require './config/configure'
-configure.specs = require './routes/specs'
-
-server =
+module.exports = server =
   title:       'Open.Core (Server)'
-  paths:       paths
-  util:        require './util'
-  client:      require 'open.client'
-  configure:   configure
-
+  
+  # Set in bootstrap below.
+  paths:       undefined 
+  util:        undefined
+  client:      undefined
+  configure:   undefined
+  
+  
   ###
   Generates the standard copyright notice (MIT).
   @param options (optional)
@@ -28,5 +26,17 @@ server =
       notice
 
 
-# Export
-module.exports = server
+# Bootstrap.
+do -> 
+    
+    # Initialize 3rd party libs.
+    require './config/libs'
+    
+    # Store sub-modules.
+    server.paths           = require './config/paths'
+    server.util            = require './util'
+    server.client          = require 'open.client'
+    server.configure       = require './config/configure'
+    server.configure.specs = require './routes/specs'
+
+

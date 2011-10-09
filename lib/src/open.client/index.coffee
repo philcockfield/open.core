@@ -1,3 +1,12 @@
+tryRequire = (name) -> 
+    try
+      require name
+    catch error
+      # Ignore.  Code not referenced within page.
+
+
 module.exports = 
-  core:     require './core'
-  controls: require './controls'
+  core:     tryRequire './core'
+  controls: tryRequire './controls'
+  harness:  tryRequire './harness'
+

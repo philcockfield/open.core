@@ -1,4 +1,4 @@
-fs = require 'fs'
+fs           = require 'fs'
 CoffeeScript = require 'coffee-script'
 
 
@@ -56,7 +56,7 @@ module.exports = (app, options) ->
         getHelpers specsDir, (helperPaths) ->
           getSpecs specsDir, (specPaths) ->
               libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
-              core.util.render res, 'specs/index',
+              core.util.render res, 'test/specs',
                                     layout:       false
                                     title:        title
                                     url:          url
