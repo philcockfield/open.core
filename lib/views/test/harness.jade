@@ -11,21 +11,8 @@ html(lang='en')
     - JS_PATH = core.baseUrl + '/javascripts'
     script(type='text/javascript', src="#{JS_PATH}/libs/libs-min.js")
     script(type='text/javascript', src="#{JS_PATH}/core/harness.js")
-
-    // Source files (under test).
-    - each path in sourceUrls
-      script(type='text/javascript', src="#{path}")
     
-    // Sample code (compile into CommonJS modules).
-    script(type='text/javascript', src="#{sampleCode}")
-    
-    // Helper files.
-    - each path in helperPaths
-      script(type='text/javascript', src="#{url}/specs/#{path}")
-
-    // Spec files.
-    - each path in specPaths
-      script(type='text/javascript', src="#{url}/specs/#{path}")
+    != partial('./scripts')
     
     :coffeescript
       $ -> 

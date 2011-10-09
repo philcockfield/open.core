@@ -2,28 +2,15 @@
 html(lang='en')
   head
     title= title
-
+    
     // Test runner.
     - JASMINE_URL = core.baseUrl + '/javascripts/libs/jasmine'
     link(type='text/css', rel='stylesheet', href="#{JASMINE_URL}/jasmine.css")
     script(type='text/javascript', src="#{JASMINE_URL}/jasmine.js")
     script(type='text/javascript', src="#{JASMINE_URL}/jasmine-html.js")
-
-    // Source files (under test).
-    - each path in sourceUrls
-      script(type='text/javascript', src="#{path}")
     
-    // Sample code (compile into CommonJS modules).
-    script(type='text/javascript', src="#{sampleCode}")
-    
-    // Helper files.
-    - each path in helperPaths
-      script(type='text/javascript', src="#{url}/specs/#{path}")
-
-    // Spec files.
-    - each path in specPaths
-      script(type='text/javascript', src="#{url}/specs/#{path}")
-
+    != partial('./scripts')
+  
   body
     :coffeescript
       jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
