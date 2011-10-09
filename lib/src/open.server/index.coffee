@@ -33,10 +33,14 @@ do ->
     require './config/libs'
     
     # Store sub-modules.
+    # NB: Set here to avoid load order problems with sub-modules that
+    #     in turn require the [server] module.
     server.paths           = require './config/paths'
     server.util            = require './util'
     server.client          = require 'open.client'
     server.configure       = require './config/configure'
-    server.configure.specs = require './routes/specs'
+    
+    # Test runners.
+    server.configure.specs = require './routes/test/jasmine'
 
 

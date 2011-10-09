@@ -14,6 +14,8 @@ module.exports =
       minRequested = (req)-> _(req.params.package).endsWith '-min'
 
       # Routes.
+      
+      # GET: Stylesheets
       app.get "#{core.baseUrl}/:stylesheet?.css", (req, res) ->
           stylesheet = req.params.stylesheet
           switch stylesheet
@@ -21,7 +23,7 @@ module.exports =
             else path = 'core'
           send.cssFile res, "#{paths.stylesheets}/#{path}/#{stylesheet}.css"
       
-      
+      # GET: Javascript file.
       app.get "#{core.baseUrl}/:package?.js", (req, res) ->
           package = req.params.package
           min  = if minRequested(req) then '-min' else ''

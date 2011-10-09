@@ -3,7 +3,7 @@ CoffeeScript = require 'coffee-script'
 
 
 ###
-Configures the Jasmine BDD spec runner.
+Configures a test-runner page.
 @param app express/connect that the test runner is operating within.
 @param options:
         - url         : (optional) The URL that loads the test-runner (defaults to /specs).
@@ -47,8 +47,7 @@ module.exports = (app, options) ->
             try
               callback CoffeeScript.compile(data)
             catch error
-              msg = "Failed to compile spec file: #{file} \n#{error.message}"
-              throw msg
+              throw "Failed to compile spec file: #{file} \n#{error.message}"
               
     
     # Route: The test runner.
