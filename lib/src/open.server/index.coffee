@@ -25,6 +25,29 @@ module.exports = server =
                 """
       notice
 
+  ###
+  Starts the development server.
+  @param options
+            - port: (optional) The port to start the server on (default 8080).
+  ###
+  start: (options = {})->
+      
+      # Setup initial conditions.
+      @configure null, baseUrl: '/'
+      app  = @app
+      log  = @util.log
+          
+      # Determine which port to start on.
+      options.port ?= 8080
+      port = process.env.PORT ?= options.port
+      
+      # Start listening on requested port.
+      app.listen port, =>
+          log ''
+          log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
+          log '---'
+
+
 
 # Bootstrap.
 do -> 

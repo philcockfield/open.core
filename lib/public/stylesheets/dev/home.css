@@ -1,0 +1,16 @@
+@import "http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css";
+body {
+  padding: 10px 30px;
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
+}
+.dev h1 {
+  font-weight: 300;
+  font-size: 36px;
+}
+.dev h2 {
+  font-weight: 500;
+  font-size: 16pt;
+}
+.dev li {
+  margin-bottom: 8px;
+}

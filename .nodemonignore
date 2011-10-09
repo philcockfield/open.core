@@ -1,3 +1,4 @@
 _tmp/*
 lib/public/*
+lib/views/*
 .git

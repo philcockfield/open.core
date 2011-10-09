@@ -2,6 +2,7 @@ core = require 'open.server'
 
 ###
 Configures the library.
+@param app :       The express app.
 @param options:
         - baseUrl: The base URL path to put the Core app within (default: /core).
         - express: The instance of Express being used.
@@ -11,6 +12,9 @@ module.exports = (app, options = {}) ->
     # Modules.
     express = options.express ?= require('express')
     routes  = require '../routes'
+    
+    # Create a new express app if one was not passed.
+    app ?= express.createServer()
     
     # Setup initial conditions.
     paths   = core.paths
