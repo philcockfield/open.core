@@ -4,11 +4,13 @@ html(lang='en')
     title= title
     
     // Stylesheets.
-    // link(type='text/css', rel='stylesheet', href="#{testRunnerDir}/jasmine.css")
+    
+    // link(type='text/css', rel='stylesheet', href="#{stylesheetDir}/harness.css")
     
     // Test Harness.
-    script(type='text/javascript', src="#{testRunnerDir}/libs/libs-min.js")
-    script(type='text/javascript', src="#{testRunnerDir}/core/harness.js")
+    - JS_PATH = core.baseUrl + '/javascripts'
+    script(type='text/javascript', src="#{JS_PATH}/libs/libs-min.js")
+    script(type='text/javascript', src="#{JS_PATH}/core/harness.js")
 
     // Source files (under test).
     - each path in sourceUrls
