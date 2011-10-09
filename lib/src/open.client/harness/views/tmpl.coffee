@@ -10,7 +10,16 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   
   sidebar:
     """
-    <ul class="th_descs"></ul>
+    <ul class="th_descriptions"></ul>
     """
+  
+  descriptionButton:
+    """
+    <p class="th_title"><%= model.title() %></p>
+    <% if (model.summary()) { %>
+      <p class="th_summary"><%= model.summary() %></p>
+    <% } %>
+    """
+  
   
   

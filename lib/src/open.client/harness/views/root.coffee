@@ -10,7 +10,7 @@ module.exports = (module) ->
     
     render: -> 
         # Insert base HTML structure.
-        tmpl = new module.views.Tmpl()
+        tmpl = module.tmpl
         @html tmpl.root()
         
         # Insert sub-views.

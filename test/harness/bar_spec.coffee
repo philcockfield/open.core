@@ -1,2 +1,2 @@
-describe 'Bar', ->
+describe 'Xar', ->
   

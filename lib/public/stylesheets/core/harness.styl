@@ -1,7 +1,7 @@
 @import '../core/functions'
 @import FONT_URL_UBUNTU
 
-SIDEBAR_WIDTH = 250px
+SIDEBAR_WIDTH = 300px
 
 
 .th_harness
@@ -12,13 +12,49 @@ SIDEBAR_WIDTH = 250px
     abs-pos 0, 0, null, 0
     width SIDEBAR_WIDTH
     background darken(white, 4%)
+    overflow hidden
+    overflow-y auto
+    
+    // Root "descriptions" list.
+    ul.th_descriptions
+      list-style none
+      margin 0px
+      padding 0px
+    
+    li.th_desc_btn
+      cursor pointer
+      padding 12px
+      border-bottom solid 1px darken(white, 20%)
+      
+      p
+        padding 0px
+        margin 0px
+        textEmboss()
+      p.th_title
+        font-size 12pt
+        color darken(white, 80%)
+        ellipsis()
+      p.th_summary
+        padding-top 5px
+        font-size 8pt
+        color darken(white, 60%)
+      
+      &.core_selected
+        // background darken(white, 15%)
+        background: linear-gradient(top, #6bade1, #428bd1)
+        box-shadow inset 0 0px 5px 2px rgba(black, 0.10)
+        
+        p
+          color white
+          textEmboss rgba(black, 0.3)
+
+    
   
   // Main.
   .th_main
     abs-pos SIDEBAR_WIDTH, 0, 0, 0
     border-left solid 1px darken(white, 60%)
     box-shadow 0px 0px 20px 10px rgba(black, 0.15)
-    
     background white
     
   

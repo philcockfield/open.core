@@ -26,6 +26,7 @@ module.exports = (module) ->
   # Collection.
   Describe.Collection = class Describe.Collection extends module.mvc.Collection
     model: Describe
+    comparator: (model) -> model.title()
   
   # Export.
   Describe
