@@ -90,7 +90,7 @@ module.exports = class Button extends core.mvc.View
           cancel:     false
           srcElement: srcElement
       
-      # Don't allow click is disabled.
+      # Don't allow click if disabled.
       return if not @enabled()
       
       # Determine if event is required.
