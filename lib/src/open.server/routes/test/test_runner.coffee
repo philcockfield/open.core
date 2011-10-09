@@ -6,12 +6,15 @@ CoffeeScript = require 'coffee-script'
 Configures a test-runner page.
 @param app express/connect that the test runner is operating within.
 @param options:
-        - url         : (optional) The URL that loads the test-runner (defaults to /specs).
-        - title       : (optional) The page title (defaults to 'Specs').
-        - specsDir    : The path to the directory containing the client-side specs.
-        - sourceUrls  : An array or URLs (or a single URL) pointing to the source script(s)
-                        that are under test.
-        - samplesDir:   Optional. The path to a directory of samples to compile and serve as commonJS modules.
+        - url           : (optional) The URL that loads the test-runner (defaults to /specs).
+        - title         : (optional) The page title (defaults to 'Specs').
+        - specsDir      : The path to the directory containing the client-side specs.
+        - sourceUrls    : An array or URLs (or a single URL) pointing to the source script(s)
+                          that are under test.
+        - samplesDir    : Optional. The path to a directory of samples to compile and serve as commonJS modules.
+        
+        - viewFile      : The path to the .jade view.
+        - testRunnerDir : Folder that contains the JS of the test-runner.
 ###
 module.exports = (app, options) ->
     
@@ -50,22 +53,22 @@ module.exports = (app, options) ->
               throw "Failed to compile spec file: #{file} \n#{error.message}"
               
     
-    # Route: The test runner.
+    # GET: The test runner page.
     app.get url, (req, res) ->
         getHelpers specsDir, (helperPaths) ->
           getSpecs specsDir, (specPaths) ->
-              libFolder = "#{core.baseUrl}/javascripts/libs/jasmine"
-              core.util.render res, 'test/specs',
-                                    layout:       false
-                                    title:        title
-                                    url:          url
-                                    libFolder:    libFolder
-                                    specPaths:    specPaths
-                                    helperPaths:  helperPaths
-                                    sourceUrls:   sourceUrls
-                                    sampleCode:   "#{url}/samples"
+              
+              core.util.render res, options.viewFile,
+                                    layout:         false
+                                    title:          title
+                                    url:            url
+                                    testRunnerDir:  options.testRunnerDir
+                                    specPaths:      specPaths
+                                    helperPaths:    helperPaths
+                                    sourceUrls:     sourceUrls
+                                    sampleCode:     "#{url}/samples"
     
-    # Route: The spec file.
+    # GET: The spec file.
     app.get "#{url}/specs/*", (req, res) ->
         
         # Setup initial conditions.
@@ -86,7 +89,7 @@ module.exports = (app, options) ->
           res.send "Script type [.#{extension}] not supported", 415
     
     
-    # Route: Compiled sample code (CommonJS)
+    # GET: Compiled sample code (CommonJS)
     app.get "#{url}/samples", (req, res) ->
         send = (code) -> core.util.send.script res, code
         if not samplesDir?

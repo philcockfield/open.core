@@ -1,4 +1,6 @@
+core       = require 'open.server'
 testRunner = require './test_runner'
+
 
 ###
 Configures the Jasmine BDD spec runner.
@@ -12,4 +14,7 @@ Configures the Jasmine BDD spec runner.
         - samplesDir:   Optional. The path to a directory of samples to compile and serve as commonJS modules.
 ###
 module.exports = (app, options) -> 
+      _.extend options, jasmine =
+                          viewFile:      'test/specs'
+                          testRunnerDir: "#{core.baseUrl}/javascripts/libs/jasmine"
       testRunner(app, options)

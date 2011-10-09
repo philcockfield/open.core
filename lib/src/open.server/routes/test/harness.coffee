@@ -1,3 +1,4 @@
+core       = require 'open.server'
 testRunner = require './test_runner'
 
 ###
@@ -12,4 +13,8 @@ Configures the TestHarness page.
         - samplesDir:   Optional. The path to a directory of samples to compile and serve as commonJS modules.
 ###
 module.exports = (app, options) -> 
+      _.extend options, harness =
+                          viewFile: 'test/harness'
+                          testRunnerDir: "#{core.baseUrl}/javascripts"
+
       testRunner(app, options)

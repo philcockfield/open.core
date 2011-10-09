@@ -9,9 +9,9 @@ logDone = -> log 'Done', color.green
 buildLibs = (callback) -> 
     console.log 'Building all 3rd party lib code...'
     core.util.javascript.build.libs -> 
-        console.log "See: #{core.paths.public}/libs"
+        log ' - See: ', color.blue, "#{core.paths.public}/libs"
         logDone()
-        console.log ''
+        log()
         callback?()
       
 
@@ -20,10 +20,9 @@ buildCore = (callback) ->
   core.util.javascript.build.all
       save: true
       callback: (result) ->
-          console.log ' - Standard file: ', result.paths.standard
-          console.log ' - Minified file: ', result.paths.minified
+          log ' - See: ', color.blue, "#{core.paths.public}/core"
           logDone()
-          console.log ''
+          log()
           callback?()
 
 

@@ -9,21 +9,23 @@ CoreBuilder: class CoreBuilder
       # Construct paths.
       client = core.paths.client
       @path =
-        core:     { path: "#{client}/core",     namespace: 'open.client/core' }
-        controls: { path: "#{client}/controls", namespace: 'open.client/controls' }
+          core:     { path: "#{client}/core",     namespace: 'open.client/core' }
+          controls: { path: "#{client}/controls", namespace: 'open.client/controls' }
+          harness:  { path: "#{client}/harness",  namespace: 'open.client/harness' }
   
   build: (name, paths, callback)-> 
       paths = [paths] unless _(paths).isArray()
       builder = new Builder( paths, header:@copyright )
       builder.build (code) => 
-          if @save is yes
-            builder.save dir:@dir, name:name, (code) -> callback? code
-          else
-            callback? code
+              if @save is yes
+                builder.save dir:@dir, name:name, (code) -> callback? code
+              else
+                callback? code
   
   coreControls: (callback) -> @build 'core+controls', [ @path.core, @path.controls ], callback
-  core:         (callback) -> @build 'core', @path.core, callback
+  core:         (callback) -> @build 'core',     @path.core, callback
   controls:     (callback) -> @build 'controls', @path.controls, callback
+  harness:      (callback) -> @build 'harness',  @path.harness, callback
 
 module.exports =
   ###
@@ -40,15 +42,12 @@ module.exports =
                                   - minified: false - returns the unminified, packed code.
   ###
   all: (options = {}) -> 
-      callback = options.callback
       builder = new CoreBuilder(options.save)
-      
-      builder.coreControls (coreControls) -> 
-        builder.core (core) -> 
-          builder.controls (controls) -> 
-            callback? coreControls
-  
-  
+      builder.core -> 
+        builder.controls -> 
+          builder.coreControls -> 
+            builder.harness -> 
+                      options.callback?()  
   ###
   The core builder.
   ###

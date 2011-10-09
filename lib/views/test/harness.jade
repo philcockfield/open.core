@@ -2,11 +2,13 @@
 html(lang='en')
   head
     title= title
-
-    // Test runner.
-    link(type='text/css', rel='stylesheet', href="#{testRunnerDir}/jasmine.css")
-    script(type='text/javascript', src="#{testRunnerDir}/jasmine.js")
-    script(type='text/javascript', src="#{testRunnerDir}/jasmine-html.js")
+    
+    // Stylesheets.
+    // link(type='text/css', rel='stylesheet', href="#{testRunnerDir}/jasmine.css")
+    
+    // Test Harness.
+    script(type='text/javascript', src="#{testRunnerDir}/libs/libs-min.js")
+    script(type='text/javascript', src="#{testRunnerDir}/core/harness.js")
 
     // Source files (under test).
     - each path in sourceUrls
@@ -22,8 +24,16 @@ html(lang='en')
     // Spec files.
     - each path in specPaths
       script(type='text/javascript', src="#{url}/specs/#{path}")
-
-  body
+    
     :coffeescript
-      jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
-      jasmine.getEnv().execute()
+      $ -> 
+        TestHarness = require 'open.client/harness'
+        harness = new TestHarness()
+        console.log 'harness', harness
+    
+  body
+    
+    
+    
+    h1 Harness!
+    
