@@ -56,7 +56,7 @@ module.exports = (app, options = {}) ->
     
     # Unit-test runner (specs).
     core.configure.specs app,
-          title:      'Open.Core Specs'
+          title:      'Open.Core (Specs)'
           url:        "#{baseUrl}/specs"
           specsDir:   "#{core.paths.specs}/client/"
           samplesDir: "#{core.paths.specs}/client/samples"
@@ -66,7 +66,7 @@ module.exports = (app, options = {}) ->
     
     # TestHarness.
     core.configure.harness app,
-          title:      'Open.Core TestHarness'
+          title:      'Open.Core (TestHarness)'
           url:        "#{baseUrl}/harness"
           specsDir:   "#{core.paths.test}/harness/"
           sourceUrls: [

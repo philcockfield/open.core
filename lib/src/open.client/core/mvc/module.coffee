@@ -63,6 +63,7 @@ module.exports = Module = class Module extends Base
   ###
   rootView: null
   
+  
   ###
   An index of the convention based MVC structures within the module.
   The object has the form:
@@ -83,7 +84,7 @@ module.exports = Module = class Module extends Base
   
   @param name: The name of the module (folder).
   @param options
-            - init:  Flag indicating if the [parent module-init] pattern should be invoked (default: false)
+            - init:  Flag indicating if the [parent module-init] pattern should be invoked (default: true)
             - throw: Flag indicating if the errors should be thrown (default: false)
             - log:   Flag indicating if errors should be written to the console (default: false)
   

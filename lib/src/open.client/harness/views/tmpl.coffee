@@ -7,3 +7,10 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     <div class="th_main">Main</div>
     """
     
+  
+  sidebar:
+    """
+    <ul class="th_descs"></ul>
+    """
+  
+  

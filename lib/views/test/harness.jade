@@ -11,13 +11,19 @@ html(lang='en')
     - JS_PATH = core.baseUrl + '/javascripts'
     script(type='text/javascript', src="#{JS_PATH}/libs/libs-min.js")
     script(type='text/javascript', src="#{JS_PATH}/core/harness.js")
-    
-    != partial('./scripts')
-    
     :coffeescript
+      # Catch root level spec descritions.
+      window.HARNESS =
+            descriptions: []
+      window.describe = (options...) => HARNESS.descriptions.push options
+      
+      # Boot the Harness.
       $ -> 
         TestHarness = require 'open.client/harness'
         new TestHarness().init()
+    
+    # Load tests scripts.
+    != partial('./scripts')
     
   body
     
