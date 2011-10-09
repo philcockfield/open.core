@@ -41,6 +41,7 @@ do ->
     server.configure       = require './config/configure'
     
     # Test runners.
-    server.configure.specs = require './routes/test/jasmine'
+    server.configure.specs   = require './routes/test/jasmine'
+    server.configure.harness = require './routes/test/harness'
 
 

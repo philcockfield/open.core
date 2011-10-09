@@ -44,20 +44,31 @@ module.exports = (app, options = {}) ->
         
     app.configure 'development', ->
         use express.errorHandler( dumpExceptions: true, showStack: true )
-        
-        # Setup the client-side test runner.
-        core.configure.specs app,
-              title:      'Open.Core Specs'
-              url:        "#{baseUrl}/specs"
-              specsDir:   "#{core.paths.specs}/client/"
-              samplesDir: "#{core.paths.specs}/client/samples"
-              sourceUrls: [
-                "#{baseUrl}/libs.js"
-                "#{baseUrl}/core+controls.js" ]
-    
     
     app.configure 'production', ->
         use express.errorHandler()
+    
+    
+    # Unit-test runner (specs).
+    core.configure.specs app,
+          title:      'Open.Core Specs'
+          url:        "#{baseUrl}/specs"
+          specsDir:   "#{core.paths.specs}/client/"
+          samplesDir: "#{core.paths.specs}/client/samples"
+          sourceUrls: [
+            "#{baseUrl}/libs.js"
+            "#{baseUrl}/core+controls.js" ]
+    
+    # TestHarness.
+    core.configure.specs app,
+          title:      'Open.Core TestHarness'
+          url:        "#{baseUrl}/harness"
+          specsDir:   "#{core.paths.specs}/client/"
+          samplesDir: "#{core.paths.specs}/client/samples"
+          sourceUrls: [
+            "#{baseUrl}/libs.js"
+            "#{baseUrl}/core+controls.js" ]
+    
     
     # Setup routes.
     routes.init()
