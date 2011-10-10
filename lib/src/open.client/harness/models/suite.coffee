@@ -22,7 +22,7 @@ module.exports = (module) ->
         last = _(params).last()
         
         # Collections.
-        @suites       = new Suite.Collection()
+        @childSuites  = new Suite.Collection()
         @its          = new It.Collection()
         
         # Store parts.
@@ -44,7 +44,7 @@ module.exports = (module) ->
         if fn?
             resetGlobalArrays()
             fn()
-            @suites.add new Suite desc for desc in HARNESS.suites
+            @childSuites.add new Suite desc for desc in HARNESS.suites
             @its.add new It(it) for it in HARNESS.specs
             resetGlobalArrays()
         

@@ -21,7 +21,7 @@ module.exports = (module) ->
         @ulChildSuites = @$('ul.th_sub_descriptions')
         
         # Render child descriptions.
-        @model.suites.each (d) =>
+        @model.childSuites.each (d) =>
             li = $("<li class='th_desc th_child'>#{d.title()}</li>")
             @ulChildSuites.append li
     
@@ -40,7 +40,7 @@ module.exports = (module) ->
               view.render()
         
           # Show or hide the list of child-suites.
-          view.ulChildSuites.toggle (view.selected() and view.model.suites.length > 0)
+          view.ulChildSuites.toggle (view.selected() and view.model.childSuites.length > 0)
           
           # Store the selection on the TestHarness root.
           module.selectedDescription view.model if view.selected()
