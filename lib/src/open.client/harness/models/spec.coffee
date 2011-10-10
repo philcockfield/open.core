@@ -2,7 +2,7 @@
 Model: Represents an "it" specification.
 ###
 module.exports = (module) ->
-  class It extends module.mvc.Model
+  class Spec extends module.mvc.Model
     defaults:
         description:  null
         func:         null
@@ -11,7 +11,7 @@ module.exports = (module) ->
     Constructor.
     @param params: The array of arguments retreived from the describe function.
     ###
-    constructor: (params) -> 
+    constructor: (params = {}) -> 
         
         # Setup initial conditions.
         super
@@ -24,12 +24,11 @@ module.exports = (module) ->
         @func last if _(last).isFunction()
   
   
-  
   # Collection.
-  class It.Collection extends module.mvc.Collection
-    model: It
+  class Spec.Collection extends module.mvc.Collection
+    model: Spec
   
   
   # Export.
-  It
+  Spec
 

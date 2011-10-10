@@ -2,7 +2,7 @@
 Model: Represents a specifications 'describe' block.
 ###
 module.exports = (module) ->
-  It = module.model 'it'
+  Spec = module.model 'spec'
   
   class Suite extends module.mvc.Model
     defaults:
@@ -23,7 +23,7 @@ module.exports = (module) ->
         
         # Collections.
         @childSuites  = new Suite.Collection()
-        @its          = new It.Collection()
+        @specs        = new Spec.Collection()
         
         # Store parts.
         @title params[0]
@@ -45,7 +45,7 @@ module.exports = (module) ->
             resetGlobalArrays()
             fn()
             @childSuites.add new Suite desc for desc in HARNESS.suites
-            @its.add new It(it) for it in HARNESS.specs
+            @specs.add new Spec(spec) for spec in HARNESS.specs
             resetGlobalArrays()
         
         

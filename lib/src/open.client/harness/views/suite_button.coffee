@@ -43,7 +43,7 @@ module.exports = (module) ->
           view.ulChildSuites.toggle (view.selected() and view.model.childSuites.length > 0)
           
           # Store the selection on the TestHarness root.
-          module.selectedDescription view.model if view.selected()
+          module.selectedSuite view.model if view.selected()
   
   
   # Export.

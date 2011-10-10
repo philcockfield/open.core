@@ -7,7 +7,7 @@ module.exports = class TestHarness extends core.mvc.Module
       # Setup initial conditions.
       super module
       @addProps
-        selectedDescription: null
+        selectedSuite: null
       
       # Store common references.
       @core     = core

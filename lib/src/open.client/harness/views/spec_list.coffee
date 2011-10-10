@@ -7,10 +7,8 @@ module.exports = (module) ->
         @render()
         
         # Wire up events.
-        module.selectedDescription.onChanged (e) => 
+        module.selectedSuite.onChanged (e) => 
             @renderSpecs()
-            
-        
     
     
     render: -> 
@@ -21,7 +19,7 @@ module.exports = (module) ->
     renderSpecs: () -> 
         
         # Setup initial conditions.
-        suite = module.selectedDescription()
+        suite = module.selectedSuite()
         return unless suite?
         
         # Clear the UL.
@@ -29,7 +27,7 @@ module.exports = (module) ->
         ul.empty()
         
         # Insert each spec.
-        module.selectedDescription().its.each (spec) -> 
+        module.selectedSuite().specs.each (spec) -> 
             li = $("<li>#{spec.description()}</li>")
             ul.append li
         
