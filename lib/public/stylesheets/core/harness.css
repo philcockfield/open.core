@@ -128,4 +128,23 @@
   -moz-box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
   box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
   background: #fff;
+  padding: 10px 20px;
+}
+.th_harness .th_main div.th_title {
+  font-weight: 300;
+  color: #404040;
+  border-bottom: solid 1px #ccc;
+  padding-bottom: 10px;
+  line-height: 180%;
+}
+.th_harness .th_main div.th_title p.th_title {
+  font-size: 24px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
+}
+.th_harness .th_main div.th_title p.th_summary {
+  font-size: 12px;
+  line-height: 150%;
 }

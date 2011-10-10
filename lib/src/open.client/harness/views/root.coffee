@@ -14,7 +14,11 @@ module.exports = (module) ->
         @html tmpl.root()
         
         # Insert sub-views.
-        Sidebar = module.view 'sidebar'
+        Sidebar  = module.view 'sidebar'
         @sidebar = new Sidebar().replace @$('.th_sidebar')
+        
+        Main  = module.view 'main'
+        @main = new Main().replace @$('.th_main')
+        
         
         
