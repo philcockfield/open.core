@@ -52,7 +52,9 @@ module.exports = (module) ->
     
   # PRIVATE --------------------------------------------------------------------------
   
-  resetGlobalArrays = -> HARNESS.descriptions = []
+  resetGlobalArrays = -> 
+        HARNESS.descriptions = []
+        HARNESS.its = []
   
   
   # Collection.

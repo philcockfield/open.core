@@ -33,7 +33,7 @@ module.exports = (module) ->
       
       # Select the first button.
       # NB: Timeout so that model correctly load child-descriptions.
-      setTimeout (-> view.buttons.items.first().selected true), 0
+      # setTimeout (-> view.buttons.items.first().selected true), 0
     
     
   # Export.
