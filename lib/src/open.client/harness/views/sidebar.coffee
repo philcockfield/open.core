@@ -8,15 +8,14 @@ module.exports = (module) ->
     render: -> 
         
         # Insert the 'description' list.
-        DescriptionList = module.view 'desc_list'
-        @descriptionList = new DescriptionList()
-        @el.append @descriptionList.el
+        SuiteList = module.view 'suite_list'
+        @suiteList = new SuiteList()
+        @el.append @suiteList.el
         
         # Insert the 'sepc' list.
         SpecList = module.view 'spec_list'
         @specList = new SpecList()
         @el.append @specList.el
-        
         
 
 
