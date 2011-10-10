@@ -30,9 +30,9 @@ module.exports = class TestHarness extends core.mvc.Module
       # Create root collection describe blocks.
       @descriptions = new @models.Describe.Collection()
       do => 
-          for d in HARNESS.descriptions
+          for d in HARNESS.suites
             @descriptions.add new @models.Describe d
-      HARNESS.descriptions = [] # Reset the collection.
+      HARNESS.suites = [] # Reset the collection.
       
       # Insert the root view.
       @tmpl     = new @views.Tmpl()

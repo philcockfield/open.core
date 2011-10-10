@@ -44,8 +44,8 @@ module.exports = (module) ->
         if fn?
             resetGlobalArrays()
             fn()
-            @descriptions.add new Describe desc for desc in HARNESS.descriptions
-            @its.add new It(it) for it in HARNESS.its
+            @descriptions.add new Describe desc for desc in HARNESS.suites
+            @its.add new It(it) for it in HARNESS.specs
             resetGlobalArrays()
         
         
@@ -53,8 +53,8 @@ module.exports = (module) ->
   # PRIVATE --------------------------------------------------------------------------
   
   resetGlobalArrays = -> 
-        HARNESS.descriptions = []
-        HARNESS.its = []
+        HARNESS.suites = []
+        HARNESS.specs = []
   
   
   # Collection.
