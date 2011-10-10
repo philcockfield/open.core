@@ -1,15 +1,53 @@
 module.exports = (module) ->
   class DescriptionButton extends module.controls.Button
     constructor: (options = {}) -> 
+        
+        # Setup initial conditions.
         super _.extend options, tagName: 'li', className: 'th_desc_btn', canToggle:true
         @model = options.model
+        
+        # Render the button.
         @render()
         @el.disableTextSelect()
+        
+        # Finish up.
+        updateState @
+    
     
     render: -> 
-      @html module.tmpl.descriptionButton(model: @model)
+        
+        # Render base HTML.
+        @html module.tmpl.descriptionButton(model: @model)
+        @ulChildDescriptions = @$('ul.th_sub_descriptions')
+        
+        # Render child descriptions.
+        @model.descriptions.each (d) =>
+            li = $("<li class='th_desc th_child'>#{d.title()}</li>")
+            @ulChildDescriptions.append li
     
     
-    handleSelectedChanged: -> # @render()
-    
+    handleSelectedChanged: -> updateState @
+  
+  
+  # PRIVATE --------------------------------------------------------------------------  
+  
+  
+  updateState = (view) ->
+          
+          # Initialize the model.
+          if view.selected() and not view.model.isInitialized is yes
+              view.model.init() 
+              view.render()
+        
+          # Show or hide the list of child-descriptions.
+          view.ulChildDescriptions.toggle (view.selected() and view.model.descriptions.length > 0)
+          
+          # Store the selection on the TestHarness root.
+          module.selectedDescription view.model if view.selected()
+  
+  
+  # Export.
+  DescriptionButton
+  
+
         

@@ -6,20 +6,24 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     <div class="th_sidebar">Sidebar</div>
     <div class="th_main">Main</div>
     """
-    
   
-  sidebar:
+  descriptionList:
     """
-    <ul class="th_descriptions"></ul>
+    <ul></ul>
     """
   
   descriptionButton:
     """
     <p class="th_title"><%= model.title() %></p>
-    <% if (model.summary()) { %>
-      <p class="th_summary"><%= model.summary() %></p>
-    <% } %>
+    <ul class="th_sub_descriptions"></ul>
     """
+  
+  
+  specList:
+    """
+    <div class="th_title">Specs</div>
+    """
+    
   
   
   

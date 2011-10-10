@@ -6,6 +6,8 @@ module.exports = class TestHarness extends core.mvc.Module
       
       # Setup initial conditions.
       super module
+      @addProps
+        selectedDescription: null
       
       # Store common references.
       @core     = core
@@ -31,7 +33,6 @@ module.exports = class TestHarness extends core.mvc.Module
           for d in HARNESS.descriptions
             @descriptions.add new @models.Describe d
       HARNESS.descriptions = [] # Reset the collection.
-      
       
       # Insert the root view.
       @tmpl     = new @views.Tmpl()
