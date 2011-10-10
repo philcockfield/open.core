@@ -1,5 +1,5 @@
 module.exports = (module) ->
-  class SuiteButton extends module.controls.Button
+  class SpecButton extends module.controls.Button
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
@@ -21,12 +21,12 @@ module.exports = (module) ->
     render: -> 
         
         # Render base HTML.
-        @html module.tmpl.suiteButton model: @model
-        @ulChildSuites = @$('ul.th_sub_suites')
+        @html module.tmpl.specButton model: @model
+        @ulChildSuites = @$('ul.th_sub_descriptions')
         
         # Render child descriptions.
         @model.childSuites.each (d) =>
-            li = $("<li class='th_suite th_child'>#{d.title()}</li>")
+            li = $("<li class='th_desc th_child'>#{d.title()}</li>")
             @ulChildSuites.append li
     
     

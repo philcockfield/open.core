@@ -17,7 +17,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   suiteButton:
     """
     <p class="th_title"><%= model.title() %></p>
-    <ul class="th_sub_descriptions"></ul>
+    <ul class="th_sub_suites"></ul>
     """
   
   

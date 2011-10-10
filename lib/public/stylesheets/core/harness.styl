@@ -34,7 +34,7 @@ overflow()
         padding 0px
     
       // Root description button.
-      li.th_desc_btn
+      li.th_suite_btn
         cursor pointer
         padding 12px
         border-bottom solid 1px darken(white, 20%)
@@ -48,13 +48,12 @@ overflow()
           background darken(white, 15%)
           box-shadow inset 0 0px 5px 2px rgba(black, 0.10)
     
-        // Child descriptions.
-        ul.th_sub_descriptions
+        // Child suites.
+        ul.th_sub_suites
           display none // Hidden by default.  Revealed on selectin.
           margin 0px
           padding-left 20px
-        
-          li.th_desc.th_child
+          li.th_suite.th_child
             color LABEL_COLOR
             font-size 10pt
             margin-top 5px
@@ -62,7 +61,7 @@ overflow()
             textEmboss()
 
     // "Specs" list.
-    .th_specs_list
+    .th_spec_list
       position relative
       height 50%
       top 50%

@@ -3,7 +3,7 @@ module.exports = (module) ->
     constructor: () -> 
         
         # Setup initial conditions.
-        super className: 'th_specs_list'
+        super className: 'th_spec_list'
         @render()
         
         # Wire up events.
