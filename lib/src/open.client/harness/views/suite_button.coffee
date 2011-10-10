@@ -12,6 +12,7 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => 
+              # Ensure the button is selected if the model is set as the selected suite.
               @selected(true) if e.newValue is @.model
         
         # Finish up.

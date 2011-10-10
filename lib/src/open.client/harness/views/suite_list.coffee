@@ -6,34 +6,25 @@ module.exports = (module) ->
         super className: 'th_desc_list'
         @buttons = new module.controls.ButtonSet()
         @render()
-        renderSuites @
     
-    render: -> @html module.tmpl.suiteList()
-
-
-# PRIVATE --------------------------------------------------------------------------
-
-
-  renderSuites = (view) -> 
+    render: -> 
+        @html module.tmpl.suiteList()
+        @renderList()          
+    
+    renderList: -> 
+        # Setup initial conditions.
+        ul = @el.children('ul')
+        ul.empty()
+        @buttons.clear()
       
-      # Setup initial conditions.
-      ul = view.el.children('ul')
-      ul.empty()
-      view.buttons.clear()
-      
-      # Enumerate each root 'description'.
-      module.suites.each (d) -> 
+        # Enumerate each root 'suite'.
+        module.suites.each (d) => 
           
-          # Create the Description-button.
-          btn = new SuiteButton model:d
-          view.buttons.add btn
+            # Create the button.
+            btn = new SuiteButton model:d
+            @buttons.add btn
           
-          # Insert into the list.
-          ul.append btn.el
+            # Insert into the list.
+            ul.append btn.el
     
-    
-  # Export.
-  SuiteList
 
-
-    

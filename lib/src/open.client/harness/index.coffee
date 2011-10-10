@@ -8,11 +8,15 @@ module.exports = class TestHarness extends core.mvc.Module
       super module
       @addProps
           selectedSuite: null
+          selectedSpec:  null
       
       # Store common references.
       @core     = core
       @mvc      = core.mvc
       @controls = controls
+      
+      # Wire up events.
+      @selectedSuite.onChanged => @selectedSpec null # Reset the spec when the suite changes.
   
   
   ###

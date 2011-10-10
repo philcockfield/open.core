@@ -1,22 +1,23 @@
 module.exports = (module) ->
+  SpecButton = module.view 'spec_button'
+  
   class SpecList extends module.mvc.View
     constructor: () -> 
         
         # Setup initial conditions.
         super className: 'th_spec_list'
+        @buttons = new module.controls.ButtonSet()
         @render()
         
         # Wire up events.
-        module.selectedSuite.onChanged (e) => 
-            @renderSpecs()
+        module.selectedSuite.onChanged (e) => @renderList()
     
     
     render: -> 
         @html module.tmpl.specList()
-        @renderSpecs()
-        
+        @renderList()
     
-    renderSpecs: () -> 
+    renderList: () -> 
         
         # Setup initial conditions.
         suite = module.selectedSuite()
@@ -25,11 +26,14 @@ module.exports = (module) ->
         # Clear the UL.
         ul = @$('ul')
         ul.empty()
+        @buttons.clear()
         
-        # Insert each spec.
-        module.selectedSuite().specs.each (spec) -> 
-            li = $("<li>#{spec.description()}</li>")
-            ul.append li
-        
-    
-    
+        # Enumerate each spec.
+        suite.specs.each (spec) => 
+            
+            # Create the button.
+            btn = new SpecButton model:spec
+            @buttons.add btn
+            
+            # Insert into the list.
+            ul.append btn.el

@@ -106,11 +106,16 @@
   padding: 10px;
   padding-left: 20px;
 }
-.th_harness .th_sidebar .th_spec_list > .th_scroller > ul li {
+.th_harness .th_sidebar .th_spec_list > .th_scroller > ul li.th_spec_btn {
+  cursor: pointer;
   color: #4d4d4d;
   font-size: 10pt;
   margin-top: 5px;
   text-shadow: 0px 1px 0px #fff;
+  padding: 3px;
+}
+.th_harness .th_sidebar .th_spec_list > .th_scroller > ul li.th_spec_btn.core_selected {
+  background: #e6e6e6;
 }
 .th_harness .th_main {
   position: absolute;

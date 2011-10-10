@@ -32,5 +32,11 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     """
   
   
+  specButton:
+    """
+     <%= model.description() %>
+    """
+  
+  
   
   
