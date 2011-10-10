@@ -8,18 +8,7 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedDescription.onChanged (e) => 
-            
-            # suite = e.newValue
-            # 
-            # console.log 'suite', suite.its.length, suite.title()
-            # suite.its.each (spec) ->  
-            #     console.log ' > ', spec.description()
-            # console.log ''
-            
-            
             @renderSpecs()
-            
-            # console.log 'e', e, e.newValue.title()
             
         
     

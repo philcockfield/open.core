@@ -4,7 +4,7 @@ Model: Represents a specifications 'describe' block.
 module.exports = (module) ->
   It = module.model 'it'
   
-  class Describe extends module.mvc.Model
+  class Suite extends module.mvc.Model
     defaults:
         title:    null
         summary:  null
@@ -12,7 +12,7 @@ module.exports = (module) ->
     
     ###
     Constructor.
-    @param params: The array of arguments retreived from the describe function.
+    @param params: The array of arguments retreived from the "describe" function.
     ###
     constructor: (params) -> 
         
@@ -22,7 +22,7 @@ module.exports = (module) ->
         last = _(params).last()
         
         # Collections.
-        @descriptions = new Describe.Collection()
+        @descriptions = new Suite.Collection()
         @its          = new It.Collection()
         
         # Store parts.
@@ -44,7 +44,7 @@ module.exports = (module) ->
         if fn?
             resetGlobalArrays()
             fn()
-            @descriptions.add new Describe desc for desc in HARNESS.suites
+            @descriptions.add new Suite desc for desc in HARNESS.suites
             @its.add new It(it) for it in HARNESS.specs
             resetGlobalArrays()
         
@@ -57,12 +57,15 @@ module.exports = (module) ->
         HARNESS.specs = []
   
   
+  # Static methods.
+  
+  
   # Collection.
-  class Describe.Collection extends module.mvc.Collection
-    model: Describe
+  class Suite.Collection extends module.mvc.Collection
+    model: Suite
     comparator: (model) -> model.title()
   
   
   # Export.
-  Describe
+  Suite
   

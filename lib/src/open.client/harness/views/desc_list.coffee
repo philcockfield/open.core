@@ -22,7 +22,7 @@ module.exports = (module) ->
       view.buttons.clear()
       
       # Enumerate each root 'description'.
-      module.descriptions.each (d) -> 
+      module.suites.each (d) -> 
           
           # Create the Description-button.
           btn = new DescButton model:d
