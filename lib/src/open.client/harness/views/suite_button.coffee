@@ -23,12 +23,34 @@ module.exports = (module) ->
         
         # Render base HTML.
         @html module.tmpl.suiteButton model: @model
-        @ulChildSuites = @$('ul.th_sub_suites')
         
-        # Render child descriptions.
-        @model.childSuites.each (d) =>
-            li = $("<li class='th_suite th_child'>#{d.title()}</li>")
-            @ulChildSuites.append li
+        renderChildSuites = (elParent, model) ->
+            return if model.childSuites.length is 0
+            
+            # Insert the containing UL.
+            ul = $('<ul class="th_sub_suites"></ul>')
+            elParent.append ul
+            
+            # Enumerate each child spec.
+            model.childSuites.each (d) ->
+                li = $("<li class='th_suite th_child'></li>")
+                li.html $("<p>#{d.title()}</p>")
+                
+                d.init()
+                renderChildSuites li, d # <== Recursion.
+                
+                
+                
+                ul.append li
+            
+            
+            
+        renderChildSuites @el, @model
+        
+        # Finish up.
+        @ulChildSuites = @el.children('ul.th_sub_suites')
+        
+        # Render child suites.
     
     
     handleSelectedChanged: -> updateState @

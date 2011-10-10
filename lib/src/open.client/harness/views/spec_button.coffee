@@ -31,14 +31,6 @@ module.exports = (module) ->
   
   updateState = (view) ->
           
-          # Initialize the model.
-          # if view.selected() and not view.model.isInitialized is yes
-          #     view.model.init() 
-          #     view.render()
-          #         
-          # # Show or hide the list of child-suites.
-          # view.ulChildSuites.toggle (view.selected() and view.model.childSuites.length > 0)
-          # 
           # Store the selection on the TestHarness root.
           module.selectedSpec view.model if view.selected()
   

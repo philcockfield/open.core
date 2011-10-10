@@ -49,7 +49,6 @@
   box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
 }
 .th_harness .th_sidebar .th_desc_list li.th_suite_btn ul.th_sub_suites {
-  display: none;
   margin: 0px;
   padding-left: 20px;
 }

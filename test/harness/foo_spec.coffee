@@ -13,9 +13,17 @@ describe 'Foo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecen
     
     describe 'foo-child', ->
       
+      it 'foo-child spec', ->
+      
+      describe 'fooo-grand-child', ->
+        describe 'fooo-great-grand-child', ->
+        
+      
+      
+      
 
 
-describe 'Foo2 Really Long Name that Should Overflow by all accounts'
+describe 'Really Long Name that Should Overflow by all accounts'
 
 
 describe 'Foo3', 'Foo3-Summary'
