@@ -7,7 +7,7 @@ module.exports = class TestHarness extends core.mvc.Module
       # Setup initial conditions.
       super module
       @addProps
-        selectedSuite: null
+          selectedSuite: null
       
       # Store common references.
       @core     = core
@@ -26,21 +26,18 @@ module.exports = class TestHarness extends core.mvc.Module
       # Setup initial conditions.
       options.within ?= 'body'
       super options
-      
+
       # Create root collection describe blocks.
+      Suite = @models.Suite
       @suites = new @models.Suite.Collection()
-      do => 
-          for d in HARNESS.suites
-            @suites.add new @models.Suite d
-      HARNESS.suites = [] # Reset the collection.
+      Suite.getSuites @suites
       
       # Insert the root view.
       @tmpl     = new @views.Tmpl()
       @rootView = new @views.Root()
       options.within?.append @rootView.el
       
-      
-
-      
+      # Select the first suite.
+      @selectedSuite @suites.first()
       
     

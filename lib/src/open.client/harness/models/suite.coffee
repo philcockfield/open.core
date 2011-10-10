@@ -44,13 +44,13 @@ module.exports = (module) ->
         if fn?
             resetGlobalArrays()
             fn()
-            @childSuites.add new Suite desc for desc in HARNESS.suites
-            @specs.add new Spec(spec) for spec in HARNESS.specs
+            Suite.getSuites @childSuites
+            Suite.getSpecs @specs
             resetGlobalArrays()
-        
-        
-    
+  
+  
   # PRIVATE --------------------------------------------------------------------------
+  
   
   resetGlobalArrays = -> 
         HARNESS.suites = []
@@ -58,6 +58,8 @@ module.exports = (module) ->
   
   
   # Static methods.
+  Suite.getSuites = (collection) -> collection.add new Suite suite for suite in HARNESS.suites
+  Suite.getSpecs = (collection) -> collection.add new Spec(spec) for spec in HARNESS.specs
   
   
   # Collection.

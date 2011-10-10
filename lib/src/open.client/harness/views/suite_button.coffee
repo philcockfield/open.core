@@ -10,6 +10,10 @@ module.exports = (module) ->
         @render()
         @el.disableTextSelect()
         
+        # Wire up events.
+        module.selectedSuite.onChanged (e) => 
+              @selected(true) if e.newValue is @.model
+        
         # Finish up.
         updateState @
     

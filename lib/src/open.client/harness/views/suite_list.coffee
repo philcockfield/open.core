@@ -30,10 +30,6 @@ module.exports = (module) ->
           
           # Insert into the list.
           ul.append btn.el
-      
-      # Select the first button.
-      # NB: Timeout so that model correctly load child-suites.
-      # setTimeout (-> view.buttons.items.first().selected true), 0
     
     
   # Export.
