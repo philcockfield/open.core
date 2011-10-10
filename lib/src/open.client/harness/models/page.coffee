@@ -4,6 +4,7 @@ A simple page model that is accessed from within specs.
 Events:
  - add
  - clear
+ - reset
 
 ###
 module.exports = (module) ->
@@ -20,9 +21,11 @@ module.exports = (module) ->
         el = module.core.util.toJQuery(el)
         @trigger 'add', element: el
     
-    ###
-    Clears the Test Harness.
-    ###
+    
+    # Clears the Test Harness.
     clear: -> @trigger 'clear'
+
+    # Complete reset of the Test Harness.
+    reset: -> @trigger 'reset'
     
   

@@ -12,7 +12,8 @@ module.exports = (module) ->
         
         # Page events.
         module.page.bind 'add', (e) => @divHost.append e.element
-        module.page.bind 'clear', (e) => @divHost.empty()
+        module.page.bind 'clear', (e) => @clear()
+        module.page.bind 'reset', (e) => @reset()
         
     
     render: -> 
@@ -28,6 +29,9 @@ module.exports = (module) ->
         # Finish up.
         @_updateState()
     
+    clear: -> @divHost.empty()
+    
+    reset: -> @clear()
     
     _updateState: -> 
         

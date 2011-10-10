@@ -16,7 +16,9 @@ module.exports = class TestHarness extends core.mvc.Module
       @controls = controls
       
       # Wire up events.
-      @selectedSuite.onChanged => @selectedSpec null # Reset the spec when the suite changes.
+      @selectedSuite.onChanged => 
+          page.reset()
+          @selectedSpec null # Reset the spec when the suite changes.
   
   
   ###
