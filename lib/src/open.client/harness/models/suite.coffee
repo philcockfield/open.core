@@ -22,7 +22,7 @@ module.exports = (module) ->
         last = _(params).last()
         
         # Collections.
-        @descriptions = new Suite.Collection()
+        @suites       = new Suite.Collection()
         @its          = new It.Collection()
         
         # Store parts.
@@ -32,7 +32,7 @@ module.exports = (module) ->
     
     
     ###
-    Invokes the 'describe' function to get child specs and descriptions.
+    Invokes the 'describe' function to get child specs and suites.
     ###
     init: -> 
         # Setup initial conditions.
@@ -44,7 +44,7 @@ module.exports = (module) ->
         if fn?
             resetGlobalArrays()
             fn()
-            @descriptions.add new Suite desc for desc in HARNESS.suites
+            @suites.add new Suite desc for desc in HARNESS.suites
             @its.add new It(it) for it in HARNESS.specs
             resetGlobalArrays()
         

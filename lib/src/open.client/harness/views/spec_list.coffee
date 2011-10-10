@@ -1,5 +1,5 @@
 module.exports = (module) ->
-  class SpecListView extends module.mvc.View
+  class SpecList extends module.mvc.View
     constructor: () -> 
         
         # Setup initial conditions.
@@ -30,13 +30,8 @@ module.exports = (module) ->
         
         # Insert each spec.
         module.selectedDescription().its.each (spec) -> 
-            
             li = $("<li>#{spec.description()}</li>")
-            
             ul.append li
-            
-        
-        
         
     
     

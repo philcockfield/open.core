@@ -7,10 +7,12 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     <div class="th_main">Main</div>
     """
   
-  descriptionList:
+  
+  suiteList:
     """
     <ul></ul>
     """
+  
   
   suiteButton:
     """
@@ -28,7 +30,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
       <ul></ul>
     </div>
     """
-    
+  
   
   
   

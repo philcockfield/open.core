@@ -1,5 +1,6 @@
 module.exports = (module) ->
-  class SidebarView extends module.mvc.View
+  class Sidebar extends module.mvc.View
+    
     constructor: () -> 
         super className: 'th_sidebar'
         @render()
@@ -23,7 +24,7 @@ module.exports = (module) ->
 
 
   # Export.
-  SidebarView
+  Sidebar
 
 
     

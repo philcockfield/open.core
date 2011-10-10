@@ -2,7 +2,7 @@ core = require 'open.client/core'
 
 
 module.exports = (module) ->
-  class RootView extends core.mvc.View
+  class Root extends core.mvc.View
     constructor: -> 
         super className: 'th_harness'
         @render()
