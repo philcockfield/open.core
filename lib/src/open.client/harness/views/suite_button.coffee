@@ -1,5 +1,5 @@
 module.exports = (module) ->
-  class DescriptionButton extends module.controls.Button
+  class SuiteButton extends module.controls.Button
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
@@ -17,13 +17,13 @@ module.exports = (module) ->
     render: -> 
         
         # Render base HTML.
-        @html module.tmpl.descriptionButton(model: @model)
-        @ulChildDescriptions = @$('ul.th_sub_descriptions')
+        @html module.tmpl.suiteButton model: @model
+        @ulChildSuites = @$('ul.th_sub_descriptions')
         
         # Render child descriptions.
         @model.descriptions.each (d) =>
             li = $("<li class='th_desc th_child'>#{d.title()}</li>")
-            @ulChildDescriptions.append li
+            @ulChildSuites.append li
     
     
     handleSelectedChanged: -> updateState @
@@ -40,14 +40,14 @@ module.exports = (module) ->
               view.render()
         
           # Show or hide the list of child-descriptions.
-          view.ulChildDescriptions.toggle (view.selected() and view.model.descriptions.length > 0)
+          view.ulChildSuites.toggle (view.selected() and view.model.descriptions.length > 0)
           
           # Store the selection on the TestHarness root.
           module.selectedDescription view.model if view.selected()
   
   
   # Export.
-  DescriptionButton
+  SuiteButton
   
 
         

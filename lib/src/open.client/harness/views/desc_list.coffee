@@ -1,5 +1,5 @@
 module.exports = (module) ->
-  DescButton = module.view 'desc_button'
+  SuiteButton = module.view 'suite_button'
 
   class DescriptionListView extends module.mvc.View
     constructor: () -> 
@@ -25,7 +25,7 @@ module.exports = (module) ->
       module.suites.each (d) -> 
           
           # Create the Description-button.
-          btn = new DescButton model:d
+          btn = new SuiteButton model:d
           view.buttons.add btn
           
           # Insert into the list.
