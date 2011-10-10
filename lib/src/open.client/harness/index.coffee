@@ -30,7 +30,12 @@ module.exports = class TestHarness extends core.mvc.Module
       # Setup initial conditions.
       options.within ?= 'body'
       super options
-
+      
+      # Store page reference on Module and make it available to spec
+      # by storing it in the global object.
+      Page = @model 'page'
+      window.page = @page = new Page()
+      
       # Create root collection describe blocks.
       Suite = @models.Suite
       @suites = new @models.Suite.Collection()

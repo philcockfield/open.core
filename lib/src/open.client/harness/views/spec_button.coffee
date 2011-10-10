@@ -3,7 +3,7 @@ module.exports = (module) ->
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
-        super _.extend options, tagName: 'li', className: 'th_spec_btn', canToggle:true
+        super _.extend options, tagName: 'li', className: 'th_spec_btn'
         @model = options.model
         
         # Render the button.
@@ -11,6 +11,7 @@ module.exports = (module) ->
         @el.disableTextSelect()
         
         # Wire up events.
+        @onClick => @model.invoke()
         module.selectedSpec.onChanged (e) => 
               # Ensure the button is selected if the model is set as the selected spec.
               @selected(true) if e.newValue is @.model
@@ -19,10 +20,7 @@ module.exports = (module) ->
         updateState @
     
     
-    render: -> 
-        
-        # Render base HTML.
-        @html module.tmpl.specButton model: @model
+    render: -> @html module.tmpl.specButton model: @model
     
     
     handleSelectedChanged: -> updateState @

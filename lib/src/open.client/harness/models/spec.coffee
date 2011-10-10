@@ -22,6 +22,14 @@ module.exports = (module) ->
         # Store parts.
         @description first if _(first).isString()
         @func last if _(last).isFunction()
+    
+    
+    ###
+    Invokes the spec.
+    ###
+    invoke: -> 
+        fn = @func()
+        fn?()
   
   
   # Collection.

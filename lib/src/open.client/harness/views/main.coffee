@@ -9,6 +9,11 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => @_updateState()
+        
+        # Page events.
+        module.page.bind 'add', (e) => @divHost.append e.element
+        module.page.bind 'clear', (e) => @divHost.empty()
+        
     
     render: -> 
         
@@ -16,8 +21,9 @@ module.exports = (module) ->
         @html module.tmpl.main()
         
         # Retreive elements.
-        @divTitle = @$('p.th_title')
+        @divTitle   = @$('p.th_title')
         @divSummary = @$('p.th_summary')
+        @divHost    = @$('div.th_host')
         
         # Finish up.
         @_updateState()

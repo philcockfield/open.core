@@ -26,15 +26,11 @@ module.exports = class Button extends core.mvc.View
       
       # Wire up events.
       @selected.onChanged (e) => 
-          
           isSelected = self.selected()
-          
-          # TODO Tests for these args.
           args = 
               source:     self
               selected:   isSelected
               srcElement: e.options.srcElement
-              
           self._stateChanged('selected')
           self.handleSelectedChanged args
           self.trigger('selected', args) if self.canToggle() and isSelected

@@ -1,7 +1,13 @@
 describe 'Foo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel eleifend nisl. Suspendisse tristique dignissim leo ut auctor.', ->
     
-    it 'does 1 :)', ->
-    it 'does 2 :(', ->
+    it 'Adds something to the Test Harness', ->
+        el = $('<div>Hello this is an element.</div>')
+        page.add el
+        
+        
+    it 'Clears the Test Harness', ->
+      
+      page.clear()
       
     
     

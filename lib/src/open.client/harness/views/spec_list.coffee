@@ -6,7 +6,6 @@ module.exports = (module) ->
         
         # Setup initial conditions.
         super className: 'th_spec_list'
-        @buttons = new module.controls.ButtonSet()
         @render()
         
         # Wire up events.
@@ -26,14 +25,10 @@ module.exports = (module) ->
         # Clear the UL.
         ul = @$('ul')
         ul.empty()
-        @buttons.clear()
         
         # Enumerate each spec.
         suite.specs.each (spec) => 
             
-            # Create the button.
+            # Create the button and insert it into the list.
             btn = new SpecButton model:spec
-            @buttons.add btn
-            
-            # Insert into the list.
             ul.append btn.el

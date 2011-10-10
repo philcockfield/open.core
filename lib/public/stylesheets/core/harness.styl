@@ -45,7 +45,7 @@ overflow()
           color LABEL_COLOR
           ellipsis()
         &.core_selected
-          background darken(white, 15%)
+          background darken(white, 10%)
           box-shadow inset 0 0px 5px 2px rgba(black, 0.10)
     
         // Child suites.
@@ -98,9 +98,6 @@ overflow()
               margin-top 5px
               textEmboss()
               padding 3px
-              
-              &.core_selected
-                background darken(white, 10%)
   
   
   // Main.
@@ -124,6 +121,12 @@ overflow()
       p.th_summary
         font-size 12px
         line-height 150%
+    
+    div.th_host
+      position absolute
+      top 50%
+      left 50%
+    
   
   
   
