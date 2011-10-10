@@ -2,6 +2,8 @@
 Model: Represents a specifications 'describe' block.
 ###
 module.exports = (module) ->
+  It = module.model 'it'
+  
   class Describe extends module.mvc.Model
     defaults:
         title:    null
@@ -9,7 +11,7 @@ module.exports = (module) ->
         func:     null
     
     ###
-    Constructor
+    Constructor.
     @param params: The array of arguments retreived from the describe function.
     ###
     constructor: (params) -> 
@@ -18,7 +20,10 @@ module.exports = (module) ->
         super
         params = [params] unless _(params).isArray()
         last = _(params).last()
+        
+        # Collections.
         @descriptions = new Describe.Collection()
+        @its          = new It.Collection()
         
         # Store parts.
         @title params[0]
@@ -33,22 +38,21 @@ module.exports = (module) ->
         # Setup initial conditions.
         return if @isInitialized is yes
         @isInitialized = yes
-        return unless @func()?
         
-        # Invoke the function to get the children.
-        resetDescriptions()
-        @func()()
-        for d in HARNESS.descriptions
-            @descriptions.add new module.models.Describe d
-        resetDescriptions()
-        
+        # Invoke the function to get the child "describe" and "it" blocks.
+        fn = @func()
+        if fn?
+            resetGlobalArrays()
+            fn()
+            @descriptions.add new Describe desc for desc in HARNESS.descriptions
+            @its.add new It(it) for it in HARNESS.its
+            resetGlobalArrays()
         
         
     
   # PRIVATE --------------------------------------------------------------------------
   
-  resetDescriptions = -> HARNESS.descriptions = []
-  
+  resetGlobalArrays = -> HARNESS.descriptions = []
   
   
   # Collection.
@@ -57,14 +61,6 @@ module.exports = (module) ->
     comparator: (model) -> model.title()
   
   
-  
   # Export.
   Describe
-  
-  
-  
-  
-  
-
-
   

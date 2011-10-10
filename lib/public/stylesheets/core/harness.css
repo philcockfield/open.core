@@ -2,6 +2,10 @@
 .th_harness {
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
 }
+.th_harness p {
+  padding: 0px;
+  margin: 0px;
+}
 .th_harness .th_sidebar {
   position: absolute;
   left: 0px;
@@ -14,8 +18,10 @@
 }
 .th_harness .th_sidebar .th_desc_list {
   height: 50%;
+  overflow: hidden;
+  overflow-y: auto;
 }
-.th_harness .th_sidebar .th_desc_list ul {
+.th_harness .th_sidebar .th_desc_list > ul {
   list-style: none;
   margin: 0px;
   padding: 0px;
@@ -26,26 +32,21 @@
   border-bottom: solid 1px #ccc;
 }
 .th_harness .th_sidebar .th_desc_list li.th_desc_btn p {
-  padding: 0px;
-  margin: 0px;
   text-shadow: 0px 1px 0px #fff;
 }
 .th_harness .th_sidebar .th_desc_list li.th_desc_btn p.th_title {
   font-size: 12pt;
-  color: #333;
+  color: #4d4d4d;
   text-overflow: ellipsis;
   overflow: hidden;
+  overflow-y: auto;
   white-space: nowrap;
 }
 .th_harness .th_sidebar .th_desc_list li.th_desc_btn.core_selected {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #6bade1), color-stop(1, #428bd1));
-  background: -webkit-linear-gradient(top, #6bade1 0%, #428bd1 100%);
-  background: -moz-linear-gradient(top, #6bade1 0%, #428bd1 100%);
-  background: linear-gradient(top, #6bade1 0%, #428bd1 100%);
-}
-.th_harness .th_sidebar .th_desc_list li.th_desc_btn.core_selected p {
-  color: #fff;
-  text-shadow: 0px 1px 0px rgba(0,0,0,0.30);
+  background: #d9d9d9;
+  -webkit-box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
+  -moz-box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
+  box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
 }
 .th_harness .th_sidebar .th_desc_list li.th_desc_btn ul.th_sub_descriptions {
   display: none;
@@ -53,21 +54,31 @@
   padding-left: 20px;
 }
 .th_harness .th_sidebar .th_desc_list li.th_desc_btn ul.th_sub_descriptions li.th_desc.th_child {
+  color: #4d4d4d;
   font-size: 10pt;
-  color: #fff;
   margin-top: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  overflow-y: auto;
+  white-space: nowrap;
+  text-shadow: 0px 1px 0px #fff;
 }
 .th_harness .th_sidebar .th_specs_list {
+  position: relative;
   height: 50%;
   top: 50%;
   background: #f0f0f0;
 }
 .th_harness .th_sidebar .th_specs_list .th_title {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 34px;
   border-top: solid 1px #666;
   border-bottom: solid 1px #666;
   font-size: 10pt;
   font-weight: 500;
-  padding: 8px;
   text-shadow: 0px 1px 0px #fff;
   color: #4d4d4d;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #b3b3b3));
@@ -77,6 +88,29 @@
   -webkit-box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.17);
   -moz-box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.17);
   box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.17);
+}
+.th_harness .th_sidebar .th_specs_list .th_title p {
+  margin: 8px;
+}
+.th_harness .th_sidebar .th_specs_list > .th_scroller {
+  position: absolute;
+  left: 0px;
+  top: 36px;
+  right: 0px;
+  bottom: 0px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.th_harness .th_sidebar .th_specs_list > .th_scroller > ul {
+  margin: 5px;
+  padding: 10px;
+  padding-left: 20px;
+}
+.th_harness .th_sidebar .th_specs_list > .th_scroller > ul li {
+  color: #4d4d4d;
+  font-size: 10pt;
+  margin-top: 5px;
+  text-shadow: 0px 1px 0px #fff;
 }
 .th_harness .th_main {
   position: absolute;

@@ -15,7 +15,9 @@ html(lang='en')
       # Catch root level spec descritions.
       window.HARNESS =
             descriptions: []
-      window.describe = (options...) => HARNESS.descriptions.push options
+            its: []
+      window.describe = (params...) -> HARNESS.descriptions.push params
+      window.it       = (params...) -> HARNESS.its.push params
       
       # Boot the Harness.
       $ -> 

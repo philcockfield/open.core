@@ -21,7 +21,14 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   
   specList:
     """
-    <div class="th_title">Specs</div>
+    <div class="th_title">
+      <p>Specs</p>
+    </div>
+    <div class="th_scroller">
+      <ul>
+        <li>Foo</li>
+      </ul>
+    </div>
     """
     
   

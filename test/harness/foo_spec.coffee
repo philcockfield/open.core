@@ -1,5 +1,9 @@
 describe 'Foo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel eleifend nisl. Suspendisse tristique dignissim leo ut auctor.', ->
     
+    it 'does 1 :)', ->
+      
+    
+    
     describe 'foo-child', ->
       
 

@@ -40,4 +40,7 @@ module.exports = class TestHarness extends core.mvc.Module
       options.within?.append @rootView.el
       
       
+
+      
+      
     

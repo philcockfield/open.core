@@ -9,11 +9,8 @@ module.exports = (module) ->
         # Wire up events.
         module.selectedDescription.onChanged (e) -> 
             
-            console.log 'e', e, e.newValue.title()
+            # console.log 'e', e, e.newValue.title()
             
-            # if e.newValue == true
-            # 
-            #   console.log 'e', e 
         
     
     
