@@ -1,12 +1,16 @@
-@import '../functions'
+@import './_functions'
 
-// Constants.
-SIDEBAR_WIDTH = 300px
-BORDER_COLOR  = darken(white, 60%)
-LABEL_COLOR   = darken(white, 70%)
-
-// Functions.
-overflow-y()
-  overflow hidden
-  overflow-y auto
-
+.th_title_bar
+  abs-pos 0, 0, 0, null
+  height TITLE_BAR_HEIGHT
+  border-top solid 1px BORDER_COLOR
+  border-bottom solid 1px BORDER_COLOR
+  font-size 10pt
+  font-weight 500
+  textEmboss()
+  color darken(white, 70%)
+  background: linear-gradient(top, white, darken(white, 30%))
+  box-shadow 0px 0px 15px 3px rgba(black, 0.17)
+  p
+    margin 8px
+    margin-top 9px

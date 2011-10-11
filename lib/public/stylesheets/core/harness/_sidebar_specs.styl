@@ -1,7 +1,5 @@
-@import './_common'
+@import './_functions'
 
-// Constants.
-TITLE_HEIGHT = 34px
 
 
 // "Specs" list.
@@ -11,23 +9,8 @@ TITLE_HEIGHT = 34px
   top 50%
   background darken(white, 6%)
   
-  .th_title
-    abs-pos 0, 0, 0, null
-    height TITLE_HEIGHT
-    border-top solid 1px BORDER_COLOR
-    border-bottom solid 1px BORDER_COLOR
-    font-size 10pt
-    font-weight 500
-    textEmboss()
-    color darken(white, 70%)
-    background: linear-gradient(top, white, darken(white, 30%))
-    box-shadow 0px 0px 15px 3px rgba(black, 0.17)
-    p
-      margin 8px
-      margin-top 9px
-    
   > .th_scroller
-      abs-pos 0, TITLE_HEIGHT + 2, 0, 0
+      abs-pos 0, TITLE_BAR_HEIGHT + 2, 0, 0
       overflow-y()
       > ul
         margin 5px

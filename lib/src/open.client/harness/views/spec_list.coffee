@@ -13,7 +13,7 @@ module.exports = (module) ->
     
     
     render: -> 
-        @html module.tmpl.specList()
+        @html module.tmpl.specList title: 'Specs'
         @renderList()
     
     renderList: () -> 
