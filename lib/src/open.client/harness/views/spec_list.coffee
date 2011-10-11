@@ -16,6 +16,7 @@ module.exports = (module) ->
         @html module.tmpl.specList title: 'Specs'
         @renderList()
     
+    
     renderList: () -> 
         
         # Setup initial conditions.

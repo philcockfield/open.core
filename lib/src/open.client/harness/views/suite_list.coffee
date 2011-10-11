@@ -8,12 +8,12 @@ module.exports = (module) ->
         @render()
     
     render: -> 
-        @html module.tmpl.suiteList()
+        @html module.tmpl.suiteList title: 'Suites'
         @renderList()          
     
     renderList: -> 
         # Setup initial conditions.
-        ul = @el.children('ul')
+        ul = @$('ul.th_suite_root')
         ul.empty()
         @buttons.clear()
       

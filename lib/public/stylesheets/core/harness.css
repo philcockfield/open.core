@@ -30,12 +30,26 @@
   margin: 8px;
   margin-top: 9px;
 }
+.th_scroller {
+  overflow: hidden;
+  overflow-y: auto;
+}
 .th_sidebar > .th_suite_list {
   height: 50%;
   overflow: hidden;
   overflow-y: auto;
 }
-.th_sidebar > .th_suite_list > ul {
+.th_sidebar > .th_suite_list .th_title_bar {
+  border-top: none;
+}
+.th_sidebar > .th_suite_list .th_scroller {
+  position: absolute;
+  left: 0px;
+  top: 35px;
+  right: 0px;
+  bottom: 0px;
+}
+.th_sidebar > .th_suite_list .th_scroller ul {
   list-style: none;
   margin: 0px;
   padding: 0px;
@@ -78,23 +92,20 @@
   position: relative;
   height: 50%;
   top: 50%;
-  background: #f0f0f0;
 }
-.th_sidebar > .th_spec_list > .th_scroller {
+.th_sidebar > .th_spec_list .th_scroller {
   position: absolute;
   left: 0px;
   top: 36px;
   right: 0px;
   bottom: 0px;
-  overflow: hidden;
-  overflow-y: auto;
 }
-.th_sidebar > .th_spec_list > .th_scroller > ul {
+.th_sidebar > .th_spec_list .th_scroller ul {
   margin: 5px;
   padding: 10px;
   padding-left: 20px;
 }
-.th_sidebar > .th_spec_list > .th_scroller > ul li.th_spec_btn {
+.th_sidebar > .th_spec_list .th_scroller ul li.th_spec_btn {
   cursor: pointer;
   color: #4d4d4d;
   font-size: 10pt;

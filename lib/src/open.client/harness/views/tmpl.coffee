@@ -17,7 +17,10 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   
   suiteList:
     """
-    <ul></ul>
+    <%= this.titleBar({ title:title }) %>
+    <div class="th_scroller">
+      <ul class="th_suite_root"></ul>
+    </div>
     """
   
   

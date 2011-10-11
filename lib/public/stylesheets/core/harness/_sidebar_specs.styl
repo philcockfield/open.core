@@ -7,20 +7,19 @@
   position relative
   height 50%
   top 50%
-  background darken(white, 6%)
+
+  .th_scroller
+    abs-pos 0, TITLE_BAR_HEIGHT + 2, 0, 0
   
-  > .th_scroller
-      abs-pos 0, TITLE_BAR_HEIGHT + 2, 0, 0
-      overflow-y()
-      > ul
-        margin 5px
-        padding 10px
-        padding-left 20px
-        
-        li.th_spec_btn
-          cursor pointer
-          color LABEL_COLOR
-          font-size 10pt
-          margin-top 5px
-          textEmboss()
-          padding 3px
+    ul
+      margin 5px
+      padding 10px
+      padding-left 20px
+    
+      li.th_spec_btn
+        cursor pointer
+        color LABEL_COLOR
+        font-size 10pt
+        margin-top 5px
+        textEmboss()
+        padding 3px

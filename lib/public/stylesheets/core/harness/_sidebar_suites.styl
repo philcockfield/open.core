@@ -4,10 +4,16 @@
 .th_sidebar > .th_suite_list
   height 50%
   overflow-y()
-  > ul
-    list-style none
-    margin 0px
-    padding 0px
+
+  .th_title_bar
+    border-top none
+
+  .th_scroller
+    abs-pos 0, TITLE_BAR_HEIGHT + 1, 0, 0
+    ul
+      list-style none
+      margin 0px
+      padding 0px
 
   // Root description button.
   li.th_suite_btn
