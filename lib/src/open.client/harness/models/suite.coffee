@@ -5,6 +5,7 @@ module.exports = (module) ->
   Spec      = module.model 'spec'
   Operation = module.model 'operation'
   
+  
   class Suite extends module.mvc.Model
     defaults:
         title:          null
@@ -63,6 +64,13 @@ module.exports = (module) ->
             
             # Re-clear the cache.
             resetGlobalArrays()
+  
+    ###
+    Retrieves the root spec in the hierarhcy, or this suite if it is the root.
+    ###
+    root: -> 
+        getRoot = (suite) -> if suite.parentSuite? then getRoot(suite.parentSuite) else suite
+        getRoot @
   
   
   # PRIVATE --------------------------------------------------------------------------

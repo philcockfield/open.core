@@ -32,7 +32,7 @@ module.exports = class TestHarness extends core.mvc.Module
                     e.newValue.beforeAll.each (op) -> op.invoke()
               
               # Store the selected item in storage.
-              desc = e.newValue?.title() ? null
+              desc = e.newValue?.root().title() ? null
               localStorage.selectedSuite = desc
       
       
