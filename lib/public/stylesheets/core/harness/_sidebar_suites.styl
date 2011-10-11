@@ -1,0 +1,36 @@
+@import './_common'
+
+// "Suites" list.
+.th_sidebar > .th_suite_list
+  height 50%
+  overflow-y()
+  > ul
+    list-style none
+    margin 0px
+    padding 0px
+
+  // Root description button.
+  li.th_suite_btn
+    cursor pointer
+    padding 12px
+    border-bottom solid 1px darken(white, 20%)
+    p
+      textEmboss()
+    p.th_title
+      font-size 12pt
+      color LABEL_COLOR
+      ellipsis()
+    &.core_selected
+      background darken(white, 10%)
+      box-shadow inset 0 0px 5px 2px rgba(black, 0.10)
+
+    // Child suites.
+    ul.th_sub_suites
+      margin 0px
+      padding-left 20px
+      li.th_suite.th_child
+        color LABEL_COLOR
+        font-size 10pt
+        margin-top 5px
+        ellipsis()
+        textEmboss()

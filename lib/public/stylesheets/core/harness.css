@@ -1,74 +1,55 @@
 @import "http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css";
-.th_harness {
-  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
-}
-.th_harness p {
-  padding: 0px;
-  margin: 0px;
-}
-.th_harness .th_sidebar {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  width: 300px;
-  background: #f5f5f5;
-  overflow: hidden;
-  overflow-y: auto;
-}
-.th_harness .th_sidebar .th_desc_list {
+.th_sidebar > .th_suite_list {
   height: 50%;
   overflow: hidden;
   overflow-y: auto;
 }
-.th_harness .th_sidebar .th_desc_list > ul {
+.th_sidebar > .th_suite_list > ul {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn {
+.th_sidebar > .th_suite_list li.th_suite_btn {
   cursor: pointer;
   padding: 12px;
   border-bottom: solid 1px #ccc;
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn p {
+.th_sidebar > .th_suite_list li.th_suite_btn p {
   text-shadow: 0px 1px 0px #fff;
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn p.th_title {
+.th_sidebar > .th_suite_list li.th_suite_btn p.th_title {
   font-size: 12pt;
   color: #4d4d4d;
   text-overflow: ellipsis;
   overflow: hidden;
-  overflow-y: auto;
   white-space: nowrap;
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn.core_selected {
+.th_sidebar > .th_suite_list li.th_suite_btn.core_selected {
   background: #e6e6e6;
   -webkit-box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
   -moz-box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
   box-shadow: inset 0 0px 5px 2px rgba(0,0,0,0.10);
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn ul.th_sub_suites {
+.th_sidebar > .th_suite_list li.th_suite_btn ul.th_sub_suites {
   margin: 0px;
   padding-left: 20px;
 }
-.th_harness .th_sidebar .th_desc_list li.th_suite_btn ul.th_sub_suites li.th_suite.th_child {
+.th_sidebar > .th_suite_list li.th_suite_btn ul.th_sub_suites li.th_suite.th_child {
   color: #4d4d4d;
   font-size: 10pt;
   margin-top: 5px;
   text-overflow: ellipsis;
   overflow: hidden;
-  overflow-y: auto;
   white-space: nowrap;
   text-shadow: 0px 1px 0px #fff;
 }
-.th_harness .th_sidebar .th_spec_list {
+.th_sidebar > .th_spec_list {
   position: relative;
   height: 50%;
   top: 50%;
   background: #f0f0f0;
 }
-.th_harness .th_sidebar .th_spec_list .th_title {
+.th_sidebar > .th_spec_list .th_title {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -88,11 +69,11 @@
   -moz-box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.17);
   box-shadow: 0px 0px 15px 3px rgba(0,0,0,0.17);
 }
-.th_harness .th_sidebar .th_spec_list .th_title p {
+.th_sidebar > .th_spec_list .th_title p {
   margin: 8px;
   margin-top: 9px;
 }
-.th_harness .th_sidebar .th_spec_list > .th_scroller {
+.th_sidebar > .th_spec_list > .th_scroller {
   position: absolute;
   left: 0px;
   top: 36px;
@@ -101,12 +82,12 @@
   overflow: hidden;
   overflow-y: auto;
 }
-.th_harness .th_sidebar .th_spec_list > .th_scroller > ul {
+.th_sidebar > .th_spec_list > .th_scroller > ul {
   margin: 5px;
   padding: 10px;
   padding-left: 20px;
 }
-.th_harness .th_sidebar .th_spec_list > .th_scroller > ul li.th_spec_btn {
+.th_sidebar > .th_spec_list > .th_scroller > ul li.th_spec_btn {
   cursor: pointer;
   color: #4d4d4d;
   font-size: 10pt;
@@ -114,7 +95,16 @@
   text-shadow: 0px 1px 0px #fff;
   padding: 3px;
 }
-.th_harness .th_main {
+.th_harness > .th_sidebar {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 300px;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.th_harness > .th_main {
   position: absolute;
   left: 300px;
   top: 0px;
@@ -127,27 +117,33 @@
   background: #fff;
   padding: 10px 20px;
 }
-.th_harness .th_main div.th_title {
+.th_harness > .th_main div.th_title {
   font-weight: 300;
   color: #404040;
   border-bottom: solid 1px #ccc;
   padding-bottom: 10px;
 }
-.th_harness .th_main div.th_title p.th_title {
+.th_harness > .th_main div.th_title p.th_title {
   font-size: 24px;
   text-overflow: ellipsis;
   overflow: hidden;
-  overflow-y: auto;
   white-space: nowrap;
 }
-.th_harness .th_main div.th_title p.th_summary {
+.th_harness > .th_main div.th_title p.th_summary {
   font-size: 10pt;
   color: #737373;
   margin-top: 5px;
   line-height: 150%;
 }
-.th_harness .th_main div.th_host {
+.th_harness > .th_main div.th_host {
   position: absolute;
   top: 50%;
   left: 50%;
+}
+.th_harness {
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
+}
+.th_harness p {
+  padding: 0px;
+  margin: 0px;
 }

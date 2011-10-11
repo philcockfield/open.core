@@ -1,135 +1,13 @@
-@import '../core/functions'
+@import './harness/_common'
 @import FONT_URL_UBUNTU
 
-SIDEBAR_WIDTH = 300px
-BORDER_COLOR  = darken(white, 60%)
-LABEL_COLOR   = darken(white, 70%)
+@import './harness/_sidebar'
+@import './harness/_main'
 
-overflow()
-  overflow hidden
-  overflow-y auto
 
 .th_harness
-  
-  // Global styles.
   font-family DEFAULT_FONT_FAMILY
   p
     padding 0px
     margin 0px
-  
-  // Sidebar.
-  .th_sidebar
-    abs-pos 0, 0, null, 0
-    width SIDEBAR_WIDTH
-    background darken(white, 4%)
-    overflow hidden
-    
-    // "Suites" list.
-    .th_desc_list
-      height 50%
-      overflow()
-      > ul
-        list-style none
-        margin 0px
-        padding 0px
-    
-      // Root description button.
-      li.th_suite_btn
-        cursor pointer
-        padding 12px
-        border-bottom solid 1px darken(white, 20%)
-        p
-          textEmboss()
-        p.th_title
-          font-size 12pt
-          color LABEL_COLOR
-          ellipsis()
-        &.core_selected
-          background darken(white, 10%)
-          box-shadow inset 0 0px 5px 2px rgba(black, 0.10)
-    
-        // Child suites.
-        ul.th_sub_suites
-          margin 0px
-          padding-left 20px
-          li.th_suite.th_child
-            color LABEL_COLOR
-            font-size 10pt
-            margin-top 5px
-            ellipsis()
-            textEmboss()
-
-    // "Specs" list.
-    .th_spec_list
-      position relative
-      height 50%
-      top 50%
-      background darken(white, 6%)
-      
-      TITLE_HEIGHT = 34px
-      
-      .th_title
-        abs-pos 0, 0, 0, null
-        height TITLE_HEIGHT
-        border-top solid 1px BORDER_COLOR
-        border-bottom solid 1px BORDER_COLOR
-        font-size 10pt
-        font-weight 500
-        textEmboss()
-        color darken(white, 70%)
-        background: linear-gradient(top, white, darken(white, 30%))
-        box-shadow 0px 0px 15px 3px rgba(black, 0.17)
-        p
-          margin 8px
-          margin-top 9px
-        
-      > .th_scroller
-          abs-pos 0, TITLE_HEIGHT + 2, 0, 0
-          overflow()
-          > ul
-            margin 5px
-            padding 10px
-            padding-left 20px
-            
-            li.th_spec_btn
-              cursor pointer
-              color LABEL_COLOR
-              font-size 10pt
-              margin-top 5px
-              textEmboss()
-              padding 3px
-  
-  
-  // Main.
-  .th_main
-    abs-pos SIDEBAR_WIDTH, 0, 0, 0
-    border-left solid 1px BORDER_COLOR
-    box-shadow 0px 0px 20px 10px rgba(black, 0.15)
-    background white
-    padding 10px 20px
-    
-    div.th_title
-      font-weight 300
-      color darken(white, 75%)
-      border-bottom solid 1px darken(white, 20%)
-      padding-bottom 10px
-      // line-height 190%
-      
-      p.th_title
-        font-size 24px
-        ellipsis()
-      p.th_summary
-        font-size 10pt
-        color darken(white, 55%)
-        margin-top 5px
-        line-height 150%
-    
-    div.th_host
-      position absolute
-      top 50%
-      left 50%
-    
-  
-  
-  
   

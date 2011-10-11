@@ -3,7 +3,7 @@ module.exports = (module) ->
 
   class SuiteList extends module.mvc.View
     constructor: () -> 
-        super className: 'th_desc_list'
+        super className: 'th_suite_list'
         @buttons = new module.controls.ButtonSet()
         @render()
     
