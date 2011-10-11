@@ -33,14 +33,14 @@ module.exports = (module) ->
             elParent.append ul
             
             # Enumerate each child spec.
-            model.childSuites.each (d) ->
+            model.childSuites.each (suite) ->
                       # Insert the LI.
                       li = $("<li class='th_suite th_child'></li>")
-                      li.html $("<p>#{d.title()}</p>")
+                      li.html $("<p>#{suite.title()}</p>")
                       
                       # Insert child suites in a new child UL.
-                      d.init()
-                      renderChildSuites li, d # <== Recursion.
+                      suite.init()
+                      renderChildSuites li, suite # <== Recursion.
                       
                       # Insert the LI into the UL
                       ul.append li

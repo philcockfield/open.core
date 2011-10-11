@@ -14,9 +14,10 @@ module.exports = (module) ->
     
     ###
     Constructor.
-    @param params: The array of arguments retreived from the "describe" function.
+    @param params:      The array of arguments retreived from the "describe" function.
+    @param parentSuite: The parent suite if this is not a root suite.
     ###
-    constructor: (params) -> 
+    constructor: (params, @parentSuite) -> 
         
         # Setup initial conditions.
         super
@@ -53,11 +54,11 @@ module.exports = (module) ->
             fn()
             
             # Collect each type of operation.
-            Suite.getSuites     @childSuites
-            Suite.getBeforeEach @beforeEach
-            Suite.getAfterEach  @afterEach
-            Suite.getBeforeAll  @beforeAll
-            Suite.getAfterAll   @afterAll
+            Suite.getSuites     @childSuites, @
+            Suite.getBeforeEach @beforeEach, @
+            Suite.getAfterEach  @afterEach, @
+            Suite.getBeforeAll  @beforeAll, @
+            Suite.getAfterAll   @afterAll, @
             Suite.getSpecs      @specs, @
             
             # Re-clear the cache.
@@ -77,14 +78,14 @@ module.exports = (module) ->
 
   
   getFunctions = (collection, items, fnModel) -> collection.add fnModel(item) for item in items
-  getOperations = (collection, items) -> getFunctions collection, items, (params) -> new Operation(params)
+  getOperations = (collection, suite, items) -> getFunctions collection, items, (params) -> new Operation(params, suite)
   
   # Static methods.
-  Suite.getSuites     = (collection)        -> getFunctions collection, HARNESS.suites, (params) -> new Suite(params)
-  Suite.getBeforeEach = (collection)        -> getOperations collection, HARNESS.beforeEach
-  Suite.getAfterEach  = (collection)        -> getOperations collection, HARNESS.afterEach
-  Suite.getBeforeAll  = (collection)        -> getOperations collection, HARNESS.beforeAll
-  Suite.getAfterAll   = (collection)        -> getOperations collection, HARNESS.afterAll
+  Suite.getSuites     = (collection, suite) -> getFunctions collection, HARNESS.suites, (params) -> new Suite(params, suite)
+  Suite.getBeforeEach = (collection, suite) -> getOperations collection, suite, HARNESS.beforeEach
+  Suite.getAfterEach  = (collection, suite) -> getOperations collection, suite, HARNESS.afterEach
+  Suite.getBeforeAll  = (collection, suite) -> getOperations collection, suite, HARNESS.beforeAll
+  Suite.getAfterAll   = (collection, suite) -> getOperations collection, suite, HARNESS.afterAll
   Suite.getSpecs      = (collection, suite) -> getFunctions collection, HARNESS.specs, (params) -> new Spec(params, suite)
   
   
