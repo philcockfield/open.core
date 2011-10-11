@@ -1,10 +1,13 @@
 module.exports = (module) ->
-  class SuiteButton extends module.controls.Button
+  Button = module.controls.Button
+  
+  class SuiteButton extends Button
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
         super _.extend options, tagName: 'li', className: 'th_suite_btn', canToggle:true
-        @model = options.model
+        @model   = options.model
+        @buttons = new module.controls.ButtonSet()
         @model.init()
         
         # Render the button.
@@ -14,17 +17,25 @@ module.exports = (module) ->
         # Wire up events.
         module.selectedSuite.onChanged (e) => 
                     # Ensure the button is selected if the model is set as the selected suite.
-                    @selected(true) if e.newValue is @.model
+                    @selected(true) if e.newValue is @model
         
         # Finish up.
         @_updateState()
     
     
     render: -> 
-        
         # Render base HTML.
-        @html module.tmpl.suiteButton model: @model
+        @html module.tmpl.suiteButton()
+
+        createButton = (suite) => 
+              btn = new SubSuiteButton model:suite
+              @buttons.add btn
+              btn
         
+        # Insert the root suite title as a button.
+        createButton(@model).replace @$('.th_title')
+        
+        # Render any child-suites that may exist.
         renderChildSuites = (elParent, model) ->
             return if model.childSuites.length is 0
             
@@ -34,10 +45,15 @@ module.exports = (module) ->
             
             # Enumerate each child spec.
             model.childSuites.each (suite) ->
+                      
+                      # Create the sub-suite button.
+                      btn = createButton suite
+                      
                       # Insert the LI.
                       title = _(suite.title()).capitalize()
                       li    = $("<li class='th_suite th_child'></li>")
-                      li.html $("<p>#{title}</p>")
+                      li.append btn.el
+                      # li.html $("<p>#{title}</p>")
                       
                       # Insert child suites in a new child UL.
                       suite.init()
@@ -45,8 +61,6 @@ module.exports = (module) ->
                       
                       # Insert the LI into the UL
                       ul.append li
-        
-        # Render any child-suites that may exist.
         renderChildSuites @el, @model
         
         # Finish up.
@@ -75,6 +89,17 @@ module.exports = (module) ->
           module.selectedSuite(@model) if @selected()
   
   
+  
+  class SubSuiteButton extends Button
+    constructor: (options = {}) -> 
+        super _.extend options, className: 'th_sub_suite_btn', canToggle:true
+        @model = options.model
+        @render()
+    
+    
+    render: -> 
+        title = _(@model.title()).capitalize()
+        @html title
   
   
   

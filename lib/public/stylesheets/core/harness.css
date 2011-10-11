@@ -65,7 +65,6 @@
 }
 .th_sidebar > .th_suite_list li.th_suite_btn p.th_title {
   font-size: 12pt;
-  color: #4d4d4d;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -81,13 +80,18 @@
   padding-left: 20px;
 }
 .th_sidebar > .th_suite_list li.th_suite_btn ul.th_sub_suites li.th_suite.th_child {
-  color: #4d4d4d;
   font-size: 10pt;
   margin-top: 5px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   text-shadow: 0px 1px 0px #fff;
+}
+.th_sidebar > .th_suite_list li.th_suite_btn .th_sub_suite_btn {
+  color: #4d4d4d;
+}
+.th_sidebar > .th_suite_list li.th_suite_btn .th_sub_suite_btn.core_selected {
+  color: #ffa500;
 }
 .th_sidebar > .th_spec_list {
   position: relative;

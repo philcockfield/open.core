@@ -15,7 +15,7 @@
       margin 0px
       padding 0px
 
-  // Root description button.
+  // Root button.
   li.th_suite_btn
     cursor pointer
     padding 12px
@@ -24,7 +24,6 @@
       textEmboss()
     p.th_title
       font-size 12pt
-      color LABEL_COLOR
       ellipsis()
     &.core_selected
       background darken(white, 10%)
@@ -35,8 +34,16 @@
       margin 0px
       padding-left 20px
       li.th_suite.th_child
-        color LABEL_COLOR
         font-size 10pt
         margin-top 5px
         ellipsis()
         textEmboss()
+    
+    
+    // Sub-suite button.
+    .th_sub_suite_btn
+      color LABEL_COLOR
+    
+    .th_sub_suite_btn.core_selected
+      color orange
+    
