@@ -17,7 +17,7 @@ module.exports = (module) ->
                     @selected(true) if e.newValue is @.model
         
         # Finish up.
-        updateState @
+        @_updateState()
     
     
     render: -> 
@@ -53,31 +53,29 @@ module.exports = (module) ->
         @ulChildSuites = @el.children('ul.th_sub_suites')
     
     
-    handleSelectedChanged: -> updateState @, true
-  
-  
-  # PRIVATE --------------------------------------------------------------------------  
-  
-  
-  updateState = (view, animate = false) ->
+    handleSelectedChanged: -> @_updateState true
+    
+    
+    _updateState: (animate = false) -> 
           
           # Setup initial conditions.
-          isSelected = view.selected()
+          isSelected = @selected()
           
           # Show or hide the list of child-suites.
-          do -> 
-              ul   = view.ulChildSuites
-              show = (isSelected and view.model.childSuites.length > 0 and ul.is(':hidden'))
+          aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
+          do => 
+              ul   = @ulChildSuites
+              show = (isSelected and @model.childSuites.length > 0 and ul.is(':hidden'))
               if animate
                   aniToggle ul, show
               else
                 ul.toggle show
           
           # Store the selection on the TestHarness root.
-          module.selectedSuite(view.model) if view.selected()
+          module.selectedSuite(@model) if @selected()
   
   
-  aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
+  
   
   
   # Export.
