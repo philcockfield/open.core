@@ -77,21 +77,25 @@
 }
 .th_sidebar > .th_suite_list li.th_suite_btn ul.th_sub_suites {
   margin: 0px;
-  padding-left: 20px;
+  padding-left: 12px;
 }
 .th_sidebar > .th_suite_list li.th_suite_btn ul.th_sub_suites li.th_suite.th_child {
   font-size: 10pt;
   margin-top: 5px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   text-shadow: 0px 1px 0px #fff;
 }
 .th_sidebar > .th_suite_list li.th_suite_btn .th_sub_suite_btn {
   color: #4d4d4d;
+  background-image: url("../../images/harness/bullet_gray.png");
+  background-repeat: no-repeat;
+  background-position: 0px 50%;
+  padding-left: 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .th_sidebar > .th_suite_list li.th_suite_btn .th_sub_suite_btn.core_selected {
-  color: #ffa500;
+  background-image: url("../../images/harness/bullet_blue.png");
 }
 .th_sidebar > .th_spec_list {
   position: relative;
