@@ -33,7 +33,7 @@ module.exports = (module) ->
               btn
         
         # Insert the root suite title as a button.
-        createButton(@model).replace @$('.th_title')
+        @rootButton = createButton(@model).replace @$('.th_title')
         
         # Render any child-suites that may exist.
         renderChildSuites = (elParent, model) ->
@@ -74,6 +74,8 @@ module.exports = (module) ->
           
           # Setup initial conditions.
           isSelected = @selected()
+          @_updateSubButtons()
+          
           
           # Show or hide the list of child-suites.
           aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
@@ -87,7 +89,19 @@ module.exports = (module) ->
           
           # Store the selection on the TestHarness root.
           module.selectedSuite(@model) if @selected()
-  
+    
+    
+    _updateSubButtons: -> 
+          
+          # Select or unselect the sub-suite button.
+          if @selected()
+            
+            # Select first button - unless a selection already exists.
+            @buttons.items.first().selected true unless @buttons.selected()?
+            
+          else
+            @buttons.selected()?.selected false
+    
   
   
   class SubSuiteButton extends Button

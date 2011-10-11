@@ -9,7 +9,7 @@ describe 'Foo', 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecen
     afterAll -> console.log 'After all: FOO'
     
     it 'Adds something to the Test Harness', ->
-        el = $('<div>Hello this is an element.</div>')
+        el = $('<div>Hello I am an element.</div>')
         page.add el
         
     it 'Clears the Test Harness', -> page.clear()
