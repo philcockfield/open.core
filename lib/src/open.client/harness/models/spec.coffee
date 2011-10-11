@@ -40,7 +40,8 @@ module.exports = (module) ->
         catch error
           if console?
               console.log 'Failed to invoke spec.' 
-              console.log ' - it: ', @description()
+              console.log ' - describe: ', @suite.title()
+              console.log '         it: ', @description()
               console.log ' - Error: ', error
               console.log ''
         

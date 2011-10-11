@@ -47,6 +47,21 @@ module.exports = (module) ->
         # Update title.
         @divTitle.toggle suite?
         if suite?
-            @pTitle.html suite.title() ? ''
-            @pSummary.html suite.summary() ? ''
+            # Format title and summary.
+            title   = suite.title() ? ''
+            title   = _(title).capitalize()
+            summary = suite.summary() ? ''
+            summary = _(summary).capitalize()
+            
+            # Update DOM elements.
+            @pTitle.html    title
+            @pSummary.html  summary
+
+
+
+
+
+
+
+
         

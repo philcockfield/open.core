@@ -1,4 +1,4 @@
-describe 'Foo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel eleifend nisl. Suspendisse tristique dignissim leo ut auctor.', ->
+describe 'Foo', 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel eleifend nisl. Suspendisse tristique dignissim leo ut auctor.', ->
     
     beforeEach -> console.log 'Before each: FOO 1'
     beforeEach -> console.log 'Before each: FOO 2'

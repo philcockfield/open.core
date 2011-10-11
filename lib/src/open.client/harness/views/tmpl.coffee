@@ -34,7 +34,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   
   specButton:
     """
-     <%= model.description() %>
+     <%= text %>
     """
   
   
@@ -48,6 +48,6 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     <div class="th_host"></div>
     
     """
-    
+  
   
   

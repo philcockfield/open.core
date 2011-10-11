@@ -20,7 +20,9 @@ module.exports = (module) ->
         updateState @
     
     
-    render: -> @html module.tmpl.specButton model: @model
+    render: -> 
+        text = _(@model.description()).capitalize()
+        @html module.tmpl.specButton text:text
     
     
     handleSelectedChanged: -> updateState @

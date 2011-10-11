@@ -35,9 +35,9 @@ module.exports = (module) ->
             # Enumerate each child spec.
             model.childSuites.each (suite) ->
                       # Insert the LI.
-                      li = $("<li class='th_suite th_child'></li>")
-                      # li.html $("<p>#{suite.title()}</p>")
-                      li.html $("<p>#{suite.title()} | #{suite.root()?.title()}</p>")
+                      title = _(suite.title()).capitalize()
+                      li    = $("<li class='th_suite th_child'></li>")
+                      li.html $("<p>#{title}</p>")
                       
                       # Insert child suites in a new child UL.
                       suite.init()
