@@ -67,7 +67,7 @@
 }
 .th_sidebar > .th_suite_list .th_suite_btn ul.th_sub_suites {
   margin: 0px;
-  padding-left: 12px;
+  padding-left: 14px;
 }
 .th_sidebar > .th_suite_list .th_suite_btn ul.th_sub_suites li.th_suite.th_child {
   margin-top: 5px;
@@ -79,7 +79,7 @@
   background-image: url("../../images/harness/bullet_gray.png");
   background-repeat: no-repeat;
   background-position: 0px 50%;
-  padding-left: 14px;
+  padding-left: 16px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

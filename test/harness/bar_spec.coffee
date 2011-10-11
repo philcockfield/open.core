@@ -1,6 +1,11 @@
 describe 'Xar', ->
   
-  it 'is a test', -> console.log 'XAR test'
+  beforeAll ->
+        el = $('<div>Xar!!! Added on BeforeAll</div>')
+        page.add el
+      
+  
+  it 'I am a test', -> console.log 'XAR test'
     
   
   
