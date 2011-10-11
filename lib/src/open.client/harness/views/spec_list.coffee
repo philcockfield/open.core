@@ -14,6 +14,7 @@ module.exports = (module) ->
     
     render: -> 
         @html module.tmpl.specList title: 'Specs'
+        @$('.th_title_bar').disableTextSelect()
         @renderList()
     
     
