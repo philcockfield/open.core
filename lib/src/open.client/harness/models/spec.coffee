@@ -9,15 +9,16 @@ module.exports = (module) ->
 
     ###
     Constructor.
-    @param params: The array of arguments retreived from the describe function.
+    @param params:  The array of arguments retreived from the describe function.
+    @param suite:   The suite that the spec belongs to.
     ###
-    constructor: (params = {}) -> 
+    constructor: (params = {}, @suite) -> 
         
         # Setup initial conditions.
         super
         params = [params] unless _(params).isArray()
-        first = _(params).first()
-        last = _(params).last()
+        first  = _(params).first()
+        last   = _(params).last()
         
         # Store parts.
         @description first if _(first).isString()
@@ -28,8 +29,23 @@ module.exports = (module) ->
     Invokes the spec.
     ###
     invoke: -> 
-        fn = @func()
-        fn?()
+        
+        # Invoke the [beforeEach] method(s).
+        @suite.beforeEach.each (op) -> op.invoke()
+        
+        # Invoke the spec.
+        try
+          fn = @func()
+          fn?()
+        catch error
+          if console?
+              console.log 'Failed to invoke spec.' 
+              console.log ' - it: ', @description()
+              console.log ' - Error: ', error
+              console.log ''
+        
+        # Invoke the [afterEach] method(s).
+        @suite.afterEach.each (op) -> op.invoke()
   
   
   # Collection.

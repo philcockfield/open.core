@@ -14,10 +14,20 @@ html(lang='en')
     :coffeescript
       # Catch root level spec descritions.
       window.HARNESS =
-            suites: []
-            specs: []
-      window.describe = (params...) -> HARNESS.suites.push params
-      window.it       = (params...) -> HARNESS.specs.push params
+            suites:     []
+            specs:      []
+            beforeEach: []
+            afterEach:  []
+            beforeAll:  []
+            afterAll:   []
+      window.describe   = (params...) -> HARNESS.suites.push params
+      window.it         = (params...) -> HARNESS.specs.push params
+      
+      window.beforeEach = (params...) -> HARNESS.beforeEach.push params
+      window.afterEach  = (params...) -> HARNESS.afterEach.push params
+      
+      window.beforeAll  = (params...) -> HARNESS.beforeAll.push params
+      window.afterAll   = (params...) -> HARNESS.afterAll.push params
       
       # Boot the Harness.
       $ -> 

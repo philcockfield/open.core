@@ -1,6 +1,7 @@
 core     = require 'open.client/core'
 controls = require 'open.client/controls'
 
+
 module.exports = class TestHarness extends core.mvc.Module
   constructor: -> 
       
@@ -16,10 +17,25 @@ module.exports = class TestHarness extends core.mvc.Module
       @controls = controls
       
       # Wire up events.
-      @selectedSuite.onChanged => 
-          page.reset()
-          @selectedSpec null # Reset the spec when the suite changes.
-  
+      @selectedSuite.onChanged (e) => 
+              
+              # Update state.
+              page.reset()
+              @selectedSpec null # Reset the spec when the suite changes.
+              
+              # Invoke the [afterAll] if a current suite is being unloaded.
+              if e.oldValue?
+                    e.oldValue.afterAll.each (op) -> op.invoke()
+              
+              # Invoke the [beforeAll] on the new suite that is being.
+              if e.newValue?
+                    e.newValue.beforeAll.each (op) -> op.invoke()
+              
+              # Store the selected item in storage.
+              desc = e.newValue?.title() ? null
+              localStorage.selectedSuite = desc
+      
+      
   
   ###
   Initializes the TestHarness.
@@ -48,7 +64,18 @@ module.exports = class TestHarness extends core.mvc.Module
       @rootView = new @views.Root()
       options.within?.append @rootView.el
       
-      # Select the first suite.
-      @selectedSuite @suites.first()
+      # Select the initial suite.
+      do => 
+          return unless localStorage?
+          
+          # Get the previously selected suite, or the first one in the list.
+          previous = localStorage.selectedSuite
+          suite = @suites.detect (s) -> s.title() is previous
+          suite ?= @suites.first()
+          
+          # Select the suite.
+          if suite?
+              setTimeout (=> @selectedSuite suite), 10
+      
       
     

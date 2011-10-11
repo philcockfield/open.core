@@ -11,27 +11,33 @@ module.exports = (module) ->
         module.selectedSuite.onChanged (e) => @_updateState()
         
         # Page events.
-        module.page.bind 'add', (e) => @divHost.append e.element
+        module.page.bind 'add',   (e) => @add e
         module.page.bind 'clear', (e) => @clear()
         module.page.bind 'reset', (e) => @reset()
-        
     
+    
+    add: (options = {}) -> @divHost.append options.element
+    
+    clear: -> @divHost.empty()
+    
+    reset: -> @clear()
+
     render: -> 
         
         # Insert base HTML structures.
         @html module.tmpl.main()
         
         # Retreive elements.
-        @divTitle   = @$('p.th_title')
-        @divSummary = @$('p.th_summary')
-        @divHost    = @$('div.th_host')
+        @divTitle = @$('div.th_title')
+        @pTitle   = @$('p.th_title')
+        @pSummary = @$('p.th_summary')
+        @divHost  = @$('div.th_host')
+        
+        # Store the host DIV on the [page] object.
+        page.div = @divHost
         
         # Finish up.
         @_updateState()
-    
-    clear: -> @divHost.empty()
-    
-    reset: -> @clear()
     
     _updateState: -> 
         
@@ -39,6 +45,8 @@ module.exports = (module) ->
         suite = module.selectedSuite()
         
         # Update title.
-        @divTitle.html suite?.title() ? ''
-        @divSummary.html suite?.summary() ? ''
+        @divTitle.toggle suite?
+        if suite?
+            @pTitle.html suite.title() ? ''
+            @pSummary.html suite.summary() ? ''
         

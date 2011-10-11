@@ -5,6 +5,7 @@ module.exports = (module) ->
         # Setup initial conditions.
         super _.extend options, tagName: 'li', className: 'th_suite_btn', canToggle:true
         @model = options.model
+        @model.init()
         
         # Render the button.
         @render()
@@ -12,8 +13,8 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => 
-              # Ensure the button is selected if the model is set as the selected suite.
-              @selected(true) if e.newValue is @.model
+                    # Ensure the button is selected if the model is set as the selected suite.
+                    @selected(true) if e.newValue is @.model
         
         # Finish up.
         updateState @
@@ -33,44 +34,49 @@ module.exports = (module) ->
             
             # Enumerate each child spec.
             model.childSuites.each (d) ->
-                li = $("<li class='th_suite th_child'></li>")
-                li.html $("<p>#{d.title()}</p>")
-                
-                d.init()
-                renderChildSuites li, d # <== Recursion.
-                
-                
-                
-                ul.append li
-            
-            
-            
+                      # Insert the LI.
+                      li = $("<li class='th_suite th_child'></li>")
+                      li.html $("<p>#{d.title()}</p>")
+                      
+                      # Insert child suites in a new child UL.
+                      d.init()
+                      renderChildSuites li, d # <== Recursion.
+                      
+                      # Insert the LI into the UL
+                      ul.append li
+        
+        # Render any child-suites that may exist.
         renderChildSuites @el, @model
         
         # Finish up.
         @ulChildSuites = @el.children('ul.th_sub_suites')
-        
-        # Render child suites.
     
     
-    handleSelectedChanged: -> updateState @
+    handleSelectedChanged: -> updateState @, true
   
   
   # PRIVATE --------------------------------------------------------------------------  
   
   
-  updateState = (view) ->
+  updateState = (view, animate = false) ->
           
-          # Initialize the model.
-          if view.selected() and not view.model.isInitialized is yes
-              view.model.init() 
-              view.render()
-        
+          # Setup initial conditions.
+          isSelected = view.selected()
+          
           # Show or hide the list of child-suites.
-          view.ulChildSuites.toggle (view.selected() and view.model.childSuites.length > 0)
+          do -> 
+              ul   = view.ulChildSuites
+              show = (isSelected and view.model.childSuites.length > 0 and ul.is(':hidden'))
+              if animate
+                  aniToggle ul, show
+              else
+                ul.toggle show
           
           # Store the selection on the TestHarness root.
-          module.selectedSuite view.model if view.selected()
+          module.selectedSuite(view.model) if view.selected()
+  
+  
+  aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
   
   
   # Export.
