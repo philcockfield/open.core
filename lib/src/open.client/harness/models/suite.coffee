@@ -71,6 +71,19 @@ module.exports = (module) ->
     root: -> 
         getRoot = (suite) -> if suite.parentSuite? then getRoot(suite.parentSuite) else suite
         getRoot @
+
+    ###
+    Retrieves the sub-suite model from anywhere within the hierarchy.
+    @param title: The title of the suite to match by.
+    ###
+    descendentByTitle: (title) -> 
+        matchChild = (suite) -> 
+              for child in suite.childSuites.models
+                    return child if child.title() is title
+                    match = matchChild(child) # <== RECURSION
+                    return match if match?
+              null
+        matchChild(@) ? null
   
   
   # PRIVATE --------------------------------------------------------------------------

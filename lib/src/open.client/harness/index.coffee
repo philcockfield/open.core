@@ -35,10 +35,7 @@ module.exports = class TestHarness extends core.mvc.Module
               # Store the selected item in storage.
               localStorage.selectedRoot  = (suite?.root().title()) ? null
               localStorage.selectedSuite = (suite?.title()) ? null
-              
-              console.log 'SAVE', localStorage.selectedSuite
-              
-      
+  
   
   ###
   Initializes the TestHarness.
@@ -71,31 +68,29 @@ module.exports = class TestHarness extends core.mvc.Module
       do => 
           return unless localStorage?
           
-          console.log 'LOAD PREV'
-
           # Setup initial conditions.
-          previous = localStorage.selectedSuite
-          root     = localStorage.selectedRoot
+          selectionTitle = localStorage.selectedSuite
+          rootTitle      = localStorage.selectedRoot
           
           # Get the previously selected suite, or the first one in the list.
-          rootSuite = @suites.detect (s) -> s.title() is root
+          rootSuite = @suites.detect (s) -> s.title() is rootTitle
           rootSuite ?= @suites.first()
-          
-          # console.log 'previous: ', previous
-          # console.log 'root: ', root
           
           # Select the suite.
           if rootSuite?
+              select = () => 
+                      if rootTitle is selectionTitle
+                          # Select the root suite.
+                          @selectedSuite rootSuite              
+                      else
+                          # Select the child-suite.
+                          rootSuite.init()
+                          descendent = rootSuite.descendentByTitle selectionTitle
+                          @selectedSuite descendent if descendent?
               
-              select = => 
-                  rootSuite.init()
-                  @selectedSuite rootSuite              
-                  
-                  console.log 'previous', previous
-                  console.log ''
-              
-              
-              setTimeout select, 10
+              # Break sync flow to allow view insertion to render 
+              # before selection animation starts.
+              setTimeout select, 100
       
       
     
