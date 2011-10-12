@@ -54,25 +54,8 @@ module.exports = (app, options = {}) ->
           app.configure 'production', ->
               use express.errorHandler()
     
-    # Unit-test runner (specs).
-    core.configure.specs app,
-          title:      'Open.Core (Specs)'
-          url:        "#{baseUrl}/specs"
-          specsDir:   "#{core.paths.specs}/client/"
-          samplesDir: "#{core.paths.specs}/client/samples"
-          sourceUrls: [
-            "#{baseUrl}/libs.js"
-            "#{baseUrl}/core+controls.js" ]
-    
-    # TestHarness.
-    core.configure.harness app,
-          title:      'Open.Core (TestHarness)'
-          url:        "#{baseUrl}/harness"
-          specsDir:   "#{core.paths.test}/harness/"
-          sourceUrls: [
-            "#{baseUrl}/libs.js"
-            "#{baseUrl}/core+controls.js" ]
-    
+    # Setup testing.
+    require './testing'
     
     # Setup routes.
     routes.init()

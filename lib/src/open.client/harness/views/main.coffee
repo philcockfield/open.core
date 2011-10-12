@@ -16,7 +16,9 @@ module.exports = (module) ->
         module.page.bind 'reset', (e) => @reset()
     
     
-    add: (options = {}) -> @divHost.append options.element
+    add: (options = {}) -> 
+        el = options.element
+        @divHost.append el
     
     clear: -> @divHost.empty()
     
