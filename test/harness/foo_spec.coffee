@@ -18,6 +18,7 @@ describe 'Foo', 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecen
     
     describe 'foo-child', ->
       it 'foo-child spec', ->
+        console.log 'foo-child sec output'
       describe 'fooo-grand-child', ->
         describe 'fooo-great-grand-child', ->
 

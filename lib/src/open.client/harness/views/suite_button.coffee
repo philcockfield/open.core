@@ -2,12 +2,15 @@ module.exports = (module) ->
   Button = module.controls.Button
   
   class SuiteButton extends Button
+    # defaults:
+    #     selectedSuite: null # Gets or sets the selected suite.  May be the null, the root-suite, or a sub-suite.
+    
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
         super _.extend options, tagName: 'li', className: 'th_suite_btn', canToggle:true
         @model   = options.model
-        @buttons = new module.controls.ButtonSet()
+        @childSuiteButtons = new module.controls.ButtonSet()
         @model.init()
         
         # Render the button.
@@ -15,9 +18,17 @@ module.exports = (module) ->
         @el.disableTextSelect()
         
         # Wire up events.
+        @childSuiteButtons.bind 'selectionChanged', => 
+              # EVENT: child-suite button selection changed.
+              #        Update the currently selected suite on the root module.
+              return unless @selected
+              btn = @childSuiteButtons.selected()
+              module.selectedSuite btn?.model
+        
         module.selectedSuite.onChanged (e) => 
-                    # Ensure the button is selected if the model is set as the selected suite.
-                    @selected(true) if e.newValue is @model
+                # EVENT: Selected 'suite' changed on root module.
+                #        Ensure the button is selected if the model is set as the selected suite.
+                @selected(true) if e.newValue is @model
         
         # Finish up.
         @_updateState()
@@ -28,9 +39,9 @@ module.exports = (module) ->
         @html module.tmpl.suiteButton()
 
         createButton = (suite) => 
-              btn = new SubSuiteButton model:suite
-              @buttons.add btn
-              btn
+                        btn = new SubSuiteButton model:suite
+                        @childSuiteButtons.add btn
+                        btn
         
         # Insert the root suite title as a button.
         @rootButton = createButton(@model).replace @$('.th_title')
@@ -80,28 +91,23 @@ module.exports = (module) ->
           # Show or hide the list of child-suites.
           aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
           do => 
-              ul   = @ulChildSuites
-              show = (isSelected and @model.childSuites.length > 0 and ul.is(':hidden'))
-              if animate
-                  aniToggle ul, show
-              else
-                ul.toggle show
-          
-          # Store the selection on the TestHarness root.
-          module.selectedSuite(@model) if @selected()
+              ul       = @ulChildSuites
+              isHidden = ul.is(':hidden')
+              show     = (isSelected and @model.childSuites.length > 0) and isHidden
+              if animate then aniToggle(ul, show) else ul.toggle show
     
     
     _updateSubButtons: -> 
+          buttons = @childSuiteButtons
           
           # Select or unselect the sub-suite button.
           if @selected()
             
             # Select first button - unless a selection already exists.
-            @buttons.items.first().selected true unless @buttons.selected()?
+            buttons.items.first().selected true unless buttons.selected()?
             
           else
-            @buttons.selected()?.selected false
-    
+            buttons.selected()?.selected false
   
   
   class SubSuiteButton extends Button
