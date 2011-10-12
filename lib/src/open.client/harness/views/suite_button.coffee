@@ -28,7 +28,18 @@ module.exports = (module) ->
         module.selectedSuite.onChanged (e) => 
                 # EVENT: Selected 'suite' changed on root module.
                 #        Ensure the button is selected if the model is set as the selected suite.
-                @selected(true) if e.newValue is @model
+                selectedSuite = e.newValue
+                rootSuite     = selectedSuite?.root()
+                
+                console.log '++', rootSuite?.title(), " | > ", selectedSuite?.title()
+                
+                @selected(true) if rootSuite is @model
+                
+                if selectedSuite isnt rootSuite
+                    
+                    console.log 'it is a child suite that was selected'
+                
+                
         
         # Finish up.
         @_updateState()

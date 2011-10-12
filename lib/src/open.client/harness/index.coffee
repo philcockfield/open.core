@@ -28,13 +28,16 @@ module.exports = class TestHarness extends core.mvc.Module
                     e.oldValue.afterAll.each (op) -> op.invoke()
               
               # Invoke the [beforeAll] on the new suite that is being.
-              if e.newValue?
-                    e.newValue.beforeAll.each (op) -> op.invoke()
+              suite = e.newValue
+              if suite?
+                    suite.beforeAll.each (op) -> op.invoke()
               
               # Store the selected item in storage.
-              desc = e.newValue?.root().title() ? null
-              localStorage.selectedSuite = desc
-      
+              localStorage.selectedRoot  = (suite?.root().title()) ? null
+              localStorage.selectedSuite = (suite?.title()) ? null
+              
+              console.log 'SAVE', localStorage.selectedSuite
+              
       
   
   ###
@@ -68,14 +71,31 @@ module.exports = class TestHarness extends core.mvc.Module
       do => 
           return unless localStorage?
           
-          # Get the previously selected suite, or the first one in the list.
+          console.log 'LOAD PREV'
+
+          # Setup initial conditions.
           previous = localStorage.selectedSuite
-          suite = @suites.detect (s) -> s.title() is previous
-          suite ?= @suites.first()
+          root     = localStorage.selectedRoot
+          
+          # Get the previously selected suite, or the first one in the list.
+          rootSuite = @suites.detect (s) -> s.title() is root
+          rootSuite ?= @suites.first()
+          
+          # console.log 'previous: ', previous
+          # console.log 'root: ', root
           
           # Select the suite.
-          if suite?
-              setTimeout (=> @selectedSuite suite), 10
+          if rootSuite?
+              
+              select = => 
+                  rootSuite.init()
+                  @selectedSuite rootSuite              
+                  
+                  console.log 'previous', previous
+                  console.log ''
+              
+              
+              setTimeout select, 10
       
       
     
