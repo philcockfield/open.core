@@ -36,9 +36,8 @@
   overflow-y: auto;
 }
 .th_sidebar > .th_suite_list {
+  position: relative;
   height: 50%;
-  overflow: hidden;
-  overflow-y: auto;
 }
 .th_sidebar > .th_suite_list .th_title_bar {
   border-top: none;
