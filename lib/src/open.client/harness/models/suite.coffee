@@ -1,5 +1,5 @@
 ###
-Model: Represents a specifications 'describe' block.
+Model: Represents a 'describe' block.
 ###
 module.exports = (module) ->
   Spec      = module.model 'spec'

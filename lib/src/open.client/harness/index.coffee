@@ -19,22 +19,29 @@ module.exports = class TestHarness extends core.mvc.Module
       # Wire up events.
       @selectedSuite.onChanged (e) => 
               
+              # Setup initial conditions.
+              oldSuite = e.oldValue
+              newSuite = e.newValue
+              
               # Update state.
               page.reset()
               @selectedSpec null # Reset the spec when the suite changes.
               
               # Invoke the [afterAll] if a current suite is being unloaded.
-              if e.oldValue?
-                    e.oldValue.afterAll.each (op) -> op.invoke()
+              # This starts at the the closest suite and works out to the most distant ancestor suite.
+              if oldSuite?
+                    _(oldSuite.ancestors(direction:'ascending')).each (suite) -> 
+                          suite.afterAll.each (op) -> op.invoke()
               
               # Invoke the [beforeAll] on the new suite that is being.
-              suite = e.newValue
-              if suite?
-                    suite.beforeAll.each (op) -> op.invoke()
+              # This starts at the root most ancestor suite and works down to the this (the closest) suite.
+              if newSuite?
+                    _(newSuite.ancestors(direction:'descending')).each (suite) -> 
+                          suite.beforeAll.each (op) -> op.invoke()
               
               # Store the selected item in storage.
-              localStorage.selectedRoot  = (suite?.root().title()) ? null
-              localStorage.selectedSuite = (suite?.title()) ? null
+              localStorage.selectedRoot  = (newSuite?.root().title()) ? null
+              localStorage.selectedSuite = (newSuite?.title()) ? null
   
   
   ###
