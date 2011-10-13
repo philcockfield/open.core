@@ -139,6 +139,13 @@
   background: #fff;
   padding: 10px 20px;
 }
+.th_harness > .th_main > table.th_main {
+  width: 100%;
+  height: 100%;
+}
+.th_harness > .th_main > table.th_main tr.th_title {
+  height: 10px;
+}
 .th_harness > .th_main div.th_title {
   font-weight: 300;
   color: #404040;
@@ -158,7 +165,8 @@
   line-height: 150%;
 }
 .th_harness > .th_main div.th_host {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  background: #ffa500;
 }
