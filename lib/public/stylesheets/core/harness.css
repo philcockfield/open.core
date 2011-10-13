@@ -166,7 +166,8 @@
 }
 .th_harness > .th_main div.th_host {
   position: relative;
+}
+.th_harness > .th_main div.th_host > :first-child {
   margin-left: auto;
   margin-right: auto;
-  background: #ffa500;
 }
