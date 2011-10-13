@@ -6,6 +6,7 @@ baseUrl = core.baseUrl
 sourceUrls = [
   "#{baseUrl}/libs.js"
   "#{baseUrl}/core+controls.js" 
+  "#{baseUrl}/harness.js" 
 ]
 
 
@@ -17,7 +18,7 @@ core.configure.specs app,
       specsDir:   "#{core.paths.specs}/client/"
       samplesDir: "#{core.paths.specs}/client/samples"
 
-# TestHarness.
+# Test Harness.
 core.configure.harness app,
       title:      'Open.Core (TestHarness)'
       url:        "#{baseUrl}/harness"

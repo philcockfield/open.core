@@ -1,4 +1,4 @@
 module.exports = (module) ->
   index =
-    Suite:    module.model 'suite'
-    Spec:     module.model 'spec'
+    Suite:     module.model 'suite'
+    Spec:      module.model 'spec'

@@ -64,14 +64,31 @@ module.exports = (module) ->
             
             # Re-clear the cache.
             resetGlobalArrays()
-  
+    
+    
     ###
     Retrieves the root spec in the hierarhcy, or this suite if it is the root.
     ###
-    root: -> 
-        getRoot = (suite) -> if suite.parentSuite? then getRoot(suite.parentSuite) else suite
-        getRoot @
-
+    root: -> _(@ancestors()).last()
+    
+    
+    ###
+    Builds up list of ancestors from this suite to it's root.
+    @param includeThis : Flag indicating if this suite should be included in the list.
+    @returns array of suites, ordered from 'descendent' to 'ancestor'.
+    ###
+    ancestors: (includeThis = true) -> 
+        list = []
+        get = (suite) -> 
+                return unless suite?
+                list.push suite
+                get(suite.parentSuite) if suite.parentSuite?
+        
+        startingSuite = if includeThis is yes then @ else @parentSuite
+        get(startingSuite)
+        list
+    
+    
     ###
     Retrieves the sub-suite model from anywhere within the hierarchy.
     @param title: The title of the suite to match by.
@@ -84,7 +101,7 @@ module.exports = (module) ->
                     return match if match?
               null
         matchChild(@) ? null
-  
+    
   
   # PRIVATE --------------------------------------------------------------------------
   
@@ -96,9 +113,11 @@ module.exports = (module) ->
         HARNESS.afterEach  = []
         HARNESS.beforeAll  = []
         HARNESS.afterAll   = []
-
   
-  getFunctions = (collection, items, fnModel) -> collection.add fnModel(item) for item in items
+  
+  getFunctions = (collection, items, fnModel) -> 
+                                return unless items?
+                                collection.add fnModel(item) for item in items
   getOperations = (collection, suite, items) -> getFunctions collection, items, (params) -> new Operation(params, suite)
   
   # Static methods.

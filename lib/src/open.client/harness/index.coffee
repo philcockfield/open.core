@@ -48,6 +48,7 @@ module.exports = class TestHarness extends core.mvc.Module
       # Setup initial conditions.
       options.within ?= 'body'
       super options
+      window.HARNESS ?= {} # Used for testing.  This would otherwise be set in the page.
       
       # Store page reference on Module and make it available to spec
       # by storing it in the global object.
@@ -92,5 +93,7 @@ module.exports = class TestHarness extends core.mvc.Module
               # before selection animation starts.
               setTimeout select, 100
       
+      # Finish up.
+      @
       
     
