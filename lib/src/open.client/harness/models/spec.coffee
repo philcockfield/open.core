@@ -31,7 +31,9 @@ module.exports = (module) ->
     invoke: -> 
         
         # Invoke the [beforeEach] method(s).
-        @suite.beforeEach.each (op) -> op.invoke()
+        # This starts at the root most ancestor suite and works down to the this (the closest) suite.
+        _(@suite.ancestors(direction:'descending')).each (suite) -> 
+              suite.beforeEach.each (op) -> op.invoke()
         
         # Invoke the spec.
         try
@@ -46,7 +48,9 @@ module.exports = (module) ->
               console.log ''
         
         # Invoke the [afterEach] method(s).
-        @suite.afterEach.each (op) -> op.invoke()
+        # This starts at the this (the closest) suite and works out to the most distant ancestor suite.
+        _(@suite.ancestors(direction:'ascending')).each (suite) -> 
+              suite.afterEach.each (op) -> op.invoke()
   
   
   # Collection.

@@ -59,15 +59,22 @@ describe 'harness/models/suite', ->
         grandChild = new Suite([], child)
     
     describe 'ancestors()', ->
-      it 'retrieves the list of ancestors, including the current one', ->
+      it 'retrieves the list of ancestors, including the current one (ascending by default)', ->
         list = grandChild.ancestors()
         expect(list.length).toEqual 3
         expect(list[0]).toEqual grandChild
         expect(list[1]).toEqual child
         expect(list[2]).toEqual root
       
+      it 'retrieves the list of ancestors, including the current one (descending)', ->
+        list = grandChild.ancestors(direction:'descending')
+        expect(list.length).toEqual 3
+        expect(list[0]).toEqual root
+        expect(list[1]).toEqual child
+        expect(list[2]).toEqual grandChild
+      
       it 'retrieves the list of ancestors, not including the current one', ->
-        list = grandChild.ancestors(false)
+        list = grandChild.ancestors(includeThis: false)
         expect(list.length).toEqual 2
         expect(list[0]).toEqual child
         expect(list[1]).toEqual root
@@ -78,7 +85,7 @@ describe 'harness/models/suite', ->
         expect(list[0]).toEqual root
       
       it 'retrieves empty list', ->
-        list = root.ancestors(false)
+        list = root.ancestors(includeThis: false)
         expect(list.length).toEqual 0
     
     describe 'root()', ->
@@ -88,16 +95,28 @@ describe 'harness/models/suite', ->
       it 'retrieves the same suite if it is already the root', ->
         expect(root.root()).toEqual root
         
-      
-      
-      
-      
+  describe 'A', ->
+    beforeEach -> console.log '+ Before A'
+    afterEach -> console.log '- After A'
     
-    
-      
+    describe 'B', ->
+        beforeEach -> console.log '+ Before B'
+        afterEach -> console.log '- After B'
+            
+        describe 'C', ->
+          beforeEach -> console.log '+ Before C'
+          afterEach -> console.log '- After C'
+        
+          it 'Does It', ->
+            console.log 'Spec C'
     
     
     
   
   
+    
   
+  
+  
+
+

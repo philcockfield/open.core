@@ -22,14 +22,17 @@ describe 'A',
       # it 'Clears the Test Harness', -> page.clear()
       # it 'Throws an error', -> throw 'My Error!!!!'
       
-      beforeEach -> console.log 'Before A'
+      beforeEach -> console.log '+ Before A'
+      afterEach -> console.log '- After A'
           
       
       describe 'B', ->
-          beforeEach -> console.log 'Before B'
+          beforeEach -> console.log '+ Before B'
+          afterEach -> console.log '- After B'
               
           describe 'C', ->
-            beforeEach -> console.log 'Before C'
+            beforeEach -> console.log '+ Before C'
+            afterEach -> console.log '- After C'
           
             it 'Does It', ->
               console.log 'Spec C'

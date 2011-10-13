@@ -73,19 +73,35 @@ module.exports = (module) ->
     
     
     ###
-    Builds up list of ancestors from this suite to it's root.
-    @param includeThis : Flag indicating if this suite should be included in the list.
-    @returns array of suites, ordered from 'descendent' to 'ancestor'.
+    Builds up list of ancestors of the suite.
+    @param options:
+              - includeThis : Flag indicating if this suite should be included in the list (default: true).
+              - direction   : The order of the list.
+                              - 'ascending'  : descendent to ancestor.
+                              - 'descending' : ancestor descendent.
+    @returns array of suites.
     ###
-    ancestors: (includeThis = true) -> 
-        list = []
+    ancestors: (options = {}) -> 
+        
+        # Setup initial conditions.
+        list        = []
+        includeThis = options.includeThis ? true
+        direction   = options.direction ? 'ascending'
+        
+        # Walk up the hierarchy.
         get = (suite) -> 
                 return unless suite?
                 list.push suite
                 get(suite.parentSuite) if suite.parentSuite?
         
+        # Start the walk.
         startingSuite = if includeThis is yes then @ else @parentSuite
         get(startingSuite)
+        
+        # Sort order.
+        list = list.reverse() if direction is 'descending'
+        
+        # Finish up.
         list
     
     
