@@ -93,9 +93,11 @@
   cursor: default;
 }
 .th_sidebar > .th_spec_list {
-  position: relative;
-  height: 50%;
+  position: absolute;
+  left: 0px;
   top: 50%;
+  right: 0px;
+  bottom: 0px;
 }
 .th_sidebar > .th_spec_list .th_scroller {
   position: absolute;

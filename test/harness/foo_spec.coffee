@@ -20,10 +20,13 @@ describe 'Foo',
       
       
       it 'Adds something to the Test Harness', ->
+          
         
       it 'Clears the Test Harness', -> page.clear()
       
       it 'Throws an error', -> throw 'My Error!!!!'
+      
+      
       
       describe 'foo-child', ->
         it 'foo-child spec', ->
