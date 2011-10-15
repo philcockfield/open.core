@@ -56,7 +56,7 @@ module.exports = class TestRunner
           
           # Ensure the path ends with a '/'
           unless _(req.url).endsWith '/'
-                res.redirect req.route.path + '/'
+                res.redirect req.originalUrl + '/'
                 return
           
           # Retrieve paths to script files.

@@ -28,16 +28,16 @@ task 'specs', 'Run the server-side Jasmine BDD specs', ->
   exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
 
-option '-t', '--throw', 'Throw an exception if any client specs fail'
-task 'specs:client', 'Run the client-side Jasmine BDD specs in a new process on the server', (options) ->
-    runner = new core.util.test.ClientTestRunner
-                                          app:  'app.js'
-                                          port: 8888
-                                          path: '/specs'
-    runner.run -> 
-        if options.throw is yes and runner.passed is no
-            throw "#{runner.totalFailed} of #{runner.total} client side unit tests failed."
-        callback?()
+# option '-t', '--throw', 'Throw an exception if any client specs fail'
+# task 'specs:client', 'Run the client-side Jasmine BDD specs in a new process on the server', (options) ->
+#     runner = new core.util.test.ClientTestRunner
+#                                           app:  'app.js'
+#                                           port: 8888
+#                                           path: '/specs'
+#     runner.run -> 
+#         if options.throw is yes and runner.passed is no
+#             throw "#{runner.totalFailed} of #{runner.total} client side unit tests failed."
+#         callback?()
 
 task 'build', 'Build and save all JavaScript files', ->
     buildLibs -> 
