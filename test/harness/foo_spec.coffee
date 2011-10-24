@@ -29,10 +29,13 @@ describe 'Foo',
               el = $('<div>Hello I am an element.</div>')
               # el.css 'width', '300px'
               el.css 'background', 'orange'
-              el.css 'height', '100%'
-              page.add el,
+              
+              options = 
                   width: '80%'
-                  height: '70%'
+                  height: '100%'
+                  # showTitle: false
+              
+              page.add el, options
               
               
               

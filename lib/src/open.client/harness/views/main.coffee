@@ -25,6 +25,7 @@ module.exports = (module) ->
         # Assign style options.
         el.css 'width', width   if width?
         el.css 'height', height if height?
+        @trTitle.toggle (options.showTitle ?= true)
         
         # Insert the element into the host DIV.
         @tdHost.append el
@@ -40,6 +41,7 @@ module.exports = (module) ->
         
         # Retreive elements.
         @divTitle = @$('div.th_title')
+        @trTitle  = @$('tr.th_title')
         @pTitle   = @$('p.th_title')
         @pSummary = @$('p.th_summary')
         @tdHost  = @$('td.th_host')
