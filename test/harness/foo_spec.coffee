@@ -23,7 +23,19 @@ describe 'Foo',
       # it 'Throws an error', -> throw 'My Error!!!!'
       
       describe 'A', ->
-        beforeAll -> console.log '++ Before All: A' # Create and insert view here.
+        beforeAll -> 
+              console.log '++ Before All: A' # Create and insert view here.
+
+              el = $('<div>Hello I am an element.</div>')
+              # el.css 'width', '300px'
+              el.css 'background', 'orange'
+              el.css 'height', '100%'
+              page.add el,
+                  width: '80%'
+                  height: '70%'
+              
+              
+              
         afterAll  -> console.log '++ After All: A'
             
         beforeEach -> console.log '+ Before Each: A'

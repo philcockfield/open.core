@@ -13,6 +13,7 @@ module.exports = class TestHarness extends core.mvc.Module
       
       # Store common references.
       @core     = core
+      @util     = core.util
       @mvc      = core.mvc
       @controls = controls
       

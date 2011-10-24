@@ -58,9 +58,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
         </td>
       </tr>
       <tr class="th_body">
-        <td>
-          <div class="th_host"></div>
-        </td>
+        <td class="th_host"></td>
       </tr>
     </table>
     """

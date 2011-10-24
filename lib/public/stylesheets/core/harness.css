@@ -148,6 +148,17 @@
 .th_harness > .th_main > table.th_main tr.th_title {
   height: 10px;
 }
+.th_harness > .th_main > table.th_main tr.th_body {
+  height: 100%;
+}
+.th_harness > .th_main > table.th_main tr.th_body td.th_host {
+  position: relative;
+}
+.th_harness > .th_main > table.th_main tr.th_body td.th_host > :first-child {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
 .th_harness > .th_main div.th_title {
   font-weight: 300;
   color: #404040;
@@ -165,11 +176,4 @@
   color: #737373;
   margin-top: 5px;
   line-height: 150%;
-}
-.th_harness > .th_main div.th_host {
-  position: relative;
-}
-.th_harness > .th_main div.th_host > :first-child {
-  margin-left: auto;
-  margin-right: auto;
 }

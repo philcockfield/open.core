@@ -11,16 +11,25 @@ module.exports = (module) ->
         module.selectedSuite.onChanged (e) => @_updateState()
         
         # Page events.
-        module.page.bind 'add',   (e) => @add e
+        module.page.bind 'add',   (e) => @add e.element, e.options
         module.page.bind 'clear', (e) => @clear()
         module.page.bind 'reset', (e) => @reset()
     
     
-    add: (options = {}) -> 
-        el = options.element
-        @divHost.append el
+    add: (el, options = {}) -> 
+        
+        # Setup initial conditions.
+        width   = formatSizeValue options.width
+        height  = formatSizeValue options.height
+        
+        # Assign style options.
+        el.css 'width', width   if width?
+        el.css 'height', height if height?
+        
+        # Insert the element into the host DIV.
+        @tdHost.append el
     
-    clear: -> @divHost.empty()
+    clear: -> @tdHost.empty()
     
     reset: -> @clear()
 
@@ -33,10 +42,7 @@ module.exports = (module) ->
         @divTitle = @$('div.th_title')
         @pTitle   = @$('p.th_title')
         @pSummary = @$('p.th_summary')
-        @divHost  = @$('div.th_host')
-        
-        # Store the host DIV on the [page] object.
-        page.div = @divHost
+        @tdHost  = @$('td.th_host')
         
         # Finish up.
         @_updateState()
@@ -61,7 +67,18 @@ module.exports = (module) ->
 
 
 
-
+  # PRIVATE --------------------------------------------------------------------------
+  formatSizeValue = (value) -> 
+        return null unless value?
+        return value + 'px' if _(value).isNumber()
+        value
+      
+      
+  
+  
+  # Export
+  Main
+  
 
 
 
