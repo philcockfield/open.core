@@ -14,7 +14,7 @@ module.exports = (module) ->
         module.page.bind 'add',     (e) => @add e.element, e.options
         module.page.bind 'clear',   (e) => @clear()
         module.page.bind 'reset',   (e) => @reset()
-        module.page.bind 'css', (e) => @css e.urls
+        module.page.bind 'css',     (e) => @css e.urls
     
     
     # See [page] object for documentation on available options.

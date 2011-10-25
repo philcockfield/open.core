@@ -73,7 +73,7 @@
 }
 .th_sidebar > .th_suite_list .th_suite_btn .th_sub_suite_btn {
   cursor: pointer;
-  font-size: 11pt;
+  font-size: 10pt;
   color: #4d4d4d;
   background-image: url("../../images/harness/bullet_gray.png");
   background-repeat: no-repeat;
