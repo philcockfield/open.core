@@ -33,21 +33,30 @@ describe 'Controls',
           rdo = null
           beforeAll -> rdo = page.add new controls.RadioButton label:'My Radio Button'
         
+        addButtonToSet = (buttonSet, prefix = 'Option') -> buttonSet.add label:"#{prefix} #{buttonSet.count() + 1}"
+        initButtonSet = (buttonSet) -> 
+              page.add buttonSet
+              addButtonToSet(buttonSet) for i in [1,2,3]
+              buttonSet.bind 'selectionChanged', (e) -> console.log 'EVENT: selectionChanged', e
+              buttonSet
+        
+        describe 'CheckboxSet', ->
+          chkSet = null
+          beforeAll -> chkSet = initButtonSet new controls.CheckboxSet()
+          
+          it 'add', -> addButtonToSet(chkSet)
+          it 'orientation: X', -> chkSet.orientation 'x'
+          it 'orientation: Y (default)', -> chkSet.orientation 'y'
+        
         describe 'RadioButtonSet', ->
           rdoSet = null
-          beforeAll ->
-              rdoSet = page.add new controls.RadioButtonSet()
-              add()
-              add()
-              add()
-              rdoSet.buttons.first().selected true
-              rdoSet.bind 'selectionChanged', (e) -> console.log 'EVENT: selectionChanged', e
-          
-          add = -> rdoSet.add label:"Option #{rdoSet.count() + 1}"
-          
-          it 'add', -> add()
-          it 'orientation: x', -> rdoSet.orientation 'x'
-          it 'orientation: y', -> rdoSet.orientation 'y'
+          beforeAll -> 
+              rdoSet = initButtonSet new controls.RadioButtonSet()
+              rdoSet.buttons.first().selected true          
+              
+          it 'add', -> addButtonToSet(rdoSet)
+          it 'orientation: X', -> rdoSet.orientation 'x'
+          it 'orientation: Y (default)', -> rdoSet.orientation 'y'
           it 'select first', -> rdoSet.buttons.first().selected true
           it 'select last', -> rdoSet.buttons.last().selected true
           
