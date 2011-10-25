@@ -19,8 +19,8 @@ module.exports = (module) ->
     
     add: (el, options = {}) -> 
         # Setup initial conditions.
-        width   = formatSizeValue options.width
-        height  = formatSizeValue options.height
+        width   = formatSizeValue options.width, options.fill
+        height  = formatSizeValue options.height, options.fill
         
         # Assign style options.
         el.css 'width', width   if width?
@@ -59,6 +59,9 @@ module.exports = (module) ->
         @pSummary = @$('p.th_summary')
         @tdHost  = @$('td.th_host')
         
+        # Store the host element so that it can be passed to 'init' methods of modules.
+        page.host = @tdHost
+        
         # Finish up.
         @_updateState()
     
@@ -83,8 +86,12 @@ module.exports = (module) ->
 
 
   # PRIVATE --------------------------------------------------------------------------
-  formatSizeValue = (value) -> 
-        return null unless value?
+  formatSizeValue = (value, fill) -> 
+        
+        unless value?
+            return '100%' if fill is true
+            return null
+        
         return value + 'px' if _(value).isNumber()
         value
       
