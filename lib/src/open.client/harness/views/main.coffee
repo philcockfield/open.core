@@ -11,13 +11,13 @@ module.exports = (module) ->
         module.selectedSuite.onChanged (e) => @_updateState()
         
         # Page events.
-        module.page.bind 'add',   (e) => @add e.element, e.options
-        module.page.bind 'clear', (e) => @clear()
-        module.page.bind 'reset', (e) => @reset()
+        module.page.bind 'add',     (e) => @add e.element, e.options
+        module.page.bind 'add:css', (e) => @addCss e.urls
+        module.page.bind 'clear',   (e) => @clear()
+        module.page.bind 'reset',   (e) => @reset()
     
     
     add: (el, options = {}) -> 
-        
         # Setup initial conditions.
         width   = formatSizeValue options.width
         height  = formatSizeValue options.height
@@ -30,12 +30,23 @@ module.exports = (module) ->
         # Insert the element into the host DIV.
         @tdHost.append el
     
+    
+    addCss: (urls) -> 
+        urls = [urls] unless _(urls).isArray()
+        add = (url) -> 
+            return if $("head link[href='#{url}']").length > 0
+            $('head').append $("<link type='text/css' rel='stylesheet' href='#{url}'>")
+        add url for url in urls
+        @
+    
+    
     clear: -> @tdHost.empty()
     
+    
     reset: -> @clear()
-
+    
+    
     render: -> 
-        
         # Insert base HTML structures.
         @html module.tmpl.main()
         
@@ -49,8 +60,8 @@ module.exports = (module) ->
         # Finish up.
         @_updateState()
     
+    
     _updateState: -> 
-        
         # Setup initial conditions.
         suite = module.selectedSuite()
         

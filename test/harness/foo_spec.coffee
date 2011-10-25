@@ -26,9 +26,9 @@ describe 'Foo',
         beforeAll -> 
               console.log '++ Before All: A' # Create and insert view here.
 
-              el = $('<div>Hello I am an element.</div>')
+              el = $('<div class="foo">Hello I am an element.</div>')
               # el.css 'width', '300px'
-              el.css 'background', 'orange'
+              # el.css 'background', 'orange'
               
               options = 
                   width: '80%'
@@ -58,6 +58,12 @@ describe 'Foo',
           
               it 'Does It', ->
                 console.log 'Spec C'
+              
+              it 'Adds style sheet', ->
+                page.addCss '/stylesheets/dev/test.css'
+                
+              
+              
           
               
 
