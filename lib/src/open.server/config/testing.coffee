@@ -24,4 +24,5 @@ core.configure.harness app,
       url:        "#{baseUrl}/harness"
       sourceUrls: sourceUrls
       specsDir:   "#{core.paths.test}/harness/"
+      css:        ["#{baseUrl}/stylesheets/core/base.css", "#{baseUrl}/stylesheets/core/controls.css"]
 

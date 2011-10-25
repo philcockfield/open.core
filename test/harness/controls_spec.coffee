@@ -3,10 +3,6 @@ describe 'Controls',
     Controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
   ->
-    beforeAll ->
-        page.css '/stylesheets/core/base.css',
-                 '/stylesheets/core/controls.css'
-    
     
     describe 'Buttons', ->
       describe 'Command (CmdButton)', ->

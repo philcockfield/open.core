@@ -36,6 +36,7 @@ module.exports = class TestRunner
           - sourceUrls    : An array or URLs (or a single URL) pointing to the source script(s)
                             that are under test.
           - samplesDir    : Optional. The path to a directory of samples to compile and serve as commonJS modules.
+          - css           : Optional. The URL (or array of URL's) for style sheets to include in the page.
   ###
   init: (options = {}) -> 
     
@@ -46,6 +47,7 @@ module.exports = class TestRunner
       options.samplesDir = _.rtrim(options.samplesDir, '/') if options.samplesDir?
       options.sourceUrls = options.sourceUrls ?= []
       options.sourceUrls = [options.sourceUrls] if not _.isArray(options.sourceUrls)
+      options.css        = [options.css] if not _.isArray(options.css)
       
       # Store variables.
       app = @app
@@ -72,6 +74,7 @@ module.exports = class TestRunner
                     helperPaths:    helperPaths
                     sourceUrls:     options.sourceUrls
                     sampleCode:     "#{url}/samples"
+                    css:            options.css
     
       # GET: The spec file.
       app.get "#{url}/specs/*", (req, res) =>
