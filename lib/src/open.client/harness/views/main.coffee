@@ -17,14 +17,21 @@ module.exports = (module) ->
         module.page.bind 'css', (e) => @css e.urls
     
     
+    # See [page] object for documentation on available options.
     add: (el, options = {}) -> 
         # Setup initial conditions.
+        return unless el?
+        
+        # Format style options.
         width   = formatSizeValue options.width, options.fill
         height  = formatSizeValue options.height, options.fill
+        border  = formatBorderValue options.border
         
         # Assign style options.
-        el.css 'width', width   if width?
-        el.css 'height', height if height?
+        el.css 'width',  width   if width?
+        el.css 'height', height  if height?
+        el.css 'border', "solid 1px #{border}" if border?
+          
         @trTitle.toggle (options.showTitle ?= true)
         @css options.css
         
@@ -86,6 +93,12 @@ module.exports = (module) ->
 
 
   # PRIVATE --------------------------------------------------------------------------
+  
+  formatBorderValue = (value) -> 
+      return null unless value?
+      value = '#666666' if _(value).isBoolean()
+      value
+  
   formatSizeValue = (value, fill) -> 
         
         unless value?
