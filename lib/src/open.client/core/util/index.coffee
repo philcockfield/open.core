@@ -1,4 +1,5 @@
 require './jquery'  # Cause jQuery extensions to be loaded.
+require './string'  # Cause string extensions to be loaded (added to underscore.string).
 
 util =
   Property: require './property'
