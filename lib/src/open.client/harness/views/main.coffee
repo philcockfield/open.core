@@ -12,9 +12,9 @@ module.exports = (module) ->
         
         # Page events.
         module.page.bind 'add',     (e) => @add e.element, e.options
-        module.page.bind 'add:css', (e) => @addCss e.urls
         module.page.bind 'clear',   (e) => @clear()
         module.page.bind 'reset',   (e) => @reset()
+        module.page.bind 'css', (e) => @css e.urls
     
     
     add: (el, options = {}) -> 
@@ -26,21 +26,23 @@ module.exports = (module) ->
         el.css 'width', width   if width?
         el.css 'height', height if height?
         @trTitle.toggle (options.showTitle ?= true)
+        @css options.css
         
         # Insert the element into the host DIV.
         @tdHost.append el
     
     
-    addCss: (urls) -> 
+    clear: -> @tdHost.empty()
+    
+    
+    css: (urls) -> 
+        return unless urls?
         urls = [urls] unless _(urls).isArray()
         add = (url) -> 
             return if $("head link[href='#{url}']").length > 0
             $('head').append $("<link type='text/css' rel='stylesheet' href='#{url}'>")
         add url for url in urls
         @
-    
-    
-    clear: -> @tdHost.empty()
     
     
     reset: -> @clear()

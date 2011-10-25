@@ -104,11 +104,11 @@ module.exports = class Textbox extends core.mvc.View
   @param callback: to invoke when the [Escape] key is pressed.
   ###
   onEscape: (callback) -> @_.onPress 'escape', callback      
-      
-      
-###
-  PRIVATE
-###      
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+
 textSyncer = (textProperty, input) -> 
       # Syncer.
       ignore = false

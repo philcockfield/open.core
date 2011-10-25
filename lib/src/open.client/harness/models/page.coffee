@@ -34,7 +34,7 @@ module.exports = (module) ->
     Adds a stylesheet link to the page.
     @param urls: Array of URL's to the stylehseet(s) to add.
     ###
-    addCss: (urls...) -> @trigger 'add:css', urls:urls
+    css: (urls...) -> @trigger 'css', urls:urls
     
     
     # Clears the currently hosted test element.

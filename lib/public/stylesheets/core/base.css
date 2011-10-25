@@ -1,4 +1,8 @@
 div.core_bevel_highlight {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
   height: 1px;
   background: #fff;
 }
