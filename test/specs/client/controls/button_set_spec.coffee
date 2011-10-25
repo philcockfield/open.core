@@ -29,6 +29,28 @@ describe 'controls/button_set', ->
     
     it 'is empty by default', ->
       expect(buttons.items.size()).toEqual 0
+    
+    describe 'first/last', ->
+      beforeEach ->
+        buttons.add tab1
+        buttons.add tab2
+        buttons.add tab3
+      
+      it 'retrieves the [first] button', ->
+        expect(buttons.first()).toEqual tab1
+        
+      it 'retrieves the [last] button', ->
+        expect(buttons.last()).toEqual tab3
+      
+      it 'retrieves null as the [first] button when the collection is empty', ->
+        buttons.clear()
+        expect(buttons.first()).toEqual null
+        
+      it 'retrieves null as the [last] button when the collection is empty', ->
+        buttons.clear()
+        expect(buttons.last()).toEqual null
+    
+    
   
   describe 'togglable', ->
     it 'gets only the toggle buttons', ->

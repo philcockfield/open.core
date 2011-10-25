@@ -109,6 +109,7 @@
 .th_sidebar > .th_spec_list .th_scroller ul {
   margin: 5px;
   padding: 10px;
+  padding-top: 2px;
   padding-left: 20px;
 }
 .th_sidebar > .th_spec_list .th_scroller ul li.th_spec_btn {

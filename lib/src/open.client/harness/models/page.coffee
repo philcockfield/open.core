@@ -28,8 +28,8 @@ module.exports = (module) ->
               - border:    A color (string) or an opacity value (number 0..1) for a border to put around the hosted control.
     ###
     add: (el, options = {}) -> 
-        el = module.util.toJQuery(el)
-        @trigger 'add', element: el, options: options
+        @trigger 'add', element: module.util.toJQuery(el), options: options
+        el
     
     
     ###

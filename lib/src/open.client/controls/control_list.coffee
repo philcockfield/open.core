@@ -20,6 +20,8 @@ module.exports = class ControlList extends core.mvc.View
       # Finish up.
       syncClasses @
   
+  # Gets the total number of items within the controls collection.
+  count: -> @controls.length
   
   ###
   Adds a control to the list.

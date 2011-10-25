@@ -25,17 +25,35 @@ describe 'Controls',
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
       
       describe 'Toggle Buttons', ->
-        describe 'RadioButton', ->
-          rdo = null
-          beforeAll ->
-              rdo = new controls.RadioButton label:'My Radio Button'
-              page.add rdo
-
         describe 'Checkbox', ->
           chk = null
+          beforeAll -> chk = page.add new controls.Checkbox label:'My Checkbox'
+        
+        describe 'RadioButton', ->
+          rdo = null
+          beforeAll -> rdo = page.add new controls.RadioButton label:'My Radio Button'
+        
+        describe 'RadioButtonSet', ->
+          rdoSet = null
           beforeAll ->
-              chk = new controls.Checkbox label:'My Checkbox'
-              page.add chk
+              rdoSet = page.add new controls.RadioButtonSet()
+              add()
+              add()
+              add()
+              rdoSet.buttons.first().selected true
+              rdoSet.bind 'selectionChanged', (e) -> console.log 'EVENT: selectionChanged', e
+          
+          add = -> rdoSet.add label:"Option #{rdoSet.count() + 1}"
+          
+          it 'add', -> add()
+          it 'orientation: x', -> rdoSet.orientation 'x'
+          it 'orientation: y', -> rdoSet.orientation 'y'
+          it 'select first', -> rdoSet.buttons.first().selected true
+          it 'select last', -> rdoSet.buttons.last().selected true
+          
+          
+          
+        
 
   
   

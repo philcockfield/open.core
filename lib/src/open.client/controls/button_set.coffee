@@ -28,6 +28,7 @@ module.exports = class ButtonSet extends core.Base
   ###
   items: undefined  # Set in constructor.
   
+  
   ###
   Retrieves the button model from the [Items] collection at the specified index.
   @param index: The index within the collection (0-based)
@@ -36,15 +37,20 @@ module.exports = class ButtonSet extends core.Base
   item: (index) -> @items.models[index]
   
   
-  ###
-  Retrieves the currently selected toggle-button.
-  ###
+  # Retrieves the currently selected toggle-button.
   selected: -> (@items.select (btn) -> btn.canToggle() and btn.selected())[0]
   
-  ###
-  Selects the buttons that can be toggled.
-  ###
+  
+  # Selects the buttons that can be toggled.
   togglable: -> @items.select (btn) -> btn.canToggle()
+  
+  
+  # Retrieves the first button in the set.
+  first: -> @items.first()
+  
+  
+  # Retrieves the last button in the set.
+  last: -> @items.last()
   
   
   ###
@@ -91,7 +97,8 @@ module.exports = class ButtonSet extends core.Base
           @_fire 'add' 
           @_fireChanged()
       button
-
+  
+  
   ###
   Removes the specified button from the set.
   @param button: The button to remove.
@@ -142,10 +149,11 @@ module.exports = class ButtonSet extends core.Base
       if not options.silent
           @_fire 'clear' 
           @_fireChanged()
-
+      
       # Finish up.
       null
-
+  
+  
   ###
   Determines whether the specified button exists within the set.
   @param button : The button to look for.
@@ -153,13 +161,15 @@ module.exports = class ButtonSet extends core.Base
   ###
   contains: (button) -> @items.include button
   
+  
   ###
   Retrieves the sibling immediately previous to the given button.
   @param button : The button to retrieve the sibling of.
   @returns the previous button, or null if there is no previous button.
   ###
   previous: (button) -> @items.models[@items.indexOf(button) - 1]
-
+  
+  
   ###
   Retrieves the sibling immediately next to the given button.
   @param button : The button to retrieve the sibling of.

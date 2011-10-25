@@ -40,6 +40,17 @@ describe 'controls/control_list', ->
       elControl = li.children().get(0)
       expect(elControl).toEqual control.el.get(0)
   
+  describe 'count() method', ->
+    it 'has zero count', ->
+      expect(list.count()).toEqual 0
+    
+    it 'has a count of two items', ->
+      list.add(new core.mvc.View())
+      list.add(new core.mvc.View())
+      expect(list.count()).toEqual 2
+    
+    
+  
   describe 'orientation', ->
     it 'has vertical orientation by default (Y)', ->
       expect(list.orientation()).toEqual 'y'
