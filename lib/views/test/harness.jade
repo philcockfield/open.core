@@ -6,7 +6,7 @@ html(lang='en')
     // Stylesheets.
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/libs/normalize.css")
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/harness.css")
-    - for url in css
+    - each url in css
       link(type='text/css', rel='stylesheet', href="#{url}")
     
     // Test Harness.

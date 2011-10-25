@@ -47,6 +47,7 @@ module.exports = class TestRunner
       options.samplesDir = _.rtrim(options.samplesDir, '/') if options.samplesDir?
       options.sourceUrls = options.sourceUrls ?= []
       options.sourceUrls = [options.sourceUrls] if not _.isArray(options.sourceUrls)
+      options.css       ?= []
       options.css        = [options.css] if not _.isArray(options.css)
       
       # Store variables.

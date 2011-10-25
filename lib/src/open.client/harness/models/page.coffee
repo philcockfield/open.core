@@ -25,7 +25,7 @@ module.exports = (module) ->
                            If a number is supplied pixels are used (eg. 200 => '200px')
               - showTitle: Flag indicating if the title, and description, should be displayed (default true).
               - fill:      Flag indicating if width/height values should be set to '100%' (default false).
-              - border:    A color (string) or an opacity value (number 0..1) for a border to put around the hosted control.
+              - border:    A color (string) or a bolean (yes/no) for whether a border should be put around the hosted control.
     ###
     add: (el, options = {}) -> 
         @trigger 'add', element: module.util.toJQuery(el), options: options
