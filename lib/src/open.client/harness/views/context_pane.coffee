@@ -18,11 +18,20 @@ module.exports = (module) ->
         
     
     render: -> 
+        @html module.tmpl.contextPane()
+        @tabStrip = new module.controls.TabStrip().replace @$('.th_tab_strip')
         
+        # TEMP 
+        @tabStrip.add label:'One'
+        @tabStrip.add label:'Two'
+        @tabStrip.add label:'Three'
+        @tabStrip.first().click()
         
-        
-        
-        @html 'Context!'
     
+  
+  
+  
+
+
     
     

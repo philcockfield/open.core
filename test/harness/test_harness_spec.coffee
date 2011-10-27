@@ -1,5 +1,8 @@
 describe 'Test Harness', ->
-
-  it 'show pane', -> page.contextPane.visible true
-  it 'hide pane', -> page.contextPane.visible false
+  
+  beforeAll ->
+      page.pane.show()
+  
+  it 'Pane: Show', -> page.pane.show()
+  it 'Pane: Hide', -> page.pane.hide()
   

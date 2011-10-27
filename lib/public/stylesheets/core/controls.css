@@ -205,32 +205,32 @@ ul.core_tab_strip li.core_tab div.core_div_right {
   background-repeat: no-repeat;
   background-position: right center;
 }
-ul.core_tab_strip li.core_tab.core_over {
+ul.core_tab_strip li.core_tab.core_enabled.core_over {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f2f2f2), color-stop(1, #bfbfbf));
   background: -webkit-linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
   background: -moz-linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
   background: linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
 }
-ul.core_tab_strip li.core_tab.core_down {
+ul.core_tab_strip li.core_tab.core_enabled.core_down {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #bfbfbf), color-stop(1, #f2f2f2));
   background: -webkit-linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
   background: -moz-linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
   background: linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
 }
-ul.core_tab_strip li.core_tab.core_down div.core_div_right {
+ul.core_tab_strip li.core_tab.core_enabled.core_down div.core_div_right {
   background: none;
 }
-ul.core_tab_strip li.core_tab.core_selected {
+ul.core_tab_strip li.core_tab.core_enabled.core_selected {
   background: #ededed;
 }
-ul.core_tab_strip li.core_tab.core_selected div.core_div_left {
+ul.core_tab_strip li.core_tab.core_enabled.core_selected div.core_div_left {
   border-left: solid 1px #b3b3b3;
 }
-ul.core_tab_strip li.core_tab.core_selected div.core_div_right {
+ul.core_tab_strip li.core_tab.core_enabled.core_selected div.core_div_right {
   background: none;
   border-right: solid 1px #b3b3b3;
 }
-ul.core_tab_strip li.core_tab.core_first div.core_div_left {
+ul.core_tab_strip li.core_tab.core_enabled.core_first div.core_div_left {
   border-left: none;
 }
 ul.core_tab_strip li.core_tab.core_before_selected div.core_div_right {

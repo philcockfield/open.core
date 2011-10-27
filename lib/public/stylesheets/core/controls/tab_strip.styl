@@ -38,31 +38,34 @@ ul.core_tab_strip
       background-repeat no-repeat
       background-position right center
     
-    // Tab: Over.
-    &.core_over
-      background: linear-gradient(top, darken(white, 5%), darken(white, 25%))
+    &.core_enabled
     
-    // Tab: Down.
-    &.core_down
-      background: linear-gradient(top, darken(white, 25%), darken(white, 5%))
-      div.core_div_right
-        background none
+      // Tab: Over.
+      &.core_over
+        background: linear-gradient(top, darken(white, 5%), darken(white, 25%))
     
-    // Tab: Selected.
-    &.core_selected
-      background: darken(white, 7%)
-      BORDER = darken(white, 30%)
-      div.core_div_left
-        border-left solid 1px BORDER
-      div.core_div_right
-        background none
-        border-right solid 1px BORDER
+      // Tab: Down.
+      &.core_down
+        background: linear-gradient(top, darken(white, 25%), darken(white, 5%))
+        div.core_div_right
+          background none
     
-    // Edge overrides.
-    &.core_first
-      div.core_div_left
-        border-left none
-
+      // Tab: Selected.
+      &.core_selected
+        background: darken(white, 7%)
+        BORDER = darken(white, 30%)
+        div.core_div_left
+          border-left solid 1px BORDER
+        div.core_div_right
+          background none
+          border-right solid 1px BORDER
+    
+      // Don't show the left hand border for the first tab.
+      &.core_first
+        div.core_div_left
+          border-left none
+    
+    // Don't show the fade-out divider if the next tab is selected.
     &.core_before_selected
       div.core_div_right
         background none

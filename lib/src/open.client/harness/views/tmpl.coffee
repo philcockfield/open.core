@@ -42,7 +42,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   
   specButton:
     """
-     <%= text %>
+    <%= text %>
     """
   
   
@@ -65,6 +65,13 @@ module.exports = class HarnessTemplate extends core.mvc.Template
     </div>
     <div class="th_context_pane"></div>
     """
+  
+  
+  contextPane:
+    """
+    <div class="th_tab_strip">Foo!</div>
+    """
+  
   
   
   

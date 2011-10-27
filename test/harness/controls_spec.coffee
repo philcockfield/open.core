@@ -66,7 +66,9 @@ describe 'Controls',
           add()
           add()
           add()
+          add()
           tabStrip.first().click()
+          tabStrip.last().enabled false
           tabStrip.tabs.bind 'selectionChanged', (e) -> console.log 'SELECTION CHANGED:', e.button.label(), e
       
       add = -> tabStrip.add label:"Tab #{tabStrip.count() + 1}"

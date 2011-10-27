@@ -120,6 +120,9 @@
   text-shadow: 0px 1px 0px #fff;
   padding: 3px;
 }
+.th_sidebar > .th_spec_list .th_scroller ul li.th_spec_btn:hover {
+  text-decoration: underline;
+}
 .th_harness > .th_sidebar {
   position: absolute;
   left: 0px;
@@ -146,7 +149,7 @@
   left: 0px;
   top: 0px;
   right: 0px;
-  bottom: 250px;
+  bottom: 350px;
   padding: 10px 20px;
 }
 .th_harness > .th_main > div.th_host > table {
@@ -186,12 +189,15 @@
   margin-left: auto;
   margin-right: auto;
 }
-.th_harness > .th_main > div.th_context_pane {
+.th_harness > .th_main > .th_context_pane {
   position: absolute;
   left: 0px;
   right: 0px;
   bottom: 0px;
-  height: 249px;
+  height: 349px;
   border-top: solid 1px #666;
   background: #f7f7f7;
+}
+.th_harness > .th_main > .th_context_pane > .th_tab_strip {
+  border-bottom: solid 1px #666;
 }

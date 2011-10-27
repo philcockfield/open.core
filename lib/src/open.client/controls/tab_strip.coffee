@@ -74,6 +74,7 @@ TabStrip.Tab = class Tab extends Button
       
       # Wire up events.
       @bind 'change',               => @updateState()
+      @enabled.onChanged            => @selected false if not @enabled()
       tabs.bind 'add',              => @syncClasses()
       tabs.bind 'remove',           => @syncClasses()
       tabs.bind 'selectionChanged', => @syncClasses()
