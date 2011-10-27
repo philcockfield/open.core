@@ -77,18 +77,18 @@ module.exports = (module) ->
         createContextPane = => 
               # Insert the control.
               ContextPane = module.view('context_pane')
-              pane = new ContextPane().replace @$('div.th_context_pane')
-            
+              pane        = new ContextPane().replace @$('div.th_context_pane')
+              page.pane   = pane
+              
               # Keep heights in sync.
-              syncHeight = () => 
-                    @divRoot.css 'bottom', (if pane.visible() then '250px' else '0px')
+              syncHeight = => syncPaneHeight @
               pane.visible.onChanged syncHeight
-              syncHeight()
-            
+              pane.height.onChanged  syncHeight
+              
               # Finish up.
               pane
-        
-        page.pane = createContextPane()
+              
+        @pane = createContextPane()
         
         # Finish up.
         @_updateState()
@@ -97,6 +97,7 @@ module.exports = (module) ->
     _updateState: -> 
         # Setup initial conditions.
         suite = module.selectedSuite()
+        syncPaneHeight @
         
         # Update title.
         @divTitle.toggle suite?
@@ -127,6 +128,24 @@ module.exports = (module) ->
         
         return value + 'px' if _(value).isNumber()
         value
+  
+  syncPaneHeight = (view) -> 
+        
+        # Setup initial conditions.
+        pane = view.pane
+        min  = pane.minHeight()
+        
+        # Calculate height.
+        if pane.visible()
+            height = pane.height()
+            height = min if height < min
+        else
+            height = 0
+        
+        # Sync elements
+        height += 'px'
+        view.divRoot.css 'bottom', height
+        pane.el.css 'height', height
   
   
   # Export.

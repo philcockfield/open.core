@@ -1,20 +1,12 @@
 module.exports = (module) ->
   class ContextPaneView extends module.mvc.View
+    defaults:
+        height:    250 # Gets or sets the height of the panel (in pixels).
+        minHeight: 38  # Gets or sets the minimum height of the panel (in pixels).
+    
     constructor: (params = {}) -> 
-        
-        # Setup initial conditions.
         super className:'th_context_pane'
-        # @model = params.model
         @render()
-        
-        # Syncers.
-        # syncVisibility = => @visible @model.visible()
-        
-        # Wire up events.
-        # @model.visible.onChanged syncVisibility
-        
-        # Finish up.
-        # syncVisibility()
     
     
     # Shows the pane by setting the [visible] property to true.
