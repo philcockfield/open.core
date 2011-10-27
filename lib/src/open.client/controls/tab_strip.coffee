@@ -47,28 +47,29 @@ module.exports = class TabStrip extends mvc.View
   Removes the given tab from the strip.
   @param tab: The tab button to remove.
   ###
-  remove: (tab) -> 
-      return unless tab?
-      tab.el.remove()     # Remove from DOM.
-      @tabs.remove tab    # Remove from collection.
+  remove: (tab) -> tab.remove() if tab?
   
   
   # Removes all tabs from the strip.
   clear: -> 
-      @el.empty()
-      @tabs.clear()
+      # NB: Make a clone of the collection because it is being removed from.
+      clonedTabs = @tabs.items.map (t) -> t
+      tab.remove() for tab in clonedTabs
 
 
 ###
 An individual Tab button.
+
+Events:
+  - removed
 ###
 TabStrip.Tab = class Tab extends Button
-  constructor: (parent, options = {}) ->
+  constructor: (tabStrip, options = {}) ->
       
       # Setup initial conditions.
       super _.extend options, tagName:'li', className: @_className('tab'), canToggle:true
-      @parent = parent
-      tabs    = parent.tabs
+      @tabStrip = tabStrip
+      tabs      = tabStrip.tabs
       @render()
       
       # Wire up events.
@@ -78,7 +79,7 @@ TabStrip.Tab = class Tab extends Button
       tabs.bind 'selectionChanged', => @syncClasses()
   
   
-  isFirst: -> @parent.tabs.first() is @
+  isFirst: -> @tabStrip.tabs.first() is @
   
   
   render: -> 
@@ -88,6 +89,19 @@ TabStrip.Tab = class Tab extends Button
       @syncClasses()
   
   
+  remove: -> 
+      
+      # Remove from DOM and the strip's collection.
+      @el.remove()
+      @tabStrip.tabs.remove @
+      
+      # Alert listeners.
+      @trigger 'removed', 
+          tab:@
+          tabStrip:@tabStrip
+      
+      
+  
   updateState: -> 
       @divLabel.html @label()
   
@@ -95,7 +109,7 @@ TabStrip.Tab = class Tab extends Button
   syncClasses: -> 
       toggle = (className, apply) => @el.toggleClass @_className(className), apply
       toggle 'first', @isFirst()
-      toggle 'before_selected', (@parent.tabs.next(@)?.selected() is true)
+      toggle 'before_selected', (@tabStrip.tabs.next(@)?.selected() is true)
 
 
 class Tmpl extends mvc.Template

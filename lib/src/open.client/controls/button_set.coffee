@@ -20,14 +20,18 @@ module.exports = class ButtonSet extends core.Base
       
       # Collection API.
       @length = 0
-      @items = new core.mvc.Collection()
+      @items  = new core.mvc.Collection()
   
   
-  ###
-  Gets the collection of buttons being managed.
-  ###
+  # Gets the collection of buttons being managed.
   items: undefined  # Set in constructor.
   
+  
+  # Method for enumerating each tab (alias for items.each)
+  each: (fn) -> @items.each fn
+  
+  # Gets the number of items in the set.
+  count: -> @items.length
   
   ###
   Retrieves the button model from the [Items] collection at the specified index.

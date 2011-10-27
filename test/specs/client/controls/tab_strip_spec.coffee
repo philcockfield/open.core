@@ -90,6 +90,19 @@ describe 'controls/tab_strip', ->
     it 'does not fail if the tab does not exist within the strip', ->
       tab = new Tab(tabStrip)
       tabStrip.remove tab
+    
+    it 'fires [remove] event', ->
+      args = null
+      count = 0
+      tab1.bind 'removed', (e) -> 
+            count += 1
+            args = e
+            
+      tabStrip.remove tab1
+      expect(count).toEqual 1
+      expect(args.tab).toEqual tab1
+      expect(args.tabStrip).toEqual tabStrip
+    
 
   describe 'clear() method', ->
     beforeEach ->
@@ -104,6 +117,13 @@ describe 'controls/tab_strip', ->
     it 'removes all items from the DOM', ->
       tabStrip.clear()
       expect(tabStrip.el.children().length).toEqual 0
+
+    it 'fires [remove] event when cleared', ->
+      count = 0
+      tabStrip.tabs.each (tab) -> 
+          tab.bind 'removed', (e) -> count += 1
+      tabStrip.clear()
+      expect(count).toEqual 3
       
   
   describe 'position based CSS classes', ->

@@ -23,7 +23,7 @@ describe 'controls/button_set', ->
     ensure.parentConstructorWasCalled ButtonSet, -> new ButtonSet()
 
   
-  describe 'buttons collection', ->
+  describe '[items] collection', ->
     it 'is an MVC Collection', ->
       expect(buttons.items instanceof core.mvc.Collection).toEqual true
     
@@ -49,8 +49,31 @@ describe 'controls/button_set', ->
       it 'retrieves null as the [last] button when the collection is empty', ->
         buttons.clear()
         expect(buttons.last()).toEqual null
-    
-    
+  
+  
+  describe 'each() method', ->
+    it 'enumerates each button.', ->
+      buttons.add tab1
+      buttons.add tab2
+      buttons.add tab3
+      tabs = []
+      buttons.each (tab) -> 
+                  tabs.push tab
+      expect(tabs[0]).toEqual tab1
+      expect(tabs[1]).toEqual tab2
+      expect(tabs[2]).toEqual tab3
+  
+  
+  describe 'count() method', ->
+    it 'has no items', ->
+      expect(buttons.count()).toEqual 0
+
+    it 'has 3 items', ->
+      buttons.add tab1
+      buttons.add tab2
+      buttons.add tab3
+      expect(buttons.count()).toEqual 3
+  
   
   describe 'togglable', ->
     it 'gets only the toggle buttons', ->
