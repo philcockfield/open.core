@@ -58,12 +58,10 @@ describe 'mvc/view', ->
 
   describe 'css', ->
     describe 'classname', ->
-      it 'has no class name by default', ->
-        expect(view.el.get(0).className).toEqual ''
-  
       it 'has a custom class name', ->
         view = new View( className: 'foo bar' )
-        expect(view.el.get(0).className).toEqual 'foo bar'
+        expect(view.el.hasClass('foo')).toEqual true
+        expect(view.el.hasClass('bar')).toEqual true
     
     describe 'custom CSS prefix', ->
       it 'has the [core] CSS prefix by default', ->
@@ -73,25 +71,41 @@ describe 'mvc/view', ->
       it 'generates a CSS class name', ->
         view._cssPrefix = 'my'
         expect(view._className('foo')).toEqual 'my_foo'
-    
   
-
   describe 'enabled', ->
-    it 'does not have the [disabled] CSS class by default', ->
-      expect(view.el.hasClass('my_disabled')).toEqual false
+    describe '[enabled] CSS class', ->
+      it 'has the [enabled] CSS class by default', ->
+        expect(view.el.hasClass('my_enabled')).toEqual true
+      
+      it 'does not have the [enabled] CSS class when disabled', ->
+        view.enabled false
+        expect(view.el.hasClass('my_enabled')).toEqual false
+      
+      it 'has does not have the [enabled] CSS class when disabled at construction', ->
+        view = new View(enabled: false)
+        expect(view.el.hasClass('core_enabled')).toEqual false
+      
+      it 'does has the [enabled] CSS class when re-enabled', ->
+        view.enabled false
+        view.enabled true
+        expect(view.el.hasClass('my_enabled')).toEqual true
     
-    it 'has the [disabled] CSS class when not enabled', ->
-      view.enabled false
-      expect(view.el.hasClass('my_disabled')).toEqual true
+    describe '[disabled] CSS class', ->
+      it 'does not have the [disabled] CSS class by default', ->
+        expect(view.el.hasClass('my_disabled')).toEqual false
+    
+      it 'has the [disabled] CSS class when not enabled', ->
+        view.enabled false
+        expect(view.el.hasClass('my_disabled')).toEqual true
   
-    it 'has the [disabled] CSS class when disabled at construction', ->
-      view = new View(enabled: false)
-      expect(view.el.hasClass('core_disabled')).toEqual true
+      it 'has the [disabled] CSS class when disabled at construction', ->
+        view = new View(enabled: false)
+        expect(view.el.hasClass('core_disabled')).toEqual true
   
-    it 'does not have the [disabled] CSS class when re-enabled', ->
-      view.enabled false
-      view.enabled true
-      expect(view.el.hasClass('my_disabled')).toEqual false
+      it 'does not have the [disabled] CSS class when re-enabled', ->
+        view.enabled false
+        view.enabled true
+        expect(view.el.hasClass('my_disabled')).toEqual false
 
   
   describe 'html', ->
@@ -251,11 +265,15 @@ describe 'mvc/view', ->
         
         it 'has no classes to copy', ->
           view.replace $('<div>EMPTY</div>')
-          expect(view.el.attr('class')).toEqual 'my_view'
+          expect(view.el.attr('class')).toEqual 'my_enabled my_view'
 
-        it 'has existing class to copy', ->
+        it 'has existing class that matches view', ->
           view.replace $('<div class="my_view">EMPTY</div>')
-          expect(view.el.attr('class')).toEqual 'my_view'
+          expect(view.el.attr('class')).toEqual 'my_enabled my_view'
+
+        it 'has additional different class to replacement element to copy', ->
+          view.replace $('<div class="my_foo">EMPTY</div>')
+          expect(view.el.attr('class')).toEqual 'my_enabled my_view my_foo'
           
       describe 'copying [data-*] property values', ->
         it 'copies a number property', ->

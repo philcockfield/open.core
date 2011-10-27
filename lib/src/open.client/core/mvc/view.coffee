@@ -153,7 +153,10 @@ module.exports = class View extends Model
 
 
 syncClasses = (view) -> 
-    view.el.toggleClass view._className('disabled'), not view.enabled()
+    toggle = (className, apply) -> view.el.toggleClass view._className(className), apply
+    isEnabled = view.enabled()
+    toggle 'enabled', isEnabled
+    toggle 'disabled', not isEnabled
 
 syncVisibility = (view, visible) -> 
       display = if visible then '' else 'none'

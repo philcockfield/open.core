@@ -72,7 +72,13 @@ describe 'Controls',
       add = -> tabStrip.add label:"Tab #{tabStrip.count() + 1}"
       
       it 'Add', -> add()
-      it 'Remove First', -> tabStrip.remove tabStrip.tabs.first()
+      it 'Toggle Enabled (First)', -> 
+          firstTab = tabStrip.tabs.first()
+          if firstTab?
+              firstTab.enabled not firstTab.enabled()
+              console.log 'Enabled: ', firstTab.enabled()
+          
+      it 'Remove (First)', -> tabStrip.remove tabStrip.tabs.first()
       it 'Clear', -> tabStrip.clear()
       it 'Change Label', ->
         tab = tabStrip.tabs.first()

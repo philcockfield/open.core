@@ -67,7 +67,8 @@ describe 'controls/button', ->
 
     it 'passes className to base class', ->
       button = new Button(className: 'foo bar')
-      expect(button.element.className).toEqual 'foo bar'
+      expect(button.el.hasClass('foo')).toEqual true
+      expect(button.el.hasClass('bar')).toEqual true
     
     it 'syncs CSS classes upon construction', ->
       button = new Button(selected:true)

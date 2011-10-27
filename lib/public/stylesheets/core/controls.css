@@ -236,6 +236,12 @@ ul.core_tab_strip li.core_tab.core_first div.core_div_left {
 ul.core_tab_strip li.core_tab.core_before_selected div.core_div_right {
   background: none;
 }
+ul.core_tab_strip li.core_tab.core_disabled {
+  background: none;
+}
+ul.core_tab_strip li.core_tab.core_disabled p {
+  color: #b3b3b3;
+}
 .core_textbox {
   position: relative;
   display: inline-block;

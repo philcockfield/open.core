@@ -28,10 +28,10 @@ describe 'controls/buttons/system_toggle', ->
   describe 'css classes', ->
     it 'has the default CSS class', ->
       btn = new SystemToggle()
-      expect(btn.el.get(0).className).toEqual 'core_system_toggle_btn'
+      expect(btn.el.hasClass('core_system_toggle_btn')).toEqual true
   
     it 'has custom CSS class', ->
-      expect(btn.el.get(0).className).toEqual 'custom_system_toggle_btn'
+      expect(btn.el.hasClass('custom_system_toggle_btn')).toEqual true
   
   describe 'checked() control state method', ->
     describe 'reading the INPUT elements checked state', ->
