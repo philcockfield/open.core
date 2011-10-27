@@ -56,6 +56,9 @@ module.exports = (module) ->
     
     
     render: -> 
+        # Setup initial conditions.
+        page = module.page
+        
         # Insert base HTML structures.
         @html module.tmpl.main()
         
@@ -68,20 +71,24 @@ module.exports = (module) ->
         @tdHost   = @$ 'td.th_host'
         
         # Store the host element so that it can be passed to 'init' methods of modules.
-        module.page.el = @tdHost
+        page.el = @tdHost
         
         # Initialize the context pane.
-        do => 
-            # Insert the control.
-            model        = module.page.pane
-            ContextPane  = module.view('context_pane')
-            @contextPane = new ContextPane(model: model).replace @$('div.th_context_pane')
+        createContextPane = => 
+              # Insert the control.
+              ContextPane = module.view('context_pane')
+              pane = new ContextPane().replace @$('div.th_context_pane')
             
-            # Keep heights in sync.
-            syncHeight = () => 
-                  @divRoot.css 'bottom', (if model.visible() then '250px' else '0px')
-            model.visible.onChanged syncHeight
-            syncHeight()
+              # Keep heights in sync.
+              syncHeight = () => 
+                    @divRoot.css 'bottom', (if pane.visible() then '250px' else '0px')
+              pane.visible.onChanged syncHeight
+              syncHeight()
+            
+              # Finish up.
+              pane
+        
+        page.pane = createContextPane()
         
         # Finish up.
         @_updateState()

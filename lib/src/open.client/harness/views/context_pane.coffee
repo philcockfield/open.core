@@ -4,17 +4,25 @@ module.exports = (module) ->
         
         # Setup initial conditions.
         super className:'th_context_pane'
-        @model = params.model
+        # @model = params.model
         @render()
         
         # Syncers.
-        syncVisibility = => @visible @model.visible()
+        # syncVisibility = => @visible @model.visible()
         
         # Wire up events.
-        @model.visible.onChanged syncVisibility
+        # @model.visible.onChanged syncVisibility
         
         # Finish up.
-        syncVisibility()
+        # syncVisibility()
+    
+    
+    # Shows the pane by setting the [visible] property to true.
+    show: -> @visible true
+    
+    
+    # Hides the pane by setting the [visible] property to false.
+    hide: -> @visible false
     
     
     render: -> 

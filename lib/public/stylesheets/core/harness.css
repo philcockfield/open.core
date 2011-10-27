@@ -149,7 +149,7 @@
   left: 0px;
   top: 0px;
   right: 0px;
-  bottom: 350px;
+  bottom: 250px;
   padding: 10px 20px;
 }
 .th_harness > .th_main > div.th_host > table {
@@ -194,7 +194,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  height: 349px;
+  height: 249px;
   border-top: solid 1px #666;
   background: #f7f7f7;
 }
