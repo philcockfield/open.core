@@ -140,42 +140,58 @@
   -moz-box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
   box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.15);
   background: #fff;
+}
+.th_harness > .th_main > div.th_host {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 250px;
   padding: 10px 20px;
 }
-.th_harness > .th_main > table.th_main {
+.th_harness > .th_main > div.th_host > table {
   width: 100%;
   height: 100%;
 }
-.th_harness > .th_main > table.th_main tr.th_title {
+.th_harness > .th_main > div.th_host > table tr.th_title {
   height: 10px;
 }
-.th_harness > .th_main > table.th_main div.th_title {
+.th_harness > .th_main > div.th_host > table div.th_title {
   font-weight: 300;
   color: #404040;
   border-bottom: solid 1px #ccc;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
-.th_harness > .th_main > table.th_main div.th_title p.th_title {
+.th_harness > .th_main > div.th_host > table div.th_title p.th_title {
   font-size: 24px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
-.th_harness > .th_main > table.th_main div.th_title p.th_summary {
+.th_harness > .th_main > div.th_host > table div.th_title p.th_summary {
   font-size: 10pt;
   color: #737373;
   margin-top: 5px;
   line-height: 150%;
 }
-.th_harness > .th_main > table.th_main tr.th_body {
+.th_harness > .th_main > div.th_host > table tr.th_body {
   height: 100%;
 }
-.th_harness > .th_main > table.th_main tr.th_body td.th_host {
+.th_harness > .th_main > div.th_host > table tr.th_body td.th_host {
   position: relative;
 }
-.th_harness > .th_main > table.th_main tr.th_body td.th_host > :first-child {
+.th_harness > .th_main > div.th_host > table tr.th_body td.th_host > :first-child {
   position: relative;
   margin-left: auto;
   margin-right: auto;
+}
+.th_harness > .th_main > div.th_context_pane {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 249px;
+  border-top: solid 1px #666;
+  background: #f7f7f7;
 }

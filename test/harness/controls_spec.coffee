@@ -19,6 +19,7 @@ describe 'Controls',
         it 'Add another', -> addButton label:"Button #{buttons.length + 1}"
         it 'Color: Blue', -> btn.color 'blue' for btn in buttons
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
+        
       
       describe 'Toggle Buttons', ->
         describe 'Checkbox', ->
@@ -57,9 +58,26 @@ describe 'Controls',
           it 'select last', -> rdoSet.buttons.last().selected true
           
           
-          
-        
-
+    describe 'TabStrip', ->
+      tabStrip = null
+      beforeAll ->
+          tabStrip = new controls.TabStrip()
+          page.add tabStrip, width:'80%', border:true
+          add()
+          add()
+          add()
+          tabStrip.first().click()
+          tabStrip.tabs.bind 'selectionChanged', (e) -> console.log 'SELECTION CHANGED:', e.button.label(), e
+      
+      add = -> tabStrip.add label:"Tab #{tabStrip.count() + 1}"
+      
+      it 'Add', -> add()
+      it 'Remove First', -> tabStrip.remove tabStrip.tabs.first()
+      it 'Clear', -> tabStrip.clear()
+      it 'Change Label', ->
+        tab = tabStrip.tabs.first()
+        if tab?
+          tab.label 'New Label'
   
   
     describe 'Textbox', ->
@@ -69,10 +87,6 @@ describe 'Controls',
           page.add textbox, width:300
       
       it 'Focus', -> textbox.focus()
-      
-        
-        
-      
   
   
   

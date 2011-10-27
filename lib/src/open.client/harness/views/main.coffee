@@ -60,14 +60,28 @@ module.exports = (module) ->
         @html module.tmpl.main()
         
         # Retreive elements.
-        @divTitle = @$('div.th_title')
-        @trTitle  = @$('tr.th_title')
-        @pTitle   = @$('p.th_title')
-        @pSummary = @$('p.th_summary')
-        @tdHost  = @$('td.th_host')
+        @divTitle = @$ 'div.th_title'
+        @trTitle  = @$ 'tr.th_title'
+        @pTitle   = @$ 'p.th_title'
+        @pSummary = @$ 'p.th_summary'
+        @divRoot  = @$ 'div.th_host'
+        @tdHost   = @$ 'td.th_host'
         
         # Store the host element so that it can be passed to 'init' methods of modules.
-        page.host = @tdHost
+        module.page.el = @tdHost
+        
+        # Initialize the context pane.
+        do => 
+            # Insert the control.
+            model        = module.page.pane
+            ContextPane  = module.view('context_pane')
+            @contextPane = new ContextPane(model: model).replace @$('div.th_context_pane')
+            
+            # Keep heights in sync.
+            syncHeight = () => 
+                  @divRoot.css 'bottom', (if model.visible() then '250px' else '0px')
+            model.visible.onChanged syncHeight
+            syncHeight()
         
         # Finish up.
         @_updateState()
@@ -89,10 +103,10 @@ module.exports = (module) ->
             # Update DOM elements.
             @pTitle.html    title
             @pSummary.html  summary
-
-
-
+  
+  
   # PRIVATE --------------------------------------------------------------------------
+  
   
   formatBorderValue = (value) -> 
       return null unless value?
@@ -100,22 +114,14 @@ module.exports = (module) ->
       value
   
   formatSizeValue = (value, fill) -> 
-        
         unless value?
             return '100%' if fill is true
             return null
         
         return value + 'px' if _(value).isNumber()
         value
-      
-      
   
   
-  # Export
+  # Export.
   Main
   
-
-
-
-
-        

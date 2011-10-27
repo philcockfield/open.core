@@ -1,61 +1,43 @@
 core = require 'open.server'
+log  = core.log
 
 ###
 Configures the library.
 @param app :       The express app.
 @param options:
-        - baseUrl: The base URL path to put the Core app within (default: /core).
-        - express: The instance of Express being used.
+        - baseUrl:  Optional. The base URL path to put the Core app within (default: /core).
+        - express:  Optional. The instance of Express being used.
+        - callback: Optional. Function to invoke upon completion.
 ###
 module.exports = (app, options = {}) ->
     
-    # Modules.
-    express = options.express ?= require('express')
-    routes  = require '../routes'
-    
-    # Create a new express app if one was not passed.
-    app ?= express.createServer()
-    
     # Setup initial conditions.
-    paths   = core.paths
-    baseUrl = options.baseUrl ?= '/core'
-    baseUrl = _.trim(baseUrl)
-    baseUrl = '' if baseUrl is '/'
+    callback = options.callback
+    paths    = core.paths
+    baseUrl  = options.baseUrl ?= '/core'
+    baseUrl  = _.trim(baseUrl)
+    baseUrl  = '' if baseUrl is '/'
     
     # Store values on module.
+    core.options = options
     core.baseUrl = baseUrl
-    core.app     = app
+    core.app     = app if app?
+    
+    # Initialize sibling modules.
+    require './express'
+    require './testing'
+    require '../routes'
     
     # Build client-side JavaScript.
-    core.util.javascript.build.all( save: true ) if app.settings.env is 'development'
-    
-    # Setup Express.
-    do -> 
-          # Put middleware within the given URL namespace.
-          use = (middleware) ->
-              if baseUrl is '/'
-                  # Running from the local project (dev/debug).  Don't namespace the url.
-                  app.use middleware
-              else
-                  app.use baseUrl, middleware
-    
-          # Configuration.
-          app.configure ->
-              use express.bodyParser()
-              use express.methodOverride()
-              use express.cookieParser()
-              require('./css').configure use # CSS pre-processor (Stylus).
-              use express.static(paths.public)
-              use app.router
-        
-          app.configure 'development', ->
-              use express.errorHandler( dumpExceptions: true, showStack: true )
-    
-          app.configure 'production', ->
-              use express.errorHandler()
-    
-    # Setup testing.
-    require './testing'
-    
-    # Setup routes.
-    routes.init()
+    switch core.app.settings.env
+      when 'development'
+        log '  Building:', color.blue, 'Open.Core client-side javascript...'
+        timer = new core.util.Timer()
+        core.util.javascript.build.all 
+                      save: true, 
+                      callback: -> 
+                          log '  - Javascript built', color.blue, "in #{timer.secs()} seconds"
+                          callback?()
+      else 
+        callback?()
+

@@ -1,5 +1,4 @@
-core      = require '../../core'
-Template  = require './tmpl'
+core      = require '../core'
 
 
 ###
@@ -51,7 +50,7 @@ module.exports = class Textbox extends core.mvc.View
       inputType = if @password() then 'password' else 'text'
       
       # Base HTML.
-      tmpl = new Template()
+      tmpl = new Tmpl()
       html = tmpl.root( textbox:@, inputType: inputType )
       @html html
       
@@ -62,12 +61,15 @@ module.exports = class Textbox extends core.mvc.View
       @_.syncer = new textSyncer(@.text, input)
       @_.input = input
       @
-      
+  
+  
   # Applies focus to the INPUT element.
   focus: -> @_.input.focus()
-
+  
+  
   # Determines whether the textbox has the focus.
   hasFocus: -> @$('input:focus').length is 1
+  
   
   ###
   Determines whether the textbox is empty.
@@ -81,24 +83,28 @@ module.exports = class Textbox extends core.mvc.View
       return true if text is ''
       return false
   
+  
   ###
   Called when the [Enter] key is pressed.
   This can also be used to simulate the [Enter] key press event.
   ###
   enterPress: -> @_.press 'enter'
-
+  
+  
   ###
   Called when the [Escape] key is pressed.
   Note: This can also be used to simulate the [Escape] key press event.
   ###
   escapePress: -> @_.press 'escape'
-
+  
+  
   ###
   Wires an event handler to the [Enter] key-press.
   @param callback: to invoke when the [Enter] key is pressed.
   ###
   onEnter: (callback) -> @_.onPress 'enter', callback
-
+  
+  
   ###
   Wires an event handler to the [Escape] key-press.
   @param callback: to invoke when the [Escape] key is pressed.
@@ -130,4 +136,20 @@ textSyncer = (textProperty, input) ->
             sync -> textProperty input.val()
       input.keyup syncProperty
       input.change syncProperty
+
+
+class Tmpl extends core.mvc.Template
+  root: 
+    """
+      <span class="core_inner">
+        &nbsp;
+        <span class="core_watermark"></span>
+        <% if (textbox.multiline()) { %>
+          <textarea></textarea>
+        <% } else { %>
+          <input type="<%= inputType %>" />
+        <% } %>
+      </span>
+    """
+
 

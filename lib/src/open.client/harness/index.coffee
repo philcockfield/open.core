@@ -25,7 +25,7 @@ module.exports = class TestHarness extends core.mvc.Module
               newSuite = e.newValue
               
               # Update state.
-              page.reset()
+              @page.reset()
               @selectedSpec null # Reset the spec when the suite changes.
               
               # Invoke the [afterAll] if a current suite is being unloaded.

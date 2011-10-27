@@ -1,43 +1,57 @@
 @import './_functions'
 
+CONTEXT_PANE_HEIGHT = 250px
+
 // Main.
 .th_harness > .th_main
     abs-pos SIDEBAR_WIDTH, 0, 0, 0
     border-left solid 1px BORDER_COLOR
     box-shadow 0px 0px 20px 10px rgba(black, 0.15)
     background white
-    padding 10px 20px
     
-    > table.th_main
-      width 100%
-      height 100%
+    // Control Host.
+    > div.th_host
+      abs-pos 0, 0, 0, CONTEXT_PANE_HEIGHT
+      padding 10px 20px
       
-      // Title.
-      tr.th_title
-        height 10px
-      
-      div.th_title
-        font-weight 300
-        color darken(white, 75%)
-        border-bottom solid 1px darken(white, 20%)
-        padding-bottom 10px
-        margin-bottom 10px
-        p.th_title
-          font-size 24px
-          ellipsis()
-        p.th_summary
-          font-size 10pt
-          color darken(white, 55%)
-          margin-top 5px
-          line-height 150%
-
-      // Body.
-      tr.th_body
+      > table
+        width 100%
         height 100%
-        td.th_host
-          position relative
-          > :first-child
+        
+        // Title.
+        tr.th_title
+          height 10px
+        
+        div.th_title
+          font-weight 300
+          color darken(white, 75%)
+          border-bottom solid 1px darken(white, 20%)
+          padding-bottom 10px
+          margin-bottom 10px
+          p.th_title
+            font-size 24px
+            ellipsis()
+          p.th_summary
+            font-size 10pt
+            color darken(white, 55%)
+            margin-top 5px
+            line-height 150%
+      
+        // Body.
+        tr.th_body
+          height 100%
+          td.th_host
             position relative
-            margin-left auto
-            margin-right auto
+            > :first-child
+              position relative
+              margin-left auto
+              margin-right auto
     
+
+    // Context Pane.
+    > div.th_context_pane
+      abs-pos 0, null, 0, 0
+      height CONTEXT_PANE_HEIGHT - 1 // Account for border
+      border-top solid 1px BORDER_COLOR
+      background darken(white, 3%)
+

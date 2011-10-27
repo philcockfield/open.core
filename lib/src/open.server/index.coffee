@@ -4,6 +4,7 @@ module.exports = server =
   # Set in bootstrap below.
   paths:       undefined 
   util:        undefined
+  log:         undefined
   client:      undefined
   configure:   undefined
   
@@ -33,19 +34,21 @@ module.exports = server =
   start: (options = {})->
       
       # Setup initial conditions.
-      @configure null, baseUrl: '/'
-      app  = @app
-      log  = @util.log
+      @configure null, 
+          baseUrl: '/', 
+          callback: => 
+            app  = @app
+            log  = @util.log
           
-      # Determine which port to start on.
-      options.port ?= 8080
-      port = process.env.PORT ?= options.port
+            # Determine which port to start on.
+            options.port ?= 8080
+            port = process.env.PORT ?= options.port
       
-      # Start listening on requested port.
-      app.listen port, =>
-          log ''
-          log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
-          log '---'
+            # Start listening on requested port.
+            app.listen port, =>
+                log ''
+                log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
+                log '---'
 
 
 
@@ -60,6 +63,7 @@ do ->
     #     in turn require the [server] module.
     server.paths           = require './config/paths'
     server.util            = require './util'
+    server.log     = server.util.log
     server.client          = require 'open.client'
     server.configure       = require './config/configure'
     

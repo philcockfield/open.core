@@ -9,9 +9,15 @@ Events:
 
 ###
 module.exports = (module) ->
-  class Page 
-    constructor: -> _.extend @, Backbone.Events
+  class Page
+    constructor: -> 
+        _.extend @, Backbone.Events
+        @pane = new (module.model 'context_pane')()
     
+    ###
+    Gets the [Context Pane] - the panel to display options below the control host.
+    ###
+    pane: undefined # Set in constructor.
     
     ###
     Adds a new element to the Test Harness
