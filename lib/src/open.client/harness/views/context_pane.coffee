@@ -15,7 +15,7 @@ module.exports = (module) ->
         
         # Finish up.
         syncVisibility()
-        
+    
     
     render: -> 
         @html module.tmpl.contextPane()
@@ -26,12 +26,5 @@ module.exports = (module) ->
         @tabStrip.add label:'Two'
         @tabStrip.add label:'Three'
         @tabStrip.first().click()
-        
-    
   
   
-  
-
-
-    
-    
