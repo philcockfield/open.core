@@ -51,6 +51,31 @@ describe 'controls/control_list', ->
     
     
   
+  describe 'first / last', ->
+    describe 'with three controls', ->
+      control1 = null
+      control2 = null
+      control3 = null
+      beforeEach ->
+        control1 = list.add(new core.mvc.View())
+        control2 = list.add(new core.mvc.View())
+        control3 = list.add(new core.mvc.View())
+    
+      it 'retrieves the first control', -> expect(list.first()).toEqual control1
+      it 'retrieves the last control', -> expect(list.last()).toEqual control3
+    
+    describe 'with one control', ->
+      control = null
+      beforeEach -> control = list.add(new core.mvc.View())
+      it 'retrieves the first control', -> expect(list.first()).toEqual control
+      it 'retrieves the last control', -> expect(list.last()).toEqual control
+    
+    describe 'with no controls', ->
+      it 'retrieves the first control', -> expect(list.first()).toEqual null
+      it 'retrieves the last control', -> expect(list.last()).toEqual null
+    
+  
+  
   describe 'orientation', ->
     it 'has vertical orientation by default (Y)', ->
       expect(list.orientation()).toEqual 'y'

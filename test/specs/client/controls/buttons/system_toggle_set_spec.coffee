@@ -15,11 +15,18 @@ describe 'controls/buttons/system_toggle_set', ->
     expect(toggleSet.buttons instanceof controls.ButtonSet).toEqual true 
   
   it 'retrieves the [selected] button', ->
-      rdo1 = toggleSet.add()
-      rdo2 = toggleSet.add()
-      rdo2.selected true
-      expect(toggleSet.selected()).toEqual rdo2
+    rdo1 = toggleSet.add()
+    rdo2 = toggleSet.add()
+    rdo2.selected true
+    expect(toggleSet.selected()).toEqual rdo2
   
+  describe 'count() method', ->
+    it 'has 0 buttons', -> expect(toggleSet.count()).toEqual 0
+    it 'has 3 buttons', ->
+      toggleSet.add()
+      toggleSet.add()
+      toggleSet.add()
+      expect(toggleSet.count()).toEqual 3
   
   describe 'add() method', ->
     it 'returns a new Button', ->
