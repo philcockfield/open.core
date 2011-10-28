@@ -1,4 +1,4 @@
-@import "http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css";
+@import 'http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css';
 ul.core_tab_strip {
   height: 38px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f7f7f7), color-stop(1, #ccc));
@@ -79,7 +79,7 @@ ul.core_tab_strip li.core_tab.core_disabled p {
   color: #b3b3b3;
 }
 .th_harness {
-  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, 'Helvetica Neue', Helvetica, Verdana, sans-serif;
 }
 .th_harness p {
   padding: 0px;
@@ -256,6 +256,12 @@ ul.core_tab_strip li.core_tab.core_disabled p {
   color: #737373;
   margin-top: 5px;
   line-height: 150%;
+}
+.th_harness > .th_main > div.th_host > table div.th_title p.th_summary ul {
+  margin-top: 0px;
+}
+.th_harness > .th_main > div.th_host > table div.th_title p.th_summary li {
+  margin-top: 5px;
 }
 .th_harness > .th_main > div.th_host > table tr.th_body {
   height: 100%;

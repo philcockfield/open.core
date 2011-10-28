@@ -1,7 +1,7 @@
 core = require 'open.server'
 
 log = (message, color = '', explanation = '') ->
-    return # Temporarily don't write out.  Figure out how to only write this when running in Core app
+    # return # Temporarily don't write out.  Figure out how to only write this when running in Core app
     core.log message, color, explanation
 
 
@@ -32,9 +32,7 @@ module.exports = (app, options = {}) ->
     require './testing'
     require '../routes'
     
-    # Build client-side JavaScript.
-    switch core.app.settings.env
-      when 'development'
+    build = (callback) -> 
         log '  Building:', color.blue, 'Open.Core client-side javascript...'
         timer = new core.util.Timer()
         core.util.javascript.build.all 
@@ -42,6 +40,12 @@ module.exports = (app, options = {}) ->
                       callback: -> 
                           log '  - Javascript built', color.blue, "in #{timer.secs()} seconds"
                           callback?()
-      else 
-        callback?()
+    
+    # Build client-side JavaScript.
+    build(callback)
+    # switch core.app.settings.env
+    #   when 'development'
+    #     build callback
+    #   else 
+    #     callback?()
 
