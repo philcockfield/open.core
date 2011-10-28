@@ -70,6 +70,7 @@ module.exports = class HarnessTemplate extends core.mvc.Template
   contextPane:
     """
     <div class="th_tab_strip">Foo!</div>
+    <div class="th_body"></div>
     """
   
   

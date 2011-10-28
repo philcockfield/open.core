@@ -3,15 +3,25 @@ Button    = require './button'
 ButtonSet = require './button_set'
 mvc       = core.mvc
 
+SELECTION_CHANGED = 'selectionChanged'
 
 ###
 A horizontal strip of tabs.
+
+Events:
+ - selectionChanged
+
 ###
 module.exports = class TabStrip extends mvc.View
   constructor: () -> 
+      
+      # Setup initial conditions.
       super tagName:'ul', className: @_className('tab_strip')
       @tabs = new ButtonSet()
       @el.disableTextSelect()
+      
+      # Wire up events.
+      @tabs.bind SELECTION_CHANGED, (e) => @trigger SELECTION_CHANGED, tab:e.button
   
   
   # Determines the number of tabs within the strip (1-based).

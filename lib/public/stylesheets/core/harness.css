@@ -1,4 +1,83 @@
 @import "http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,400italic.css";
+ul.core_tab_strip {
+  height: 38px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f7f7f7), color-stop(1, #ccc));
+  background: -webkit-linear-gradient(top, #f7f7f7 0%, #ccc 100%);
+  background: -moz-linear-gradient(top, #f7f7f7 0%, #ccc 100%);
+  background: linear-gradient(top, #f7f7f7 0%, #ccc 100%);
+  overflow: hidden;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+ul.core_tab_strip li.core_tab {
+  position: relative;
+  float: left;
+  height: 100%;
+}
+ul.core_tab_strip li.core_tab p {
+  font-size: 10pt;
+  color: #4d4d4d;
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 11px;
+  text-shadow: 0px 1px 0px #fff;
+  cursor: default;
+}
+ul.core_tab_strip li.core_tab div.core_div_left {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 1px;
+}
+ul.core_tab_strip li.core_tab div.core_div_right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 2px;
+  background-image: url("../../images/controls/tab_strip/divider.png");
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_over {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f2f2f2), color-stop(1, #bfbfbf));
+  background: -webkit-linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
+  background: -moz-linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
+  background: linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_down {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #bfbfbf), color-stop(1, #f2f2f2));
+  background: -webkit-linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
+  background: -moz-linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
+  background: linear-gradient(top, #bfbfbf 0%, #f2f2f2 100%);
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_down div.core_div_right {
+  background: none;
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_selected {
+  background: #ededed;
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_selected div.core_div_left {
+  border-left: solid 1px #b3b3b3;
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_selected div.core_div_right {
+  background: none;
+  border-right: solid 1px #b3b3b3;
+}
+ul.core_tab_strip li.core_tab.core_enabled.core_first div.core_div_left {
+  border-left: none;
+}
+ul.core_tab_strip li.core_tab.core_before_selected div.core_div_right {
+  background: none;
+}
+ul.core_tab_strip li.core_tab.core_disabled {
+  background: none;
+}
+ul.core_tab_strip li.core_tab.core_disabled p {
+  color: #b3b3b3;
+}
 .th_harness {
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, "Helvetica Neue", Helvetica, Verdana, sans-serif;
 }
@@ -149,7 +228,7 @@
   left: 0px;
   top: 0px;
   right: 0px;
-  bottom: 250px;
+  bottom: 0px;
   padding: 10px 20px;
 }
 .th_harness > .th_main > div.th_host > table {
@@ -194,10 +273,25 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  height: 249px;
+  height: 0px;
   border-top: solid 1px #666;
   background: #f7f7f7;
 }
 .th_harness > .th_main > .th_context_pane > .th_tab_strip {
   border-bottom: solid 1px #666;
+}
+.th_harness > .th_main > .th_context_pane > .th_body {
+  position: absolute;
+  left: 0px;
+  top: 39px;
+  right: 0px;
+  bottom: 0px;
+}
+.th_harness > .th_main > .th_context_pane > .th_body > .th_tab_content {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  overflow: hidden;
 }

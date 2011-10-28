@@ -7,10 +7,22 @@ module.exports = (module) ->
     constructor: (params = {}) -> 
         super className:'th_context_pane'
         @render()
+        @visible false # Not shown by default.
     
     
-    # Shows the pane by setting the [visible] property to true.
-    show: -> @visible true
+    # Gets the number of tabs in the pane.
+    count: -> @tabStrip.count()
+    
+    
+    ###
+    Shows the pane by setting the [visible] property to true.
+    @param options:
+              - height: (optional). The number representing the pixel height to set the pane to.
+    ###
+    show: (options = {}) -> 
+        @height options.height if options.height?
+        @visible true
+        
     
     
     # Hides the pane by setting the [visible] property to false.
@@ -20,11 +32,48 @@ module.exports = (module) ->
     render: -> 
         @html module.tmpl.contextPane()
         @tabStrip = new module.controls.TabStrip().replace @$('.th_tab_strip')
+        @divBody = @$ '.th_body'
+    
+    
+    ###
+    Adds a new tab to the pane.
+    Note: To remove the tab, call the [remove] method on the returned tab.
+    
+    @param options: The options for the tab (eg. label:'My Label')
+              - content: (optional) A view/element to insert as content.
+              
+    @returns the new [Tab] button.
+    ###
+    add: (options = {}) -> 
         
-        # TEMP 
-        @tabStrip.add label:'One'
-        @tabStrip.add label:'Two'
-        @tabStrip.add label:'Three'
-        @tabStrip.first().click()
-  
-  
+        # Setup initial conditions.
+        options.label ?= 'Untitled'
+        
+        # Insert the tab.
+        tab = @tabStrip.add options
+        tab.selected true if @count() is 1 # Ensure at least one tab is selected.
+        
+        # Insert tab content element.
+        tab.elContent = $ '<div class="th_tab_content"></div>'
+        if options.content?
+              tab.elContent.append module.util.toJQuery(options.content)
+              tab.content = options.content
+        @divBody.append tab.elContent
+        
+        # Tab method extensions.
+        tab.syncContent = -> 
+            tab.elContent.toggle tab.selected() # Sync visibility of content.
+            
+        # Wire up events.
+        tab.bind 'removed', (e) => e.tab.elContent.remove() # Remove the corresponding content element.
+        tab.selected.onChanged (e) -> tab.syncContent()
+        
+        # Finish up.
+        tab.syncContent()
+        tab
+    
+    
+    # Removes all tabs from the pane.
+    clear: -> @tabStrip.clear()
+    
+    

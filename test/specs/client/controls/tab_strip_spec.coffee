@@ -162,6 +162,24 @@ describe 'controls/tab_strip', ->
         expect(tab3.el.hasClass('core_before_selected')).toEqual false
         
   
+  describe '[selectionChanged] event', ->
+    tab1 = null
+    tab2 = null
+    beforeEach ->
+        tab1 = tabStrip.add()
+        tab2 = tabStrip.add()
+    
+    it 'fires Selection changed event', ->
+      args  = null
+      count = 0
+      tabStrip.bind 'selectionChanged', (e) -> 
+            count += 1
+            args = e
+      tab2.click()
+      expect(count).toEqual 1
+      expect(args.tab).toEqual tab2
+    
+    
   
   
   

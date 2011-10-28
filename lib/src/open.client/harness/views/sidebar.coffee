@@ -4,6 +4,7 @@ module.exports = (module) ->
     constructor: () -> 
         super className: 'th_sidebar'
         @render()
+        @el.disableTextSelect()
     
     
     render: -> 

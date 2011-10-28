@@ -1,13 +1,20 @@
 @import './_functions'
 
+TAB_STRIP_HEIGHT = 39px
 
 // Context Pane.
 .th_harness > .th_main > .th_context_pane
   abs-pos 0, null, 0, 0
-  height CONTEXT_PANE_HEIGHT - 1 // Account for border
+  height 0px
   border-top solid 1px BORDER_COLOR
   background darken(white, 3%)
   
   > .th_tab_strip
     border-bottom solid 1px BORDER_COLOR
   
+  > .th_body
+    abs-pos 0, TAB_STRIP_HEIGHT, 0, 0
+    
+    > .th_tab_content
+      abs-pos()
+      overflow hidden

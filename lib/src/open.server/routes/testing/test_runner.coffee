@@ -30,13 +30,14 @@ module.exports = class TestRunner
   ###
   Initializes the routes for the test-runner.
   @param options:
-          - url           : (optional) The URL that loads the test-runner (defaults to /specs).
-          - title         : (optional) The page title (defaults to 'Specs').
-          - specsDir      : The path to the directory containing the client-side specs.
-          - sourceUrls    : An array or URLs (or a single URL) pointing to the source script(s)
-                            that are under test.
-          - samplesDir    : Optional. The path to a directory of samples to compile and serve as commonJS modules.
-          - css           : Optional. The URL (or array of URL's) for style sheets to include in the page.
+          - url              : (optional) The URL that loads the test-runner (defaults to /specs).
+          - title            : (optional) The page title (defaults to 'Specs').
+          - specsDir         : The path to the directory containing the client-side specs.
+          - sourceUrls       : An array or URLs (or a single URL) pointing to the source script(s)
+                               that are under test.
+          - samplesDir       : Optional. The path to a directory of samples to compile and serve as commonJS modules.
+          - samplesNamespace : Optional. The root namespace to compile sample code under (see 'samplesDir').
+          - css              : Optional. The URL (or array of URL's) for style sheets to include in the page.
   ###
   init: (options = {}) -> 
     
@@ -106,7 +107,7 @@ module.exports = class TestRunner
           else
             path = 
                 path:      options.samplesDir
-                namespace: 'core/test'
+                namespace: options.samplesNamespace
                 deep:      true
             new util.javascript.Builder(path).build (code) -> send code(false)
 
