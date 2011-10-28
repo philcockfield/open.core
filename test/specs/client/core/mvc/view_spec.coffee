@@ -128,10 +128,7 @@ describe 'mvc/view', ->
   
     it 'changes the CSS display value to none', ->
       view.visible false
-      
-      # NB: Allows comparison within IE8
-      attr = view.el.attr('style')
-      expect(_(attr).startsWith 'display: none').toEqual true
+      expect(view.el.css 'display').toEqual 'none'
   
     it 'changes the CSS display value to empty string', ->
       view.visible false
