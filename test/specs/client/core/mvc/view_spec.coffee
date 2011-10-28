@@ -181,10 +181,10 @@ describe 'mvc/view', ->
     describe '[replace] method', ->
       html = """
              <div>
-                <span class="  foo    bar "></span>
+                <span class="  foo    bar ">This will be replaced</span>
                 <span class="prop1" data-foo="456" data-enabled="false" data-text="foo"></span>
                 <span class="prop2" data-noProp="value"></span>
-                <span id="my_id"></span>
+                <span id="my_id">My ID</span>
              </div>      
              """
       page = null
@@ -205,14 +205,15 @@ describe 'mvc/view', ->
       
       describe 'replacing the DOM element', ->
         it 'puts the [view.el] in the DOM', ->
-          view.replace page.find('span.foo')
-          expect(page.find('.my_view').length).toEqual 1
-
+          el = page.children('span.foo')
+          view.replace el
+          expect(page.children('.my_view').length).toEqual 1
+        
         it 'removes the replaced element from the DOM', ->
-          expect(page.find('span.foo').length).toEqual 1
-          view.replace page.find('span.foo')
-          expect(page.find('span.foo').length).toEqual 0
-
+          expect(page.children('span.foo').length).toEqual 1
+          view.replace page.children('span.foo')
+          expect(page.children('span.foo').length).toEqual 0
+        
         it 'does not fail of the element does not exist', ->
           replaceEl = $('does-not-exist')
           expect(replaceEl.length).toEqual 0
@@ -220,7 +221,7 @@ describe 'mvc/view', ->
         
       describe 'copying the ID property', ->
         beforeEach ->
-            replaceEl = page.find('#my_id')
+            replaceEl = page.children('#my_id')
         
         it 'copies the ID from the source element to the [view.el]', ->
           view.replace replaceEl
@@ -234,12 +235,14 @@ describe 'mvc/view', ->
         it 'does not set an ID to an empty-string', ->
           replaceEl.attr 'id', ''
           view.replace replaceEl
-          expect(view.el.attr('id')).not.toBeDefined()
+          id = view.el.attr('id') ? '' # Allow for different responses from jQuery on the server.
+          expect(id).toEqual ''
         
         it 'does not set an ID to white-space', ->
           replaceEl.attr 'id', '   '
           view.replace replaceEl
-          expect(view.el.attr('id')).not.toBeDefined()
+          id = view.el.attr('id') ? '' # Allow for different responses from jQuery on the server.
+          expect(id).toEqual ''
         
         it 'copies the ID to the View', ->
           view.replace replaceEl
@@ -252,47 +255,47 @@ describe 'mvc/view', ->
       
       describe 'copying CSS classes', ->
         it 'copies both [foo] and [bar] classes from the replaced element', ->
-          view.replace page.find('span.foo')
+          view.replace page.children('span.foo')
           expect(view.el.hasClass('foo')).toEqual true
           expect(view.el.hasClass('bar')).toEqual true
-
+      
         it 'retains the original [my_view] classes from the view', ->
-          view.replace page.find('span.foo')
+          view.replace page.children('span.foo')
           expect(view.el.hasClass('my_view')).toEqual true
         
         it 'has no classes to copy', ->
           view.replace $('<div>EMPTY</div>')
           expect(view.el.attr('class')).toEqual 'my_enabled my_view'
-
+      
         it 'has existing class that matches view', ->
           view.replace $('<div class="my_view">EMPTY</div>')
           expect(view.el.attr('class')).toEqual 'my_enabled my_view'
-
+      
         it 'has additional different class to replacement element to copy', ->
           view.replace $('<div class="my_foo">EMPTY</div>')
           expect(view.el.attr('class')).toEqual 'my_enabled my_view my_foo'
           
       describe 'copying [data-*] property values', ->
         it 'copies a number property', ->
-          view.replace page.find('.prop1')
+          view.replace page.children('.prop1')
           value = view.foo()
           expect(value).toEqual 456
           expect(_.isNumber(value)).toEqual true 
-
+      
         it 'copies and converts a boolean property', ->
-          view.replace page.find('.prop1')
+          view.replace page.children('.prop1')
           value = view.enabled()
           expect(value).toEqual false
           expect(_.isBoolean(value)).toEqual true 
-
+      
         it 'copies a string property', ->
-          view.replace page.find('.prop1')
+          view.replace page.children('.prop1')
           value = view.text()
           expect(value).toEqual 'foo'
           expect(_.isString(value)).toEqual true 
           
         it 'ignore [data-*] values that are not properties of the View', ->
-          view.replace page.find('.prop2')
+          view.replace page.children('.prop2')
           expect(view.noProp).not.toBeDefined()
         
         

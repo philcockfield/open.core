@@ -48,7 +48,7 @@ module.exports = server =
             app.listen port, =>
                 log ''
                 log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
-                log '---'
+                log '---', color.green
 
 
 

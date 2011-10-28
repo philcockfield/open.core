@@ -75,7 +75,7 @@ module.exports = class View extends Model
               - DOM element
               - jQuery object
               - MVC View
-
+  
   This method:
     - copies all CSS classes from the replaced element.
     - sets default property values specified in data-{propName} attributes.
@@ -93,10 +93,16 @@ module.exports = class View extends Model
 
       # Copy ID from source element.
       do -> 
-          return if self.el.attr('id')? # Don't override the View element's existing ID.
+          # Don't override the View element's existing ID.
+          viewId = self.el.attr('id')
+          return if viewId? and viewId isnt ''
+          
+          # Retrieve the ID from the element being replaced.
           id = el.attr('id')
           return unless id?
-          return  if _(id).isBlank()
+          return if _(id).isBlank()
+          
+          # Assign the ID to the view and the el.
           self.el.attr 'id', id
           self.id = id unless self.id?
       
