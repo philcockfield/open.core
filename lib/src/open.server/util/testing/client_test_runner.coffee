@@ -103,7 +103,7 @@ module.exports = class ClientTestRunner
           callback? args
       
       # Visit the page containing the test runner.
-      @log " - Running client tests on #{url}"
+      @log ' - Running', color.blue, "client tests on #{url}"
       zombie.visit url, (err, browser, status) => 
           if err?
               @log err, color.red
