@@ -5,7 +5,7 @@ module.exports = index =
   cake:       require './cake'
   git:        require './git'
   html:       require './html'
-  test:       require './test'
+  testing:    require './testing'
   
   Timer:      require './timer'
   
