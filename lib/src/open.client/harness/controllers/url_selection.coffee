@@ -6,6 +6,7 @@ module.exports = (module) ->
       
       # Wire up events.
       module.selectedSuite.onChanged (e) => @syncUrl()
+      $(window).bind 'hashchange', => @load() unless @ignoreHashChanged
       
       # Finish up.
       @load()
@@ -14,7 +15,9 @@ module.exports = (module) ->
     # Updates the URL hash to match the currently selected hash.
     syncUrl: () -> 
         id = module.selectedSuite()?.id ? ''
+        @ignoreHashChanged = true
         window.location.hash = id
+        @ignoreHashChanged = false
     
     
     # Loads the previously selected suite from local-storage.
