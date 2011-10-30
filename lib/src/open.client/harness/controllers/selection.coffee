@@ -26,15 +26,6 @@ module.exports = (module) ->
         window.location.hash = url
     
     
-    # Saves the selected suite to storage.
-    save: () -> 
-        local = localStorage
-        return unless local?
-        suite               = @toIdentifier()
-        local.selectedRoot  = suite.root
-        local.selectedSuite = suite.selected
-    
-    
     # Extracts the uniqude identifying parts of the currently selected suite.
     toIdentifier: () -> 
         suite = module.selectedSuite()
@@ -45,10 +36,26 @@ module.exports = (module) ->
             isRoot: -> @root is @selected
             encode: -> 
                 return unless @exists
-                @root = encodeURI(@root)
+                
+                # @root = @root.replace /\//g, '\\'
+                
+                @root     = encodeURI(@root)
                 @selected = encodeURI(@selected)
-        
-        
     
+    
+    # Saves the selected suite to storage.
+    save: () -> 
+        local = localStorage
+        return unless local?
+        suite               = @toIdentifier()
+        local.selectedRoot  = suite.root
+        local.selectedSuite = suite.selected
+    
+    
+
+
+
+
+
 
         
