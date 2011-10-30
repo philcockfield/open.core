@@ -24,15 +24,13 @@ module.exports = (module) ->
         id = window.location.hash
         return if _(id).isBlank()
         id = _(id).strRight '#'
-        # return unless id?
         
         # Find the corresponding suite.
         match = Suite.all.find (s) -> s.id is id
         unless match?
-            
             # No matching suite exists anymore.
-            # Clear the local storage and exit out.
-            local.selectedSuite = null
+            # Clear it from the URL.
+            window.location.hash = ''
             return
         
         # Select the suite.
