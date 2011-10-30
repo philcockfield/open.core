@@ -3,14 +3,28 @@ module.exports = (module) ->
     constructor: () -> 
       
       # Wire up events.
-      module.selectedSuite.onChanged (e) => @save()
+      module.selectedSuite.onChanged (e) => 
+            @syncUrl()
+            @save()
     
     
-    setUrl: () -> 
+    # Updates the URL hash to match the currently selected hash.
+    syncUrl: () -> 
         
+        # Setup initial conditions.
         suite = @toIdentifier()
         
+        # Generate the URL.
+        if suite.exists
+            suite.encode()
+            url = suite.root
+            url += "//#{suite.selected}" unless suite.isRoot()
+        else
+            url = ''
         
+        # Update the URL hash.
+        window.location.hash = url
+    
     
     # Saves the selected suite to storage.
     save: () -> 
@@ -20,12 +34,19 @@ module.exports = (module) ->
         local.selectedRoot  = suite.root
         local.selectedSuite = suite.selected
     
-    # Extracts
+    
+    # Extracts the uniqude identifying parts of the currently selected suite.
     toIdentifier: () -> 
         suite = module.selectedSuite()
         identifier =
-          root:     suite?.root().title() ? null
-          selected: suite?.title() ? null
+            exists:   suite?
+            root:     suite?.root().title() ? null
+            selected: suite?.title() ? null
+            isRoot: -> @root is @selected
+            encode: -> 
+                return unless @exists
+                @root = encodeURI(@root)
+                @selected = encodeURI(@selected)
         
         
     
