@@ -73,35 +73,7 @@ module.exports = class TestHarness extends core.mvc.Module
       options.within?.append @rootView.el
       
       # Create controllers
-      new (@controller 'selection')()
-      
-      # Select the initial suite.
-      do => 
-          return unless localStorage?
-          
-          # Setup initial conditions.
-          selectionTitle = localStorage.selectedSuite
-          rootTitle      = localStorage.selectedRoot
-          
-          # Get the previously selected suite, or the first one in the list.
-          rootSuite = @suites.detect (s) -> s.title() is rootTitle
-          rootSuite ?= @suites.first()
-          
-          # Select the suite.
-          if rootSuite?
-              select = () => 
-                      if rootTitle is selectionTitle
-                          # Select the root suite.
-                          @selectedSuite rootSuite              
-                      else
-                          # Select the child-suite.
-                          rootSuite.init()
-                          descendent = rootSuite.descendentByTitle selectionTitle
-                          @selectedSuite descendent if descendent?
-              
-              # Break sync flow to allow view insertion to render 
-              # before selection animation starts.
-              setTimeout select, 100
+      new (@controller 'url_selection')()
       
       # Finish up.
       @

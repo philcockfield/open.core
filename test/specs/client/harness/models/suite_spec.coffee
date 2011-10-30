@@ -78,6 +78,19 @@ describe 'harness/models/suite', ->
           expect(suite3.id).toEqual 'root/child/grand%5Cchild'
   
   
+  describe 'all (static collection)', ->
+    it 'has an all collection', ->
+      expect(Suite.all instanceof Suite.Collection).toEqual true 
+    
+    it 'adds itself to the all collection upon construction', ->
+      suite1 = new Suite ['root']
+      expect(Suite.all.include(suite1)).toEqual true
+      
+      
+      
+    
+    
+  
   describe 'hierarchy', ->
     root       = null
     child      = null

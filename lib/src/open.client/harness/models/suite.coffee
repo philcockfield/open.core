@@ -41,6 +41,9 @@ module.exports = (module) ->
         @summary params[1] if _(params[1]).isString()
         @func last if _(last).isFunction()
         @id = buildId @
+        
+        # Store this instance in the flat master list of suites.
+        Suite.all.add @
     
     
     ###
@@ -109,18 +112,7 @@ module.exports = (module) ->
         list
     
     
-    ###
-    Retrieves the sub-suite model from anywhere within the hierarchy.
-    @param title: The title of the suite to match by.
-    ###
-    descendentByTitle: (title) -> 
-        matchChild = (suite) -> 
-              for child in suite.childSuites.models
-                    return child if child.title() is title
-                    match = matchChild(child) # <== RECURSION
-                    return match if match?
-              null
-        matchChild(@) ? null
+
   
   
   # PRIVATE --------------------------------------------------------------------------
@@ -165,7 +157,10 @@ module.exports = (module) ->
                                 collection.add fnModel(item) for item in items
   getOperations = (collection, suite, items) -> getFunctions collection, items, (params) -> new Operation(params, suite)
   
-  # Static methods.
+  
+  # STATIC MEMBERS --------------------------------------------------------------------------
+  
+  
   Suite.getSuites     = (collection, suite) -> getFunctions collection, HARNESS.suites, (params) -> new Suite(params, suite)
   Suite.getBeforeEach = (collection, suite) -> getOperations collection, suite, HARNESS.beforeEach
   Suite.getAfterEach  = (collection, suite) -> getOperations collection, suite, HARNESS.afterEach
@@ -174,10 +169,16 @@ module.exports = (module) ->
   Suite.getSpecs      = (collection, suite) -> getFunctions collection, HARNESS.specs, (params) -> new Spec(params, suite)
   
   
-  # Collection.
+  # COLLECTION --------------------------------------------------------------------------
+  
+  
   class Suite.Collection extends module.mvc.Collection
     model: Suite
     comparator: (model) -> model.title()
+  
+  
+  # A collection that contains a flat list of all suites.
+  Suite.all = new Suite.Collection()
   
   
   # Export.
