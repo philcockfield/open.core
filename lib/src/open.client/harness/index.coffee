@@ -39,10 +39,6 @@ module.exports = class TestHarness extends core.mvc.Module
               if newSuite?
                     _(newSuite.ancestors(direction:'descending')).each (suite) -> 
                           suite.beforeAll.each (op) -> op.invoke()
-              
-              # Store the selected item in storage.
-              localStorage.selectedRoot  = (newSuite?.root().title()) ? null
-              localStorage.selectedSuite = (newSuite?.title()) ? null
   
   
   ###
@@ -75,6 +71,9 @@ module.exports = class TestHarness extends core.mvc.Module
       @tmpl     = new @views.Tmpl()
       @rootView = new @views.Root()
       options.within?.append @rootView.el
+      
+      # Create controllers
+      new (@controller 'selection')()
       
       # Select the initial suite.
       do => 
