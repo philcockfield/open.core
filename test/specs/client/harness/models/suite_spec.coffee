@@ -48,6 +48,36 @@ describe 'harness/models/suite', ->
       expect(suite.parentSuite).toEqual parent
   
   
+  describe 'id', ->
+    describe 'root id', ->
+      it 'has no id', ->
+        expect(new Suite().id).toEqual null
+      
+      it 'uses the spec title as the id', ->
+        expect(new Suite(['foo']).id).toEqual 'foo'
+      
+      it 'escapes the title', ->
+        expect(new Suite('foo bar').id).toEqual 'foo%20bar'
+      
+      it 'replaces / with escaped \\ character', ->
+        expect(new Suite('foo/bar').id).toEqual 'foo%5Cbar'
+      
+      describe 'id hierarchy', ->
+        suite1 = null
+        suite2 = null
+        suite3 = null
+        beforeEach ->
+            suite1 = new Suite ['root']
+            suite2 = new Suite ['child'], suite1
+            suite3 = new Suite ['grand/child'], suite2
+        
+        it 'contains two level path', ->
+          expect(suite2.id).toEqual 'root/child'
+        
+        it 'contains three level path with escapes', ->
+          expect(suite3.id).toEqual 'root/child/grand%5Cchild'
+  
+  
   describe 'hierarchy', ->
     root       = null
     child      = null

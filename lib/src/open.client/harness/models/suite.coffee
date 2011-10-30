@@ -16,6 +16,9 @@ module.exports = (module) ->
     ###
     Constructor.
     @param params:      The array of arguments retreived from the "describe" function.
+                        This will be a set of strings:
+                        [0]: The title
+                        [1]: Summary (optional).
     @param parentSuite: The parent suite if this is not a root suite.
     ###
     constructor: (params, @parentSuite) -> 
@@ -34,9 +37,10 @@ module.exports = (module) ->
         @specs        = new Spec.Collection()
         
         # Store parts.
-        @title params[0]
+        @title params[0] if _(params[0]).isString()
         @summary params[1] if _(params[1]).isString()
         @func last if _(last).isFunction()
+        @id = buildId @
     
     
     ###
@@ -117,9 +121,34 @@ module.exports = (module) ->
                     return match if match?
               null
         matchChild(@) ? null
-    
+  
   
   # PRIVATE --------------------------------------------------------------------------
+  
+  
+  buildId = (suite, childId = null) -> 
+        
+        # Setup initial conditions.
+        id = formatId suite.title()
+        return null unless id?
+        
+        # Prepend the child-ID (if passed from recursive call).
+        id = "#{id}/#{childId}" if childId?
+        
+        # Prepend the parent part of the id
+        parent = suite.parentSuite
+        if parent?
+            id = buildId suite.parentSuite, id  # <== RECURSION
+        
+        # Finish up.
+        id
+  
+  
+  formatId = (raw) -> 
+        return null unless raw?
+        id = raw.replace /\//g, '\\' # Convert forward-spash to back-slash, so that it will be escaped.
+        id = encodeURI(id)
+        id
   
   
   resetGlobalArrays = -> 
@@ -143,7 +172,6 @@ module.exports = (module) ->
   Suite.getBeforeAll  = (collection, suite) -> getOperations collection, suite, HARNESS.beforeAll
   Suite.getAfterAll   = (collection, suite) -> getOperations collection, suite, HARNESS.afterAll
   Suite.getSpecs      = (collection, suite) -> getFunctions collection, HARNESS.specs, (params) -> new Spec(params, suite)
-  
   
   
   # Collection.
