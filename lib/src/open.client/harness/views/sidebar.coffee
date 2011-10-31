@@ -18,14 +18,5 @@ module.exports = (module) ->
         SpecList = module.view 'spec_list'
         @specList = new SpecList()
         @el.append @specList.el
-        
 
 
-# PRIVATE --------------------------------------------------------------------------
-
-
-  # Export.
-  Sidebar
-
-
-    
