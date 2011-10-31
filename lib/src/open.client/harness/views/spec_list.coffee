@@ -3,9 +3,9 @@ module.exports = (module) ->
   
   class SpecList extends module.mvc.View
     constructor: () -> 
-        
         # Setup initial conditions.
         super className: 'th_spec_list'
+        @buttons = new module.controls.ButtonSet()
         @render()
         
         # Wire up events.
@@ -33,4 +33,9 @@ module.exports = (module) ->
             
             # Create the button and insert it into the list.
             btn = new SpecButton model:spec
-            ul.append btn.el
+            @buttons.add btn
+            
+            # Append it to the UL within a LI.
+            li = $('<li class="th_btn">')
+            li.append btn.el
+            ul.append li

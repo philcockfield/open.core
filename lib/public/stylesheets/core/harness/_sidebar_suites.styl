@@ -16,7 +16,7 @@
       padding 0px
   
   // Root button.
-  .th_suite_btn
+  li.th_suite.th_root
     padding 12px
     border-bottom solid 1px darken(white, 20%)
     &.core_selected
@@ -29,24 +29,5 @@
       padding-left 14px
       li.th_suite.th_child
         margin-top 5px
-    
-    // Sub-suite button.
-    .th_sub_suite_btn
-      cursor pointer
-      font-size 10pt
-      color darken(white, 70%)
-      background-image harnessImage('bullet_gray.png')
-      background-repeat no-repeat
-      background-position 0px 50%
-      padding-left 16px
-      ellipsis()
-      textEmboss()
-    
-    .th_sub_suite_btn:hover
-      text-decoration underline
-    
-    .th_sub_suite_btn.core_selected
-      background-image harnessImage('bullet_blue.png')
-      text-decoration none
-      cursor default
+        color red
     

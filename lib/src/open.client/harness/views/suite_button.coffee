@@ -5,8 +5,8 @@ module.exports = (module) ->
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
-        super _.extend options, tagName: 'li', className: 'th_suite_btn', canToggle:true
-        @model   = options.model
+        super _.extend options, tagName: 'li', className: 'th_btn th_suite th_root', canToggle:true
+        @model = options.model
         @childSuiteButtons = new module.controls.ButtonSet()
         @model.init()
         
@@ -17,10 +17,10 @@ module.exports = (module) ->
         # Wire up events.
         # EVENT: child-suite button selection changed.
         @childSuiteButtons.bind 'selectionChanged', => 
-              # Update the currently selected suite on the root module.
-              return unless @selected
-              btn = @childSuiteButtons.selected()
-              module.selectedSuite btn?.model
+                # Update the currently selected suite on the root module.
+                return unless @selected
+                btn = @childSuiteButtons.selected()
+                module.selectedSuite btn?.model
         
         # EVENT: Selected 'suite' changed on root module.
         module.selectedSuite.onChanged (e) => 
@@ -108,7 +108,7 @@ module.exports = (module) ->
   
   class SubSuiteButton extends Button
     constructor: (options = {}) -> 
-        super _.extend options, className: 'th_sub_suite_btn', canToggle:true
+        super _.extend options, className: 'th_btn th_suite', canToggle:true
         @model = options.model
         @render()
         

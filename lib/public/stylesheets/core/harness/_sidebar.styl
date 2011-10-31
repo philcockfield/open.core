@@ -5,8 +5,38 @@
 
 // Sidebar.
 .th_harness > .th_sidebar
-    abs-pos 0, 0, null, 0
-    width SIDEBAR_WIDTH
-    background darken(white, 4%)
-    overflow hidden
-    
+  abs-pos 0, 0, null, 0
+  width SIDEBAR_WIDTH
+  background darken(white, 4%)
+  overflow hidden
+  
+  // Shared.
+  ul
+    list-style none
+    margin 0px
+    padding 0px
+  
+  // Suite | Spec buttons.
+  div.th_btn
+    cursor pointer
+    font-size 10pt
+    color darken(white, 70%)
+    background-image harnessImage('bullet_gray.png')
+    background-repeat no-repeat
+    background-position 0px 50%
+    padding-left 16px
+    ellipsis()
+    textEmboss()
+  
+  div.th_btn:hover
+    text-decoration underline
+  
+  div.th_btn.core_selected
+    background-image harnessImage('bullet_blue.png')
+    text-decoration none
+    cursor default
+
+  
+
+
+

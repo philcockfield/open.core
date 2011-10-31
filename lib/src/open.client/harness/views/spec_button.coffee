@@ -3,7 +3,7 @@ module.exports = (module) ->
     constructor: (options = {}) -> 
         
         # Setup initial conditions.
-        super _.extend options, tagName: 'li', className: 'th_spec_btn'
+        super _.extend options, className: 'th_spec th_btn', canToggle:true
         @model = options.model
         
         # Render the button.
