@@ -10,6 +10,10 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => @renderList()
+        
+        # Create controllers.
+        SizeController = module.controller 'spec_list_size'
+        new SizeController()
     
     
     render: -> 
