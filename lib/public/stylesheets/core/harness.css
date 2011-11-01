@@ -128,11 +128,6 @@ ul.core_tab_strip li.core_tab.core_disabled p {
   right: 0px;
   bottom: 0px;
 }
-.th_sidebar > .th_suite_list .th_scroller ul {
-  list-style: none;
-  margin: 0px;
-  padding: 0px;
-}
 .th_sidebar > .th_suite_list li.th_suite.th_root {
   padding: 12px;
   border-bottom: solid 1px #ccc;
