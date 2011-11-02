@@ -4,6 +4,9 @@ module.exports = (module) ->
         # Wire up events.
         module.selectedSuite.onChanged => @syncSize()
         $(window).resize _.debounce (=> @syncSize()), 100
+        
+        # Finish up.
+        @syncSize()
     
     
     syncSize: -> 
