@@ -1,7 +1,7 @@
 core = require 'open.server'
 
 log = (message, color = '', explanation = '') ->
-    return # Temporarily don't write out.  Figure out how to only write this when running in Core app
+    # return # Temporarily don't write out.  Figure out how to only write this when running in Core app
     core.log message, color, explanation
 
 
