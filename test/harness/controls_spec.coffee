@@ -1,4 +1,4 @@
-describe 'Cont/rols', 
+describe 'Controls', 
   '''
     Controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',

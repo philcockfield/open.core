@@ -7,6 +7,7 @@ sourceUrls = [
   "#{baseUrl}/libs.js"
   "#{baseUrl}/core+controls.js" 
   "#{baseUrl}/harness.js" 
+  "#{baseUrl}/auth.js" 
 ]
 
 
