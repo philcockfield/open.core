@@ -8,7 +8,7 @@ module.exports = (module) ->
         
         # Create controllers.
         SizeController = module.controller 'sidebar_pane_size'
-        new SizeController @suiteList, @specList
+        new SizeController @
     
     
     render: -> 
