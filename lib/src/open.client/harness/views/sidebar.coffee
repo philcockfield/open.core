@@ -1,10 +1,14 @@
 module.exports = (module) ->
   class Sidebar extends module.mvc.View
-    
     constructor: () -> 
+        # Setup initial conditions.
         super className: 'th_sidebar'
         @render()
         @el.disableTextSelect()
+        
+        # Create controllers.
+        SizeController = module.controller 'sidebar_pane_size'
+        new SizeController @
     
     
     render: -> 

@@ -115,8 +115,10 @@ ul.core_tab_strip li.core_tab.core_disabled p {
   overflow-y: auto;
 }
 .th_sidebar > .th_suite_list {
-  position: relative;
-  height: 50%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
 }
 .th_sidebar > .th_suite_list .th_title_bar {
   border-top: none;
@@ -149,9 +151,9 @@ ul.core_tab_strip li.core_tab.core_disabled p {
 .th_sidebar > .th_spec_list {
   position: absolute;
   left: 0px;
-  top: 50%;
   right: 0px;
   bottom: 0px;
+  background: #f2f2f2;
 }
 .th_sidebar > .th_spec_list .th_scroller {
   position: absolute;
@@ -163,6 +165,7 @@ ul.core_tab_strip li.core_tab.core_disabled p {
 .th_sidebar > .th_spec_list .th_scroller ul {
   margin: 5px;
   margin-top: 8px;
+  margin-bottom: 15px;
 }
 .th_sidebar > .th_spec_list .th_scroller ul li.th_btn {
   cursor: pointer;

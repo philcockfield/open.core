@@ -26,14 +26,15 @@ module.exports = (module) ->
         # Get the ID of the suite to load from the URL.
         id = window.location.hash
         return if _(id).isBlank()
-        id = _(id).strRight '#'
+        id = _(id).strRight('#').toLowerCase()
         
         # Find the corresponding suite.
-        match = Suite.all.find (s) -> s.id is id
+        match = Suite.all.find (s) -> s.id.toLowerCase() is id
         unless match?
             # No matching suite exists anymore.
             # Clear it from the URL.
             window.location.hash = ''
+            module.selectedSuite null
             return
         
         # Select the suite.

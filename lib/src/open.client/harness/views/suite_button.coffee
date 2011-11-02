@@ -25,8 +25,11 @@ module.exports = (module) ->
         # EVENT: Selected 'suite' changed on root module.
         module.selectedSuite.onChanged (e) => 
                 # Ensure the button is selected if the model is set as the selected suite.
-                rootSuite = e.newValue?.root()
-                @selected(true) if rootSuite is @model
+                if e.newValue?
+                  rootSuite = e.newValue.root()
+                  @selected true if rootSuite is @model
+                else
+                  @selected false # Ensure the button is de-selected when nothing is selected on the module.
         
         # Finish up.
         @_updateState()
