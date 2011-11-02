@@ -10,15 +10,34 @@ module.exports = (module) ->
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => @renderList()
-        
-        # Create controllers.
-        SizeController = module.controller 'spec_list_size'
-        new SizeController()
     
+    # Gets the pixel height of the contained list.
+    listHeight: -> 
+        
+        
+        ul = @ul
+        cssNum = module.util.jQuery.cssNum
+        ul.height() + cssNum(ul, 'margin-top') + cssNum(ul, 'margin-bottom')
+        
+        # 
+        # # marginTop = @ul.css 'margin-top'
+        # # marginBottom = @ul.css 'margin-bottom'
+        # 
+        # marginTop = cssNum ul, 'margin-top'
+        # marginBottom = cssNum ul, 'margin-bottom'
+        # 
+        # console.log 'marginTop', marginTop
+        # console.log 'marginBottom', marginBottom
+        # 
+        # height
+        
+        
+        
     
     render: -> 
         @html module.tmpl.specList title: 'Specs'
         @$('.th_title_bar').disableTextSelect()
+        @ul = @$ 'ul'
         @renderList()
     
     
@@ -29,7 +48,7 @@ module.exports = (module) ->
         return unless suite?
         
         # Clear the UL.
-        ul = @$('ul')
+        ul = @ul
         ul.empty()
         
         # Enumerate each spec.

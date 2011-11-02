@@ -1,8 +1,8 @@
-require './jquery'  # Cause jQuery extensions to be loaded.
-require './string'  # Cause string extensions to be loaded (added to underscore.string).
+require './_string'  # Cause string extensions to be loaded (added to underscore.string).
 
-util =
+module.exports = util =
   Property: require './property'
+  jQuery:   require './_jquery'   # NB: Also causees jQuery extensions to be loaded.
 
   ###
   Executes a [require] call within a try/catch block.
@@ -22,6 +22,5 @@ util =
     
 
 
-# Export
-_.extend util, require('./_conversion')
-module.exports = util
+# Extend with partial modules.
+_.extend util, require './_conversion'
