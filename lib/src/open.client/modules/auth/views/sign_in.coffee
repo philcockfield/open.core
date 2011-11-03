@@ -4,20 +4,38 @@ module.exports = (module) ->
   ###
   class SignIn extends module.mvc.View
     constructor: () -> 
+        # Setup initial conditions.
         super className:"core_auth_sign_in core_inset_pane core_shadow_x_8px"
         @render()
         @el.disableTextSelect()
         @providers = new module.controls.ButtonSet()
+        
+        # Wire up events.
+        @providers.bind 'selectionChanged', (e) => @syncTitle()
+        
+        # Finish up.
+        @syncTitle()
+    
     
     render: -> 
         # Insert base HTML structure.
         @html new Tmpl().root()
+        @divTitle       = @$ '.core_title'
         @tableProviders = @$ '.core_providers'
+        
         
         # Insert buttons.
         @btnSignIn = 
           new module.controls.CmdButton( label:'Sign In', color:'blue' )
           .replace @$ '.core_btn_sign_in'
+    
+    
+    syncTitle: -> 
+        selected = @providers.selected()
+        title = "Sign In With "
+        title += selected.label() if selected?
+        @divTitle.html title
+    
     
     ###
     Adds a new Authentication Provider button.
@@ -62,16 +80,13 @@ module.exports = (module) ->
         @render()
     
     render: -> 
-        @html new Tmpl().providerBtn()
-        
-        # TEMP 
         @html @label()
         
   
   class Tmpl extends module.mvc.Template
     root:
       """
-      <div class="core_title">Sign In With</div>
+      <div class="core_title"></div>
       <div class="core_body">
         <table class="core_providers"></table>
       </div>
@@ -80,11 +95,6 @@ module.exports = (module) ->
       </div>
       """
     
-    providerBtn:
-      """
-      Provider      
-      """
-      
   
   
   # Export
