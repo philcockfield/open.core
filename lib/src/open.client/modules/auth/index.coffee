@@ -23,5 +23,4 @@ module.exports = class Auth extends core.mvc.Module
       @rootView = new @views.Root()
       
       
-      
 

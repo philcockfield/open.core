@@ -16,6 +16,12 @@ describe 'Modules', ->
         signIn = new auth.views.SignIn()
         page.reset()
         page.add signIn.el
+        
+        signIn.addProvider label:'Facebook'
+        signIn.addProvider label:'Google'
+        signIn.addProvider label:'Twitter'
+        signIn.addProvider label:'Yahoo'
+        signIn.addProvider label:'Dropbox'
       
     
     
