@@ -165,7 +165,7 @@ ul.core_tab_strip li.core_tab.core_disabled p {
 .th_sidebar > .th_spec_list .th_scroller ul {
   margin: 5px;
   margin-top: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .th_sidebar > .th_spec_list .th_scroller ul li.th_btn {
   cursor: pointer;

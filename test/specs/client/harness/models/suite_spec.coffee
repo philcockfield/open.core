@@ -60,7 +60,7 @@ describe 'harness/models/suite', ->
         expect(new Suite('foo bar').id).toEqual 'foo%20bar'
       
       it 'replaces / with escaped \\ character', ->
-        expect(new Suite('foo/bar').id).toEqual 'foo%5Cbar'
+        expect(new Suite('foo/bar').id).toEqual 'foo%5cbar'
       
       describe 'id hierarchy', ->
         suite1 = null
@@ -75,7 +75,7 @@ describe 'harness/models/suite', ->
           expect(suite2.id).toEqual 'root/child'
         
         it 'contains three level path with escapes', ->
-          expect(suite3.id).toEqual 'root/child/grand%5Cchild'
+          expect(suite3.id).toEqual 'root/child/grand%5cchild'
   
   
   describe 'all (static collection)', ->

@@ -16,3 +16,15 @@ div.core_bevel_highlight {
   right: 0px;
   bottom: 0px;
 }
+.core_inset_pane {
+  background: #f7f7f7;
+  border: solid 1px #bdbdbd;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.core_shadow_x_8px {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAICAYAAAA4GpVBAAAABmJLR0QA/wD/AP+gvaeTAAAAI0lEQVQImT3EsREAIBADIC5xH/cfzW+0kwLYwfxOMMUqUtwHZOgFLcp/MMcAAAAASUVORK5CYII=");
+  background-position: 0px -3px;
+  background-repeat: repeat-x;
+}
