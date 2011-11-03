@@ -1,6 +1,10 @@
 module.exports = (module) ->
   ###
   An authentiation provider selector.
+  
+  Events:
+   - click:signIn - Fires when the sign in button is selected.
+  
   ###
   class SignIn extends module.mvc.View
     constructor: () -> 
@@ -12,10 +16,13 @@ module.exports = (module) ->
         
         # Wire up events.
         @providers.bind 'selectionChanged', (e) => @syncTitle()
+        @btnSignIn.onClick => @trigger 'click:signIn', selected:@selected()
         
         # Finish up.
         @syncTitle()
     
+    # Gets the currently selected provider.
+    selected: -> @providers.selected()
     
     render: -> 
         # Insert base HTML structure.
@@ -31,7 +38,7 @@ module.exports = (module) ->
     
     
     syncTitle: -> 
-        selected = @providers.selected()
+        selected = @selected()
         title = "Sign In With "
         title += selected.label() if selected?
         @divTitle.html title

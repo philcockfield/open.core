@@ -14,6 +14,7 @@ describe 'Modules', ->
       
       beforeAll ->
         signIn = new auth.views.SignIn()
+        signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.label(), e
         page.reset()
         page.add signIn.el
         
