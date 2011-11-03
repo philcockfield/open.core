@@ -6,5 +6,5 @@ module.exports = (module) ->
     
     
     render: -> 
-        @html 'Root Auth'
+        @html 'Root'
         

@@ -1,11 +1,12 @@
-core = require 'open.client/core'
-
+core     = require 'open.client/core'
+controls = require 'open.client/controls'
 
 module.exports = class Auth extends core.mvc.Module
   constructor: () -> 
       super module
-      @core = core
-      @mvc  = core.mvc
+      @core     = core
+      @mvc      = core.mvc
+      @controls = controls
   
   
   ###
