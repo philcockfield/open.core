@@ -68,6 +68,7 @@ module.exports = (module) ->
         addCell().append btn.el
         
         # Finish up.
+        btn.selected true if @providers.count() is 1
         btn
   
   
