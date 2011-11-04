@@ -318,10 +318,31 @@ describe 'util/property', ->
         
         
         
-        
+  describe 'event: reading', ->
+    prop = null
+    args = null
+    count = 0
+    beforeEach ->
+      count = 0
+      args = null
+      prop = new Property( name:'foo', store: {}, default:123 )
+      prop.bind 'reading', (e) -> 
+            count += 1
+            args = e
+    
+    it 'fires when the property is read', ->
+      prop.fn()
+      expect(count).toEqual 1
+
+    it 'passes the current value in event args', ->
+      value = prop.fn()
+      expect(args.value).toEqual value
+    
+    it 'returns the value that was mutated within the handler', ->
+      prop.bind 'reading', (e) -> e.value = 'mutant!'
+      expect(prop.fn()).toEqual 'mutant!'
+    
+    it 'provides the [onReading] bindign helper', ->
+      prop.fn.onReading (e) -> e.value = 'bar'
+      expect(prop.fn()).toEqual 'bar'
       
-      
-    
-    
-    
-    
