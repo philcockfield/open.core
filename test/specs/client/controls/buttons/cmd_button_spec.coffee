@@ -55,7 +55,6 @@ describe 'controls/buttons/cmd_button', ->
       button = new CmdButton size:'l'
       expect(button.size()).toEqual 'l'
       expect(button.el.hasClass('core_size_l')).toEqual true
-    
 
   describe 'color', ->
     it 'is [silver] by default', ->
@@ -73,7 +72,7 @@ describe 'controls/buttons/cmd_button', ->
       expect(button.color()).toEqual 'blue'
       expect(button.el.hasClass('core_color_blue')).toEqual true
 
-  describe 'text', ->
+  describe 'label property', ->
     beforeEach ->
       button = new CmdButton label:'foo'
     
@@ -83,24 +82,36 @@ describe 'controls/buttons/cmd_button', ->
     it 'changes the text in the BUTTON element', ->
       button.label 'bar'
       expect(button._btn.text()).toEqual 'bar'
+  
+  describe 'width property', ->
+    it 'has no width property by default', ->
+      expect(button.width()).toEqual null
+
+    it 'sets the width on the element', ->
+      button.width 120
+      expect(button.el.css('width')).toEqual '120px'
+    
+    it 'sets the width at construction', ->
+      button = new CmdButton width:120
+      expect(button.el.css('width')).toEqual '120px'
+      
+    
+    
 
       
     
     
-    
-      
-      
+
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
   

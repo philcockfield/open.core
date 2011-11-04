@@ -2,8 +2,13 @@
 A function which is used as a property.
 Create an instance of this class and assign the 'fn' to a property on an object. 
 Usage:
-- Read:  the 'fn' function is invoked with no parameter.
-- Write: the 'fn' function is invoekd with a value parameter.
+  - Read:  the 'fn' function is invoked with no parameter.
+  - Write: the 'fn' function is invoekd with a value parameter.
+
+Property events:
+  - changing
+  - changed
+
 ###
 module.exports = class Property
   ###
