@@ -88,7 +88,10 @@ module.exports = (module) ->
         @render()
     
     render: -> 
-        @html @label()
+        @html new Tmpl().btn()
+        
+        # TEMP 
+        @$('.core_inner_border').html @label()
         
   
   class Tmpl extends module.mvc.Template
@@ -102,6 +105,15 @@ module.exports = (module) ->
         <button class="core_btn_sign_in"></button>
       </div>
       """
+    
+    btn:
+      """
+      <div class="core_inner_border">
+      
+      </div>      
+      """
+      
+    
     
   
   

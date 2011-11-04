@@ -4,10 +4,12 @@
 .core_auth_sign_in
   MARGIN    = 15px
   HR_BORDER = solid 1px darken(white, 20%)
+  BG_COLOR  = darken(white, 3%)
   
   position relative
-  width 450px
+  width 500px
   padding MARGIN
+  background BG_COLOR
   
   .core_title
     font-size 24px
@@ -26,7 +28,6 @@
       margin-top 15px
       margin-bottom 15px
       td
-        // border solid 1px darken(white, 10%)
         padding 8px
   
   .core_footer
@@ -40,18 +41,35 @@
   
   // Provider Button.
   .core_provider_btn
+    FAT_BORDER    = 6px
+    
+    position relative
     border-radius 10px
-    background darken(white, 6%)
-    border solid 5px darken(white, 10%)
+    // background darken(white, 6%)
+    
     height 45px
+    padding-bottom (FAT_BORDER * 2) 
+
+    border solid FAT_BORDER BG_COLOR
+    .core_inner_border
+      position relative
+      height 100%
+      border-radius 4px
+      border solid 1px darken(white, 20%)
+      background: linear-gradient(top, darken(white, 1%), darken(white, 10%))
+      
+      // TEMP
+      // background orange
+      color darken(white, 40%)
+      padding 5px
+      font-size 8pt
+      
     
     &.core_selected
-      border-color #00bdf3
+      border solid FAT_BORDER darken(white, 20%)
+      .core_inner_border
+        background darken(white, 2%)
     
-    // TEMP
-    color darken(white, 40%)
-    padding 5px
-    font-size 8pt
   
   
   

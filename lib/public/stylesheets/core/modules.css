@@ -3,8 +3,9 @@
 }
 .core_auth_sign_in {
   position: relative;
-  width: 450px;
+  width: 500px;
   padding: 15px;
+  background: #f7f7f7;
 }
 .core_auth_sign_in .core_title {
   font-size: 24px;
@@ -36,16 +37,32 @@
   float: right;
 }
 .core_auth_sign_in .core_provider_btn {
+  position: relative;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  background: #f0f0f0;
-  border: solid 5px #e6e6e6;
   height: 45px;
+  padding-bottom: 12px;
+  border: solid 6px #f7f7f7;
+}
+.core_auth_sign_in .core_provider_btn .core_inner_border {
+  position: relative;
+  height: 100%;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: solid 1px #ccc;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fcfcfc), color-stop(1, #e6e6e6));
+  background: -webkit-linear-gradient(top, #fcfcfc 0%, #e6e6e6 100%);
+  background: -moz-linear-gradient(top, #fcfcfc 0%, #e6e6e6 100%);
+  background: linear-gradient(top, #fcfcfc 0%, #e6e6e6 100%);
   color: #999;
   padding: 5px;
   font-size: 8pt;
 }
 .core_auth_sign_in .core_provider_btn.core_selected {
-  border-color: #00bdf3;
+  border: solid 6px #ccc;
+}
+.core_auth_sign_in .core_provider_btn.core_selected .core_inner_border {
+  background: #fafafa;
 }
