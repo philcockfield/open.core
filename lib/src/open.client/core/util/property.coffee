@@ -38,6 +38,9 @@ module.exports = class Property
       fn.onChanging = (handler) -> fn.bind 'changing', handler
       fn.onChanged  = (handler) -> fn.bind 'changed',  handler
       fn.onReading  = (handler) -> fn.bind 'reading',  handler
+      fn.toggle = -> 
+          value = fn()
+          fn(not value) if value is true or value is false
   
   
   ###

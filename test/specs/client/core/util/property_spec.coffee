@@ -346,3 +346,56 @@ describe 'util/property', ->
       prop.fn.onReading (e) -> e.value = 'bar'
       expect(prop.fn()).toEqual 'bar'
       
+  describe 'toggle()', ->
+    prop = null
+    beforeEach ->
+      prop = new Property( name:'foo', store: {} )
+    
+    it 'toggles to [true] from [false]', ->
+      prop.fn false
+      prop.fn.toggle()
+      expect(prop.fn()).toEqual true
+
+    it 'toggles to [false] from [true]', ->
+      prop.fn true
+      prop.fn.toggle()
+      expect(prop.fn()).toEqual false
+
+    describe 'it does not toggle when', ->
+      it 'is a null value', ->
+        prop.fn null
+        prop.fn.toggle()
+        expect(prop.fn()).toEqual null
+
+      it 'is a simple type other than boolean', ->
+        prop.fn 'foo'
+        prop.fn.toggle()
+        expect(prop.fn()).toEqual 'foo'
+
+      it 'is an object', ->
+        obj = { foo:123 }
+        prop.fn obj
+        prop.fn.toggle()
+        expect(prop.fn()).toEqual obj
+
+
+    
+      
+    
+      
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
