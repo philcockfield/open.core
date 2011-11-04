@@ -1,4 +1,4 @@
-describe 'Cont/rols', 
+describe 'Controls', 
   '''
     Controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
@@ -16,9 +16,13 @@ describe 'Cont/rols',
         
         beforeAll -> addButton label:'My Label'
         
-        it 'Add another', -> addButton label:"Button #{buttons.length + 1}"
-        it 'Color: Blue', -> btn.color 'blue' for btn in buttons
+        it 'Add another',   -> addButton label:"Button #{buttons.length + 1}"
+        it 'Color: Blue',   -> btn.color 'blue' for btn in buttons
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
+        it 'Width: 200',    -> btn.width 200 for btn in buttons
+        it 'Width: null',   -> btn.width null for btn in buttons
+          
+        
         
       
       describe 'Toggle Buttons', ->

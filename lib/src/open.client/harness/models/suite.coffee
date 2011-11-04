@@ -140,6 +140,7 @@ module.exports = (module) ->
         return null unless raw?
         id = raw.replace /\//g, '\\' # Convert forward-spash to back-slash, so that it will be escaped.
         id = encodeURI(id)
+        id = id.toLowerCase()
         id
   
   

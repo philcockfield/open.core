@@ -2,11 +2,13 @@ core    = require 'open.server'
 app     = core.app
 baseUrl = core.baseUrl
 
-
+# Paths.
+stylesheets = "#{baseUrl}/stylesheets/core"
 sourceUrls = [
   "#{baseUrl}/libs.js"
   "#{baseUrl}/core+controls.js" 
   "#{baseUrl}/harness.js" 
+  "#{baseUrl}/auth.js" 
 ]
 
 
@@ -25,5 +27,9 @@ core.configure.harness app,
       url:        "#{baseUrl}/harness"
       sourceUrls: sourceUrls
       specsDir:   "#{core.paths.test}/harness/"
-      css:        ["#{baseUrl}/stylesheets/core/base.css", "#{baseUrl}/stylesheets/core/controls.css"]
+      css:        [
+                    "#{stylesheets}/base.css"
+                    "#{stylesheets}/controls.css"
+                    "#{stylesheets}/modules.css"
+                  ]
 

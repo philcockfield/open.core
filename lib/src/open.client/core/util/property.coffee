@@ -2,8 +2,14 @@
 A function which is used as a property.
 Create an instance of this class and assign the 'fn' to a property on an object. 
 Usage:
-- Read:  the 'fn' function is invoked with no parameter.
-- Write: the 'fn' function is invoekd with a value parameter.
+  - Read:  the 'fn' function is invoked with no parameter.
+  - Write: the 'fn' function is invoekd with a value parameter.
+
+Property events:
+  - changing : Fires immediately before the property changes.  Event handler can mutate written property value.
+  - changed  : Fires immediately after the property has changed.
+  - reading  : Fires immediately before the property is read.  Event handler can mutate the read property value.
+
 ###
 module.exports = class Property
   ###
@@ -30,7 +36,11 @@ module.exports = class Property
       
       # Add handler helper methods.
       fn.onChanging = (handler) -> fn.bind 'changing', handler
-      fn.onChanged  = (handler) -> fn.bind 'changed', handler
+      fn.onChanged  = (handler) -> fn.bind 'changed',  handler
+      fn.onReading  = (handler) -> fn.bind 'reading',  handler
+      fn.toggle = -> 
+          value = fn()
+          fn(not value) if value is true or value is false
   
   
   ###
@@ -51,9 +61,17 @@ module.exports = class Property
   Reads the property value.
   ###
   read: => 
+      
+      # Retrieve the value.
       store = @_.store      
       if _.isFunction(store) then value = store(@name) else value = store[@name]
       value = @_.default if value == undefined
+      
+      # Pre-event.
+      args = @fireReading value
+      value = args.value # Return any mutation of the value an event handler may have made.
+      
+      # Finish up.
       value
   
   
@@ -83,6 +101,19 @@ module.exports = class Property
       
       # Post-event.
       @fireChanged(oldValue, value, options) if options.silent is no
+  
+  
+  ###
+  Fires the 'reading' event (from the [Property] instance, and the [fn] method)
+  allowing listeners to mutate the returned value.
+  @param value : The value of the property.
+  @returns the event args.
+  ###
+  fireReading: (value) => 
+      args = 
+          value: value
+      fireEvent 'reading', @, args
+      args
   
   
   ###
