@@ -43,13 +43,18 @@ module.exports = class CmdButton extends Button
         @color.onChanged    onColorChanged
         @selected.onChanged onSelectedChanged
         @width.onChanged    onWidthChanged
+        @width.onReading (e) => 
+            width   = core.util.jQuery.cssNum @el, 'width'
+            width   = null if width is 0
+            e.value = width
+            
         @label.onChanged (e) => @_btn.text e.newValue
         
         # Finish up.
         onSizeChanged     newValue: @size()
         onColorChanged    newValue: @color()
         onSelectedChanged newValue: @selected()
-        onWidthChanged    newValue: @width()
+        onWidthChanged    newValue: params.width ? null
     
     
     render: -> 

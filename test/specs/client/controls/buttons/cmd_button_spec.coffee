@@ -94,6 +94,22 @@ describe 'controls/buttons/cmd_button', ->
     it 'sets the width at construction', ->
       button = new CmdButton width:120
       expect(button.el.css('width')).toEqual '120px'
+    
+    describe 'reading', ->
+      it 'is a number', ->
+        button.el.css 'width', '50px'
+        expect(button.width()).toEqual 50
+        
+      it 'is null when 0px', ->
+        button.el.css 'width', '0px'
+        expect(button.width()).toEqual null
+
+      it 'is null when null is applied to el', ->
+        button.el.css 'width', null
+        expect(button.width()).toEqual null
+      
+    
+    
       
     
     
