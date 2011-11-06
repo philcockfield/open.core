@@ -21,8 +21,6 @@ describe 'Controls',
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
         it 'Width: 200',    -> btn.width 200 for btn in buttons
         it 'Width: null',   -> btn.width null for btn in buttons
-          
-        
         
       
       describe 'Toggle Buttons', ->
@@ -67,10 +65,8 @@ describe 'Controls',
       beforeAll ->
           tabStrip = new controls.TabStrip()
           page.add tabStrip, width:'80%', border:true
-          add()
-          add()
-          add()
-          add()
+
+          add() for i in [1..4]
           tabStrip.first().click()
           tabStrip.last().enabled false
           tabStrip.tabs.bind 'selectionChanged', (e) -> console.log 'SELECTION CHANGED:', e.button.label(), e
@@ -88,8 +84,18 @@ describe 'Controls',
       it 'Clear', -> tabStrip.clear()
       it 'Change Label', ->
         tab = tabStrip.tabs.first()
-        if tab?
-          tab.label 'New Label'
+        tab.label 'New Label' if tab?
+      
+      it 'Init', ->
+        tabStrip.init [
+          { label:'One' }
+          { label:'Two' }
+          { label:'Three', enabled:false }
+        ]
+          
+        
+      
+      
   
   
     describe 'Textbox', ->

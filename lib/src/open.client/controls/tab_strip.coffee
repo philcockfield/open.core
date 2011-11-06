@@ -35,6 +35,27 @@ module.exports = class TabStrip extends mvc.View
   # Retrieves the last button in the set.
   last: -> @tabs.last()
   
+  ###
+  Clears the tab-strip and initializes it with the specified set of tabs.
+  @param tabs - and array of tabs containing the [Tab] button definitions, for example:
+            [
+              { label:'One', value:1 }
+              { label:'Two', value:2, enabled:false }
+            ]
+  @returns the collection of tabs.
+  ###
+  init: (tabs = []) ->
+      
+      # Setup initial conditions.
+      @clear()
+      
+      # Add each tab.
+      tabs = [tabs] unless _(tabs).isArray()
+      @add tab for tab in tabs
+      
+      # Finish up.
+      @tabs
+      
   
   ###
   Adds a new [Tab] button to the strip.

@@ -179,6 +179,38 @@ describe 'controls/tab_strip', ->
       expect(count).toEqual 1
       expect(args.tab).toEqual tab2
     
+  describe 'init() method', ->
+    tabs = [
+      { label:'One', value:1 }
+      { label:'Two', value:2 }
+      { label:'Three', value:3, enabled:false }
+    ]
+    
+    it 'adds the specified tabs to the strip.', ->
+      tabStrip.init tabs
+      buttons = tabStrip.tabs.items.models
+      expect(buttons[0].value()).toEqual 1
+      expect(buttons[1].label()).toEqual 'Two'
+      expect(buttons[2].enabled()).toEqual false
+      
+    it 'adds a single tab (not specified as an array)', ->
+      tabStrip.init label:'foo'
+      expect(tabStrip.first().label()).toEqual 'foo'
+      
+    it 'returns the [tabs] collection', ->
+      expect(tabStrip.init()).toEqual tabStrip.tabs
+    
+    it 'clears the existing tabs', ->
+      spyOn(tabStrip, 'clear')
+      tabStrip.init tabs
+      expect(tabStrip.clear).toHaveBeenCalled()
+      
+    
+    
+
+      
+    
+    
     
   
   
