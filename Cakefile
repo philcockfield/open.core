@@ -1,7 +1,7 @@
 {exec}   = require 'child_process'
 core     = require './index'
 log      = core.util.log
-cakeUtil = core.util.cake
+tasks    = core.util.cake
 onExec   = core.util.onExec
 
 logDone = -> log 'Done', color.green
@@ -48,7 +48,7 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
     
     # Setup initial conditions.
     console.log 'Bumping version...'
-    package = new cakeUtil.Package(core.paths.root)
+    package = new tasks.Package(core.paths.root)
     
     # Increment the package version.
     increment = (callback) -> 

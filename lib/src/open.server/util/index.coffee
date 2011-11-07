@@ -2,7 +2,7 @@ module.exports = index =
   javascript: require './javascript'
   send:       require './send'
   fs:         require './fs'
-  cake:       require './cake'
+  tasks:      require './tasks'
   git:        require './git'
   html:       require './html'
   testing:    require './testing'

@@ -98,6 +98,7 @@ TabStrip.Tab = class Tab extends Button
   constructor: (tabStrip, options = {}) ->
       
       # Setup initial conditions.
+      @_cssPrefix = tabStrip._cssPrefix
       super _.extend options, tagName:'li', className: @_className('tab'), canToggle:true
       @tabStrip = tabStrip
       tabs      = tabStrip.tabs
@@ -115,8 +116,9 @@ TabStrip.Tab = class Tab extends Button
   
   
   render: -> 
-      @html new Tmpl().tab()
-      @divLabel = @$ 'p.core_label'
+      prefix = @_cssPrefix
+      @html new Tmpl().tab prefix:prefix
+      @divLabel = @$ "p.#{prefix}_label"
       @updateState()
       @syncClasses()
   
@@ -147,9 +149,9 @@ TabStrip.Tab = class Tab extends Button
 class Tmpl extends mvc.Template
   tab: 
     """
-    <div class="core_div_left"></div>
-    <p class="core_label"></p>
-    <div class="core_div_right"></div>
+    <div class="<%= prefix %>_div_left"></div>
+    <p class="<%= prefix %>_label"></p>
+    <div class="<%= prefix %>_div_right"></div>
     """
 
 
