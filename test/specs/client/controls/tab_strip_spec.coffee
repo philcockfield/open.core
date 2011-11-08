@@ -212,12 +212,23 @@ describe 'controls/tab_strip', ->
     it 'has an [elContent] element', ->
       expect(tab.elContent).toBeDefined()
     
+    it 'has an [elContent] element when constructor from the [init] method', ->
+      tabStrip.init [label:'foo']
+      expect(tabStrip.first().elContent).toBeDefined()
+    
     it 'is hidden by default', ->
       expect(tab.elContent.css('display')).toEqual 'none'
     
     it 'is not hidden if the tab is selected at construction', ->
       tab = tabStrip.add selected:true
       expect(tab.elContent.css('display')).not.toEqual 'none'
+    
+    it 'has the [elContent] element when fired out of the tabs collection', ->
+      args = null
+      tabStrip.tabs.bind 'add', (e) -> args = e
+      tab = tabStrip.add()
+      expect(args.button.elContent).toBeDefined()
+      expect(args.button.elContent).toEqual tab.elContent
     
     describe 'content visibility based on tab selection', ->
       tab1 = null
@@ -231,12 +242,25 @@ describe 'controls/tab_strip', ->
         expect(tab1.elContent.css('display')).not.toEqual 'none'
         expect(tab2.elContent.css('display')).toEqual 'none'
       
-      
       it 'hides the element when the tab is unselected', ->
         tab1.click()
         tab2.click()
         expect(tab1.elContent.css('display')).toEqual 'none'
         expect(tab2.elContent.css('display')).not.toEqual 'none'
+      
+      it 'does not fail if the [elContent] element is removed and selection changes', ->
+        tab1.elContent = null
+        delete tab2.elContent
+        tab1.click()
+        tab2.click()
+
+      it 'changes the display property on a different element that is swapped into the [elContent] property', ->
+        el = $ '<span>Foo</span>'
+        tab1.elContent = el
+        tab1.selected true
+        tab1.selected false
+        expect(el.css('display')).toEqual 'none'
+      
     
       
     

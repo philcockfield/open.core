@@ -68,19 +68,10 @@ module.exports = class TabStrip extends mvc.View
       # Create the tab and store it in the set.
       tab = @tabs.add new Tab(@, options)
       
-      # Assign the content element.
-      el = @$ '<div>'
-      tab.elContent = el
-      
       # Insert the element within the DOM.
       @el.append tab.el
       
-      # Wire up events.
-      syncVisibility = -> el.toggle tab.selected()
-      tab.selected.onChanged syncVisibility
-      
       # Finish up.
-      syncVisibility()
       tab
   
   
@@ -115,12 +106,18 @@ TabStrip.Tab = class Tab extends Button
       tabs      = tabStrip.tabs
       @render()
       
+      # Attach the content element.
+      @elContent = @$ '<div>'
+      
       # Wire up events.
       @bind 'change',               => @updateState()
       @enabled.onChanged            => @selected false if not @enabled()
       tabs.bind 'add',              => @syncClasses()
       tabs.bind 'remove',           => @syncClasses()
-      tabs.bind 'selectionChanged', => @syncClasses()
+      tabs.bind 'selectionChanged', => @updateState()
+      
+      # Finish up.
+      @updateState()
   
   
   isFirst: -> @tabStrip.tabs.first() is @
@@ -144,11 +141,12 @@ TabStrip.Tab = class Tab extends Button
       @trigger 'removed', 
           tab:@
           tabStrip:@tabStrip
-      
-      
+  
   
   updateState: -> 
       @divLabel.html @label()
+      @elContent?.toggle @selected()
+      @syncClasses()
   
   
   syncClasses: -> 
