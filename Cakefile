@@ -43,6 +43,10 @@ task 'build', 'Build and save all JavaScript files', ->
     buildLibs -> 
       buildCore()
 
+task 'css:images', "Converts all the core images into Data-URI's for use as Stylus constants", -> 
+    sourceDir  = core.paths.images
+    targetFile = "#{core.paths.stylesheets}/core/images.styl"
+    tasks.css.toDataUris sourceDir, targetFile
 
 task 'bump', 'Increments the package version and re-publishes to NPM', -> 
     
