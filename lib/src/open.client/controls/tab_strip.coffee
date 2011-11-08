@@ -36,6 +36,9 @@ module.exports = class TabStrip extends mvc.View
   last: -> @tabs.last()
   
   
+  # Retrieves the tab at the given index.
+  tab: (index) -> @tabs.items.models[index]
+  
   ###
   Clears the tab-strip and initializes it with the specified set of tabs.
   @param tabs - and array of tabs containing the [Tab] button definitions, for example:
@@ -61,6 +64,9 @@ module.exports = class TabStrip extends mvc.View
   ###
   Adds a new [Tab] button to the strip.
   @param options : The options to apply when creating the new [Tab] button.
+                   - Standard button options (eg. label, value), and 
+                   - content: The HTML, jQuery object or element to insert within 
+                              the tab's elContent element.
   @returns the new [Tab] button.
   ###
   add: (options = {}) -> 
@@ -107,7 +113,13 @@ TabStrip.Tab = class Tab extends Button
       @render()
       
       # Attach the content element.
-      @elContent = @$ '<div>'
+      do => 
+        @elContent = el = @$ '<div>'
+        
+        # Append content.
+        content = options.content
+        content = core.util.toJQuery(content) unless _(content).isString()
+        el.html content if content?
       
       # Wire up events.
       @bind 'change',               => @updateState()

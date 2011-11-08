@@ -205,7 +205,7 @@ describe 'controls/tab_strip', ->
       tabStrip.init tabs
       expect(tabStrip.clear).toHaveBeenCalled()
 
-  describe 'tab content element', ->
+  describe 'tab content element [elContent]', ->
     tab = null
     beforeEach -> tab = tabStrip.add()
     
@@ -230,13 +230,43 @@ describe 'controls/tab_strip', ->
       expect(args.button.elContent).toBeDefined()
       expect(args.button.elContent).toEqual tab.elContent
     
+    describe 'initializing with content', ->
+      it 'adds the given HTML string to [elContent]', ->
+        tab = tabStrip.add content:'foo'
+        expect(tab.elContent.html()).toEqual 'foo'
+      
+      it 'adds the given jQuery object to [elContent]', ->
+        div = $ '<div>Foo</div>'
+        tab = tabStrip.add content:div
+        expect(tab.elContent.children()[0]).toEqual div.get(0)
+
+      it 'adds the given View object to [elContent]', ->
+        view = new core.mvc.View()
+        tab = tabStrip.add content:view
+        expect(tab.elContent.children()[0]).toEqual view.element
+
+      it 'does nothing if content is null', ->
+        tab = tabStrip.add content:null
+        expect(tab.elContent.html()).toEqual ''
+      
+      it 'adds initializes with content', ->
+         tabStrip.init [
+           { content:'foo' }
+           { content:'bar' }
+         ]
+         tab1 = tabStrip.tab(0)
+         tab2 = tabStrip.tab(1)
+         expect(tab1.elContent.html()).toEqual 'foo'
+         expect(tab2.elContent.html()).toEqual 'bar'
+    
+    
     describe 'content visibility based on tab selection', ->
       tab1 = null
       tab2 = null
       beforeEach ->
           tab1 = tabStrip.add()
           tab2 = tabStrip.add()
-    
+      
       it 'reveals the element when the tab is selected', ->
         tab1.selected true
         expect(tab1.elContent.css('display')).not.toEqual 'none'
@@ -253,7 +283,7 @@ describe 'controls/tab_strip', ->
         delete tab2.elContent
         tab1.click()
         tab2.click()
-
+      
       it 'changes the display property on a different element that is swapped into the [elContent] property', ->
         el = $ '<span>Foo</span>'
         tab1.elContent = el
@@ -261,8 +291,20 @@ describe 'controls/tab_strip', ->
         tab1.selected false
         expect(el.css('display')).toEqual 'none'
       
-    
+  describe 'tab(index) method', ->
+    tab1 = null
+    tab2 = null
+    beforeEach ->
+        tab1 = tabStrip.add()
+        tab2 = tabStrip.add()
+    it 'gets the first tab',  -> expect(tabStrip.tab(0)).toEqual tab1
+    it 'gets the second tab', -> expect(tabStrip.tab(1)).toEqual tab2
+    it 'returns null when index is less than zero', -> expect(tabStrip.tab(-1)).toEqual null
+    it 'returns null when index is greater than length', -> expect(tabStrip.tab(9)).toEqual null
+    it 'returns null when index is not specified', -> expect(tabStrip.tab()).toEqual null
       
+    
+    
     
     
     
