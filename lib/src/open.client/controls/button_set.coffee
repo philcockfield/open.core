@@ -87,7 +87,7 @@ module.exports = class ButtonSet extends core.Base
       button.selected.onChanged (e) => 
             return unless button.canToggle()
             return if e.oldValue == true
-
+            
             # Deselect the other toggle buttons.
             for btn in @togglable()
                 if btn isnt button and btn.canToggle() and btn.selected()
@@ -98,7 +98,7 @@ module.exports = class ButtonSet extends core.Base
             
       # Finish up.
       if not options.silent
-          @_fire 'add' 
+          @_fire 'add', button:button
           @_fireChanged()
       button
   
@@ -128,7 +128,7 @@ module.exports = class ButtonSet extends core.Base
       
       # Finish up.
       if not options.silent
-          @_fire 'remove' 
+          @_fire 'remove', button:button
           @_fireChanged() if options._fireChanged
       true
   

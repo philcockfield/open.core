@@ -124,7 +124,7 @@ describe 'controls/tab_strip', ->
           tab.bind 'removed', (e) -> count += 1
       tabStrip.clear()
       expect(count).toEqual 3
-      
+  
   
   describe 'position based CSS classes', ->
     tab1 = null
@@ -197,21 +197,56 @@ describe 'controls/tab_strip', ->
       tabStrip.init label:'foo'
       expect(tabStrip.first().label()).toEqual 'foo'
       
-    it 'returns the [tabs] collection', ->
-      expect(tabStrip.init()).toEqual tabStrip.tabs
+    it 'returns the TabStrip (allows for calling during construction)', ->
+      expect(tabStrip.init()).toEqual tabStrip
     
     it 'clears the existing tabs', ->
       spyOn(tabStrip, 'clear')
       tabStrip.init tabs
       expect(tabStrip.clear).toHaveBeenCalled()
+
+  describe 'tab content element', ->
+    tab = null
+    beforeEach -> tab = tabStrip.add()
+    
+    it 'has an [elContent] element', ->
+      expect(tab.elContent).toBeDefined()
+    
+    it 'is hidden by default', ->
+      expect(tab.elContent.css('display')).toEqual 'none'
+    
+    it 'is not hidden if the tab is selected at construction', ->
+      tab = tabStrip.add selected:true
+      expect(tab.elContent.css('display')).not.toEqual 'none'
+    
+    describe 'content visibility based on tab selection', ->
+      tab1 = null
+      tab2 = null
+      beforeEach ->
+          tab1 = tabStrip.add()
+          tab2 = tabStrip.add()
+    
+      it 'reveals the element when the tab is selected', ->
+        tab1.selected true
+        expect(tab1.elContent.css('display')).not.toEqual 'none'
+        expect(tab2.elContent.css('display')).toEqual 'none'
       
+      
+      it 'hides the element when the tab is unselected', ->
+        tab1.click()
+        tab2.click()
+        expect(tab1.elContent.css('display')).toEqual 'none'
+        expect(tab2.elContent.css('display')).not.toEqual 'none'
+    
+      
+    
+    
+    
+    
     
     
 
-      
-    
-    
-    
-  
-  
-  
+
+
+
+

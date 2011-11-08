@@ -1,7 +1,7 @@
 {exec}   = require 'child_process'
 core     = require './index'
 log      = core.util.log
-tasks    = core.util.cake
+tasks    = core.util.tasks
 onExec   = core.util.onExec
 
 logDone = -> log 'Done', color.green

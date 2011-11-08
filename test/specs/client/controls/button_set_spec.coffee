@@ -229,6 +229,7 @@ describe 'controls/button_set', ->
       buttons.bind 'add', (e) -> args = e
       buttons.add(btn)
       expect(args.source).toEqual buttons
+      expect(args.button).toEqual btn
 
     it 'does not fire [add] event from ButtonSet when [silent:true]', ->
       args = undefined
@@ -256,6 +257,7 @@ describe 'controls/button_set', ->
       buttons.bind 'remove', (e) -> args = e
       buttons.remove(btn)
       expect(args.source).toEqual buttons
+      expect(args.button).toEqual btn
       
     it 'does not fire [remove] event when [silent:true]', ->
       args = undefined

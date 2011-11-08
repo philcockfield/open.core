@@ -35,6 +35,7 @@ module.exports = class TabStrip extends mvc.View
   # Retrieves the last button in the set.
   last: -> @tabs.last()
   
+  
   ###
   Clears the tab-strip and initializes it with the specified set of tabs.
   @param tabs - and array of tabs containing the [Tab] button definitions, for example:
@@ -54,8 +55,8 @@ module.exports = class TabStrip extends mvc.View
       @add tab for tab in tabs
       
       # Finish up.
-      @tabs
-      
+      @
+  
   
   ###
   Adds a new [Tab] button to the strip.
@@ -67,10 +68,19 @@ module.exports = class TabStrip extends mvc.View
       # Create the tab and store it in the set.
       tab = @tabs.add new Tab(@, options)
       
+      # Assign the content element.
+      el = @$ '<div>'
+      tab.elContent = el
+      
       # Insert the element within the DOM.
       @el.append tab.el
       
+      # Wire up events.
+      syncVisibility = -> el.toggle tab.selected()
+      tab.selected.onChanged syncVisibility
+      
       # Finish up.
+      syncVisibility()
       tab
   
   
@@ -93,6 +103,7 @@ An individual Tab button.
 
 Events:
   - removed
+
 ###
 TabStrip.Tab = class Tab extends Button
   constructor: (tabStrip, options = {}) ->
@@ -118,7 +129,7 @@ TabStrip.Tab = class Tab extends Button
   render: -> 
       prefix = @_cssPrefix
       @html new Tmpl().tab prefix:prefix
-      @divLabel = @$ "p.#{prefix}_label"
+      @divLabel  = @$ "p.#{prefix}_label"
       @updateState()
       @syncClasses()
   

@@ -54,22 +54,16 @@ module.exports = (module) ->
         tab.selected true if @count() is 1 # Ensure at least one tab is selected.
         
         # Insert tab content element.
-        tab.elContent = $ '<div class="th_tab_content"></div>'
+        tab.elContent.addClass 'th_tab_content'
         if options.content?
               tab.elContent.append module.util.toJQuery(options.content)
               tab.content = options.content
         @divBody.append tab.elContent
         
-        # Tab method extensions.
-        tab.syncContent = -> 
-            tab.elContent.toggle tab.selected() # Sync visibility of content.
-            
         # Wire up events.
         tab.bind 'removed', (e) => e.tab.elContent.remove() # Remove the corresponding content element.
-        tab.selected.onChanged (e) -> tab.syncContent()
         
         # Finish up.
-        tab.syncContent()
         tab
     
     
