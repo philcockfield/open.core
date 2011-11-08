@@ -91,7 +91,7 @@ module.exports = (module) ->
         @html new Tmpl().btn()
         
         # TEMP 
-        @$('.core_inner_border').html @label()
+        # @$('.core_inner_border').html @label()
         
   
   class Tmpl extends module.mvc.Template
@@ -108,16 +108,11 @@ module.exports = (module) ->
     
     btn:
       """
-      <div class="core_inner_border">
-      
-      </div>      
+      <div class="core_inner_border"></div>      
       """
-      
-    
-    
   
   
-  # Export
+  # Export.
   SignIn
   
   

@@ -9,7 +9,7 @@
   position relative
   width 500px
   padding MARGIN
-  background BG_COLOR
+  background-color BG_COLOR
   
   .core_title
     font-size 24px
@@ -63,12 +63,13 @@
       color darken(white, 40%)
       padding 5px
       font-size 8pt
-      
     
     &.core_selected
-      border solid FAT_BORDER darken(white, 20%)
+      // border solid FAT_BORDER darken(white, 20%)
+      border solid FAT_BORDER PRIMARY_BLUE
       .core_inner_border
         background darken(white, 2%)
+        border-color PRIMARY_BLUE
     
   
   

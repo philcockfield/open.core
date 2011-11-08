@@ -22,7 +22,7 @@ describe 'Modules', ->
         signIn.addProvider label:'Google'
         signIn.addProvider label:'Twitter'
         signIn.addProvider label:'Yahoo'
-        signIn.addProvider label:'Dropbox'
+        signIn.addProvider label:'Linked In'
       
     
     
