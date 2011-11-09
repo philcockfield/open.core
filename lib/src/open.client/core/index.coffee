@@ -1,14 +1,5 @@
-util       = require './util'
-tryRequire = util.tryRequire
-
 module.exports = core =
   title:      'Open.Core (Client)'
-
-  Base:       require './base'
-  mvc:        require './mvc'
-
-  util:       util
-  tryRequire: tryRequire
   
   ###
   Initializes [Open.Core]
@@ -16,13 +7,20 @@ module.exports = core =
   are attached to this root index.
   ###
   init: -> 
-    req = (name) -> 
-              try
-                require name
-              catch error
-                # Ignore - not included in page
+    @controls = @tryRequire 'open.client/controls'
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+
+# Bootstrap.
+do -> 
     
-    @controls = require '../controls'
+    # Attach sub-modules.
+    core.Base       = require './base'
+    core.util       = require './util'
+    core.tryRequire = core.util.tryRequire
+    core.mvc        = require './mvc'
     
-    
+
   

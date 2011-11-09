@@ -173,9 +173,6 @@ ul.core_tab_strip {
   list-style-type: none;
   margin: 0px;
   padding: 0px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
 }
 ul.core_tab_strip li.core_tab {
   position: relative;

@@ -1,11 +1,11 @@
+###
+An authentiation provider selector.
+
+Events:
+ - click:signIn - Fires when the sign in button is selected.
+
+###
 module.exports = (module) ->
-  ###
-  An authentiation provider selector.
-  
-  Events:
-   - click:signIn - Fires when the sign in button is selected.
-  
-  ###
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.

@@ -31,6 +31,13 @@ describe 'mvc/module', ->
       expect(-> new Module('')).toThrow()
       expect(-> new Module('   ')).toThrow()
   
+  
+  describe 'convenience properties', ->
+    it 'exposes the [core] library',     -> expect(module.core).toEqual core
+    it 'exposes the [mvc] library',      -> expect(module.mvc).toEqual core.mvc
+    it 'exposes the [controls] library', -> expect(module.core).toEqual controls
+  
+  
   describe '[require] mvc part methods', ->
     args = null
     beforeEach ->

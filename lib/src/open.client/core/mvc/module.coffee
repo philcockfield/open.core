@@ -15,6 +15,14 @@ module.exports = Module = class Module extends Base
       super
       _.extend @, Backbone.Events
       
+      # Convenience properties.
+      unless Module::core?
+        core = require 'open.client/core'
+        core.init()
+        Module::core     = core
+        Module::mvc      = core.mvc
+        Module::controls = core.controls
+      
       # Derive the module path.
       if module?.id?
         # throw 'CommonJS module not specified' unless module.id?
@@ -23,7 +31,6 @@ module.exports = Module = class Module extends Base
         @modulePath = module
       if not @modulePath? or _.isBlank(@modulePath)
           throw 'Module path not specified. Pass either the path of the CommonJS module to [super].' 
-      
       
       # Setup the module part [require] functions.
       req = (dir) => 

@@ -23,6 +23,13 @@ describe 'Modules', ->
         signIn.addProvider label:'Twitter'
         signIn.addProvider label:'Yahoo'
         signIn.addProvider label:'Linked In'
+    
+    describe 'Provider Button', ->
+      btn = null
+      beforeAll ->
+          
+      
+    
       
     
     
