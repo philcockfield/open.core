@@ -42,6 +42,10 @@ ul.core_tab_strip li.core_tab div.core_div_right {
   background-repeat: no-repeat;
   background-position: right center;
 }
+ul.core_tab_strip li.core_tab.core_first {
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
 ul.core_tab_strip li.core_tab.core_enabled.core_over {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f2f2f2), color-stop(1, #bfbfbf));
   background: -webkit-linear-gradient(top, #f2f2f2 0%, #bfbfbf 100%);
@@ -232,7 +236,10 @@ ul.core_tab_strip li.core_tab.core_disabled p {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  padding: 10px 20px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .th_harness > .th_main > div.th_host > table {
   width: 100%;

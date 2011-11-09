@@ -34,9 +34,13 @@ tabStrip(prefix = CLASS_PREFIX)
         background-image: CONTROLS__TAB_STRIP__DIVIDER
         background-repeat no-repeat
         background-position right center
+      
+      // First tab.
+      &.{prefix}_first
+        border-top-left-radius inherit
+        border-bottom-left-radius inherit
     
       &.{prefix}_enabled
-    
         // Tab: Over.
         &.{prefix}_over
           background: linear-gradient(top, darken(white, 5%), darken(white, 25%))
