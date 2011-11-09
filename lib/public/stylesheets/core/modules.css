@@ -60,6 +60,12 @@
   padding: 5px;
   font-size: 8pt;
 }
+.core_provider_btn.core_down .core_inner_border {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e6e6e6), color-stop(1, #fcfcfc));
+  background: -webkit-linear-gradient(top, #e6e6e6 0%, #fcfcfc 100%);
+  background: -moz-linear-gradient(top, #e6e6e6 0%, #fcfcfc 100%);
+  background: linear-gradient(top, #e6e6e6 0%, #fcfcfc 100%);
+}
 .core_provider_btn.core_selected {
   border: solid 6px #00bdf3;
 }
