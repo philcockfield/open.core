@@ -6,8 +6,6 @@ Events:
 
 ###
 module.exports = (module) ->
-  ProviderButton = module.view 'provider_btn'
-  
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.
@@ -72,7 +70,7 @@ module.exports = (module) ->
             td
         
         # Create the buttons.
-        btn = new ProviderButton options
+        btn = new module.views.ProviderButton options
         @providers.add btn
         addCell().append btn.el
         

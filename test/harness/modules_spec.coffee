@@ -2,10 +2,11 @@ describe 'Modules', ->
   describe 'Auth', 'Authentication and authorization UI module.', ->
     Auth = null
     auth = null
+    views = null
     beforeAll ->
-        Auth = require 'open.client/auth'
-        auth = new Auth()
-        auth.init()
+        Auth  = require 'open.client/auth'
+        auth  = new Auth().init()
+        views = auth.views
         page.add auth.rootView, fill:true, border:true
     
     
@@ -18,15 +19,27 @@ describe 'Modules', ->
         page.reset()
         page.add signIn.el
         
-        signIn.addProvider label:'Facebook'
-        signIn.addProvider label:'Google'
-        signIn.addProvider label:'Twitter'
-        signIn.addProvider label:'Yahoo'
-        signIn.addProvider label:'Linked In'
+        signIn.addProvider value:'facebook'
+        signIn.addProvider value:'google'
+        signIn.addProvider value:'twitter'
+        signIn.addProvider value:'yahoo'
+        signIn.addProvider value:'linked_in'
     
     describe 'Provider Button', ->
       btn = null
       beforeAll ->
+        btn = new views.ProviderButton value:'facebook'
+        page.reset()
+        page.add btn, width:147, height:56-11
+      
+      it 'Select',            -> btn.selected true
+      it 'Deselect',          -> btn.selected false
+      it 'Toggle: Selected',  -> btn.selected.toggle()
+        
+      
+        
+      
+      
           
       
     

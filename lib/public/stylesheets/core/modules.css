@@ -36,16 +36,16 @@
 .core_auth_sign_in .core_footer .core_btn_sign_in {
   float: right;
 }
-.core_auth_sign_in .core_provider_btn {
+.core_provider_btn {
   position: relative;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   height: 45px;
   padding-bottom: 12px;
-  border: solid 6px #f7f7f7;
+  border: solid 6px BG_COLOR;
 }
-.core_auth_sign_in .core_provider_btn .core_inner_border {
+.core_provider_btn .core_inner_border {
   position: relative;
   height: 100%;
   -webkit-border-radius: 4px;
@@ -60,10 +60,10 @@
   padding: 5px;
   font-size: 8pt;
 }
-.core_auth_sign_in .core_provider_btn.core_selected {
+.core_provider_btn.core_selected {
   border: solid 6px #00bdf3;
 }
-.core_auth_sign_in .core_provider_btn.core_selected .core_inner_border {
+.core_provider_btn.core_selected .core_inner_border {
   background: #fafafa;
   border-color: #00bdf3;
 }

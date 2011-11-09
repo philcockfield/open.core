@@ -1,5 +1,8 @@
 core = require 'open.client/core'
 
+###
+UI for authentication and authorization.
+###
 module.exports = class Auth extends core.mvc.Module
   constructor: () -> 
       super module
@@ -17,5 +20,8 @@ module.exports = class Auth extends core.mvc.Module
       
       # Create the root view.
       @rootView = new @views.Root()
+      
+      # Finish up.
+      @
 
 

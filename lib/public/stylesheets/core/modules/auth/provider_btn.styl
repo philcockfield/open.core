@@ -1,0 +1,41 @@
+@import '../../functions'
+
+// Provider Button.
+.core_provider_btn
+  FAT_BORDER    = 6px
+  
+  position relative
+  border-radius 10px
+  // background darken(white, 6%)
+  
+  height 45px
+  padding-bottom (FAT_BORDER * 2) 
+
+  border solid FAT_BORDER BG_COLOR
+  .core_inner_border
+    position relative
+    height 100%
+    border-radius 4px
+    border solid 1px darken(white, 20%)
+    background: linear-gradient(top, darken(white, 1%), darken(white, 10%))
+    
+    // TEMP
+    // background orange
+    color darken(white, 40%)
+    padding 5px
+    font-size 8pt
+  
+  &.core_selected
+    // border solid FAT_BORDER darken(white, 20%)
+    border solid FAT_BORDER PRIMARY_BLUE
+    .core_inner_border
+      background darken(white, 2%)
+      border-color PRIMARY_BLUE
+  
+
+
+
+
+
+
+

@@ -1,0 +1,41 @@
+@import '../../functions'
+
+// Open-ID Authentication Provider.
+.core_auth_sign_in
+  MARGIN    = 15px
+  HR_BORDER = solid 1px darken(white, 20%)
+  BG_COLOR  = darken(white, 3%)
+  
+  position relative
+  width 500px
+  padding MARGIN
+  background-color BG_COLOR
+  
+  .core_title
+    font-size 24px
+    font-weight 300
+    color darken(white, 60%)
+    padding-bottom 8px
+    border-bottom HR_BORDER
+  
+  .core_body
+    position relative
+    margin-top 5px
+    margin-bottom 5px
+    
+    table.core_providers
+      width 100%
+      margin-top 15px
+      margin-bottom 15px
+      td
+        padding 8px
+  
+  .core_footer
+    position relative
+    height 34px
+    padding-top 12px
+    border-top HR_BORDER
+    .core_btn_sign_in
+      float:right
+  
+  
