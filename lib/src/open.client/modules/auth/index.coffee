@@ -1,4 +1,4 @@
-core     = require 'open.client/core'
+core = require 'open.client/core'
 
 module.exports = class Auth extends core.mvc.Module
   constructor: () -> 
@@ -17,6 +17,5 @@ module.exports = class Auth extends core.mvc.Module
       
       # Create the root view.
       @rootView = new @views.Root()
-      
-      
+
 

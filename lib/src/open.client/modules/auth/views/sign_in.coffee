@@ -6,6 +6,8 @@ Events:
 
 ###
 module.exports = (module) ->
+  ProviderButton = module.view 'provider_btn'
+  
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.
@@ -70,7 +72,7 @@ module.exports = (module) ->
             td
         
         # Create the buttons.
-        btn = new ProviderBtn options
+        btn = new ProviderButton options
         @providers.add btn
         addCell().append btn.el
         
@@ -78,21 +80,6 @@ module.exports = (module) ->
         btn.selected true if @providers.count() is 1
         btn
   
-  
-  ###
-  A button that represents an Authentication provider.
-  ###
-  SignIn.ProviderBtn = class ProviderBtn extends module.controls.Button
-    constructor: (params) -> 
-        super _.extend params, className: 'core_provider_btn', canToggle:true
-        @render()
-    
-    render: -> 
-        @html new Tmpl().btn()
-        
-        # TEMP 
-        # @$('.core_inner_border').html @label()
-        
   
   class Tmpl extends module.mvc.Template
     root:
@@ -104,11 +91,6 @@ module.exports = (module) ->
       <div class="core_footer">
         <button class="core_btn_sign_in"></button>
       </div>
-      """
-    
-    btn:
-      """
-      <div class="core_inner_border"></div>      
       """
   
   

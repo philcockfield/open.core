@@ -35,7 +35,7 @@ describe 'mvc/module', ->
   describe 'convenience properties', ->
     it 'exposes the [core] library',     -> expect(module.core).toEqual core
     it 'exposes the [mvc] library',      -> expect(module.mvc).toEqual core.mvc
-    it 'exposes the [controls] library', -> expect(module.core).toEqual controls
+    it 'exposes the [controls] library', -> expect(module.controls).toEqual controls
   
   
   describe '[require] mvc part methods', ->
