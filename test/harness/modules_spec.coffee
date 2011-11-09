@@ -30,9 +30,14 @@ describe 'Modules', ->
         btn = new views.ProviderButton value:'facebook'
         page.add btn, reset:true, width:147, height:56-11
       
-      it 'Select',            -> btn.selected true
-      it 'Deselect',          -> btn.selected false
-      it 'Toggle: Selected',  -> btn.selected.toggle()
+      it 'Toggle: Selected',    -> btn.selected.toggle()
+      it 'Provider: Facebook',  -> btn.value 'facebook'
+      it 'Provider: Google',    -> btn.value 'google'
+      it 'Provider: Twitter',   -> btn.value 'twitter'
+      it 'Provider: Yahoo',     -> btn.value 'yahoo'
+      it 'Provider: Linked In', -> btn.value 'linked_in'
+        
+      
         
       
         
