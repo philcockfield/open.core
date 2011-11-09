@@ -16,8 +16,7 @@ describe 'Modules', ->
       beforeAll ->
         signIn = new auth.views.SignIn()
         signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.label(), e
-        page.reset()
-        page.add signIn.el
+        page.add signIn.el, reset:true
         
         signIn.addProvider value:'facebook'
         signIn.addProvider value:'google'
@@ -29,8 +28,7 @@ describe 'Modules', ->
       btn = null
       beforeAll ->
         btn = new views.ProviderButton value:'facebook'
-        page.reset()
-        page.add btn, width:147, height:56-11
+        page.add btn, reset:true, width:147, height:56-11
       
       it 'Select',            -> btn.selected true
       it 'Deselect',          -> btn.selected false

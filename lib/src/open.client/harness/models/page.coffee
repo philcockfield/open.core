@@ -31,8 +31,10 @@ module.exports = (module) ->
               - showTitle: Flag indicating if the title, and description, should be displayed (default true).
               - fill:      Flag indicating if width/height values should be set to '100%' (default false).
               - border:    A color (string) or a bolean (yes/no) for whether a border should be put around the hosted control.
+              - reset:     Flag indicating if the 'Reset' method should be invoked before adding.
     ###
     add: (el, options = {}) -> 
+        @reset() if options.reset is yes
         @trigger 'add', element: module.util.toJQuery(el), options: options
         el
     
