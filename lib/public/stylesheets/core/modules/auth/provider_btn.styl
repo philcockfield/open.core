@@ -21,11 +21,6 @@
     border-radius 4px
     border solid 1px darken(white, 20%)
     background: linear-gradient(top, darken(white, 1%), darken(white, 10%))
-
-    // TEMP
-    // background orange
-    color darken(white, 40%)
-    font-size 8pt
     
     // Logos.
     .core_logo
@@ -36,19 +31,29 @@
       background-position 50% 50%
       
       &.core_provider_facebook
-        background-image MODULES__AUTH__PROVIDERS__FACEBOOK
+        background-image MODULES__AUTH__PROVIDERS__FACEBOOK_GRAY
+        &.core_color
+          background-image MODULES__AUTH__PROVIDERS__FACEBOOK
       
       &.core_provider_google
-        background-image MODULES__AUTH__PROVIDERS__GOOGLE
-
+        background-image MODULES__AUTH__PROVIDERS__GOOGLE_GRAY
+        &.core_color
+          background-image MODULES__AUTH__PROVIDERS__GOOGLE
+      
       &.core_provider_twitter
-        background-image MODULES__AUTH__PROVIDERS__TWITTER
-
+        background-image MODULES__AUTH__PROVIDERS__TWITTER_GRAY
+        &.core_color
+          background-image MODULES__AUTH__PROVIDERS__TWITTER
+      
       &.core_provider_yahoo
-        background-image MODULES__AUTH__PROVIDERS__YAHOO
-
+        background-image MODULES__AUTH__PROVIDERS__YAHOO_GRAY
+        &.core_color
+          background-image MODULES__AUTH__PROVIDERS__YAHOO
+      
       &.core_provider_linked_in
-        background-image MODULES__AUTH__PROVIDERS__LINKED_IN
+        background-image MODULES__AUTH__PROVIDERS__LINKED_IN_GRAY
+        &.core_color
+          background-image MODULES__AUTH__PROVIDERS__LINKED_IN
   
   &.core_down
     .core_inner_border

@@ -3,11 +3,13 @@ core = require '../core'
 
 ###
 A click-able button.
+
 Events:
   - selected
   - pre:click
   - click
   - stateChanged
+
 ###
 module.exports = class Button extends core.mvc.View
   ###

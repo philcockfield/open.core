@@ -11,7 +11,6 @@ module.exports = (module) ->
         
         # Wire up events.
         @value.onChanged => @updateState()
-        
     
     
     render: -> 
@@ -20,9 +19,12 @@ module.exports = (module) ->
         @updateState()
     
     
+    handleStateChanged: -> @updateState()
+    
     updateState: -> 
-        PREFIX = 'core_provider_'
-        div = @divLogo
+        PREFIX     = 'core_provider_'
+        div        = @divLogo
+        isSelected = @selected()
         
         # Remove provider classes.
         for name in div.get(0).className.split(' ')
@@ -31,6 +33,13 @@ module.exports = (module) ->
         # Add provider logo class.
         div.addClass PREFIX + @value()
         
+        # Toggle gray-scale class.
+        isColored = @selected() or @over()
+        div.toggleClass 'core_color', isColored
+        # div.toggleClass 'core_over', @over()
+        
+        
+  
   
   # PRIVATE --------------------------------------------------------------------------
   
