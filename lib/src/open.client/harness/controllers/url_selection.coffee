@@ -27,9 +27,18 @@ module.exports = (module) ->
         id = window.location.hash
         return if _(id).isBlank()
         id = _(id).strRight('#').toLowerCase()
+        id = decodeURI id
         
         # Find the corresponding suite.
-        match = Suite.all.find (s) -> s.id.toLowerCase() is id
+        match = Suite.all.find (s) -> 
+            decodeURI(s.id.toLowerCase()) is id
+        
+        # TEMP 
+        console.log ''
+        console.log 'id', id
+        console.log 'match', match
+        # return
+        
         unless match?
             # No matching suite exists anymore.
             # Clear it from the URL.

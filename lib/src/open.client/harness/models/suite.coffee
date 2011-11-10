@@ -154,9 +154,11 @@ module.exports = (module) ->
   
   
   getFunctions = (collection, items, fnModel) -> 
-                                return unless items?
-                                collection.add fnModel(item) for item in items
-  getOperations = (collection, suite, items) -> getFunctions collection, items, (params) -> new Operation(params, suite)
+      return unless items?
+      collection.add fnModel(item) for item in items
+  
+  getOperations = (collection, suite, items) -> 
+      getFunctions collection, items, (params) -> new Operation(params, suite)
   
   
   # STATIC MEMBERS --------------------------------------------------------------------------
