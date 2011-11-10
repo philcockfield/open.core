@@ -6,5 +6,14 @@ module.exports = (module) ->
     
     
     render: -> 
-        @html 'Root'
+        @signIn = new module.views.SignIn().append(@el).init [
+          { value:'facebook' }
+          { value:'google' }
+          { value:'twitter' }
+          { value:'yahoo' }
+          { value:'linked_in', label: 'Linked In' }
+        ]
+        
+        
+        
         

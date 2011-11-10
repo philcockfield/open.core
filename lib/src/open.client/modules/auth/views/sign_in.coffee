@@ -9,7 +9,7 @@ module.exports = (module) ->
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.
-        super className:"core_auth_sign_in core_inset_pane"
+        super className:"core_sign_in core_inset_pane"
         @render()
         @el.disableTextSelect()
         @providers = new module.controls.ButtonSet()
@@ -24,6 +24,7 @@ module.exports = (module) ->
     
     # Gets the currently selected provider.
     selected: -> @providers.selected()
+    
     
     render: -> 
         # Insert base HTML structure.
@@ -53,8 +54,17 @@ module.exports = (module) ->
     
     
     ###
+    Adds a collection of providers.
+    @param providers : An array of button options.  See [addProvider] method.
+    ###
+    init: (providers = []) -> 
+        @addProvider p for p in providers
+        @
+    
+    
+    ###
     Adds a new Authentication Provider button.
-    @param options
+    @param options - button options for the provider.  Specify at least 'value', and optionally a 'label'
     @returns the new button.
     ###
     addProvider: (options = {}) -> 

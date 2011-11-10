@@ -20,6 +20,7 @@ module.exports = class Auth extends core.mvc.Module
       
       # Create the root view.
       @rootView = new @views.Root()
+      options.within.append @rootView.el if options.within?
       
       # Finish up.
       @

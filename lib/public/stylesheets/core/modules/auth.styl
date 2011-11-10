@@ -1,5 +1,16 @@
+@import '../functions'
+
+
 .core_auth_root
+  abs-pos()
   background darken(white, 4%)
+  
+  .core_sign_in
+    position absolute
+    top 50%
+    left 50%
+    margin-left -250px
+    margin-top -230px
 
 @import './auth/sign_in'
 @import './auth/provider_btn'

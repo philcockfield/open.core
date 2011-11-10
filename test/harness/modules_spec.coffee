@@ -15,14 +15,17 @@ describe 'Modules', ->
       
       beforeAll ->
         signIn = new auth.views.SignIn()
-        signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.value(), e
         page.add signIn.el, reset:true
         
-        signIn.addProvider value:'facebook'
-        signIn.addProvider value:'google'
-        signIn.addProvider value:'twitter'
-        signIn.addProvider value:'yahoo'
-        signIn.addProvider value:'linked_in', label:'Linked In'
+        signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.value(), e
+        signIn.init [
+          { value:'facebook' }
+          { value:'google' }
+          { value:'twitter' }
+          { value:'yahoo' }
+          { value:'linked_in', label: 'Linked In' }
+        ]
+    
     
     describe 'Provider Button', ->
       btn = null

@@ -1,3 +1,6 @@
+.core_fonts {
+  font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, 'Helvetica Neue', Helvetica, Verdana, sans-serif;
+}
 div.core_bevel_highlight {
   position: absolute;
   left: 0px;
