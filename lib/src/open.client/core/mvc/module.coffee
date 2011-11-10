@@ -14,6 +14,7 @@ module.exports = Module = class Module extends Base
       # Setup initial conditions.
       super
       _.extend @, Backbone.Events
+      @addProps @defaults # Add defaults as Property functions.
       
       # Convenience properties.
       unless Module::core?

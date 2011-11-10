@@ -4,6 +4,8 @@ core = require 'open.client/core'
 UI for authentication and authorization.
 ###
 module.exports = class Auth extends core.mvc.Module
+  
+  
   constructor: () -> 
       super module
   

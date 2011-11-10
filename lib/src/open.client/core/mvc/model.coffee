@@ -29,7 +29,7 @@ module.exports = class Model extends Backbone.Model
                 self.get(name)
         
         # Add defaults as Property functions.
-        self.addProps @defaults
+        @addProps @defaults
         
         # Overide server interaction methods.
         # NB: These are set in the constructor for each instance (and not on the class itself)

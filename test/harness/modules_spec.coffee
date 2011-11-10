@@ -9,6 +9,11 @@ describe 'Modules', ->
         views = auth.views
         page.add auth.rootView, fill:true, border:true
     
+    it 'Mode: sign_in', -> auth.mode 'sign_in'
+    it 'Mode: null',    -> auth.mode null
+      
+    
+    
     
     describe 'Sign In', ->
       signIn = null

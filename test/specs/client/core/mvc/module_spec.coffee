@@ -38,6 +38,18 @@ describe 'mvc/module', ->
     it 'exposes the [controls] library', -> expect(module.controls).toEqual controls
   
   
+  describe 'setting property functions with [defaults]', ->
+    beforeEach ->
+        class MyModule extends Module
+          constructor: -> super 'path'
+          defaults:
+            text: null
+            number: 123
+        module = new MyModule()
+    it 'has the text property', -> expect(module.text()).toEqual null
+    it 'has the number property', -> expect(module.number()).toEqual 123
+  
+  
   describe '[require] mvc part methods', ->
     args = null
     beforeEach ->
