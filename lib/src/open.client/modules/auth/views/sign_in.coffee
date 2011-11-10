@@ -38,8 +38,16 @@ module.exports = (module) ->
     
     syncTitle: -> 
         selected = @selected()
+        
+        # Build title text.
         title = "Sign In With "
-        title += selected.label() if selected?
+        if selected?
+          provider = selected.label()
+          if provider? is false or _(provider).isBlank()
+            provider = _(selected.value()).capitalize()
+          title += provider
+          
+        # Update the DOM.
         @divTitle.html title
     
     

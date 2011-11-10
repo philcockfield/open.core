@@ -22,7 +22,7 @@ describe 'Modules', ->
         signIn.addProvider value:'google'
         signIn.addProvider value:'twitter'
         signIn.addProvider value:'yahoo'
-        signIn.addProvider value:'linked_in'
+        signIn.addProvider value:'linked_in', label:'Linked In'
     
     describe 'Provider Button', ->
       btn = null
