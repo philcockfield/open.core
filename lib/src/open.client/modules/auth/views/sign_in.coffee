@@ -9,7 +9,7 @@ module.exports = (module) ->
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.
-        super className:"core_auth_sign_in core_inset_pane core_shadow_x_8px"
+        super className:"core_auth_sign_in core_inset_pane"
         @render()
         @el.disableTextSelect()
         @providers = new module.controls.ButtonSet()
@@ -29,7 +29,6 @@ module.exports = (module) ->
         @html new Tmpl().root()
         @divTitle       = @$ '.core_title'
         @tableProviders = @$ '.core_providers'
-        
         
         # Insert buttons.
         @btnSignIn = 

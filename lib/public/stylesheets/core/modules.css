@@ -49,6 +49,7 @@
 }
 .core_provider_btn .core_inner_border {
   position: relative;
+  padding: 5px;
   height: 100%;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -59,7 +60,6 @@
   background: -moz-linear-gradient(top, #fcfcfc 0%, #e6e6e6 100%);
   background: linear-gradient(top, #fcfcfc 0%, #e6e6e6 100%);
   color: #999;
-  padding: 5px;
   font-size: 8pt;
 }
 .core_provider_btn .core_inner_border .core_logo {

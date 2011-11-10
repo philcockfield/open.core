@@ -33,12 +33,6 @@ module.exports = (module) ->
         match = Suite.all.find (s) -> 
             decodeURI(s.id.toLowerCase()) is id
         
-        # TEMP 
-        console.log ''
-        console.log 'id', id
-        console.log 'match', match
-        # return
-        
         unless match?
             # No matching suite exists anymore.
             # Clear it from the URL.
