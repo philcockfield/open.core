@@ -16,10 +16,11 @@ module.exports = (module) ->
         
         # Wire up events.
         @providers.bind 'selectionChanged', (e) => @syncTitle()
-        @btnSignIn.onClick => @trigger 'click:signIn', selected:@selected()
+        @btnSignIn.onClick => @_fireSignIn()
         
         # Finish up.
         @syncTitle()
+    
     
     # Gets the currently selected provider.
     selected: -> @providers.selected()
@@ -78,12 +79,19 @@ module.exports = (module) ->
         
         # Create the buttons.
         btn = new module.views.ProviderButton options
+        btn.el.dblclick => @_fireSignIn()
         @providers.add btn
         addCell().append btn.el
         
         # Finish up.
         btn.selected true if @providers.count() is 1
         btn
+    
+    
+    # PRIVATE --------------------------------------------------------------------------
+    
+    
+    _fireSignIn: -> @trigger 'click:signIn', selected:@selected()
   
   
   class Tmpl extends module.mvc.Template
