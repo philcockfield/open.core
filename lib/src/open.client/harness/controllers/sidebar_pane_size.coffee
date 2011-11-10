@@ -2,8 +2,8 @@ module.exports = (module) ->
   class SidebarPaneSizeController
     constructor: (@sidebar) -> 
         # Wire up events.
-        module.selectedSuite.onChanged => @syncSize()
-        $(window).resize _.debounce (=> @syncSize()), 100
+        module.selectedSuite.onChanged    => @syncSize()
+        module.core.bind 'window:resize', => @syncSize()
         
         # Finish up.
         @syncSize()

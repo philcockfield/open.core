@@ -6,16 +6,11 @@ describe 'Modules', ->
     beforeAll ->
         Auth  = require 'open.client/auth'
         auth  = new Auth( mode:'sign_in' ).init()
-        
-        console.log 'auth.mode()', auth.mode()
-        
         views = auth.views
         page.add auth.rootView, fill:true, border:true
     
     it 'Mode: sign_in', -> auth.mode 'sign_in'
     it 'Mode: null',    -> auth.mode null
-      
-    
     
     
     describe 'Sign In', ->
