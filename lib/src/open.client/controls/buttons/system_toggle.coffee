@@ -22,11 +22,6 @@ module.exports = class SystemToggleButton extends Button
       @elLabel = $("<span class=\"#{labelClass}\">#{@label()}</span>")
       @el.append @elLabel
       
-      
-      # Wire up events.
-      # @elInput?.change (e) -> 
-      #     console.log 'change e', e
-      
       # Finish up.
       syncInput @
   

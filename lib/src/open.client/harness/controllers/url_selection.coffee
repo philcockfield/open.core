@@ -15,12 +15,12 @@ module.exports = (module) ->
     # Updates the URL hash to match the currently selected hash.
     syncUrl: () -> 
         id = module.selectedSuite()?.id ? ''
-        @ignoreHashChanged = true
-        window.location.hash = id
-        @ignoreHashChanged = false
+        @ignoreHashChanged    = true
+        window.location.hash  = id
+        @ignoreHashChanged    = false
     
     
-    # Loads the previously selected suite from local-storage.
+    # Loads the previously selected suite from the URL.
     load: -> 
         
         # Get the ID of the suite to load from the URL.
