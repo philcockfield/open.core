@@ -15,7 +15,7 @@ describe 'Modules', ->
       
       beforeAll ->
         signIn = new auth.views.SignIn()
-        signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.label(), e
+        signIn.bind 'click:signIn', (e) -> console.log 'click:signIn - ', e.selected.value(), e
         page.add signIn.el, reset:true
         
         signIn.addProvider value:'facebook'
