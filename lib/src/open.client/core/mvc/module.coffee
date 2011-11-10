@@ -7,9 +7,10 @@ module.exports = Module = class Module extends Base
   
   ###
   Constructor.
-  @param module: The CommonJS module (used to derive the path), or the path itself.
+  @param module:     The CommonJS module (used to derive the path), or the path itself.
+  @param properties: Optional. An object containing the property values to assign.
   ###
-  constructor: (module) -> 
+  constructor: (module, properties = {}) -> 
       
       # Setup initial conditions.
       super
@@ -23,6 +24,12 @@ module.exports = Module = class Module extends Base
         Module::core     = core
         Module::mvc      = core.mvc
         Module::controls = core.controls
+      
+      # Write property values passed into the constructor.
+      if properties?
+        for key of properties
+          prop = @[key]
+          prop properties[key] if (prop instanceof Function)
       
       # Derive the module path.
       if module?.id?

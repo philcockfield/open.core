@@ -4,10 +4,11 @@ core = require 'open.client/core'
 UI for authentication and authorization.
 ###
 module.exports = class Auth extends core.mvc.Module
+  defaults:
+    mode: null # Gets or sets the mode. Values: null | 'sign_in'
   
   
-  constructor: () -> 
-      super module
+  constructor: () -> super module
   
   
   ###
@@ -26,5 +27,6 @@ module.exports = class Auth extends core.mvc.Module
       
       # Finish up.
       @
-
+      
+  
 

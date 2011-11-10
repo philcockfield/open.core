@@ -21,7 +21,6 @@ describe 'mvc/module', ->
   it 'support eventing', ->
     expect(-> module.bind 'name').not.toThrow()
   
-  
   describe 'constructor', ->
     it 'calls super', ->
       ensure.parentConstructorWasCalled Module, -> new Module('modules/foo')
@@ -30,6 +29,25 @@ describe 'mvc/module', ->
       expect(-> new Module()).toThrow()
       expect(-> new Module('')).toThrow()
       expect(-> new Module('   ')).toThrow()
+    
+    describe 'constructor property values', ->
+      MyModule = null
+      beforeEach ->
+          class MyModule extends Module
+            constructor: (properties) -> super 'path', properties
+            defaults:
+              text: null
+      
+      it 'assigns text property value', ->
+        module = new MyModule text:'foo'
+        expect(module.text()).toEqual 'foo'
+      
+      it 'does nothing if an empty object is passed to constructor', ->
+        module = new MyModule {}
+        expect(module.text()).toEqual null
+      
+      it 'does nothing if the property passed to the constructor does not exist as a property-function', ->
+        expect(-> new MyModule foo:123).not.toThrow()
   
   
   describe 'convenience properties', ->

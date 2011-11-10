@@ -5,13 +5,14 @@
   right: 0px;
   bottom: 0px;
   background: #e6e6e6;
+  overflow: hidden;
 }
 .core_auth_root .core_sign_in {
   position: absolute;
   top: 50%;
   left: 50%;
   margin-left: -250px;
-  margin-top: -230px;
+  margin-top: -170px;
 }
 .core_sign_in {
   position: relative;
