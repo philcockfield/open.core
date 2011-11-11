@@ -83,6 +83,11 @@ ul.core_tab_strip li.core_tab.core_disabled {
 ul.core_tab_strip li.core_tab.core_disabled p {
   color: #b3b3b3;
 }
+head,
+body {
+  height: 100%;
+  overflow: hidden;
+}
 .th_harness {
   font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, 'Helvetica Neue', Helvetica, Verdana, sans-serif;
 }
