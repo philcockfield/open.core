@@ -132,6 +132,7 @@ module.exports = Module = class Module extends Base
   init: (options = {}) -> 
       options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
       createMvcIndex @
+      @
 
 
 # PRIVATE --------------------------------------------------------------------------

@@ -132,12 +132,16 @@ describe 'mvc/module', ->
         expect(module.controller.module).toEqual module
     
     
-  describe 'init', ->
+  describe 'init() method', ->
     args = []
     beforeEach ->
         args = []
         spyOn(module, 'tryRequire').andCallFake (name, options) -> 
                 args.push { name:name, options:options }
+    
+    it 'returns the module', ->
+      expect(module.init()).toEqual module
+    
     
     describe 'index (of MVC modules)', ->
       it 'indexes the [models] folder', ->

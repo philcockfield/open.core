@@ -14,13 +14,21 @@ module.exports = (module) ->
     
     ###
     Constructor.
-    @param func:    The function for the operation.
-    @param suite:   The suite that the operation belongs to.
+    @param params
+             - type:    String representing the type of operation (eg. 'beforeAll' etc.)
+             - suite:   The suite that the operation belongs to.
+             - func:    The function for the operation.
     ###
-    constructor: (@func, @suite) -> 
-        super
-        @func = @func[0] if _(@func).isArray()
+    constructor: (params = {}) -> 
         
+        # console.log 'params', params
+        
+        super
+        @type  = params.type
+        @suite = params.suite
+        @func  = params.func
+        @func = @func[0] if _(@func).isArray()
+    
     
     ###
     Invokes the spec.
@@ -30,9 +38,10 @@ module.exports = (module) ->
           @func?()
         catch error
           if console?
-              console.log 'Failed to invoke operation.'
-              console.log ' - Error: ', error
+              console.log "Failed to invoke [#{@type}] in '#{@suite.title()}'."
+              module.logError error
               console.log ''
+  
   
   # Collection.
   class Operation.Collection extends module.mvc.Collection

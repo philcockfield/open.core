@@ -157,18 +157,22 @@ module.exports = (module) ->
       return unless items?
       collection.add fnModel(item) for item in items
   
-  getOperations = (collection, suite, items) -> 
-      getFunctions collection, items, (params) -> new Operation(params, suite)
+  getOperations = (type, collection, suite, items) -> 
+      getFunctions collection, items, (fnOperation) -> 
+          new Operation 
+                    type:  type
+                    suite: suite
+                    func:  fnOperation
   
   
   # STATIC MEMBERS --------------------------------------------------------------------------
   
   
   Suite.getSuites     = (collection, suite) -> getFunctions collection, HARNESS.suites, (params) -> new Suite(params, suite)
-  Suite.getBeforeEach = (collection, suite) -> getOperations collection, suite, HARNESS.beforeEach
-  Suite.getAfterEach  = (collection, suite) -> getOperations collection, suite, HARNESS.afterEach
-  Suite.getBeforeAll  = (collection, suite) -> getOperations collection, suite, HARNESS.beforeAll
-  Suite.getAfterAll   = (collection, suite) -> getOperations collection, suite, HARNESS.afterAll
+  Suite.getBeforeEach = (collection, suite) -> getOperations 'beforeEach', collection, suite, HARNESS.beforeEach
+  Suite.getAfterEach  = (collection, suite) -> getOperations 'afterEach',  collection, suite, HARNESS.afterEach
+  Suite.getBeforeAll  = (collection, suite) -> getOperations 'beforeAll',  collection, suite, HARNESS.beforeAll
+  Suite.getAfterAll   = (collection, suite) -> getOperations 'afterAll',   collection, suite, HARNESS.afterAll
   Suite.getSpecs      = (collection, suite) -> getFunctions collection, HARNESS.specs, (params) -> new Spec(params, suite)
   
   

@@ -44,7 +44,7 @@ module.exports = (module) ->
               console.log 'Failed to invoke spec.' 
               console.log ' - describe: ', @suite.title()
               console.log '         it: ', @description()
-              console.log ' - Error: ', error
+              module.logError error
               console.log ''
         
         # Invoke the [afterEach] method(s).

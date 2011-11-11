@@ -1,18 +1,18 @@
 !!! 5
 html(lang='en')
   head
-    title= title
+    title= options.title
     meta(name='viewport', content='width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0')
     
     // Stylesheets.
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/libs/normalize.css")
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/harness.css")
-    - each url in css
+    - each url in options.css
       link(type='text/css', rel='stylesheet', href="#{url}")
     
     // Test Harness.
     - JS_PATH = core.baseUrl + '/javascripts'
-    script(type='text/javascript', src="#{JS_PATH}/libs/libs-min.js")
+    script(type='text/javascript', src="#{options.libsJs}")
     script(type='text/javascript', src="#{JS_PATH}/core/harness.js")
     
     :coffeescript

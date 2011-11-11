@@ -30,14 +30,15 @@ module.exports = class TestRunner
   ###
   Initializes the routes for the test-runner.
   @param options:
-          - url              : (optional) The URL that loads the test-runner (defaults to /specs).
-          - title            : (optional) The page title (defaults to 'Specs').
-          - specsDir         : The path to the directory containing the client-side specs.
-          - sourceUrls       : An array or URLs (or a single URL) pointing to the source script(s)
-                               that are under test.
-          - samplesDir       : Optional. The path to a directory of samples to compile and serve as commonJS modules.
-          - samplesNamespace : Optional. The root namespace to compile sample code under (see 'samplesDir').
-          - css              : Optional. The URL (or array of URL's) for style sheets to include in the page.
+      - url              : (optional) The URL that loads the test-runner (defaults to /specs).
+      - title            : (optional) The page title (defaults to 'Specs').
+      - specsDir         : The path to the directory containing the client-side specs.
+      - sourceUrls       : An array or URLs (or a single URL) pointing to the source script(s)
+                           that are under test.
+      - samplesDir       : Optional. The path to a directory of samples to compile and serve as commonJS modules.
+      - samplesNamespace : Optional. The root namespace to compile sample code under (see 'samplesDir').
+      - css              : Optional. The URL (or array of URL's) for style sheets to include in the page.
+      - libsJs           : Optional. The path so the 3rd party libs file to use. (Default: The core 'libs-min.js' file.)
   ###
   init: (options = {}) -> 
     
@@ -50,11 +51,12 @@ module.exports = class TestRunner
       options.sourceUrls = [options.sourceUrls] if not _.isArray(options.sourceUrls)
       options.css       ?= []
       options.css        = [options.css] if not _.isArray(options.css)
+      options.libsJs    ?= "#{core.baseUrl}/javascripts/libs/libs-min.js"
       
       # Store variables.
       app = @app
       url = options.url
-    
+      
       # GET: The test runner page.
       app.get url, (req, res) =>
           
@@ -66,18 +68,16 @@ module.exports = class TestRunner
           # Retrieve paths to script files.
           getHelpers options.specsDir, (helperPaths) =>
             getSpecs options.specsDir, (specPaths) =>
+                options.helperPaths = helperPaths
+                options.specPaths   = specPaths
+                
                 @renderRoot res, 
                     layout:         false
                     pretty:         true
                     core:           core
-                    title:          options.title
-                    url:            url
-                    specPaths:      specPaths
-                    helperPaths:    helperPaths
-                    sourceUrls:     options.sourceUrls
+                    options:        options
                     sampleCode:     "#{url}/samples"
-                    css:            options.css
-    
+      
       # GET: The spec file.
       app.get "#{url}/specs/*", (req, res) =>
         

@@ -77,5 +77,34 @@ module.exports = class TestHarness extends core.mvc.Module
       
       # Finish up.
       @
+  
+  ###
+  Logs an error message.
+  @param error: The [error] exception object to write.
+  ###
+  logError: (error) -> 
+      return unless console?
       
+      logProperty = (propName) -> 
+          text = error[propName]
+          if text?
+            console.log " - #{propName}:"
+            console.log "       #{text}"
+      
+      console.log ' - Error: ', error
+      logProperty 'message'
+      logProperty 'stack'
+      
+      # msg = error["get message"]
+      # console.log 'error["get message"]', error["get message"]
+      # console.log 'error["message"]', error["message"]
+      
+          # if console?
+          #     console.log 'Failed to invoke operation.'
+          #     console.log ' - Error: ', error
+          #     console.log ''
+      
+      
+  
+  
     
