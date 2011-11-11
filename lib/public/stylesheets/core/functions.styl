@@ -41,10 +41,18 @@ ellipsis()
   white-space nowrap
 
 
-// iOS.
-ios-no-flash()
+// iOS | Safari.
+iosNoFlash()
+  // Suppresses the visual highlight that flashes on 
+  // clickable elements when tapped.
   -webkit-tap-highlight-color rgba(0, 0, 0, 0)
 
+noPageBounce()
+  // Supresses the rubber-band bounce effect on the page when scrolling.
+  head, body
+    height 100%
+    overflow hidden
+  
 
 
 

@@ -15,11 +15,13 @@ module.exports = class Auth extends core.mvc.Module
   Initializes the module.
   @param options
             within: The element to initialize the module within.
+            mode:   Sets the module's mode.
   ###
   init: (options = {}) -> 
       
       # Setup initial conditions.
       super options
+      @mode options.mode if options.mode?
       
       # Create the root view.
       @rootView = new @views.Root()

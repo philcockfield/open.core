@@ -10,6 +10,10 @@ Events:
   - click
   - stateChanged
 
+Overrides:
+  - handleStateChanged      : Invoked on each button state change. (no need to call super)
+  - handleSelectedChanged   : Invoked when selection state chagnes. (no need to call super)
+
 ###
 module.exports = class Button extends core.mvc.View
   ###

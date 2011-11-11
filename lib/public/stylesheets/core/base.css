@@ -33,3 +33,8 @@ ul.core_reset {
   padding: 0px;
   list-style: none;
 }
+head.core_no_bounce,
+body.core_no_bounce {
+  height: 100%;
+  overflow: hidden;
+}
