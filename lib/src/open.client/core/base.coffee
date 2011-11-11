@@ -53,7 +53,6 @@ module.exports = class Base
           add name
 
 
-
   ###
   Retrieves the property store.
   This should be either an object or a property-function. 

@@ -1,3 +1,10 @@
+###
+The root authentication view.
+
+Events:
+ - click:signIn - Fires when the sign in button is selected (bubbled from the [SignIn] control).
+
+###
 module.exports = (module) ->
   class Root extends module.mvc.View
     constructor: () -> 
@@ -14,13 +21,15 @@ module.exports = (module) ->
     
     signIn: -> 
         return @_signIn if @_signIn?
-        @_signIn = new module.views.SignIn().append(@el).init [
+        signIn = new module.views.SignIn().append(@el).init [
           { value:'facebook' }
           { value:'google' }
           { value:'twitter' }
           { value:'yahoo' }
           { value:'linked_in', label: 'Linked In' }
         ]
+        @bubble 'click:signIn', signIn
+        @_signIn = signIn
     
     
     # Updates the visual state of the module.

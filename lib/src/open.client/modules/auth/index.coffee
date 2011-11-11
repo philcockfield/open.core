@@ -2,6 +2,10 @@ core = require 'open.client/core'
 
 ###
 UI for authentication and authorization.
+
+Events:
+ - click:signIn - Fires when the sign in button is selected (bubbled from the [Root/SignIn] control).
+
 ###
 module.exports = class Auth extends core.mvc.Module
   defaults:
@@ -25,6 +29,7 @@ module.exports = class Auth extends core.mvc.Module
       
       # Create the root view.
       @rootView = new @views.Root()
+      @bubble 'click:signIn', @rootView
       options.within.append @rootView.el if options.within?
       
       # Finish up.
