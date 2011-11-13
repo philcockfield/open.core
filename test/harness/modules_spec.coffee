@@ -36,6 +36,7 @@ describe 'Modules', ->
         btn = new views.ProviderButton value:'facebook'
         page.add btn, reset:true, width:147, height:56-11
       
+      it 'Toggle: Enabled',     -> btn.enabled.toggle()
       it 'Toggle: Selected',    -> btn.selected.toggle()
       it 'Provider: Facebook',  -> btn.value 'facebook'
       it 'Provider: Google',    -> btn.value 'google'

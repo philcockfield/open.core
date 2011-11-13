@@ -9,8 +9,16 @@ module.exports = (module) ->
         super _.extend params, className: 'core_provider_btn', canToggle:true
         @render()
         
+        # Syncers
+        syncLogoClasses = => 
+          @divLogo.toggleClass 'core_enabled', @enabled()
+        
         # Wire up events.
         @value.onChanged => @updateState()
+        @enabled.onChanged syncLogoClasses
+        
+        # Finish up.
+        syncLogoClasses()
     
     
     render: -> 
