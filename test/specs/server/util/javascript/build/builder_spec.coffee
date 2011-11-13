@@ -128,7 +128,7 @@ describe 'util/javascript/build/builder', ->
       runs -> 
         code = builder.code.standard
         for file in builder.files()
-            includesCode = _(code).includes file.code.moduleProperty
+            includesCode = _(code).include file.code.moduleProperty
             expect(includesCode).toEqual true
     
     it 'stores the minified version of the code', ->
@@ -181,7 +181,7 @@ describe 'util/javascript/build/builder', ->
     
     describe 'require.js', ->
       it 'loads [require.js] as static property of class', ->
-        expect(_.includes(Builder.requireJS, 'if (!this.require) {')).toEqual true
+        expect(_.include(Builder.requireJS, 'if (!this.require) {')).toEqual true
     
       it 'does not include the require JS in the built code', ->
         builder = new Builder(paths)
@@ -189,7 +189,7 @@ describe 'util/javascript/build/builder', ->
         builder.build (c) -> code = c
         waitsFor (-> code?), 100
         runs -> 
-          includes = _(code.standard).includes(Builder.requireJS)
+          includes = _(code.standard).include(Builder.requireJS)
           expect(includes).toEqual false
     
       it 'includes the require JS in the built code', ->
@@ -198,7 +198,7 @@ describe 'util/javascript/build/builder', ->
         builder.build (c) -> code = c
         waitsFor (-> code?), 100
         runs -> 
-          includes = _(code.standard).includes(Builder.requireJS)
+          includes = _(code.standard).include(Builder.requireJS)
           expect(includes).toEqual true
 
   describe 'save', ->

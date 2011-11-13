@@ -61,8 +61,8 @@ module.exports = class Builder
             files.push buildFile
     
       # Return the sorted set of files.
-      _(files).sortBy (file) -> file.id
-      files.reverse()
+      files = _(files).sortBy (file) -> file.id
+      # files.reverse()
       files
   
   

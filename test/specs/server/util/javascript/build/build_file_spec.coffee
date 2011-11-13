@@ -1,5 +1,7 @@
 fs     = require 'fs'
 fsUtil = core.util.fs
+coffee = require 'coffee-script'
+
 
 describe 'util/javascript/build/build_file', ->
   SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/build_path"
@@ -76,13 +78,6 @@ describe 'util/javascript/build/build_file', ->
     coffeePath = "#{SAMPLE_PATH}/file2.coffee"
     jsFile     = fs.readFileSync(jsPath).toString()
     coffeeFile = fs.readFileSync(coffeePath).toString()
-    compiledCoffee = """
-                (function() {
-                  var coffeeFile;
-                  coffeeFile = 'file.coffee';
-                }).call(this);
-                
-               """
     
     it 'stores the raw javascript on the code object', ->
       buildFile = new BuildFile jsPath
@@ -127,7 +122,8 @@ describe 'util/javascript/build/build_file', ->
       buildFile.build (code) -> result = code
       waitsFor (-> result?), 100
       runs -> 
-        expect(result.javascript).toEqual compiledCoffee
+        compiled = coffee.compile(coffeeFile)
+        expect(result.javascript).toEqual compiled
       
     it 'compiles module property', ->
       buildFile = new BuildFile jsPath, 'ns'

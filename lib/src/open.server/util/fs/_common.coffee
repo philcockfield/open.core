@@ -1,10 +1,9 @@
 fs     = require 'fs'
 fsPath = require 'path'
 
+
 module.exports = 
-  ###
-  Constants
-  ###
+  # Constants
   FILE_MODE:
       DEFAULT: 0777 # Full permissions.
   ERROR: 
