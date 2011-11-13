@@ -125,7 +125,7 @@
   border-color: #00bdf3;
 }
 .core_provider_btn.core_disabled .core_inner_border {
-  background: #e6e6e6;
+  background: #f2f2f2;
 }
 .core_provider_btn.core_disabled .core_inner_border .core_logo {
   opacity: 0.3;

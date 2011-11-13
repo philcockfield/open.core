@@ -15,7 +15,6 @@ describe 'Modules', ->
     
     describe 'Sign In', ->
       signIn = null
-      
       beforeAll ->
         signIn = new auth.views.SignIn()
         page.add signIn.el, reset:true
@@ -28,6 +27,7 @@ describe 'Modules', ->
           { value:'yahoo' }
           { value:'linked_in', label: 'Linked In' }
         ]
+      it 'Toggle: Enabled', -> signIn.enabled.toggle()
     
     
     describe 'Provider Button', ->

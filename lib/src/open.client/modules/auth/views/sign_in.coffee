@@ -15,11 +15,13 @@ module.exports = (module) ->
         @providers = new module.controls.ButtonSet()
         
         # Wire up events.
-        @providers.bind 'selectionChanged', (e) => @syncTitle()
+        @enabled.onChanged => @_syncEnabled()
+        @providers.bind 'selectionChanged', => @_syncTitle()
         @btnSignIn.onClick => @_fireSignIn()
         
         # Finish up.
-        @syncTitle()
+        @_syncTitle()
+        @_syncEnabled()
     
     
     # Gets the currently selected provider.
@@ -36,21 +38,6 @@ module.exports = (module) ->
         @btnSignIn = 
           new module.controls.CmdButton( label:'Sign In', color:'blue' )
           .replace @$ '.core_btn_sign_in'
-    
-    
-    syncTitle: -> 
-        selected = @selected()
-        
-        # Build title text.
-        title = "Sign In With "
-        if selected?
-          provider = selected.label()
-          if provider? is false or _(provider).isBlank()
-            provider = _(selected.value()).capitalize()
-          title += provider
-          
-        # Update the DOM.
-        @divTitle.html title
     
     
     ###
@@ -88,6 +75,7 @@ module.exports = (module) ->
             td
         
         # Create the buttons.
+        options.enabled = @enabled()
         btn = new module.views.ProviderButton options
         btn.el.dblclick => @_fireSignIn()
         @providers.add btn
@@ -101,7 +89,35 @@ module.exports = (module) ->
     # PRIVATE --------------------------------------------------------------------------
     
     
-    _fireSignIn: -> @trigger 'click:signIn', selected:@selected()
+    _fireSignIn: -> 
+        return unless @enabled() is yes
+        @trigger 'click:signIn', selected:@selected() 
+    
+    
+    _syncTitle: -> 
+        selected = @selected()
+        
+        # Build title text.
+        title = "Sign In With "
+        if selected?
+          provider = selected.label()
+          if provider? is false or _(provider).isBlank()
+            provider = _(selected.value()).capitalize()
+          title += provider
+          
+        # Update the DOM.
+        @divTitle.html title
+    
+    
+    _syncEnabled: -> 
+        isEnabled = @enabled()
+        
+        # Update enabled state of each provider button.
+        @providers.items.map (btn) -> btn.enabled isEnabled
+        
+        # Update the sign-in button.
+        @btnSignIn.enabled isEnabled
+    
   
   
   class Tmpl extends module.mvc.Template
