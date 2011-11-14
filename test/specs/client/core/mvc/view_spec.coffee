@@ -25,7 +25,19 @@ describe 'mvc/view', ->
   it 'is an MVC model', ->
     expect(view instanceof core.mvc.Model).toEqual true 
   
-
+  describe 'traditional [extend] method', ->
+    it 'has an extend method', ->
+      expect(MyView.extend).toEqual Backbone.Model.extend
+    
+    it 'can be created using classic [extend] method', ->
+      MyView = View.extend
+        defaults:
+          foo:123
+        constructor: () -> View::constructor.call @
+      
+      myView = new MyView()
+      expect(myView.foo()).toEqual 123
+  
   describe 'default property values', ->
     it 'is enabled by default', ->
       expect(view.enabled()).toEqual true

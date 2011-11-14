@@ -1,9 +1,11 @@
 describe 'mvc/module', ->
+  mvc    = null
   Module = null
   module = null
   
   beforeEach ->
-      Module = core.mvc.Module
+      mvc    = core.mvc
+      Module = mvc.Module
       module = new Module('modules/foo')
   
   it 'exists', ->
@@ -66,6 +68,20 @@ describe 'mvc/module', ->
         module = new MyModule()
     it 'has the text property', -> expect(module.text()).toEqual null
     it 'has the number property', -> expect(module.number()).toEqual 123
+
+  describe 'traditional [extend] method', ->
+    it 'has an extend method', ->
+      expect(Module.extend).toEqual Backbone.Model.extend
+    
+    it 'can be created using classic [extend] method', ->
+      MyModule = Module.extend
+        defaults:
+          foo:123
+        constructor: () -> Module::constructor.call @, 'path'
+      
+      myModule = new MyModule()
+      expect(myModule.foo()).toEqual 123
+      expect(myModule.modulePath).toEqual 'path'
   
   
   describe '[require] mvc part methods', ->

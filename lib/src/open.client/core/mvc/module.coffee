@@ -1,4 +1,5 @@
 Base     = require '../base'
+View     = require './view'
 common   = require './_common'
 util     = require '../util'
 
@@ -186,14 +187,14 @@ Module.requirePart = (fnRequire, name = '') ->
     # Silently try to get the module.
     part = fnRequire name, throw: false
     return part unless part?
-
+    
     # If the [part] is a function, it is expected that this is an initialization function.
     # Invoke it passing in the module.
     part = Module.initPart(fnRequire.module, part)
-
+    
     # Finish up.
     part
-    
+
 
 ###
 Implements the parent [module-init] pattern.
@@ -211,5 +212,14 @@ Module.initPart = (parentModule, childModule) ->
     childModule
 
 
+###
+Copy the self-propagating extend function that Backbone classes use.
+NOTE: 
+    This is so the Module can be extended using the classic approach
+    shown in the Backbone documentation, which become important if
+    the consuming application is being written in raw JavaScript and
+    does not have the 'class' sugar of of CoffeeScript.
+###
+Module.extend = View.extend
 
 

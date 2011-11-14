@@ -12,10 +12,7 @@ module.exports = class TestHarness extends core.mvc.Module
           selectedSpec:  null
       
       # Store common references.
-      @core     = core
       @util     = core.util
-      @mvc      = core.mvc
-      @controls = controls
       
       # Wire up events.
       @selectedSuite.onChanged (e) => 

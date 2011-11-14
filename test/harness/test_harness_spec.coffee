@@ -71,3 +71,7 @@ describe 'Test Harness', ->
         
             it 'Does It', ->
               console.log 'Spec C'  
+
+  describe 'Partial', ->
+  # describe 'Partial', ->
+    
