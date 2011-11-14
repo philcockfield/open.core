@@ -163,6 +163,9 @@ ul.core_control_list.core_x li {
 ul.core_control_list.core_y li {
   display: block;
 }
+.core_form {
+  background: #ffa500;
+}
 ul.core_tab_strip {
   height: 38px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f7f7f7), color-stop(1, #ccc));

@@ -92,10 +92,6 @@ describe 'Controls',
           { label:'Two' }
           { label:'Three', enabled:false }
         ]
-          
-        
-      
-      
   
   
     describe 'Textbox', ->
@@ -103,8 +99,16 @@ describe 'Controls',
       beforeAll ->
           textbox = new controls.Textbox watermark:'Watermark'
           page.add textbox, width:300
-      
       it 'Focus', -> textbox.focus()
+  
+    describe 'Form', ->
+      form = null
+      beforeAll ->
+          form = new controls.Form()
+          page.add form, width:550
+    
+  
+  
   
   
   

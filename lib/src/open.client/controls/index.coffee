@@ -4,6 +4,7 @@ module.exports =
   Textbox:         require './textbox'
   ControlList:     require './control_list'
   TabStrip:        require './tab_strip'
+  Form:            require './form'
   
   # Buttons.
   Button:          require './button'
