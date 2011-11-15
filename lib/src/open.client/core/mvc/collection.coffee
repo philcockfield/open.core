@@ -4,8 +4,16 @@ common = require './_common'
 Base class for Collections.
 ###
 module.exports = class Collection extends Backbone.Collection
-  constructor: () ->
-      super
+  constructor: () -> Collection::_construct.call @
+  
+  ###
+  Called internally by the constructor.  
+  Use this if properties are added to the object after 
+  construction and you need to re-run the constructor,
+  (eg. within a functional inheritance pattern).
+  ###
+  _construct: () -> 
+      Collection.__super__.constructor.call @
       _.extend @fetch, Backbone.Events
   
   
