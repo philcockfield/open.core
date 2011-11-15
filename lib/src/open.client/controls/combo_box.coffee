@@ -82,6 +82,7 @@ module.exports = class ComboBox extends mvc.View
   @returns the ComboBox instance.
   ###
   init: (items = []) -> 
+      @clear()
       items = [items] unless _.isArray(items)
       @add item for item in items
       @

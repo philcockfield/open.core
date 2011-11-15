@@ -233,6 +233,11 @@ describe 'controls/combo_box', ->
     it 'converts a single item into an array', ->
       cbo.init label:'foo'
       expect(cbo.items.first().label()).toEqual 'foo'
+    
+    it 'clears the ComboBox before initializing', ->
+      spyOn(cbo, 'clear')
+      cbo.init def
+      expect(cbo.clear.callCount).toEqual 1
 
   describe 'remove() method', ->
     beforeEach ->

@@ -125,8 +125,17 @@ describe 'Controls',
         
       it 'select:last', -> cbo.selected cbo.items.last()
       
+      it 'init', ->
+        cbo.init [
+          { label:'Apple' }
+          { label:'Bannana' }
+          { label:'Zebra' }
+        ]
+      
+      
       it 'read properties', ->
         console.log 'cbo.selected()', cbo.selected(), cbo.selected()?.label()
-  
-  
+      
+      
+      
   
