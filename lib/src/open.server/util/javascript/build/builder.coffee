@@ -99,7 +99,7 @@ module.exports = class Builder
         # Compress the code.
 
         # TEMP : PUT BACK IN <============================= (removed to speed up compilation during debug)
-        # minified = minifier.compress(code)
+        minified = minifier.compress(code)
         
         # Prepend the header if there is one.
         if @header?
