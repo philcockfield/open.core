@@ -9,6 +9,7 @@ module.exports = class ComboBox extends mvc.View
       @items = new ComboBox.ItemsCollection()
       @addProps
         selected: null # Gets or sets the selected item (model).
+      @_render = yes
       
       # Syners.
       syncEnabled = => 
@@ -63,6 +64,7 @@ module.exports = class ComboBox extends mvc.View
   
   render: -> 
       # Setup initial conditions.
+      return unless @_render is yes
       el = @el
       el.empty()
       
@@ -139,9 +141,15 @@ module.exports = class ComboBox extends mvc.View
       @items.remove item
       
       # Remove the <option> element.
-      
-      
-      
+      # NB: This is removed because the list is re-rendered.
+  
+  
+  # Removes all items.
+  clear: -> 
+      @_render = no
+      @remove item for item in _.clone @items.models
+      @_render = yes
+      @render()
   
   
   # PRIVATE --------------------------------------------------------------------------

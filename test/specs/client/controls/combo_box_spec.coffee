@@ -255,16 +255,24 @@ describe 'controls/combo_box', ->
       cbo.remove item1
       expect(cbo.items.length).toEqual 2
       expect(cbo.items.find((o) -> o is item1)).toEqual null
-
+    
     it 'removes <option> element', ->
       item1 = cbo.item(0)
       cbo.remove item1
       expect(cbo._optionEl(item1)).toEqual null
-      
-      
+  
+  describe 'clear() method', ->
+    beforeEach ->
+      cbo.init [
+        { value:1 }
+        { value:2 }
+        { value:3 }
+      ]
     
-    
-    
-    
+    it 'removes all items', ->
+      cbo.clear()
+      expect(cbo.items.length).toEqual 0
+      expect(cbo.el.children().length).toEqual 0
+
 
 
