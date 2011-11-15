@@ -4,10 +4,11 @@ common = require './_common'
 Base class for Collections.
 ###
 module.exports = class Collection extends Backbone.Collection
-  constructor: () -> 
+  constructor: () ->
       super
       _.extend @fetch, Backbone.Events
-
+  
+  
   ###
   Overrides the Backbone fetch method, enabling fetch events.
   @param options
@@ -23,7 +24,10 @@ module.exports = class Collection extends Backbone.Collection
       fetch = 'fetch'
       fn = Backbone.Collection.prototype[fetch]
       common.sync fn, @, fetch, options
-
+  
+  
   # Binds a handler to the fetch methods [complete] event.
   onFetched: (callback) -> @fetch.bind 'complete', callback if callback?
-
+  
+  
+  

@@ -1,57 +1,69 @@
 Base   = require '../base'
 common = require './_common'
-
 basePrototype = new Base()
-
 
 ###
 Base class for models.
 ###
 module.exports = class Model extends Backbone.Model
-  constructor: (params = {}) ->
-        # Setup initial conditions.
-        super
-        self = @
-        
-        # Extend from Base for auto properties.
-        # Note:  Return the custom property store function that ferrys
-        #        read/write requests into the Backbone model's GET/SET methods.
-        _.extend @, basePrototype
-        @propertyStore = () =>
-            fn = (name, value, options) => 
-                if value != undefined
-                      #  Write value to backing store.
-                      param = {}
-                      param[name] = value
-                      self.set param, options
-                
-                # Read value from backing model.
-                self.get(name)
-        
-        # Add defaults as Property functions.
-        @addProps @defaults
-        
-        # Overide server interaction methods.
-        # NB: These are set in the constructor for each instance (and not on the class itself)
-        #     to avoid event hookups on these methods firing for all created model, not just
-        #     this particular instance.
-        @fetch   = (options) -> @_sync @, 'fetch', options
-        @save    = (options) -> @_sync @, 'save', options
-        @destroy = (options) -> @_sync @, 'destroy', options
-        
-        # Extend members.
-        do => 
-            init = (method) -> 
-                  _.extend method, Backbone.Events
-                  method.onStart    = (handler) -> method.bind 'start', handler
-                  method.onComplete = (handler) -> method.bind 'complete', handler
-            init @fetch
-            init @save
-            init @destroy
-        
-        # Property aliases.
-        @atts = @attributes
+  constructor: (params = {}) -> Model::_construct.call @, params
   
+  
+  ###
+  Called internally by the constructor.  
+  Use this if properties are added to the object after 
+  construction and you need to re-run the constructor,
+  (eg. within a functional inheritance pattern).
+  ###
+  _construct: (params = {}) -> 
+      
+      # Setup initial conditions.
+      Model.__super__.constructor.call @, params
+      self = @
+      
+      # Extend from Base for auto properties.
+      # Note:  Return the custom property store function that ferrys
+      #        read/write requests into the Backbone model's GET/SET methods.
+      _.extend @, basePrototype
+      @propertyStore = () =>
+          fn = (name, value, options) => 
+              if value != undefined
+                    #  Write value to backing store.
+                    param = {}
+                    param[name] = value
+                    self.set param, options
+              
+              # Read value from backing model.
+              self.get(name)
+      
+      # Add defaults as Property functions.
+      @addProps @defaults
+      
+      # Overide server interaction methods.
+      # NB: These are set in the constructor for each instance (and not on the class itself)
+      #     to avoid event hookups on these methods firing for all created model, not just
+      #     this particular instance.
+      @fetch   = (options) -> @_sync @, 'fetch', options
+      @save    = (options) -> @_sync @, 'save', options
+      @destroy = (options) -> @_sync @, 'destroy', options
+      
+      # Extend members.
+      do => 
+          init = (method) -> 
+                _.extend method, Backbone.Events
+                method.onStart    = (handler) -> method.bind 'start', handler
+                method.onComplete = (handler) -> method.bind 'complete', handler
+          init @fetch
+          init @save
+          init @destroy
+      
+      # Property aliases.
+      @atts = @attributes
+      
+  
+  # constructor: (params = {}) -> 
+      
+
   ###
   Retrieves the [id] if it exists, otherwise returns the [cid].
   ###

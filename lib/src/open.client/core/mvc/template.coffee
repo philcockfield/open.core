@@ -21,20 +21,29 @@ module.exports = class Template
                 Any existing properties on the template are NOT overwridden by a 
                 property contained within the 'props' argument.
   ###
-  constructor: (props = {}) ->
-      
+  constructor: (props) -> Template::_construct.call @, props
+  
+  
+  ###
+  Called internally by the constructor.  
+  Use this if properties are added to the object after
+  construction and you need to re-run the constructor,
+  (eg. within a functional inheritance pattern).
+  ###
+  _construct: (props = {}) -> 
       # Replace members with template wrappers.
       exclude = ['constructor']
       for key of @
         unless (_(exclude).any (item)-> item == key) # Ignore excluded members.
             value = @[key]
             @[key] = @toTemplate(value) if _(value).isString()
-
+      
       # Copy property values passed to constructor.
       for name of props
           @[name] = props[name] unless @[name]?
-
-
+    
+  
+  
   ###
   Converts a template string into a compiled template function.
   Override this to use a template library other than the default underscore engine.

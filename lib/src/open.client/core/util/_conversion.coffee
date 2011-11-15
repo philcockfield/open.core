@@ -58,7 +58,21 @@ module.exports =
       # Not a known type - wrap it as a jQuery object.
       return $(value)
       
-
+  
+  ###
+  Converts < and > characgters to corresponding &lt; and &gt;
+  @param html: The HTML string to convert.
+  @returns the converted string.
+  ###
+  toSafeHtml: (html) -> 
+      return null unless html?
+      html = html
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+      
+      html
+      
+  
 
 
 

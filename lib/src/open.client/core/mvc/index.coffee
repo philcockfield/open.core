@@ -4,5 +4,3 @@ module.exports =
   Template:    require './template'
   Collection:  require './collection'
   Module:      require './module'
-  DataBinder:  require './data_binder'
-  

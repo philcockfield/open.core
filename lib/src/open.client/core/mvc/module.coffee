@@ -6,15 +6,24 @@ util     = require '../util'
 module.exports = Module = class Module extends Base
   tryRequire: util.tryRequire
   
+  
   ###
   Constructor.
   @param module:     The CommonJS module (used to derive the path), or the path itself.
   @param properties: Optional. An object containing the property values to assign.
   ###
-  constructor: (module, properties = {}) -> 
+  constructor: (module, properties = {}) -> Module::_construct.call @, module, properties
+  
+  
+  ###
+  Called internally by the constructor.  
+  Use this if properties are added to the object after 
+  construction and you need to re-run the constructor,
+  (eg. within a functional inheritance pattern).
+  ###
+  _construct: (module, properties = {}) -> 
       
-      # Setup initial conditions.
-      super
+      Module.__super__.constructor.call @
       _.extend @, Backbone.Events
       @addProps @defaults # Add defaults as Property functions.
       

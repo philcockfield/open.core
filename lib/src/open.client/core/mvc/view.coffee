@@ -14,9 +14,19 @@ module.exports = class View extends Model
           - className : (optional). The CSS class name for the root element.
           - el        : (optional). An explicit element to use.
   ###
-  constructor: (params = {}) ->
+  constructor: (params = {}) -> View::_construct.call @, params
+  
+  
+  ###
+  Called internally by the constructor.  
+  Use this if properties are added to the object after 
+  construction and you need to re-run the constructor,
+  (eg. within a functional inheritance pattern).
+  ###
+  _construct: (params = {}) -> 
+      
       # Setup initial conditions.
-      super
+      View.__super__.constructor.call @, params
       
       # Property functions.
       @addProps
@@ -56,6 +66,7 @@ module.exports = class View extends Model
       if html?
         el.html html
       el.html()
+  
   
   ###
   Deterines whether the view element currently has focus.
