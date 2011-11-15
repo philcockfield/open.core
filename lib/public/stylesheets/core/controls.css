@@ -152,7 +152,8 @@ ul.core_checkbox_set li {
   margin-bottom: 8px;
 }
 .core_combo_box {
-  font-size: 14pt;
+  position: relative;
+  font-size: 12pt;
 }
 ul.core_control_list {
   position: relative;

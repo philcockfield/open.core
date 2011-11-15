@@ -67,7 +67,7 @@ describe 'controls/combo_box', ->
       it 'updates the selection state on the element upon adding', ->
         item1 = cbo.add()
         item2 = cbo.add selected:true
-        el = cbo._elOption(item2)
+        el = cbo._optionEl(item2)
         expect(el.attr('selected')).toEqual 'selected'
       
       it 'unselects the existing item selection upon adding an element that is selected', ->
@@ -98,8 +98,8 @@ describe 'controls/combo_box', ->
     beforeEach ->
       item1 = cbo.add label:'one', value:1
       item2 = cbo.add label:'two', value:2
-      el1   = cbo._elOption item1
-      el2   = cbo._elOption item2
+      el1   = cbo._optionEl item1
+      el2   = cbo._optionEl item2
     
     it 'updates the [value] on the element', ->
       item1.value 'foo'
@@ -120,7 +120,7 @@ describe 'controls/combo_box', ->
       el = cbo.$ 'option:selected'
       expect(el.length).toEqual 0
       
-  describe '_elOption() method', ->
+  describe '_optionEl() method', ->
     item1 = null
     item2 = null
     beforeEach ->
@@ -128,18 +128,18 @@ describe 'controls/combo_box', ->
       item2 = cbo.add label:'two', value:2
     
     it 'retrieves the first element', ->
-      el = cbo._elOption item1
+      el = cbo._optionEl item1
       expect(el.attr('value')).toEqual '1'
       
     it 'retrieves the second element', ->
-      el = cbo._elOption item2
+      el = cbo._optionEl item2
       expect(el.attr('value')).toEqual '2'
       
     it 'returns null when the model does not exist', ->
-      expect(cbo._elOption(new core.mvc.Model())).toEqual null
+      expect(cbo._optionEl(new core.mvc.Model())).toEqual null
       
     it 'returns null when no model is passed ', ->
-      expect(cbo._elOption()).toEqual null
+      expect(cbo._optionEl()).toEqual null
   
   describe 'selected', ->
     item1 = null
@@ -234,5 +234,37 @@ describe 'controls/combo_box', ->
       cbo.init label:'foo'
       expect(cbo.items.first().label()).toEqual 'foo'
 
+  describe 'remove() method', ->
+    beforeEach ->
+      cbo.init [
+        { value:1 }
+        { value:2 }
+        { value:3 }
+      ]
+    
+    it ' does nothing if no item is specified', ->
+      cbo.remove()
+      expect(cbo.items.length).toEqual 3
+    
+    it ' does nothing if the item does not exist in the collection', ->
+      cbo.remove(new ComboBox.Item())
+      expect(cbo.items.length).toEqual 3
+    
+    it 'removes the item from the [items] collection', ->
+      item1 = cbo.item(0)
+      cbo.remove item1
+      expect(cbo.items.length).toEqual 2
+      expect(cbo.items.find((o) -> o is item1)).toEqual null
+
+    it 'removes <option> element', ->
+      item1 = cbo.item(0)
+      cbo.remove item1
+      expect(cbo._optionEl(item1)).toEqual null
+      
+      
+    
+    
+    
+    
 
 

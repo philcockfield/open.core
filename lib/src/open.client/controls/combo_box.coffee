@@ -111,7 +111,7 @@ module.exports = class ComboBox extends mvc.View
       # Wire up events.
       syncElement = => 
           # Update the attributes.
-          el = @_elOption model
+          el = @_optionEl model
           el.attr 'value', model.value() if model.value?
           el.html model.label() if model.label?
           
@@ -128,6 +128,21 @@ module.exports = class ComboBox extends mvc.View
       unselectOthers @, model if model.selected?()
       model
   
+  ###
+  Removes the specified item.
+  @param item : The item model (or index of the item) to remove.
+  ###
+  remove: (item) -> 
+      return unless item?
+      
+      # Remove from the Items collection.
+      @items.remove item
+      
+      # Remove the <option> element.
+      
+      
+      
+  
   
   # PRIVATE --------------------------------------------------------------------------
   
@@ -137,7 +152,7 @@ module.exports = class ComboBox extends mvc.View
   @param item: The Item model.
   @returns The <option> element as a jQuery object or null if there is not match.
   ###
-  _elOption: (item) -> 
+  _optionEl: (item) -> 
       return null unless item?
       el = @$ "option[data-cid=\"#{item.cid}\"]"
       if el.length is 0 then null else el
