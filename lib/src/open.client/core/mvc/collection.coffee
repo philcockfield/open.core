@@ -2,6 +2,13 @@ common = require './_common'
 
 ###
 Base class for Collections.
+
+Events:
+ - change           : Fires when a property on a model in the collection changes.
+ - add              : Fires when an item is added to the collection.
+ - remove           : Fires when an item is removed.
+ - count            : Fires when an item is either added or removed.
+
 ###
 module.exports = class Collection extends Backbone.Collection
   constructor: () -> Collection::_construct.call @
@@ -15,6 +22,12 @@ module.exports = class Collection extends Backbone.Collection
   _construct: () -> 
       Collection.__super__.constructor.call @
       _.extend @fetch, Backbone.Events
+      
+      fireCount = (col) => @trigger 'count', length:@length
+      
+      # Wire up events.
+      @bind 'add', fireCount
+      @bind 'remove', fireCount
   
   
   ###
@@ -36,6 +49,5 @@ module.exports = class Collection extends Backbone.Collection
   
   # Binds a handler to the fetch methods [complete] event.
   onFetched: (callback) -> @fetch.bind 'complete', callback if callback?
-  
-  
-  
+
+

@@ -151,6 +151,9 @@ ul.core_radio_set li {
 ul.core_checkbox_set li {
   margin-bottom: 8px;
 }
+.core_combo_box {
+  font-size: 14pt;
+}
 ul.core_control_list {
   position: relative;
   list-style-type: none;

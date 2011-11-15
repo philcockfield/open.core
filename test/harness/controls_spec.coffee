@@ -100,16 +100,33 @@ describe 'Controls',
           textbox = new controls.Textbox watermark:'Watermark'
           page.add textbox, width:300
       it 'Focus', -> textbox.focus()
-  
+    
     describe 'Form', ->
       form = null
       beforeAll ->
           form = new controls.Form()
           page.add form, width:550
     
-  
-  
-  
+    describe 'ComboBox', ->
+      cbo = null
+      beforeAll ->
+          cbo = new controls.ComboBox()
+          page.add cbo, width:280
+          cbo.add 'One'
+          cbo.add 'Two'
+          cbo.add label:'Three', selected:true
+      
+      it 'Toggle: enabled', -> cbo.enabled.toggle()
+      it 'add', -> cbo.add "Item #{cbo.items.length + 1}"
+      
+      it 'select:first', -> 
+        item = cbo.items.first()
+        item?.selected true
+        
+      it 'select:last', -> cbo.selected cbo.items.last()
+      
+      it 'read properties', ->
+        console.log 'cbo.selected()', cbo.selected(), cbo.selected()?.label()
   
   
   

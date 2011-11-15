@@ -42,7 +42,33 @@ describe 'mvc/collection', ->
       model.col1.add { foo: 1 }
       expect(args1).toBeDefined()
       expect(args2).not.toBeDefined()
-
+    
+    
+    describe '[count] event', ->
+      count = 0
+      args  = null
+      col   = null
+      beforeEach ->
+          count = 0
+          args  = null
+          col   = new Collection()
+          col.bind 'count', (e) -> 
+              count += 1
+              args = e
+          
+          
+      it 'fires when an item is added', ->
+        col.add new SampleModel()
+        expect(count).toEqual 1
+        expect(args.length).toEqual 1
+        
+      it 'fires when an item is removed', ->
+        model = new SampleModel()
+        col.add model
+        col.remove model
+        expect(count).toEqual 2
+        expect(args.length).toEqual 0
+    
     describe 'fetch events', ->
       col = null
       success = false

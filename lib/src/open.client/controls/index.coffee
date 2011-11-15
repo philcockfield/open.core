@@ -5,6 +5,7 @@ module.exports =
   ControlList:     require './control_list'
   TabStrip:        require './tab_strip'
   Form:            require './form'
+  ComboBox:        require './combo_box'
   
   # Buttons.
   Button:          require './button'
