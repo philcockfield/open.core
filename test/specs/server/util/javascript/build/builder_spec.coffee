@@ -26,6 +26,10 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder()
         expect(builder.header).toEqual null
       
+      it 'minifies by default', ->
+        builder = new Builder()
+        expect(builder.minify).toEqual true
+      
     
     describe 'paths', ->
       paths = [
@@ -140,6 +144,15 @@ describe 'util/javascript/build/builder', ->
         fnCompress = core.util.javascript.minifier.compress
         minified = builder.code.minified
         expect(minified).toEqual fnCompress(builder.code.standard)
+    
+    it 'does not store the minified version of the code', ->
+      builder = new Builder(paths, minify:false)
+      done = no
+      builder.build (m) -> done = yes
+      waitsFor (-> done is yes), 100
+      runs -> 
+        minified = builder.code.minified
+        expect(minified).toEqual null
     
     it 'returns the [code] function within the callback', ->
         builder = new Builder(paths)

@@ -3,7 +3,8 @@
 tabStrip(prefix = CLASS_PREFIX)
   ul.{prefix}_tab_strip
     height 38px
-    background: linear-gradient(top, darken(white, 3%), darken(white, 20%))
+    background-image CONTROLS__TAB_STRIP__BG
+    background-repeat repeat-x
     overflow hidden
     list-style-type none
     margin 0px
@@ -43,11 +44,11 @@ tabStrip(prefix = CLASS_PREFIX)
       &.{prefix}_enabled
         // Tab: Over.
         &.{prefix}_over
-          background: linear-gradient(top, darken(white, 5%), darken(white, 25%))
+          background-image: CONTROLS__TAB_STRIP__BG_OVER
     
         // Tab: Down.
         &.{prefix}_down
-          background: linear-gradient(top, darken(white, 25%), darken(white, 5%))
+          background-image: CONTROLS__TAB_STRIP__BG_DOWN
           div.{prefix}_div_right
             background none
     

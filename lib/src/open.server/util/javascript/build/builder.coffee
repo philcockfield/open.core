@@ -20,8 +20,9 @@ module.exports = class Builder
                      }
                   ]
   @param options
-      - includeRequireJS: Flag indicating if the CommonJS require script should be included (default: false).
-      - header:          (optional). A notice to prepend to the head of the code (eg. a copyright notice).
+      - includeRequireJS:  Flag indicating if the CommonJS require script should be included (default: false).
+      - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
+      - minify:            Optional. Flag indicating if code should be minified.  Default true.
   
   ###
   constructor: (paths = [], options = {}) -> 
@@ -30,6 +31,7 @@ module.exports = class Builder
       paths             = [paths] unless _.isArray(paths)
       @includeRequireJS = options.includeRequireJS ?= false
       @header           = options.header ?= null
+      @minify           = options.minify ?= true
       @code             = {}
       
       # Convert paths to wrapper classes.
@@ -97,9 +99,7 @@ module.exports = class Builder
                """
         
         # Compress the code.
-
-        # TEMP : PUT BACK IN <============================= (removed to speed up compilation during debug)
-        minified = minifier.compress(code)
+        minified = minifier.compress(code) if @minify is yes
         
         # Prepend the header if there is one.
         if @header?
