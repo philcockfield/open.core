@@ -1,12 +1,10 @@
 #Open.Core
 Common utility functionality used between multiple applications.
 
---------
-
+## Setup
 ### Install using NPM
 
     npm install open.core
-
 
 ### Initialize
 To initialize the **open.core** library from [Express](http://expressjs.com/):
@@ -21,7 +19,6 @@ To initialize the **open.core** library from [Express](http://expressjs.com/):
   app.listen 8000
 
 ```
-
 
 ### Tests
 
@@ -48,6 +45,17 @@ host application:
                 '/javascripts/app.js' ]
 
 ```
+
+
+## Optional Dependencies
+Some features require non-NPM installable dependencies.  These are optional.
+
+- [Pygments](http://pygments.org/docs/installation/)  
+  Source code highlighting. Requires [Python](http://python.org/).
+  
+  - To install: `sudo easy_install Pygments`
+  - See server class: `core.util.Pygments`
+
 
 
 ## License

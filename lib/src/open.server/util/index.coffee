@@ -7,7 +7,9 @@ module.exports = index =
   html:       require './html'
   testing:    require './testing'
   
+  # Classes.
   Timer:      require './timer'
+  Pygments:   require './pygments'
   
 
 # Copy the common utility methods onto the index.

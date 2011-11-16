@@ -24,7 +24,8 @@
 		"jquery": "1.6.2",
 		"uglify-js": ">= 1.0.3",
 		"rimraf": ">= 1.0.2",
-		"zombie": "0.10.2"
+		"zombie": "0.10.2",
+		"node-uuid", "1.2.0"
 	},
 	"keywords": [
 		"utility",

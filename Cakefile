@@ -88,3 +88,19 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
     
     # Execute.
     increment -> checkin -> publish -> logDone()
+
+
+task 'temp', -> 
+    
+    Pygments = core.util.Pygments
+    
+    pygments = new Pygments
+        source: '# A Comment'
+    
+    
+    pygments.toHtml (err, html) -> 
+        
+        console.log 'err', err
+        console.log 'html: \n', html
+        
+    
