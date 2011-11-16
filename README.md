@@ -50,7 +50,7 @@ host application:
 ```
 
 
-## Licence
+## License
 
 The [MIT License](http://www.opensource.org/licenses/mit-license.php) (MIT)  
 Copyright © 2011 Phil Cockfield
