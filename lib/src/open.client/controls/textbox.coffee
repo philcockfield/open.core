@@ -18,11 +18,11 @@ module.exports = class Textbox extends core.mvc.View
   
   constructor: (params = {}) -> 
       # Setup initial conditions.
-      super _.extend params, tagName: 'span', className: 'core_textbox'
+      super _.extend params, tagName: 'span', className: @_className('textbox')
       @render()
       
       syncWatermark = () => 
-            @$('span.core_watermark').html (if @empty() then @watermark() else '')
+            @_.watermark.html (if @empty() then @watermark() else '')
       
       # Wire up events.
       @multiline.onChanged => @render()
@@ -51,15 +51,17 @@ module.exports = class Textbox extends core.mvc.View
       
       # Base HTML.
       tmpl = new Tmpl()
-      html = tmpl.root( textbox:@, inputType: inputType )
+      html = tmpl.root( textbox:@, inputType: inputType, prefix:@_cssPrefix )
       @html html
       
       # Reference elements.
-      input = if @multiline() then @$('textarea') else @$('input')
+      elInput     = if @multiline() then @$('textarea') else @$('input')
+      elWatermark = @$ "span.#{@_className('watermark')}"
       
       # Finish up.
-      @_.syncer = new textSyncer(@.text, input)
-      @_.input = input
+      @_.syncer    = new textSyncer(@.text, elInput)
+      @_.input     = elInput
+      @_.watermark = elWatermark
       @
   
   
@@ -141,9 +143,9 @@ textSyncer = (textProperty, input) ->
 class Tmpl extends core.mvc.Template
   root: 
     """
-      <span class="core_inner">
+      <span class="<%= prefix %>_inner">
         &nbsp;
-        <span class="core_watermark"></span>
+        <span class="<%= prefix %>_watermark"></span>
         <% if (textbox.multiline()) { %>
           <textarea></textarea>
         <% } else { %>

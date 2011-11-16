@@ -26,7 +26,7 @@ describe 'Services', ->
           error: (data) -> console.log 'ERROR', data
           success: (data) -> 
             el = $ "<div style='font-size:10pt;'>#{data}</div>"
-            page.add el, fill:true
+            page.add el, fill:true, reset:true
     
     
   
