@@ -27,7 +27,15 @@ describe 'mvc/collection', ->
       col.add m
       expect(col.include(m)).toEqual true
     
-
+  
+  describe 'count() method', ->
+    it 'has two items', ->
+      col.add new SampleModel()
+      col.add new SampleModel()
+      expect(col.count()).toEqual 2
+    
+  
+  
   describe 'Events', ->
     it 'does not fire the add event when working with different collections', ->
       model = new SampleModel()
@@ -60,14 +68,14 @@ describe 'mvc/collection', ->
       it 'fires when an item is added', ->
         col.add new SampleModel()
         expect(count).toEqual 1
-        expect(args.length).toEqual 1
+        expect(args.count).toEqual 1
         
       it 'fires when an item is removed', ->
         model = new SampleModel()
         col.add model
         col.remove model
         expect(count).toEqual 2
-        expect(args.length).toEqual 0
+        expect(args.count).toEqual 0
     
     describe 'fetch events', ->
       col = null

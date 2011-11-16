@@ -9,7 +9,8 @@ SELECTION_CHANGED = 'selectionChanged'
 A horizontal strip of tabs.
 
 Events:
- - selectionChanged
+ - selectionChanged : Fires when the selected tab changes.
+ - count            : Fires when a tab is added or removed.
 
 ###
 module.exports = class TabStrip extends mvc.View
@@ -22,6 +23,7 @@ module.exports = class TabStrip extends mvc.View
       
       # Wire up events.
       @tabs.bind SELECTION_CHANGED, (e) => @trigger SELECTION_CHANGED, tab:e.button
+      @tabs.items.bind 'count',     (e) => @trigger 'count', count:e.count
   
   
   # Determines the number of tabs within the strip (1-based).
@@ -85,7 +87,9 @@ module.exports = class TabStrip extends mvc.View
   Removes the given tab from the strip.
   @param tab: The tab button to remove.
   ###
-  remove: (tab) -> tab.remove() if tab?
+  remove: (tab) -> 
+      tab = @tab(tab) if _(tab).isNumber()
+      tab.remove() if tab?
   
   
   # Removes all tabs from the strip.

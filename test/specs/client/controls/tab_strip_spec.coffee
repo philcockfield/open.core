@@ -80,6 +80,14 @@ describe 'controls/tab_strip', ->
     it 'removes the tab from the [tabs] collection', ->
       tabStrip.remove tab2
       expect(tabStrip.tabs.contains(tab2)).toEqual false
+
+    it 'removes a tab using an index', ->
+      tabStrip.remove 1
+      expect(tabStrip.tabs.contains(tab2)).toEqual false
+
+    it 'does not fail if no tab is specified', ->
+      tabStrip.remove()
+      tabStrip.remove(50)
     
     it 'removes the tab from the DOM', ->
       tabStrip.remove(tab1)
@@ -178,6 +186,30 @@ describe 'controls/tab_strip', ->
       tab2.click()
       expect(count).toEqual 1
       expect(args.tab).toEqual tab2
+
+  describe '[count] event', ->
+    count = 0
+    args  = null
+    
+    
+    beforeEach ->
+      count = 0
+      args  = null
+      tabStrip.bind 'count', (e) -> 
+          count += 1
+          args = e
+    
+    it 'fires when a tab is added', ->
+      tabStrip.add()
+      expect(count).toEqual 1
+      expect(args.count).toEqual 1
+      
+    it 'fires when a tab is removed', ->
+      tabStrip.add()
+      tabStrip.remove(0)
+      expect(count).toEqual 2
+      expect(args.count).toEqual 0
+    
     
   describe 'init() method', ->
     tabs = [

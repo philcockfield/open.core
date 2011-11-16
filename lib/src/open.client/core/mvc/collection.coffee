@@ -23,11 +23,16 @@ module.exports = class Collection extends Backbone.Collection
       Collection.__super__.constructor.call @
       _.extend @fetch, Backbone.Events
       
-      fireCount = (col) => @trigger 'count', length:@length
+      fireCount = (col) => @trigger 'count', count:@length
       
       # Wire up events.
       @bind 'add', fireCount
       @bind 'remove', fireCount
+  
+  
+  # Retrieve the length of the collection.
+  # NB: Provided here for consistency with other objects that expose a [count] method.
+  count: -> @length
   
   
   ###
