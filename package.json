@@ -1,6 +1,6 @@
 {
 	"name": "open.core",
-	"version": "0.1.130",
+	"version": "0.1.131",
 	"description": "Common utility functionality used between multiple applications.",
 	"homepage": "https://github.com/philcockfield/open.core",
 	"author": {
@@ -25,7 +25,7 @@
 		"uglify-js": ">= 1.0.3",
 		"rimraf": ">= 1.0.2",
 		"zombie": "0.10.2",
-		"node-uuid", "1.2.0"
+		"node-uuid": "1.2.0"
 	},
 	"keywords": [
 		"utility",
