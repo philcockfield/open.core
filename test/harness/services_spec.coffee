@@ -17,6 +17,7 @@ describe 'Services', ->
           source: sampleCode
           language: 'coffee'
         
+        console.log 'Posting to: ', url
         $.ajax
           type: 'POST'
           url: url
@@ -24,10 +25,8 @@ describe 'Services', ->
           dataType: 'html'
           error: (data) -> console.log 'ERROR', data
           success: (data) -> 
-            
-            el = $ "<div>#{data}</div>"
+            el = $ "<div style='font-size:10pt;'>#{data}</div>"
             page.add el, fill:true
-            
     
     
   

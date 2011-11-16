@@ -56,14 +56,10 @@ app.post "#{core.baseUrl}/pygments", (req, res) ->
         language: req.body.language
         source:   req.body.source
     pygments.toHtml (err, html) -> 
-        
-        console.log 'err', err
-        console.log 'html: \n', html
-        
-        res.send html
-    
-    
-    
+        if err?
+          res.send err.message, 500
+        else
+          res.send html
 
 
 # Helpers --------------------------------------------------------------------------
