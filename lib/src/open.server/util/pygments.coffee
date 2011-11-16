@@ -27,11 +27,6 @@ module.exports = class Pygments
       @language = options.language ? 'coffee'
       @language = _(@language).ltrim('.')
       throw 'No source code provided' unless @source?
-      
-      # TEMP 
-      console.log 'options', options
-      console.log '@language: ', @language
-      console.log '@source: ', @source
   
   ###
   Converts the 'source' code to highlighted HTML.
@@ -51,13 +46,11 @@ module.exports = class Pygments
       options = options[0] ? {}
       options.fullPage ?= false
       
-      console.log 'options', options
-      
       # Functions.
       saveSource   = (onComplete) => fsUtil.writeFile file, @source, onComplete
       deleteSource = (onComplete) -> fsUtil.delete file, onComplete
       highlight = (onComplete) -> 
-          fullOption = if options.fullPage then ' -O full ' else ''
+          fullOption = if options.fullPage is yes then ' -O full ' else ''
           cmd = "pygmentize -f html#{fullOption} #{file}"
           exec cmd, (err, stdout, stderr) -> onComplete err, stdout
       
@@ -66,6 +59,8 @@ module.exports = class Pygments
         highlight (err, html) -> 
           deleteSource -> 
               callback? err, html
-      
-      
+
+
+
+
   

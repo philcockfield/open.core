@@ -24,7 +24,7 @@ app.get "#{core.baseUrl}/dev", (req, res) ->
 app.get "#{core.baseUrl}/:stylesheet?.css", (req, res) ->
     stylesheet = req.params.stylesheet
     switch stylesheet
-      when 'normalize' then path = 'libs'
+      when 'normalize', 'pygments' then path = 'libs'
       else path = 'core'
     send.cssFile res, "#{paths.stylesheets}/#{path}/#{stylesheet}.css"
 
@@ -48,6 +48,22 @@ app.get "#{core.baseUrl}/:package?.js", (req, res) ->
         file = "#{dir}/core/#{file(package)}"
 
     send.scriptFile res, file
+
+
+# POST: Pygments (source-code highlighting).
+app.post "#{core.baseUrl}/pygments", (req, res) ->
+    pygments = new core.util.Pygments
+        language: req.body.language
+        source:   req.body.source
+    pygments.toHtml (err, html) -> 
+        
+        console.log 'err', err
+        console.log 'html: \n', html
+        
+        res.send html
+    
+    
+    
 
 
 # Helpers --------------------------------------------------------------------------
