@@ -1,5 +1,9 @@
 describe 'Test Harness', ->
   
+  beforeAll ->
+    page.pane.clear()
+    page.pane.hide()
+  
   describe 'Pane', ->
     SampleView = null
     pane       = null
@@ -48,7 +52,7 @@ describe 'Test Harness', ->
 
             page.css '/stylesheets/dev/test.css'
             
-            page.add el, options
+            # page.add el, options
             
             
             
@@ -72,6 +76,7 @@ describe 'Test Harness', ->
             it 'Does It', ->
               console.log 'Spec C'  
 
-  describe 'Partial', ->
-  # describe 'Partial', ->
+  describe 'Tabs', ->
+    describe 'Code Sample', ->
+      
     
