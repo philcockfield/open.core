@@ -106,6 +106,11 @@ describe 'mvc/module', ->
       expect(args.name).toEqual 'modules/foo/controllers/bar'
       expect(args.options.throw).toEqual true
     
+    it 'pulls a require from the [util] folder', ->
+      module.util 'bar'
+      expect(args.name).toEqual 'modules/foo/util/bar'
+      expect(args.options.throw).toEqual true
+    
     describe 'MVC part functions as object structure', ->
       it 'aliases the [model] method', ->
         expect(module.require.model).toEqual module.model
@@ -115,6 +120,9 @@ describe 'mvc/module', ->
 
       it 'aliases the [controller] method', ->
         expect(module.require.controller).toEqual module.controller
+
+      it 'aliases the [util] method', ->
+        expect(module.require.util).toEqual module.util
     
     describe 'init-module pattern', ->
       module  = null

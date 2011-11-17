@@ -70,16 +70,18 @@ module.exports = Module = class Module extends Base
           requirePart.module = @
           requirePart
       
-      # Store [require] part functions as director properties structure.
+      # Store [require] part functions as directory properties structure.
       @model      = req 'models'
       @view       = req 'views'
       @controller = req 'controllers'
+      @util       = req 'util'
       
       # Store [require] part functions as object structure.
       @require = 
           model:      @model
           view:       @view
           controller: @controller
+          util:       @util
   
   
   ###
