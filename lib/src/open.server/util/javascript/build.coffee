@@ -9,10 +9,10 @@ CoreBuilder: class CoreBuilder
       # Construct paths.
       client = core.paths.client
       @path =
-          core:     { path: "#{client}/core",         namespace: 'open.client/core' }
-          controls: { path: "#{client}/controls",     namespace: 'open.client/controls' }
-          harness:  { path: "#{client}/harness",      namespace: 'open.client/harness' }
-          auth:     { path: "#{client}/modules/auth", namespace: 'open.client/auth' }
+          core:     { path: "#{client}/core",             namespace: 'open.client/core' }
+          controls: { path: "#{client}/controls",         namespace: 'open.client/controls' }
+          harness:  { path: "#{client}/modules/harness",  namespace: 'open.client/harness' }
+          auth:     { path: "#{client}/modules/auth",     namespace: 'open.client/auth' }
   
   build: (name, paths, callback)-> 
       paths = [paths] unless _(paths).isArray()
