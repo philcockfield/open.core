@@ -125,8 +125,10 @@ module.exports = (module) ->
         unless value?
             return '100%' if fill is true
             return null
-        
-        return value + 'px' if _(value).isNumber()
+        value += 'px' if _(value).isNumber()
+        if _(value).isString()
+          value = _(value).trim()
+          value = '100%' if value is '*'
         value
   
   syncPaneHeight = (view) -> 

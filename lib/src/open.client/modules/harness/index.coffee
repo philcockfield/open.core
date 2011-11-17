@@ -51,6 +51,10 @@ module.exports = class TestHarness extends core.mvc.Module
       super options
       window.HARNESS ?= {} # Used for testing.  This would otherwise be set in the page.
       
+      # Exit out if in debug mode.
+      # This mode is just so sub-views can be pulled up within the TestHarness itself.
+      return @ if options.debug is yes
+      
       # Store page reference on Module and make it available to spec
       # by storing it in the global object.
       Page = @model 'page'
@@ -60,7 +64,7 @@ module.exports = class TestHarness extends core.mvc.Module
       document.ontouchmove = (e) -> e.preventDefault() # Suppress page scroll bouncing.
       
       # Create root collection describe blocks.
-      Suite = @models.Suite
+      Suite   = @models.Suite
       @suites = new @models.Suite.Collection()
       Suite.getSuites @suites
       
@@ -91,17 +95,6 @@ module.exports = class TestHarness extends core.mvc.Module
       console.log ' - Error: ', error
       logProperty 'message'
       logProperty 'stack'
-      
-      # msg = error["get message"]
-      # console.log 'error["get message"]', error["get message"]
-      # console.log 'error["message"]', error["message"]
-      
-          # if console?
-          #     console.log 'Failed to invoke operation.'
-          #     console.log ' - Error: ', error
-          #     console.log ''
-      
-      
   
   
     

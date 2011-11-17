@@ -305,3 +305,6 @@ body {
   bottom: 0px;
   overflow: hidden;
 }
+.th_tab.th_code_sample {
+  background: #ffa500;
+}

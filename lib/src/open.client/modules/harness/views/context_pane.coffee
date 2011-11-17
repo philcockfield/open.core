@@ -71,3 +71,9 @@ module.exports = (module) ->
     clear: -> @tabStrip.clear()
     
     
+    # Clears and hides the pane.
+    reset: -> 
+        @hide()
+        @clear()
+    
+    

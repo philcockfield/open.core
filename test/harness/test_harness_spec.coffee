@@ -1,8 +1,10 @@
 describe 'Test Harness', ->
-  
+  TestHarness = null
+  pane        = null
   beforeAll ->
-    page.pane.clear()
-    page.pane.hide()
+    TestHarness = require 'open.client/harness'
+    pane = page.pane
+    pane.reset()
   
   describe 'Pane', ->
     SampleView = null
@@ -15,7 +17,6 @@ describe 'Test Harness', ->
                 @el.css 'margin', '20px'
                 @html options.text ?= 'Untitled'
         
-        pane = page.pane
         pane.show()
         add() for i in [1,2,3]
         
@@ -41,20 +42,7 @@ describe 'Test Harness', ->
     describe 'A', ->
       beforeAll -> 
             console.log '++ Before All: A' # Create and insert view here.
-
-            el = $('<div class="foo">Hello I am an element.</div>')
-            
-            options = 
-                width: '80%'
-                height: '60%'
-                # css: '/stylesheets/dev/test.css'
-                # showTitle: false
-
             page.css '/stylesheets/dev/test.css'
-            
-            # page.add el, options
-            
-            
             
       afterAll  -> console.log '++ After All: A'
           
@@ -77,6 +65,25 @@ describe 'Test Harness', ->
               console.log 'Spec C'  
 
   describe 'Tabs', ->
+    harness = null
+    beforeAll -> harness = new TestHarness().init(debug:true)
+    
     describe 'Code Sample', ->
+      tab = null
+      beforeAll ->
+        tab = new harness.views.CodeSampleTab()
+        page.add tab, width:'80%'
+
+
+
+
+
+
+
+
+
+
+
+        
       
     
