@@ -23,8 +23,7 @@ module.exports = class Markdown
       
       # Convert the markdown into HTML.
       html = markdown.parse source
-      
-      
+      # html = toJQuery(html)
       
       # Finish up.
       """
@@ -32,6 +31,15 @@ module.exports = class Markdown
         #{html}
       </div>
       """
-      
-      
-      
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+
+toJQuery = (html) -> 
+    lines = html.split '\n'
+    html = ''
+    for line in lines
+        html += line unless _.isBlank(line)
+    $("<body>#{html}</body>")
+

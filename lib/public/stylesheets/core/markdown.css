@@ -78,10 +78,10 @@
   padding: 15px;
   border-radius: 5px;
   border: solid 1px #d9d9d9;
-  box-shadow: inset 0px 3px 5px 0px #e6e6e6;
+  box-shadow: inset 0px 2px 5px 0px #e6e6e6;
   font-size: 10pt;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .core_markdown pre code {
   background: none;
