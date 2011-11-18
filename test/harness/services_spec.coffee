@@ -43,7 +43,7 @@ describe 'Services', ->
         source:
           '''
           # H1 Title
-          Some markdown [link](https://github.com/evilstreak/markdown-js)  
+          Some markdown [link](https://github.com/evilstreak/markdown-js).  
           **Bold**, *italic*
           
           >> Quote
