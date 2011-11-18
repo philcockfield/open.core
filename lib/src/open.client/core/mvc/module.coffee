@@ -54,17 +54,7 @@ module.exports = Module = class Module extends Base
       req = (dir) => 
           
           # Curry function. Require statement scoped within the given directory.
-          requirePart = (name = '', options = {}) => 
-              # Retrieve the module.
-              options.throw ?= true
-              part = @tryRequire "#{@modulePath}/#{dir}/#{name}", options
-              
-              # Invoke the [module-init] pattern if required.
-              if part? and options.init ?= true
-                  part = Module.initPart @, part
-              
-              # Finish up.
-              part
+          requirePart = (name, options = {}) => tryRequire @, dir, name, options
           
           # Store reference to the module on the [require] function.
           requirePart.module = @
@@ -74,14 +64,14 @@ module.exports = Module = class Module extends Base
       @model      = req 'models'
       @view       = req 'views'
       @controller = req 'controllers'
-      @util       = req 'util'
+      @collection = req 'collections'
       
       # Store [require] part functions as object structure.
       @require = 
           model:      @model
           view:       @view
           controller: @controller
-          util:       @util
+          collection: @collection
   
   
   ###
@@ -127,11 +117,14 @@ module.exports = Module = class Module extends Base
   # A require function scoped to retrieve [Models] within the module. (see 'require.*' method comments for more).
   model: null      # (Set in constructor)
   
-  # A require function scoped to retrieve [Views] within the module. (see 'model' method comments for more).
+  # A require function scoped to retrieve [Views] within the module. (see 'require.*' method comments for more).
   view: null       # (Set in constructor)
   
-  # A require function scoped to retrieve [Controllers] within the module. (see 'model' method comments for more).
+  # A require function scoped to retrieve [Controllers] within the module. (see 'require.*' method comments for more).
   controller: null # (Set in constructor)
+  
+  # A require function scoped to retrieve [Collections] within the module. (see 'require.*' method comments for more).
+  collections: null # (Set in constructor)
   
   
   ###
@@ -144,6 +137,7 @@ module.exports = Module = class Module extends Base
   init: (options = {}) -> 
       options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
       createMvcIndex @
+      @util = tryRequire(@, 'util', 'index', throw:false) unless @util?
       @
 
 
@@ -167,6 +161,7 @@ createMvcIndex = (module) ->
       setIndex 'models',      module.model
       setIndex 'views',       module.view
       setIndex 'controllers', module.controller
+      setIndex 'collections', module.collection
       
       # Assign default views (if they exist).
       setView = (prop, name) => 
@@ -175,6 +170,21 @@ createMvcIndex = (module) ->
                     module.views[prop] = view if view? # Only assign the property if the view was found.
       setView 'Root', 'root'
       setView 'Tmpl', 'tmpl'
+
+
+tryRequire = (module, dir, name = '', options = {}) -> 
+    options.throw ?= true
+    
+    # Retrieve the module part.
+    path = "#{module.modulePath}/#{dir}/#{name}"
+    part = module.tryRequire path, options
+    
+    # Invoke the [module-init] pattern if required.
+    if part? and options.init ?= true
+        part = Module.initPart module, part
+    
+    # Finish up.
+    part
 
 
 # STATIC METHODS --------------------------------------------------------------------------

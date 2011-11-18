@@ -106,9 +106,9 @@ describe 'mvc/module', ->
       expect(args.name).toEqual 'modules/foo/controllers/bar'
       expect(args.options.throw).toEqual true
     
-    it 'pulls a require from the [util] folder', ->
-      module.util 'bar'
-      expect(args.name).toEqual 'modules/foo/util/bar'
+    it 'pulls a require from the [collection] folder', ->
+      module.collection 'bar'
+      expect(args.name).toEqual 'modules/foo/collections/bar'
       expect(args.options.throw).toEqual true
     
     describe 'MVC part functions as object structure', ->
@@ -121,8 +121,8 @@ describe 'mvc/module', ->
       it 'aliases the [controller] method', ->
         expect(module.require.controller).toEqual module.controller
 
-      it 'aliases the [util] method', ->
-        expect(module.require.util).toEqual module.util
+      it 'aliases the [collection] method', ->
+        expect(module.require.collection).toEqual module.collection
     
     describe 'init-module pattern', ->
       module  = null
@@ -219,19 +219,24 @@ describe 'mvc/module', ->
             return 'models_modules' if name is 'modules/foo/models/'
             return 'views_modules' if name is 'modules/foo/views/'
             return 'controllers_modules' if name is 'modules/foo/controllers/'
+            return 'collections_modules' if name is 'modules/foo/collections/'
       
     describe 'calling index for each MVC folder', ->
       it 'stores the [models] index', ->
         module.init()
         expect(module.models).toEqual 'models_modules'
-
+      
       it 'stores the [views] index', ->
         module.init()
         expect(module.views).toEqual 'views_modules'
-
+      
       it 'stores the [controllers] index', ->
         module.init()
         expect(module.controllers).toEqual 'controllers_modules'
+      
+      it 'stores the [collections] index', ->
+        module.init()
+        expect(module.collections).toEqual 'collections_modules'
     
     describe 'getting the [index] of each MVC part via the static [requirePart] method', ->
       spyCalls = null
@@ -242,15 +247,17 @@ describe 'mvc/module', ->
       
       it 'calls [requirePart] for model', ->
         expect(spyCalls[0].args[0]).toEqual module.model
-
+      
       it 'calls [requirePart] for view', ->
         expect(spyCalls[1].args[0]).toEqual module.view
-
+      
       it 'calls [requirePart] for controller', ->
         expect(spyCalls[2].args[0]).toEqual module.controller
-        
+      
+      it 'calls [requirePart] for collections', ->
+        expect(spyCalls[3].args[0]).toEqual module.collection
   
-  describe 'no overwriting existing MVC properties set by the module', ->
+  describe 'no overwriting existing properties set by the module', ->
     module = null
     beforeEach ->
         class MyModule extends Module
@@ -259,6 +266,8 @@ describe 'mvc/module', ->
               @models      = 'models'
               @views       = 'views'
               @controllers = 'controllers'
+              @collections = 'collections'
+              @util        = 'util'
         module = new MyModule()
         module.init()
     
@@ -270,7 +279,12 @@ describe 'mvc/module', ->
       
     it 'does not overwrite [controllers] property', ->
       expect(module.controllers).toEqual 'controllers'
+
+    it 'does not overwrite [collections] property', ->
+      expect(module.collections).toEqual 'collections'
       
+    it 'does not overwrite [util] property', ->
+      expect(module.util).toEqual 'util'
   
   describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
@@ -296,7 +310,7 @@ describe 'mvc/module', ->
       Module.requirePart(fnIndex)
       expect(arg).toEqual module
   
-  describe 'module with no Models, Views or Controllers', ->
+  describe 'module with no Models, Views, Collections or Controllers', ->
     describe 'with no sub-folders', ->
       module  = null
       views   = null
@@ -313,6 +327,9 @@ describe 'mvc/module', ->
 
       it 'has empty [Controllers] object', ->
         expect(module.controllers).toEqual {}
+
+      it 'has empty [Collections] object', ->
+        expect(module.collections).toEqual {}
     
     describe 'with sub-folders', ->
       module  = null
@@ -330,6 +347,9 @@ describe 'mvc/module', ->
 
       it 'has empty [Controllers] object', ->
         expect(module.controllers).toEqual {}
+
+      it 'has empty [Collections] object', ->
+        expect(module.collections).toEqual {}
   
   
   describe 'setting default [Views]', ->
@@ -411,6 +431,37 @@ describe 'mvc/module', ->
       
       it 'does not overwrite a default [Tmpl] view already setup by the [Index]', ->
         expect(views.Tmpl).toEqual 'Tmpl set in index'
+
+  describe 'Retrieveing collections', ->
+    module      = null
+    beforeEach ->
+        Module = require('core/test/modules/module7')
+        module = new Module()
+        module.init()
+
+    it 'retrieves a specific collection', ->
+      Foo = module.collection 'foo'
+      foo = new Foo()
+      expect(foo instanceof core.mvc.Collection).toEqual true 
+    
+    it 'has an index of collections', ->
+      foo = new module.collections.Foo()
+      className = foo.__proto__.constructor.name
+      expect(className).toEqual 'FooCollection'
+      
+  describe 'Util', ->
+    it 'does not have a util property', ->
+      Module = require('core/test/modules/module1')
+      module = new Module().init()
+      expect(module.util).toEqual null
+    
+    it 'has a util property', ->
+      Module = require('core/test/modules/module7')
+      module = new Module().init()
+      expect(module.util).toBeDefined()
+      expect(module.util.add instanceof Function).toEqual true 
+
+
 
 
 

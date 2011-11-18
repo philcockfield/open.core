@@ -15,10 +15,13 @@ module.exports = class Template
                 
                   root:
                       """"
-                      <div><%= this.foo %></div>
+                      <div><%= tmpl.foo %></div>
                       """"
                 
-                Any existing properties on the template are NOT overwridden by a 
+                Note: 'tmpl' is a reference to the template that is passed into all
+                      template functions automatically.  It is just available.
+                
+                Any existing properties on the template are NOT overwritten by a 
                 property contained within the 'props' argument.
   ###
   constructor: (props) -> Template::_construct.call @, props
@@ -41,12 +44,29 @@ module.exports = class Template
       # Copy property values passed to constructor.
       for name of props
           @[name] = props[name] unless @[name]?
-    
   
   
   ###
   Converts a template string into a compiled template function.
   Override this to use a template library other than the default underscore engine.
-  @param tmpl: The HTML template string.
+  @param str: The HTML template string.
   ###
-  toTemplate: (tmpl) -> new _.template(tmpl)
+  # toTemplate: (str) -> _.template(str)
+  toTemplate: (str) -> 
+    self = @
+    fn   = _.template(str)
+    return (args = {}) -> 
+        # Curried function.  Pass in a reference to the template itself.
+        # NB: This allows other template functions to be accessed from 
+        #     within the executing template.
+        args.tmpl ?= self
+        fn(args)
+    
+    
+      
+
+
+
+
+
+  
