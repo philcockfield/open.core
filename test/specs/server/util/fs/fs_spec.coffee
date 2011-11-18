@@ -1,4 +1,6 @@
 describe 'util/fs', ->
+  WAIT_TIMEOUT = 500
+  
   sampleDir = "#{__dirname}/sample"
   paths     = test.paths
   fsUtil    = test.server.util.fs
@@ -159,7 +161,7 @@ describe 'util/fs', ->
         it 'reads deep file path with hidden files', ->
           result = null
           fsUtil.readDir path, deep:true, (err, paths) -> result = paths
-          waitsFor (-> result?), 100
+          waitsFor (-> result?), WAIT_TIMEOUT
           runs ->
             expectToInclude = (path) -> 
                 expect(includesPath(result, path)).toEqual true, 'Not included: ' + path
@@ -173,14 +175,11 @@ describe 'util/fs', ->
             expectToInclude 'dir/child/grandchild2.txt'
             expectToInclude 'file1.txt'
             expectToInclude 'file2.txt'
-            
-            
-
   
         it 'reads deep file path with no hidden files/folders', ->
           result = null
           fsUtil.readDir path, deep:true, hidden:false, (err, paths) -> result = paths
-          waitsFor (-> result?), 100
+          waitsFor (-> result?), WAIT_TIMEOUT
           runs ->
             expect(includesPath(result, '.hidden')).toEqual false
             expect(includesPath(result, '.hidden/file.txt')).toEqual false
@@ -195,7 +194,7 @@ describe 'util/fs', ->
         it 'reads deep file path with folders only', ->
           result = null
           fsUtil.readDir path, deep:true, files:false, (err, paths) -> result = paths
-          waitsFor (-> result?), 100
+          waitsFor (-> result?), WAIT_TIMEOUT
           runs ->
             expect(includesPath(result, '.hidden')).toEqual true
             expect(includesPath(result, '.hidden/file.txt')).toEqual false
