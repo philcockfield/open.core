@@ -6,7 +6,11 @@ module.exports = class Template
   ###
   Constructor.
   @param props: An object containing values to attach as properties to the template.
-                Pass values that you want to access within a template.
+                
+                As well as properties passed into the template property functions themselves
+                templates can access properties on the [Template] object which can be
+                passed into the constructor.
+                
                 For example, if the template was constructed like this:
                 
                   tmpl = new MyTemplate( foo:123 )
@@ -58,7 +62,10 @@ module.exports = class Template
     return (args = {}) -> 
         # Curried function.  Pass in a reference to the template itself.
         # NB: This allows other template functions to be accessed from 
-        #     within the executing template.
+        #     within the executing template
+        #     It is more reliable than calling 'this' from within the template
+        #     as the context of 'this' will change if within a _ 'each' loop
+        #     for instance.
         args.tmpl ?= self
         fn(args)
     
