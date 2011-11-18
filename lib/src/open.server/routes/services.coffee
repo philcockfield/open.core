@@ -16,12 +16,12 @@ app.post "#{core.baseUrl}/pygments", (req, res) ->
           res.send html
 
 
-
 # POST: Markdown.
 app.post "#{core.baseUrl}/markdown", (req, res) -> 
-    converter = new core.util.Markdown source: req.body.source
+    converter = new core.util.Markdown()
     try
-      res.send converter.toHtml()
+      html = converter.toHtml( req.body.source )
+      res.send html
     catch error
       res.send error.message, 500
       

@@ -10,24 +10,17 @@ module.exports = class Markdown
   ###
   Constructor.
   @param options
-    - source:   The source markdown.
   ###
   constructor: (options = {}) -> 
-      
-      # Setup initial conditions.
-      @source   = options.source
-      throw 'No source code provided' unless @source?
   
   
   ###
-  Converts the 'source' markdown to HTML.
+  Converts markdown to HTML.
+  @param source:  The source markdown to convert.
   @param options: (optional)
   ###
-  toHtml: (options = {}) ->       
-      
-      console.log 'markdown', markdown
-      
-      html = markdown.parse @source
+  toHtml: (source, options = {}) ->       
+      html = markdown.parse source
       
       
       
