@@ -37,8 +37,9 @@ describe 'Services', ->
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->
     url = "/markdown"
-    it 'Convert: Simple Markdown', ->
-      
+    beforeAll -> simple()
+    
+    simple = -> 
       post url,
         source:
           '''
@@ -65,6 +66,9 @@ describe 'Services', ->
               var foo = 123
               
           '''
+    
+    it 'Convert: Simple Markdown', -> simple()
+      
           
       
       
