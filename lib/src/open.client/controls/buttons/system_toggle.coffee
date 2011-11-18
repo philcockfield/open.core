@@ -54,6 +54,7 @@ module.exports = class SystemToggleButton extends Button
         # Determine if a click on sub-INPUT element (not the parent Button) caused the state change.
         inputClicked = false
         srcElement = args.srcElement
+        
         if srcElement?
             el = srcElement.get(0)
             inputClicked = srcElement.get(0) is @elInput.get(0)

@@ -66,7 +66,7 @@ module.exports = class Button extends core.mvc.View
           el.mouseup (e) => 
               self.down false
               # Passes through to state-changed via the [click] method.
-              self.click srcElement: e.srcElement
+              self.click srcElement: e.target
       
       # Finish up.
       syncClasses @
