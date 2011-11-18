@@ -1,5 +1,6 @@
 describe 'Services', ->
   post = (url, data, callback) -> 
+      console.log ''
       console.log 'Posting to: ', url
       console.log 'Data:', data
       console.log '...'
@@ -9,7 +10,8 @@ describe 'Services', ->
         data: data
         dataType: 'html'
         error: (err) -> 
-            console.log '- Error: ', err
+            console.log ' - Error: ', err
+            console.log ' - Message:',  err.responseText
             callback? err, null
             
         success: (data) -> 
@@ -33,8 +35,37 @@ describe 'Services', ->
           '''
   
   
-  # describe 'Markdown', 'Markdown to HTML conversion service.', ->
-  #   it 'Convert: simple markdown', ->
+  describe 'Markdown', 'Markdown to HTML conversion service.', ->
+    url = "/markdown"
+    it 'Convert: Simple Markdown', ->
+      
+      post url,
+        source:
+          '''
+          # H1 Title
+          Some markdown [link](https://github.com/evilstreak/markdown-js)  
+          **Bold**, *italic*
+          
+          >> Quote
+          
+          ## H2 Title
+          ### H3 Title
+          ### H4 Title
+          
+          - Item 1
+          - Item 2
+            - Item a
+            - Item b
+            - Item c
+          
+          ---
+          
+          Inline `code snippet`
+              
+              var foo = 123
+              
+          '''
+          
       
       
       

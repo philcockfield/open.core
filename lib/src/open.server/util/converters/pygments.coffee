@@ -28,6 +28,7 @@ module.exports = class Pygments
       @language = _(@language).ltrim('.')
       throw 'No source code provided' unless @source?
   
+  
   ###
   Converts the 'source' code to highlighted HTML.
   @param options: (optional)

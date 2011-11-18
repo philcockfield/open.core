@@ -3,16 +3,25 @@ app     = core.app
 paths   = core.paths
 send    = core.util.send
 
-console.log 'foo'
-
 
 # POST: Pygments (source-code highlighting).
 app.post "#{core.baseUrl}/pygments", (req, res) ->
-    pygments = new core.util.Pygments
-        language: req.body.language
+    converter = new core.util.Pygments
         source:   req.body.source
-    pygments.toHtml (err, html) -> 
+        language: req.body.language
+    converter.toHtml (err, html) -> 
         if err?
           res.send err.message, 500
         else
           res.send html
+
+
+
+# POST: Markdown.
+app.post "#{core.baseUrl}/markdown", (req, res) -> 
+    converter = new core.util.Markdown source: req.body.source
+    try
+      res.send converter.toHtml()
+    catch error
+      res.send error.message, 500
+      

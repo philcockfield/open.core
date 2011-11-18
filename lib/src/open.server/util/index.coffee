@@ -9,8 +9,9 @@ module.exports = index =
   
   # Classes.
   Timer:      require './timer'
-  Pygments:   require './pygments'
-  
+  Pygments:   require './converters/pygments'
+  Markdown:   require './converters/markdown'
+
 
 # Copy the common utility methods onto the index.
 _.extend index, require('./common')
