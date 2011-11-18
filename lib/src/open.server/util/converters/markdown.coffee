@@ -20,7 +20,18 @@ module.exports = class Markdown
   @param options: (optional)
   ###
   toHtml: (source, options = {}) ->       
+      
+      # Convert the markdown into HTML.
       html = markdown.parse source
+      
+      
+      
+      # Finish up.
+      """
+      <div class="core_markdown">
+        #{html}
+      </div>
+      """
       
       
       
