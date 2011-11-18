@@ -25,7 +25,8 @@
 		"uglify-js": ">= 1.0.3",
 		"rimraf": ">= 1.0.2",
 		"zombie": "0.10.2",
-		"node-uuid": "1.2.0"
+		"node-uuid": "1.2.0",
+    "markdown": ">= 0.3.1",
 	},
 	"keywords": [
 		"utility",

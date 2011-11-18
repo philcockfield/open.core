@@ -2,6 +2,8 @@ core    = require 'open.server'
 app     = core.app
 paths   = core.paths
 send    = core.util.send
+require './services'
+
 
 
 # Dev (Home).
@@ -50,16 +52,6 @@ app.get "#{core.baseUrl}/:package?.js", (req, res) ->
     send.scriptFile res, file
 
 
-# POST: Pygments (source-code highlighting).
-app.post "#{core.baseUrl}/pygments", (req, res) ->
-    pygments = new core.util.Pygments
-        language: req.body.language
-        source:   req.body.source
-    pygments.toHtml (err, html) -> 
-        if err?
-          res.send err.message, 500
-        else
-          res.send html
 
 
 # Helpers --------------------------------------------------------------------------
