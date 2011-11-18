@@ -31,17 +31,26 @@ module.exports = (module) ->
         el.css 'width',  width   if width?
         el.css 'height', height  if height?
         el.css 'border', "solid 1px #{border}" if border?
-          
-        @trTitle.toggle (options.showTitle ?= true)
+
+        # Update CSS options.
         @css options.css
+        module.util.syncScroll el, options.scroll ? null
+        
+        # Update the host pane elements.
+        @trTitle.toggle (options.showTitle ?= true)
         
         # Insert the element into the host DIV.
         @tdHost.append el
     
     
+    # Removes the test element from the DOM.
     clear: -> @tdHost.empty()
     
     
+    ###
+    Adds a stylesheet <link> to the page.
+    @param urls: One or more urls to stylehseets to add to the page.
+    ###
     css: (urls) -> 
         return unless urls?
         urls = [urls] unless _(urls).isArray()
@@ -52,6 +61,7 @@ module.exports = (module) ->
         @
     
     
+    # Resets the control to it's original condition.
     reset: -> @clear()
     
     

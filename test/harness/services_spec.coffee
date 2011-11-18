@@ -17,7 +17,7 @@ describe 'Services', ->
         success: (data) -> 
             el = $ "<div style='font-size:10pt;'>#{data}</div>"
             console.log ' - Success: ', el
-            page.add el, fill:true, reset:true
+            page.add el, fill:true, reset:true, scroll:'y'
             callback? null, 
               el:   el
               data: data

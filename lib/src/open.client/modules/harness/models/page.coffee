@@ -32,6 +32,7 @@ module.exports = (module) ->
                            If '*' is supplied it is converted to '100%'.
               - showTitle: Flag indicating if the title, and description, should be displayed (default true).
               - fill:      Flag indicating if width/height values should be set to '100%' (default false).
+              - scroll:    Scroll behavior for container. 'x', 'y', 'xy', null.  Default:null
               - border:    A color (string) or a bolean (yes/no) for whether a border should be put around the hosted control.
               - reset:     Flag indicating if the 'Reset' method should be invoked before adding.
     ###

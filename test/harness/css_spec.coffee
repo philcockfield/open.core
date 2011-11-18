@@ -18,19 +18,12 @@ describe 'CSS Styles', ->
                 </div>
                 '''
         page.reset()
-        page.add div, width: 250, height: 250, border:true
-        syncScroll 'y'
+        page.add div, width: 250, height: 250, border:true, scroll:'y'
     
     it 'Axis: x',    -> syncScroll 'x'
     it 'Axis: y',    -> syncScroll 'y'
     it 'Axis: xy',   -> syncScroll 'xy'
     it 'Axis: null', -> syncScroll null
-        
-      
-      
-      
-    
-    
-    
-  
-  
+
+
+
