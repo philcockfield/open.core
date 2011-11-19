@@ -70,8 +70,7 @@ module.exports = util =
       return unless el?
       className = options.className ? 'core_external'
       tooltip   = options.tooltip 
-      target    = options.target
-      target    = '_blank' if target is undefined
+      target    = options.target ? '_blank'
       
       getHref = (a) -> 
           href = a.attr 'href'

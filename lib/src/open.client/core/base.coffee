@@ -23,7 +23,7 @@ module.exports = class Base
                     }
   ###
   addProps: (props) ->
-
+      
       # Setup initial conditions.
       return unless props?
       self = @
