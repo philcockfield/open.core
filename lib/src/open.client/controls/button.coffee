@@ -66,7 +66,9 @@ module.exports = class Button extends core.mvc.View
           el.mouseup (e) => 
               self.down false
               # Passes through to state-changed via the [click] method.
-              self.click srcElement: e.target
+              # NB: srcElement is accurate in Web-Kit, however null in Firefox
+              #     so pick up the 'target' element in Firefix, which is the same element.
+              self.click srcElement: e.srcElement ? e.target
       
       # Finish up.
       syncClasses @

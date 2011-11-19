@@ -29,6 +29,89 @@ describe 'util', ->
       expect(console.log).toHaveBeenCalled()
   
   
+  describe 'formatLinks()', ->
+    html = """
+           <div>
+            <a>0</a>
+            <a href="/foo">1</a>
+            <a href="http://foo">2</a>
+            <a href="http://foo.com" target="_blank">3</a>
+            <a href="http://foo.com" target="_self">4</a>
+            <a href="https://foo.com">5</a>
+            <a href="hTtp://foo" class="core_external">6</a>
+            <a href="/bar" target="_self">7</a>
+            <a href="mailto:bob@domain.com">8</a>
+           </div>    
+           """
+    div = null
+    a0  = null
+    a1  = null
+    a2  = null
+    a3  = null
+    a4  = null
+    a5  = null
+    a6  = null
+    a7  = null
+    a8  = null
+    beforeEach ->
+      div = $ html
+      core.util.formatLinks div
+      children = div.children()
+      a0 = $ children[0]
+      a1 = $ children[1]
+      a2 = $ children[2]
+      a3 = $ children[3]
+      a4 = $ children[4]
+      a5 = $ children[5]
+      a6 = $ children[6]
+      a7 = $ children[7]
+      a8 = $ children[8]
+    
+    it 'does nothing if no element is passed', ->
+      core.util.formatLinks()
+    
+    it 'does nothing to an anchor with no href', ->
+      expect(a0.hasClass('core_external')).toEqual false
+      expect(a0.attr('target')).toEqual null
+    
+    it 'does not add the CSS class to an internal link', ->
+      expect(a1.hasClass('core_external')).toEqual false
+      expect(a7.hasClass('core_external')).toEqual false
+    
+    it 'adds the CSS class to external links', ->
+      expect(a2.hasClass('core_external')).toEqual true
+      expect(a3.hasClass('core_external')).toEqual true
+      expect(a4.hasClass('core_external')).toEqual true
+      expect(a5.hasClass('core_external')).toEqual true
+      expect(a8.hasClass('core_external')).toEqual true
+    
+    it 'sets a custom CSS class name', ->
+      core.util.formatLinks div, className:'foo_external'
+      expect(a2.hasClass('foo_external')).toEqual true
+    
+    it 'sets the target to [_blank] for external links', ->
+      expect(a2.attr('target')).toEqual '_blank'
+      expect(a3.attr('target')).toEqual '_blank'
+      expect(a4.attr('target')).toEqual '_blank'
+      expect(a5.attr('target')).toEqual '_blank'
+      expect(a6.attr('target')).toEqual '_blank'
+    
+    it 'sets the target to [_self] for external links', ->
+      core.util.formatLinks div, target:'_self'
+      expect(a2.attr('target')).toEqual '_self'
+    
+    it 'does not change the target for internal links', ->
+      expect(a0.attr('target')).toEqual null
+      expect(a1.attr('target')).toEqual null
+      expect(a7.attr('target')).toEqual '_self'
+  
+    it 'does not set the target for [mailto:] links', ->
+      expect(a8.attr('target')).toEqual null
+    
+    
+    
+  
+  
   describe 'scrollClasses', ->
     div = null
     beforeEach ->

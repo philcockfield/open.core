@@ -52,6 +52,57 @@ module.exports = util =
       
       # Finish up.
       el
+  
+  
+  ###
+  Selects all <a> tags within the given element and
+  assigns the [qui_external] class to ones that start
+  with an 'http://' or 'https://' or 'mailto:
+  @param el: The element containing the <a> element to format.
+  @param options
+          - className: Optional. The class to assign to external links (default: 'core_').
+          - tooltip:   Optional. The tooltip text to assign (default: none).
+          - target:    Optional. The target for the external link (default: '_blank').
+          
+  ###
+  formatLinks: (el, options = {}) -> 
+      # Setup initial conditions.
+      return unless el?
+      className = options.className ? 'core_external'
+      tooltip   = options.tooltip 
+      target    = options.target
+      target    = '_blank' if target is undefined
+      
+      getHref = (a) -> 
+          href = a.attr 'href'
+          href = _(href.toLowerCase()) if href?
+          href
+      
+      isExternal = (href) -> 
+          return false unless href?
+          for prefix in ['http://', 'https://', 'mailto:']
+            return true if href.startsWith(prefix)
+          false
+      
+      targetNewWindow = (href) -> 
+          not href.startsWith('mailto:')
+      
+      # Process each anchor.
+      process = (a) -> 
+          href = getHref a
+          return unless isExternal(href)
+          
+          # Update the CSS class.
+          a.addClass className
+          
+          # Update the [target] attribute.
+          a.attr 'target', target if target? and targetNewWindow(href)
+          
+          # Add tooltip.
+          a.attr 'title', tooltip if tooltip?
+      
+      process $(a) for a in el.find('a')
+  
 
 
 # Extend with partial modules.

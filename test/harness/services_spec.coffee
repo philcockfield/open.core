@@ -24,14 +24,17 @@ describe 'Services', ->
   
   describe 'Pygments', 'Source code highlighting service.', -> 
     url = '/pygments'
-    it 'Convert: CoffeeScript', ->
+    beforeAll ->
       post url, 
         language: 'coffee'
         source: 
           '''
           # Comment.
           foo = 123
-          fn = -> console.log 'foo', foo
+          fn = (prefix) -> console.log "#{prefix}: ", foo
+          for i in [1..5]
+            foo += 1
+            fn('Item')
           '''
   
   
@@ -47,7 +50,7 @@ describe 'Services', ->
       '''
       # H1 Title
       Some markdown [link](https://github.com/evilstreak/markdown-js).  
-      **Bold**, *italic*
+      **Bold**, *italic* converted to em--dash
       
       >> Quote
       
@@ -60,9 +63,13 @@ describe 'Services', ->
       
       - Item 1
       - Item 2
-        - Item a
-        - Item b
-        - Item c
+        - **Item A** (bold)  
+          Next line on item-a after two spaces - makes two <br>'s
+        - Item B
+          
+          New <p> - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          
+        - **Item C**: Lorem ipsum dolar.
       
       ---
       

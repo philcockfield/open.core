@@ -24,4 +24,12 @@ app.post "#{core.baseUrl}/markdown", (req, res) ->
       res.send html
     catch error
       res.send error.message, 500
-      
+    
+    
+    ###
+    TODO
+    - links | internal, external
+    - syntax highlight code - ```coffee
+    - Ensure char-returns aren't lost on PRE blocks.
+    - Emdash conversion
+    ###
