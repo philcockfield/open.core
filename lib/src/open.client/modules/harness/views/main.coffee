@@ -131,33 +131,44 @@ module.exports = (module) ->
       value = '#666666' if _(value).isBoolean()
       value
   
+  
   formatSizeValue = (value, fill) -> 
-        unless value?
-            return '100%' if fill is true
-            return null
-        value += 'px' if _(value).isNumber()
-        if _(value).isString()
-          value = _(value).trim()
-          value = '100%' if value is '*'
-        value
+      isNumberPercent = (num) -> (0 <= num <= 1)
+      
+      unless value?
+          return '100%' if fill is true
+          return fill if _(fill).isString()
+          return fill * 100 + '%' if isNumberPercent(fill)
+          return null
+      
+      if _(value).isNumber()
+        if isNumberPercent(value)
+          value = value * 100 + '%' 
+        else
+          value += 'px' 
+      else if _(value).isString()
+        value = _(value).trim()
+        value = '100%' if value is '*'
+      
+      value
+  
   
   syncPaneHeight = (view) -> 
-        
-        # Setup initial conditions.
-        pane = view.pane
-        min  = pane.minHeight()
-        
-        # Calculate height.
-        if pane.visible()
-            height = pane.height()
-            height = min if height < min
-        else
-            height = 0
-        
-        # Sync elements
-        height += 'px'
-        view.divRoot.css 'bottom', height
-        pane.el.css 'height', height
+      # Setup initial conditions.
+      pane = view.pane
+      min  = pane.minHeight()
+      
+      # Calculate height.
+      if pane.visible()
+          height = pane.height()
+          height = min if height < min
+      else
+          height = 0
+      
+      # Sync elements
+      height += 'px'
+      view.divRoot.css 'bottom', height
+      pane.el.css 'height', height
   
   
   # Export.

@@ -74,7 +74,28 @@ describe 'Test Harness', ->
         tab = new harness.views.CodeSampleTab()
         page.add tab, width:'80%'
 
-
+  describe 'Page', ->
+    
+    div = null
+    
+    beforeEach ->
+      page.reset()
+      div = $ '<div style="background:orange">Element</div>'
+    
+    it 'Add - width:100, height:250', -> page.add div, width:100, height:250
+    it 'Add - width:*, height:*', -> page.add div, width:'*', height:'*'
+    it 'Add - width:0.3, height:0.8', -> page.add div, width:0.3, height:0.8
+    it 'Add - width:1, height:1', -> page.add div, width:1, height:1
+    
+    it 'Add - fill:true', -> page.add div, fill:true
+    it 'Add - fill:80%', -> page.add div, fill:'80%'
+    it 'Add - fill:0.8 (80%)', -> page.add div, fill:0.8
+    it 'Add - fill:1 (100%)', -> page.add div, fill:1
+      
+      
+    
+    
+    
 
 
 

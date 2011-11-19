@@ -23,15 +23,19 @@ module.exports = (module) ->
     @param el : The element to test.
     @param options: 
               - width:     A value for the width of the element being added.  
-                           If a string is supplied the value should contain units (eg. '80%')
-                           If a number is supplied pixels are used (eg. 200 => '200px')
+                           If a string is supplied the value should contain units (eg. '80em')
+                           If a number greater than 1 is supplied pixels are used (eg. 200 => '200px')
+                           If a number between 0..1 is supplied it will be translated to a percentage (eg. 0.35 => '35%')
                            If '*' is supplied it is converted to '100%'.
               - height:    A value for the width of the element being added.  
-                           If a string is supplied the value should contain units (eg. '80%')
+                           If a string is supplied the value should contain units (eg. '80em')
                            If a number is supplied pixels are used (eg. 200 => '200px')
+                           If a number between 0..1 is supplied it will be translated to a percentage (eg. 0.35 => '35%')
                            If '*' is supplied it is converted to '100%'.
               - showTitle: Flag indicating if the title, and description, should be displayed (default true).
-              - fill:      Flag indicating if width/height values should be set to '100%' (default false).
+              - fill:      Flag indicating if width/height values should be set to '100%' when true (default false).
+                           Alternatively specifying percentage (eg. '70%' or 0.7) will set both sides to the same size.
+                           '*' will set both sides to '100%'
               - scroll:    Scroll behavior for container. 'x', 'y', 'xy', null.  Default:null
               - border:    A color (string) or a bolean (yes/no) for whether a border should be put around the hosted control.
               - reset:     Flag indicating if the 'Reset' method should be invoked before adding.
