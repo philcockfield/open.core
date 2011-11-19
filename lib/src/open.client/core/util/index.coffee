@@ -56,7 +56,7 @@ module.exports = util =
   
   ###
   Selects all <a> tags within the given element and
-  assigns the [qui_external] class to ones that start
+  assigns the [core_external] class to ones that start
   with an 'http://' or 'https://' or 'mailto:
   @param el: The element containing the <a> element to format.
   @param options
