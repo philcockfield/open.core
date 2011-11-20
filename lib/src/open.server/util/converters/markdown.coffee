@@ -7,20 +7,17 @@ A wrapper for the Markdown conversion library.
 See: https://github.com/evilstreak/markdown-js
 
 ###
-module.exports = class Markdown
-  ###
-  Constructor.
-  @param options
-  ###
-  constructor: (options = {}) -> 
-  
-  
+module.exports =
   ###
   Converts markdown to HTML.
-  @param source:  The source markdown to convert.
-  @param options: (optional)
+  @param source:   The source markdown to convert.
+  @param options:  
+  @param callback: Invoked upon completion.
   ###
-  toHtml: (source, options = {}) ->       
+  toHtml: (source, options..., callback) ->
+      
+      # Setup initial conditions.
+      options = options[0] ? {}
       
       # Parse the markdown into the HTML tree.
       htmlTree = markdown.toHTMLTree source
@@ -28,7 +25,7 @@ module.exports = class Markdown
       # Walk the tree to provide extra formatting options.
       walk = (node) ->
         return unless _(node).isArray()
-        formatElement node, options
+        formatElement node, @options
         for part in _(node).rest 1
           walk part if _.isArray part # <== Recursion: Process child node.
       walk htmlTree

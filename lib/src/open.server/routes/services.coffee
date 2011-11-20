@@ -1,6 +1,5 @@
 core    = require 'open.server'
 app     = core.app
-paths   = core.paths
 send    = core.util.send
 
 
@@ -18,18 +17,10 @@ app.post "#{core.baseUrl}/pygments", (req, res) ->
 
 # POST: Markdown.
 app.post "#{core.baseUrl}/markdown", (req, res) -> 
-    converter = new core.util.Markdown()
     try
-      html = converter.toHtml( req.body.source )
+      html = core.util.markdown.toHtml( req.body.source )
       res.send html
     catch error
       res.send error.message, 500
     
     
-    ###
-    TODO
-    - links | internal, external
-    - syntax highlight code - ```coffee
-    - Ensure char-returns aren't lost on PRE blocks.
-    - Emdash conversion
-    ###

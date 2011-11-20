@@ -6,11 +6,11 @@ module.exports = index =
   git:        require './git'
   html:       require './html'
   testing:    require './testing'
+  markdown:   require './converters/markdown'
   
   # Classes.
   Timer:      require './timer'
   Pygments:   require './converters/pygments'
-  Markdown:   require './converters/markdown'
 
 
 # Copy the common utility methods onto the index.

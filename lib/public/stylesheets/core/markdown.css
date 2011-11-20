@@ -86,10 +86,10 @@
   padding: 15px;
   border-radius: 5px;
   border: solid 1px #d9d9d9;
-  box-shadow: inset 0px 2px 5px 0px #e6e6e6;
+  box-shadow: inset 0px 2px 5px 0px #ebebeb;
   font-size: 10pt;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .core_markdown pre code {
   background: none;

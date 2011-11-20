@@ -42,8 +42,8 @@ describe 'Services', ->
   describe 'Markdown', 'Markdown to HTML conversion service.', ->
     url = "/markdown"
     beforeAll -> toMarkdown simple
-    it 'Convert: Simple Markdown', -> toMarkdown simple
-    it 'Convert: Code block', -> toMarkdown codeBlock
+    it 'Markdown Specimen', -> toMarkdown simple
+    it 'Code Blocks', -> toMarkdown codeBlocks
     
     toMarkdown = (source) -> post url, source:source
     
@@ -73,7 +73,7 @@ describe 'Services', ->
           
           New <p> - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           
-        - **Item C**: Lorem ipsum dolar.
+        - **Item C**: Lorem [ipsum](http://google.com) dolar.
       
       ---
       
@@ -85,13 +85,17 @@ describe 'Services', ->
         
       '''
     
-    codeBlock =
+    codeBlocks =
       '''
       Code block:
       
           # Comment.
           foo = 123
           fn = -> console.log 'foo', foo
+      
+      
+      Code snippet: `cake specs`
+      
       '''
     
   
