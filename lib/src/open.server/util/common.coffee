@@ -26,7 +26,8 @@ log = (message, color = '', explanation = '') ->
 module.exports = commonUtil = 
   # Client aliases.
   toBool: client.util.toBool
-
+  
+  
   ###
   Logs a message to the console optionally with a color.
   

@@ -1,6 +1,6 @@
 .core_markdown {
+  font-weight: 400;
   font-size: 10pt;
-  font-weight: 200;
 }
 .core_markdown h1 {
   font-weight: 300;
@@ -35,7 +35,6 @@
 }
 .core_markdown p {
   line-height: 170%;
-  font-size: 11pt;
   margin-top: 0px;
   margin-bottom: 20px;
 }
@@ -50,7 +49,6 @@
   padding-left: 20px;
 }
 .core_markdown li {
-  font-size: 11pt;
   margin-bottom: 10px;
 }
 .core_markdown li p {

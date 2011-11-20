@@ -1,5 +1,6 @@
+core     = require 'open.server'
 markdown = (require 'markdown').markdown
-Pygments = require './pygments'
+pygments = require './pygments'
 
 ###
 A wrapper for the Markdown conversion library.
@@ -9,42 +10,34 @@ See: https://github.com/evilstreak/markdown-js
 module.exports =
   ###
   Converts markdown to HTML.
-  @param source:   The source markdown to convert.
-  @param options:  
+  @param options: 
+            - source: The source markdown to convert.
   @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
-  toHtml: (source, options..., callback) ->
+  toHtml: (options = {}, callback) ->
+    # Setup initial conditions.
+    throw 'No source markdown supplied.' unless options.source?
+    html    = markdown.toHTML options.source
+    html    = toJQuery html
+    
+    # Format <a> tags.
+    core.util.formatLinks html
+    
+    # Highlight source code.
+    highlightCode html, (err, result) -> 
       
-      # Setup initial conditions.
-      options = options[0] ? {}
-      
-      # Parse the markdown into the HTML tree.
-      try
-        htmlTree = markdown.toHTMLTree source
-      catch error
-        callback? error
+      if err?
+        callback? err
         return
-      
-      # Walk the tree to process extra formatting options.
-      walk = (node) ->
-        return unless _(node).isArray()
-        formatElement node, options
-        for part in _(node).rest 1
-          walk part if _.isArray part # <== Recursion: Process child node.
-      walk htmlTree
-      
-      # Convert the tree into the final HTML.
-      try
-        html = markdown.toHTML htmlTree
-      catch error
-        callback? error
-        return
+
+      # Convert back to HTML.
+      html = result.html()
+      html = html.replace /--/g, '&mdash;'
       html = """
               <div class="core_markdown">
                 #{html}
               </div>
              """
-      
       # Finish up.
       callback? null, html
       
@@ -53,33 +46,81 @@ module.exports =
     TODO
     - links | internal, external
     - syntax highlight code - ```coffee
-    - Ensure char-returns aren't lost on PRE blocks.
-    - Emdash conversion
     ###
 
 
 # PRIVATE --------------------------------------------------------------------------
 
 
-formatElement = (node, options) -> 
-  switch node[0]
-    when 'a'
-      attr = node[1]
-      if isExternal attr.href
-        attr.target = '_blank'
-        attr.class = 'core_external'
-    else 
-      # Ignore - no special formatting required.
+highlightCode = (html, callback) -> 
+  count = 0
+  onComplete = (err) -> 
+    count -= 1
+    if err?
+      callback err
+      callback = null # Prevent any more callbacks.
+    else
+      callback err, html if count is 0
+  
+  # Retrieve the collection of <code> blocks
+  blocks = html.find 'pre > code'
+  count  = blocks.length
+  if count is 0
+    onComplete()
+    return
+  
+  # Enumerate each <code> block looking for
+  # ones that require color-coding.
+  for code in blocks
+    code     = $ code
+    language = matchFilter(code.html())
+    
+    if language?
+      do (code) -> 
+        
+        # Remove the language filter prefix.
+        source = code.html()
+        source = source.substr language.length + 1, source.length
+        source = core.util.unescapeHtml(source)
+        
+        # Syntax highlight the code in the specified language.
+        language = mapLanguage language
+        pygments.toHtml 
+          source:   source
+          language: language,
+          (err, htmlCode) -> 
+            unless err?
+              # Replace the parent <pre> with the code color-coded HTML.
+              pre = code.parent()
+              pre.replaceWith htmlCode
+            
+            onComplete() # NB: Swallow error - leave code unchanged
+          
+    else
+      # No instruction for color coding.
+      onComplete()
 
 
+matchFilter = (str) -> 
+  match = str.match /^:.+\n/g
+  return null unless match?
+  match = match[0]
+  match = _(match).chain().ltrim(':').rtrim('\n').value()
 
 
-isExternal = (href) -> 
-    return false unless href?
-    href = _(href)
-    for prefix in ['http://', 'https://', 'mailto:']
-      return true if href.startsWith(prefix)
-    false
+mapLanguage = (language) -> 
+  switch language
+    when 'ruby'   then 'rb'
+    when 'c#'     then 'cs'
+    when 'python' then 'py'
+    else language
 
+
+toJQuery = (html) -> 
+    lines = html.split '\n'
+    html = ''
+    for line in lines
+        html += line + '\n' unless _.isBlank(line)
+    $("<body>#{html}</body>")
 
 

@@ -62,12 +62,10 @@ do ->
     # NB: Set here to avoid load order problems with sub-modules that
     #     in turn require the [server] module.
     server.paths       = require './config/paths'
+    server.client      = require 'open.client'
     server.util        = require './util'
     server.log         = server.util.log
     server.configure   = require './config/configure'
-    
-    # Client side code
-    server.client      = require 'open.client'
     
     # Test runners.
     server.configure.specs   = require './routes/testing/jasmine'

@@ -34,10 +34,10 @@ describe 'Services', ->
             foo += 1
             fn('Item')
           '''
-    highlight = (code) -> 
+    highlight = (source) -> 
       post url, 
         language: 'coffee'
-        code: code
+        source:   source
     
     beforeAll -> highlight sampleCode
     it 'Highlight Code', -> highlight sampleCode
@@ -47,11 +47,13 @@ describe 'Services', ->
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->
     url = "/markdown"
-    beforeAll -> toMarkdown simple
+    beforeAll -> toMarkdown codeBlocks
     it 'Markdown Specimen', -> toMarkdown simple
     it 'Code Blocks', -> toMarkdown codeBlocks
+      
     
-    toMarkdown = (source) -> post url, markdown:source
+    
+    toMarkdown = (source) -> post url, source:source
     
     simple = 
       '''
@@ -84,7 +86,8 @@ describe 'Services', ->
       ---
       
       Inline `code snippet`
-        
+          
+          :coffee
           # Comment.
           foo = 123
           fn = -> console.log 'foo', foo
@@ -93,25 +96,82 @@ describe 'Services', ->
     
     codeBlocks =
       '''
-      Code block:
+      Code snippet: `cake specs`
+      
+      Code block - no highlighting:
       
           # Comment.
           foo = 123
           fn = -> console.log 'foo', foo
       
+      CoffeeScript - :coffee
       
-      Code snippet: `cake specs`
+          :coffee
+          # Comment. <foo> & 'thing' in "quotes".
+          foo = 123
+          fn = (prefix) -> console.log "#{prefix}: ", foo
+          for i in [1..5]
+            foo += 1
+            fn('Item')
+      
+      HTML - :html
+      
+          :html
+            <html>
+              <head>
+                <title>My Page</title>
+                <style>
+                  .foo {
+                    background: orange;
+                  }
+                </style>
+                
+              </head>
+              <body>
+                <h1 class="foo">Foo</h1>
+              </body>
+            </html>
+      
+      CSS - :css
+      
+          :css
+          body, head {
+            height: 100%;
+            overflow: hidden;
+          }
+      
+      Ruby - :ruby or :rb
+      
+          :ruby
+          # Some ruby code
+          puts "Hello World!"
+      
+      C# - :c# or :cs
+      
+          :c#
+          public class Foo<T> 
+          {
+            void Add(T value) { // ... }
+          }
+          
+      
+      Python - :py or :python
+      
+          :python
+          from pygments import highlight
+          from pygments.lexers import PythonLexer
+          from pygments.formatters import HtmlFormatter
+
+          code = 'print "Hello World"'
+          print highlight(code, PythonLexer(), HtmlFormatter())      
       
       '''
-    
   
   
   
   
   
-  
-  
-  
+
   
   
   

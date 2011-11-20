@@ -60,18 +60,33 @@ module.exports =
       
   
   ###
-  Converts < and > characgters to corresponding &lt; and &gt;
+  Converts < and > ' and " and & characters to corresponding ascii codes.
   @param html: The HTML string to convert.
   @returns the converted string.
   ###
-  toSafeHtml: (html) -> 
+  escapeHtml: (html) -> 
       return null unless html?
       html = html
+              .replace(/&/g, "&amp;")
               .replace(/</g, "&lt;")
-              .replace(/>/g, "&gt;");
-      
-      html
-      
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#39;")
+  
+  ###
+  Converts an escaped string back into HTML.
+  @param esacped: The escaped string to convert.
+  @returns the converted string.
+  ###
+  unescapeHtml: (escaped) -> 
+      return null unless escaped?
+      escaped = escaped
+              .replace(/&amp;/g, "&")
+              .replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">")
+              .replace(/&quot;/g, "\"")
+              .replace(/&#39;/g, "'")
+
   
 
 

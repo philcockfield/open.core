@@ -14,7 +14,7 @@ module.exports =
   ###
   Converts the 'source' code to highlighted HTML.
   @param options: 
-            - code:     The source code to highlight.
+            - source:   The source code to highlight.
             - language: The language of the source code 
                         (this is the file extension for the kind file the language is
                          is saved in, for example: '.coffee' for CoffeeScript).
@@ -28,19 +28,19 @@ module.exports =
       fsUtil  = core.util.fs
       onExec  = core.util.onExec
       
-      code      = options.code
+      source    = options.source
       fullPage  = options.fullPage
       language  = options.language ? 'coffee'
       language  = _(language).ltrim('.')
       file      = "#{core.paths.root}/_tmp/#{uuid()}.#{language}"
       
       # Exit out if no source code was provided.
-      unless code?
-        callback? { message: 'No source code provided' }
+      unless source?
+        callback? new Error 'No source code provided'
         return
       
       # Functions.
-      saveSource   = (onComplete) => fsUtil.writeFile file, code, onComplete
+      saveSource   = (onComplete) => fsUtil.writeFile file, source, onComplete
       deleteSource = (onComplete) -> fsUtil.delete file, onComplete
       highlight = (onComplete) -> 
           fullOption = if fullPage is yes then ' -O full ' else ''

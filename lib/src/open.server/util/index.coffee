@@ -1,3 +1,7 @@
+core       = require 'open.server'
+clientUtil = core.client.core.util
+
+
 module.exports = index =
   javascript: require './javascript'
   send:       require './send'
@@ -11,6 +15,11 @@ module.exports = index =
   
   # Classes.
   Timer:      require './timer'
+  
+  # Aliased from client.
+  escapeHtml:   clientUtil.escapeHtml
+  unescapeHtml: clientUtil.unescapeHtml
+  formatLinks:  clientUtil.formatLinks
 
 
 # Copy the common utility methods onto the index.
