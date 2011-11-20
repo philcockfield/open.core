@@ -51,7 +51,7 @@ describe 'Services', ->
     it 'Markdown Specimen', -> toMarkdown simple
     it 'Code Blocks', -> toMarkdown codeBlocks
     
-    toMarkdown = (source) -> post url, source:source
+    toMarkdown = (source) -> post url, markdown:source
     
     simple = 
       '''

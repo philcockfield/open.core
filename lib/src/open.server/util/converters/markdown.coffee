@@ -5,14 +5,13 @@ Pygments = require './pygments'
 A wrapper for the Markdown conversion library.
 
 See: https://github.com/evilstreak/markdown-js
-
 ###
 module.exports =
   ###
   Converts markdown to HTML.
   @param source:   The source markdown to convert.
   @param options:  
-  @param callback: Invoked upon completion.
+  @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
   toHtml: (source, options..., callback) ->
       
@@ -20,23 +19,35 @@ module.exports =
       options = options[0] ? {}
       
       # Parse the markdown into the HTML tree.
-      htmlTree = markdown.toHTMLTree source
+      try
+        htmlTree = markdown.toHTMLTree source
+      catch error
+        callback? error
+        return
       
-      # Walk the tree to provide extra formatting options.
+      # Walk the tree to process extra formatting options.
       walk = (node) ->
         return unless _(node).isArray()
-        formatElement node, @options
+        formatElement node, options
         for part in _(node).rest 1
           walk part if _.isArray part # <== Recursion: Process child node.
       walk htmlTree
       
       # Convert the tree into the final HTML.
-      html = markdown.toHTML htmlTree
-      """
-      <div class="core_markdown">
-        #{html}
-      </div>
-      """
+      try
+        html = markdown.toHTML htmlTree
+      catch error
+        callback? error
+        return
+      html = """
+              <div class="core_markdown">
+                #{html}
+              </div>
+             """
+      
+      # Finish up.
+      callback? null, html
+      
 
     ###
     TODO
