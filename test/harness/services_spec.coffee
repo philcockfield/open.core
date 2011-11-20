@@ -1,5 +1,6 @@
 describe 'Services', ->
   post = (url, data, callback) -> 
+      page.clear()
       console.log ''
       console.log 'Posting to: ', url
       console.log 'Data:', data
@@ -49,7 +50,10 @@ describe 'Services', ->
     simple = 
       '''
       # H1 Title
-      Some markdown [link](https://github.com/evilstreak/markdown-js).  
+      Some markdown.
+      An [internal link](/harness/#services/pygments)
+      and an
+      [external link](https://github.com/evilstreak/markdown-js).  
       **Bold**, *italic* converted to em--dash
       
       >> Quote

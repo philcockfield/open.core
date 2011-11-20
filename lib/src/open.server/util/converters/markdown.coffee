@@ -1,4 +1,4 @@
-markdown = require 'markdown'
+markdown = (require 'markdown').markdown
 Pygments = require './pygments'
 
 ###
@@ -22,38 +22,56 @@ module.exports = class Markdown
   ###
   toHtml: (source, options = {}) ->       
       
-      # Convert the markdown into HTML.
-      html = markdown.parse source
+      # Parse the markdown into the HTML tree.
+      htmlTree = markdown.toHTMLTree source
       
-      # TEMP 
-      # foo = toJQuery(html)
-      # pre = foo.find 'pre'
-      # for item in pre
-      #   console.log item.outerHTML
-      #   console.log item.innerHTML
-      #   console.log ''
-      #   converter = new Pygments
-      #       source:   item.innerHTML
-      #   converter.toHtml (err, html) -> 
-      #       console.log 'html: ', html
-        
+      # Walk the tree to provide extra formatting options.
+      walk = (node) ->
+        return unless _(node).isArray()
+        formatElement node, options
+        for part in _(node).rest 1
+          walk part if _.isArray part # <== Recursion: Process child node.
+      walk htmlTree
       
-      
-      # Finish up.
+      # Convert the tree into the final HTML.
+      html = markdown.toHTML htmlTree
       """
       <div class="core_markdown">
         #{html}
       </div>
       """
 
+    ###
+    TODO
+    - links | internal, external
+    - syntax highlight code - ```coffee
+    - Ensure char-returns aren't lost on PRE blocks.
+    - Emdash conversion
+    ###
+
 
 # PRIVATE --------------------------------------------------------------------------
 
 
-toJQuery = (html) -> 
-    lines = html.split '\n'
-    html = ''
-    for line in lines
-        html += line unless _.isBlank(line)
-    $("<body>#{html}</body>")
+formatElement = (node, options) -> 
+  switch node[0]
+    when 'a'
+      attr = node[1]
+      if isExternal attr.href
+        attr.target = '_blank'
+        attr.class = 'core_external'
+    else 
+      # Ignore - no special formatting required.
+
+
+
+
+isExternal = (href) -> 
+    return false unless href?
+    href = _(href)
+    for prefix in ['http://', 'https://', 'mailto:']
+      return true if href.startsWith(prefix)
+    false
+
+
 
