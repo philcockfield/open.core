@@ -25,10 +25,7 @@ describe 'Services', ->
   
   describe 'Pygments', 'Source code highlighting service.', -> 
     url = '/pygments'
-    beforeAll ->
-      post url, 
-        language: 'coffee'
-        source: 
+    sampleCode = 
           '''
           # Comment.
           foo = 123
@@ -37,6 +34,15 @@ describe 'Services', ->
             foo += 1
             fn('Item')
           '''
+    highlight = (code) -> 
+      post url, 
+        language: 'coffee'
+        code: code
+    
+    beforeAll -> highlight sampleCode
+    it 'Highlight Code', -> highlight sampleCode
+      
+    
   
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->

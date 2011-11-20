@@ -5,10 +5,11 @@ send    = core.util.send
 
 # POST: Pygments (source-code highlighting).
 app.post "#{core.baseUrl}/pygments", (req, res) ->
-    converter = new core.util.Pygments
-        source:   req.body.source
-        language: req.body.language
-    converter.toHtml (err, html) -> 
+    body = req.body
+    core.util.pygments.toHtml 
+      code:     body.code
+      language: body.language,
+      (err, html) -> 
         if err?
           res.send err.message, 500
         else

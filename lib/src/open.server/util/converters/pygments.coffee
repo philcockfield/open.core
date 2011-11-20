@@ -10,49 +10,41 @@ See: http://pygments.org/
 Requires Pygments to be installed.
 
 ###
-module.exports = class Pygments
-  
-  ###
-  Constructor.
-  @param options
-    - source:   The source code.
-    - language: The language of the source code 
-                (this is the file extension for the kind file the language is
-                 is saved in, for example: '.coffee' for CoffeeScript).
-  ###
-  constructor: (options = {}) -> 
-      
-      # Setup initial conditions.
-      @source   = options.source
-      @language = options.language ? 'coffee'
-      @language = _(@language).ltrim('.')
-      throw 'No source code provided' unless @source?
-  
-  
+module.exports = 
   ###
   Converts the 'source' code to highlighted HTML.
-  @param options: (optional)
+  @param options: 
+            - code:     The source code to highlight.
+            - language: The language of the source code 
+                        (this is the file extension for the kind file the language is
+                         is saved in, for example: '.coffee' for CoffeeScript).
             - fullPage:  Flag indicating a full page should be generated (true), or just a partial
                          snippet of HTML (false).  Default false.
   @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
-  toHtml: (options..., callback) ->       
+  toHtml: (options = {}, callback) ->       
       
       # Setup initial conditions.
       fsUtil  = core.util.fs
       onExec  = core.util.onExec
-      file    = "#{core.paths.root}/_tmp/#{uuid()}.#{@language}"
       
-      # Setup default options.
-      options = options[0] ? {}
-      options.fullPage ?= false
+      code      = options.code
+      fullPage  = options.fullPage
+      language  = options.language ? 'coffee'
+      language  = _(language).ltrim('.')
+      file      = "#{core.paths.root}/_tmp/#{uuid()}.#{language}"
+      
+      # Exit out if no source code was provided.
+      unless code?
+        callback? { message: 'No source code provided' }
+        return
       
       # Functions.
-      saveSource   = (onComplete) => fsUtil.writeFile file, @source, onComplete
+      saveSource   = (onComplete) => fsUtil.writeFile file, code, onComplete
       deleteSource = (onComplete) -> fsUtil.delete file, onComplete
       highlight = (onComplete) -> 
-          fullOption = if options.fullPage is yes then ' -O full ' else ''
-          cmd = "pygmentize -f html#{fullOption} #{file}"
+          fullOption = if fullPage is yes then ' -O full ' else ''
+          cmd        = "pygmentize -f html#{fullOption} #{file}"
           exec cmd, (err, stdout, stderr) -> onComplete err, stdout
       
       # Execute sequence.

@@ -7,10 +7,10 @@ module.exports = index =
   html:       require './html'
   testing:    require './testing'
   markdown:   require './converters/markdown'
+  pygments:   require './converters/pygments'
   
   # Classes.
   Timer:      require './timer'
-  Pygments:   require './converters/pygments'
 
 
 # Copy the common utility methods onto the index.
