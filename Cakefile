@@ -38,30 +38,28 @@ task 'css:images', "Converts all the core images into Data-URI's for use as Styl
 
 task 'bump', 'Increments the package version and re-publishes to NPM', -> 
   # Setup initial conditions.
-  console.log 'Bumping version...'
+  log 'Bumping version...', color.blue
+  log()
   version = 'x.x.x'
-  clientPath: "core/index.coffee",
+  clientPath = "#{core.paths.client}/core/index.coffee"
   
   # Increments version references.
   increment = (callback) -> 
-    # Increment the package.json
-    # package.incrementVersion save:yes
-    # log ' - Version incremented to: ' + package.data.version, color.blue
     tasks.increment 
       rootPath:   core.paths.root
-      clientPath: "#{core.paths.client}/#{clientPath}",
+      clientPath: clientPath
       (ver) -> 
         version = ver
         callback?()
   
   # Check in to git.
   checkin = (callback) -> 
-    log ' - Checking into GitHub', color.blue
+    log '+ Checking into GitHub', color.blue
     console.log ''
     git = core.util.git
     
     # 1. Stage the [package.json] file
-    git.exec 'git add package.json', (err, stdout, stderr) ->
+    git.exec "git add package.json; git add #{clientPath}", (err, stdout, stderr) ->
       onExec err, stdout, stderr
       
       # 2. Commit.
@@ -75,13 +73,13 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
 
   # Publish to NPM.
   publish = (callback) -> 
-    console.log ' - Publishing to NPM registry...'
+    console.log '+ Publishing to NPM registry...'
     exec 'npm publish', (err, stdout, stderr) ->
       console.log stdout + stderr
       callback?()
   
   # Execute.
-  increment -> checkin -> # publish -> logDone()
+  increment -> checkin -> publish -> logDone()
 
 
 task 'deploy', 'Deploys to Heroku', -> 

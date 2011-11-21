@@ -38,6 +38,10 @@ module.exports = (options = {}, callback) ->
   # Finish up.
   unless options.silent is yes
     log "Version of [#{package.data.name}] incremented to:", color.blue, version
+    log 'Files changed:', color.blue
+    log ' - ' + package.path
+    log ' - ' + clientPath if clientPath?
+    log()
   callback? version
   
   
