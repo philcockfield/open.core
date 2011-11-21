@@ -1,5 +1,7 @@
-#Open.Core
+# Open.Core
 Common utility functionality used between multiple applications.
+
+[Live demo](http://opencore.herokuapp.com/harness).
 
 ## Setup
 ### Install using NPM

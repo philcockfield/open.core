@@ -110,6 +110,7 @@ matchFilter = (str) ->
 
 mapLanguage = (language) -> 
   switch language
+    when 'coffeescript', 'coffee-script' then 'coffee'
     when 'ruby'   then 'rb'
     when 'c#'     then 'cs'
     when 'python' then 'py'
