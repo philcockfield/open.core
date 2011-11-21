@@ -43,12 +43,16 @@ module.exports = class TestHarness extends core.mvc.Module
   This should only be called after the page has finishe loading (ready).
   @param options:
           - within:   (optional) Element to insert the harness within.  Default: 'body'.
+          - strings:
+              suites:  Display title of the 'Suites' list.
+              specs:   Display title of the 'Specs' list.
   ###
   init: (options = {}) -> 
       
       # Setup initial conditions.
       options.within ?= 'body'
       super options
+      @options = options
       window.HARNESS ?= {} # Used for testing.  This would otherwise be set in the page.
       
       # Exit out if in debug mode.
@@ -69,7 +73,7 @@ module.exports = class TestHarness extends core.mvc.Module
       Suite.getSuites @suites
       
       # Insert the root view.
-      @tmpl     = new @views.Tmpl()
+      @tmpl     = new @views.Tmpl strings:options.strings
       @rootView = new @views.Root()
       options.within?.append @rootView.el
       

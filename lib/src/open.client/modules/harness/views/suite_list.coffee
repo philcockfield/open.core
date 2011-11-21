@@ -8,7 +8,7 @@ module.exports = (module) ->
         @render()
     
     render: -> 
-        @html module.tmpl.suiteList title: 'Suites'
+        @html module.tmpl.suiteList()
         @$('.th_title_bar').disableTextSelect()
         @renderList()          
     

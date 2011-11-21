@@ -16,28 +16,33 @@ html(lang='en')
     script(type='text/javascript', src="#{options.libsJs}")
     script(type='text/javascript', src="#{JS_PATH}/core/harness.js")
     
+    script
+      window.HARNESS = {
+        strings: {
+          suites: "#{options.strings.suites}",
+          specs: "#{options.strings.specs}"
+        }
+      };
+      
+      
+    
     :coffeescript
-      # Catch root level spec descritions.
-      window.HARNESS =
-            suites:     []
-            specs:      []
-            beforeEach: []
-            afterEach:  []
-            beforeAll:  []
-            afterAll:   []
-      window.describe   = (params...) -> HARNESS.suites.push params
-      window.it         = (params...) -> HARNESS.specs.push params
-      
-      window.beforeEach = (params...) -> HARNESS.beforeEach.push params
-      window.afterEach  = (params...) -> HARNESS.afterEach.push params
-      
-      window.beforeAll  = (params...) -> HARNESS.beforeAll.push params
-      window.afterAll   = (params...) -> HARNESS.afterAll.push params
+      fn = (fnName, colName) -> 
+        colName = fnName unless colName?
+        HARNESS[colName] = []
+        window[fnName] = (params...) -> HARNESS[colName].push params
+      fn 'describe', 'suites'
+      fn 'it', 'specs'
+      fn 'beforeEach'
+      fn 'afterEach'
+      fn 'beforeAll'
+      fn 'afterAll'
       
       # Boot the Harness.
       $ -> 
         TestHarness = require 'open.client/harness'
-        new TestHarness().init()
+        new TestHarness().init( strings:HARNESS.strings )
+        
     
     // Load tests scripts.
     != partial('./scripts')

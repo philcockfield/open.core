@@ -53,6 +53,11 @@ module.exports = class TestRunner
       options.css        = [options.css] if not _.isArray(options.css)
       options.libsJs    ?= "#{core.baseUrl}/javascripts/libs/libs-min.js"
       
+      # Configure strings.
+      strings = options.strings ?= {}
+      strings.suites ?= 'Suites'
+      strings.specs  ?= 'Specs'
+      
       # Store variables.
       app = @app
       url = options.url
