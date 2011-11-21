@@ -47,29 +47,45 @@ module.exports = class Button extends core.mvc.View
       do -> 
           el = self.el
           stateChanged = (e, event) -> 
-                          srcElement = core.util.toJQuery(e.srcElement)
-                          self._stateChanged event, srcElement: srcElement
+            srcElement = core.util.toJQuery(e.srcElement)
+            self._stateChanged event, srcElement: srcElement
           
-          el.mouseenter (e) => 
-              self.over true
-              stateChanged e, 'mouseenter'
           
-          el.mouseleave (e) => 
-              self.over false
-              #  Reset down state (in case the mouse went out of scope but the button was not released).
-              self.down false
-              stateChanged e, 'mouseleave'
+          clickedOnMouseUp = null
+          handleClick = (e) -> 
+            self.down false
+            # Passes through to state-changed via the [click] method.
+            # NB: srcElement is accurate in Web-Kit, however null in Firefox
+            #     so pick up the 'target' element in Firefix, which is the same element.
+            self.click srcElement: e.srcElement ? e.target
           
-          el.mousedown (e) => 
-              self.down true
-              stateChanged e, 'mousedown'
+          el.mouseenter (e) -> 
+            self.over true
+            stateChanged e, 'mouseenter'
           
-          el.mouseup (e) => 
-              self.down false
-              # Passes through to state-changed via the [click] method.
-              # NB: srcElement is accurate in Web-Kit, however null in Firefox
-              #     so pick up the 'target' element in Firefix, which is the same element.
-              self.click srcElement: e.srcElement ? e.target
+          el.mouseleave (e) -> 
+            self.over false
+            #  Reset down state (in case the mouse went out of scope but the button was not released).
+            self.down false
+            stateChanged e, 'mouseleave'
+          
+          el.mousedown (e) -> 
+            self.down true
+            stateChanged e, 'mousedown'
+          
+          el.mouseup (e) -> 
+            handleClick e
+            clickedOnMouseUp = yes
+
+          el.click (e) -> 
+            if clickedOnMouseUp is yes
+              # NB: This is to account for outside acceptance tests which
+              #     may come in and simulate the button-click by performing
+              #     a DOM 'click' event (rather than a mouse-up).
+              clickedOnMouseUp = null
+              return
+            handleClick e
+
       
       # Finish up.
       syncClasses @

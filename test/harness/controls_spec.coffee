@@ -14,7 +14,9 @@ describe 'Controls',
             btn.onClick (e) -> console.log 'CLICK: ', e.source.label(), e
             btn
         
-        beforeAll -> addButton label:'My Label'
+        beforeAll -> 
+          btn = addButton label:'My Label'
+          btn.el.attr 'id', 'cmd_btn'
         
         it 'Add another',   -> addButton label:"Button #{buttons.length + 1}"
         it 'Color: Blue',   -> btn.color 'blue' for btn in buttons

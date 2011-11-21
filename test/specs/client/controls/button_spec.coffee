@@ -104,6 +104,31 @@ describe 'controls/button', ->
       it 'returns the [button] in the event args', -> expect(args.source).toEqual button
       it 'returns the [srcElement] in the event args', -> expect(args.srcElement).toEqual eventSrcElement
     
+    describe 'firing from [mouseup], and [click] DOM events', ->
+      it 'fires from [mouseup] DOM event', ->
+        button.el.mouseup()
+        expect(fireCount).toEqual 1
+      
+      it 'fires from [click] DOM event', ->
+        button.el.click()
+        expect(fireCount).toEqual 1
+
+      it 'fires once from [mouseup,click] DOM event sequence', ->
+        button.el.mouseup()
+        button.el.click()
+        expect(fireCount).toEqual 1
+
+      it 'fires twice from [mouseup] DOM event', ->
+        button.el.mouseup()
+        button.el.mouseup()
+        expect(fireCount).toEqual 2
+
+      it 'fires twice from [click] DOM event', ->
+        button.el.click()
+        button.el.click()
+        expect(fireCount).toEqual 2
+    
+    
   describe 'toggling Selected', ->
     describe 'when canToggle is true', ->
       beforeEach ->
