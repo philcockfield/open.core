@@ -40,7 +40,7 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
   # Setup initial conditions.
   console.log 'Bumping version...'
   version = 'x.x.x'
-  # package = new tasks.Package(core.paths.root)
+  clientPath: "core/index.coffee",
   
   # Increments version references.
   increment = (callback) -> 
@@ -49,7 +49,7 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
     # log ' - Version incremented to: ' + package.data.version, color.blue
     tasks.increment 
       rootPath:   core.paths.root
-      clientPath: "#{core.paths.client}/core/index.coffee",
+      clientPath: "#{core.paths.client}/#{clientPath}",
       (ver) -> 
         version = ver
         callback?()
@@ -81,7 +81,7 @@ task 'bump', 'Increments the package version and re-publishes to NPM', ->
       callback?()
   
   # Execute.
-  increment -> checkin -> publish -> logDone()
+  increment -> checkin -> # publish -> logDone()
 
 
 task 'deploy', 'Deploys to Heroku', -> 
