@@ -8,7 +8,7 @@ Events:
 
 module.exports = core =
   title:   'Open.Core (Client)'
-  version: '0.1.163'
+  version: '0.1.164'
   
   ###
   Initializes [Open.Core]
