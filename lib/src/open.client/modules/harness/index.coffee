@@ -64,6 +64,11 @@ module.exports = class TestHarness extends core.mvc.Module
       Page = @model 'page'
       window.page = @page = new Page()
       
+      # Set default strings.
+      strings = options.strings ?= {}
+      strings.suites = 'Suites'
+      strings.specs  = 'Specs'
+      
       # Configure for iOS.
       document.ontouchmove = (e) -> e.preventDefault() # Suppress page scroll bouncing.
       
@@ -73,7 +78,7 @@ module.exports = class TestHarness extends core.mvc.Module
       Suite.getSuites @suites
       
       # Insert the root view.
-      @tmpl     = new @views.Tmpl strings:options.strings
+      @tmpl     = new @views.Tmpl strings:strings
       @rootView = new @views.Root()
       options.within?.append @rootView.el
       
