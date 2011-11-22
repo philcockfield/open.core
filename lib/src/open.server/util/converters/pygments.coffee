@@ -19,9 +19,6 @@ module.exports =
             - language:     The language of the source code 
                             (this is the file extension for the kind file the language is
                             is saved in, for example: '.coffee' for CoffeeScript).
-            - useService:   Flag indicating if a pygments remote service should be used (rather than the 
-                            local library) to perform.  Useful for situations where the pygments library
-                            is not installed, ie. on a Heroku node instance.  Default:false
   @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
   toHtml: (options = {}, callback) ->       
@@ -41,25 +38,16 @@ module.exports =
         callback? new Error 'No source code provided'
         return
       
-      fromCommandLine = -> 
-        # Functions.
-        saveSource   = (onComplete) => fsUtil.writeFile file, source, onComplete
-        deleteSource = (onComplete) -> fsUtil.delete file, onComplete
-        highlight = (onComplete) -> 
-            cmd = "pygmentize -f html #{file}"
-            exec cmd, (err, stdout, stderr) -> onComplete err, stdout
-        
-        # Execute sequence.
-        saveSource -> 
-          highlight (err, html) -> 
-            deleteSource -> 
-                callback? err, html
+      # Functions.
+      saveSource   = (onComplete) => fsUtil.writeFile file, source, onComplete
+      deleteSource = (onComplete) -> fsUtil.delete file, onComplete
+      highlight = (onComplete) -> 
+          cmd = "pygmentize -f html #{file}"
+          exec cmd, (err, stdout, stderr) -> onComplete err, stdout
       
-      fromCommandLine()
-      
+      # Execute sequence.
+      saveSource -> 
+        highlight (err, html) -> 
+          deleteSource -> 
+              callback? err, html
 
-# PRIVATE --------------------------------------------------------------------------
-
-
-
-  

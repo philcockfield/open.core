@@ -25,7 +25,6 @@ describe 'Services', ->
   
   describe 'Pygments', 'Source code highlighting service.', -> 
     url        = '/pygments'
-    useService = true # TEMP 
     sampleCode = 
           '''
           # Comment.
@@ -39,13 +38,9 @@ describe 'Services', ->
       post url, 
         language:   'coffee'
         source:     source
-        useService: useService
     
     beforeAll -> highlight sampleCode
     it 'Highlight Code', -> highlight sampleCode
-    it 'Toggle: Use Service', ->
-      useService = not useService
-      console.log 'useService: ', useService
   
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->
@@ -53,8 +48,6 @@ describe 'Services', ->
     beforeAll -> toMarkdown codeBlocks
     it 'Markdown Specimen', -> toMarkdown simple
     it 'Code Blocks', -> toMarkdown codeBlocks
-      
-    
     
     toMarkdown = (source) -> post url, source:source
     

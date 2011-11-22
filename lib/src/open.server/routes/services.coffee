@@ -7,8 +7,6 @@ send    = core.util.send
 app.post "#{core.baseUrl}/pygments", (req, res) ->
   body = req.body
   
-  console.log 'PY body', body # TEMP 
-  
   core.util.pygments.toHtml 
     source:       body.source
     language:     body.language

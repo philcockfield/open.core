@@ -1,13 +1,13 @@
+core = require 'open.server'
 
 
 isDevelopment = -> 
-  core = require 'open.core'
   return core.app.settings.env is 'development'
 
 preventCache = (options = {}) -> 
-          value = options.preventCache
-          return value if value?
-          isDevelopment()
+  value = options.preventCache
+  return value if value?
+  isDevelopment()
 
 
 module.exports = 
@@ -29,8 +29,8 @@ module.exports =
                       the browser (default true if in 'development' mode).
   ###
   script: (url, options = {}) -> 
-      url = _.uniqueUrl(url) if preventCache(options)
-      "<script src=\"#{url}\" type=\"text/javascript\"></script>"
+    url = _.uniqueUrl(url) if preventCache(options)
+    "<script src=\"#{url}\" type=\"text/javascript\"></script>"
       
   ###
   Creates a stylesheet <link> tag.
@@ -41,12 +41,8 @@ module.exports =
                       the browser (default true if in 'development' mode).
   ###
   css: (url, options = {}) -> 
-      url = _.uniqueUrl(url) if preventCache(options)
-      "<link rel=\"stylesheet\" href=\"#{url}\">"
-      
-      
-      
-
+    url = _.uniqueUrl(url) if preventCache(options)
+    "<link rel=\"stylesheet\" href=\"#{url}\">"
 
 
 
