@@ -11,7 +11,14 @@ module.exports =
   ###
   Converts markdown to HTML.
   @param options: 
-            - source: The source markdown to convert.
+            - source:     The source markdown to convert.
+            - classes:    The CSS classes to assign to various elements
+                - prefix:   The prefix to assign to default CSS class names (default: 'core_').
+                - root:     The root CSS class (default: 'core_markdown').
+                - code:     The <pre> CSS class for code blocks.
+                            Options:
+                              - {core_}inset  : Sunken border.
+                              - {core_}simple : Simple left vertical line (Default).
   @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
   toHtml: (options = {}, callback) ->
@@ -20,24 +27,32 @@ module.exports =
     html    = markdown.toHTML options.source
     html    = toJQuery html
     
+    # Assign default CSS classes.
+    prefix  = 'core_'
+    classes = options.classes ?= {}
+    classes.prefix      ?= prefix
+    classes.root        ?= prefix + 'markdown'
+    classes.highlight   ?= prefix + 'highlight'
+    classes.code        ?= prefix + 'inset'
+    
     # Format <a> tags.
     core.util.formatLinks html
     
     # Highlight source code.
-    syntaxHighlight html, (err, result) -> 
-      
+    syntaxHighlight html, options, (err, result) -> 
       if err?
         callback? err
         return
-
+      
       # Convert back to HTML.
       html = result.html()
       html = html.replace /--/g, '&mdash;'
       html = """
-              <div class="core_markdown">
+              <div class="#{classes.root}">
                 #{html}
               </div>
              """
+      
       # Finish up.
       callback? null, html
 
@@ -45,7 +60,7 @@ module.exports =
 # PRIVATE --------------------------------------------------------------------------
 
 
-syntaxHighlight = (html, callback) -> 
+syntaxHighlight = (html, options, callback) -> 
   count = 0
   onComplete = (err) -> 
     count -= 1
@@ -69,7 +84,7 @@ syntaxHighlight = (html, callback) ->
     language = matchFilter(code.html())
     
     if language?
-      do (code) -> 
+      do (code, language) -> 
         
         # Remove the language filter prefix.
         source = code.html()
@@ -87,8 +102,15 @@ syntaxHighlight = (html, callback) ->
               code.html source
             else
               # Replace the parent <pre> with the code color-coded HTML.
+              htmlCode = $ htmlCode
               pre = code.parent()
               pre.replaceWith htmlCode
+              
+              # Adorn with CSS classes.
+              classes = options.classes
+              htmlCode.addClass "#{classes.prefix}highlight"
+              htmlCode.addClass "#{classes.prefix}language_#{language}"
+              htmlCode.addClass classes.code
             
             onComplete() # NB: Swallow error - leave code unchanged
           

@@ -44,12 +44,18 @@ describe 'Services', ->
   
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->
-    url = "/markdown"
+    url       = '/markdown'
+    codeClass = 'core_simple'
     beforeAll -> toMarkdown codeBlocks
     it 'Markdown Specimen', -> toMarkdown simple
     it 'Code Blocks', -> toMarkdown codeBlocks
+    it 'Code Block Style: inset',  -> codeClass = 'core_inset'
+    it 'Code Block Style: simple', -> codeClass = 'core_simple'
     
-    toMarkdown = (source) -> post url, source:source
+    toMarkdown = (source) -> 
+      classes =
+        code: codeClass
+      post url, source:source, classes:classes
     
     simple = 
       '''

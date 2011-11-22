@@ -83,17 +83,21 @@
     padding 15px
     margin-top 20px
     margin-bottom 20px
-    
-    // Vertical line.
-    padding-left 20px
-    border-left solid 12px darken(white, 8%)
-    
-    // Sunken inset.
-    // background darken(white, 2%)
-    // border-radius 5px
-    // border solid 1px darken(white, 15%)
-    // box-shadow inset 0px 2px 5px 0px darken(white, 8%)
-    
+    line-height 150%
     code
       background none
       border none
+  
+  .core_inset
+    pre
+      // Sunken inset border.
+      background darken(white, 2%)
+      border-radius 5px
+      border solid 1px darken(white, 15%)
+      box-shadow inset 0px 2px 5px 0px darken(white, 8%)
+  
+  .core_simple
+    pre
+      padding-left 20px
+      border-left solid 12px darken(white, 8%)
+  

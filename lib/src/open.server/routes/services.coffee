@@ -20,8 +20,10 @@ app.post "#{core.baseUrl}/pygments", (req, res) ->
 
 # POST: Markdown.
 app.post "#{core.baseUrl}/markdown", (req, res) -> 
-  source = req.body.source
-  core.util.markdown.toHtml source:source, (err, html) -> 
+  options =
+    source:  req.body.source
+    classes: req.body.classes
+  core.util.markdown.toHtml options, (err, html) -> 
     if err?
       res.send err.message, 500
     else
