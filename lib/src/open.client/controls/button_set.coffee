@@ -1,5 +1,6 @@
 core = require '../core'
 
+
 ###
 Manages a set of toggle buttons providing single-selection 
 behavior (for example, a tab set).
@@ -18,13 +19,13 @@ Events:
 ###
 module.exports = class ButtonSet extends core.Base
   constructor: -> 
-      # Setup initial conditions.
-      super
-      _.extend @, Backbone.Events
-      
-      # Collection API.
-      @length = 0
-      @items  = new core.mvc.Collection()
+    # Setup initial conditions.
+    super
+    _.extend @, Backbone.Events
+    
+    # Collection API.
+    @length = 0
+    @items  = new core.mvc.Collection()
   
   
   # Gets the collection of buttons being managed.
@@ -34,8 +35,10 @@ module.exports = class ButtonSet extends core.Base
   # Method for enumerating each tab (alias for items.each)
   each: (fn) -> @items.each fn
   
+  
   # Gets the number of items in the set.
   count: -> @items.length
+  
   
   ###
   Retrieves the button model from the [Items] collection at the specified index.
@@ -69,44 +72,44 @@ module.exports = class ButtonSet extends core.Base
   @returns the added button.
   ###
   add: (button, options = {}) -> 
-      # Setup initial conditions.
-      throw 'add: no button' unless button?
-      return button if @items.include(button)
+    # Setup initial conditions.
+    throw 'add: no button' unless button?
+    return button if @items.include(button)
+    
+    # Add the button to the collection.
+    @items.add button, options
+    @length = @items.length
+    
+    # Handle pre-click.
+    button.bind 'pre:click', (e) -> 
+      # Do not allow a selected button to be de-selected.
+      e.cancel = true if button.selected()
+      fire 'pre:click', e
+    
+    # Bubble events.
+    fire = (event, e) => @trigger event, args:e, button:button
+    button.el.mouseup   (e) -> fire 'mouseUp', e
+    button.el.mousedown (e) -> fire 'mouseDown', e
+    button.onClick      (e) -> fire 'click', e
+    
+    # Handle button press.
+    button.selected.onChanged (e) => 
+      return unless button.canToggle()
+      return if e.oldValue == true
       
-      # Add the button to the collection.
-      @items.add button, options
-      @length = @items.length
+      # Deselect the other toggle buttons.
+      for btn in @togglable()
+          if btn isnt button and btn.canToggle() and btn.selected()
+              btn.selected false
       
-      # Handle pre-click.
-      button.bind 'pre:click', (e) -> 
-          # Do not allow a selected button to be de-selected.
-          e.cancel = true if button.selected()
-          fire 'pre:click', e
-      
-      # Bubble events.
-      fire = (event, e) => @trigger event, args:e, button:button
-      button.el.mouseup   (e) -> fire 'mouseUp', e
-      button.el.mousedown (e) -> fire 'mouseDown', e
-      button.onClick      (e) -> fire 'click', e
-      
-      # Handle button press.
-      button.selected.onChanged (e) => 
-            return unless button.canToggle()
-            return if e.oldValue == true
-            
-            # Deselect the other toggle buttons.
-            for btn in @togglable()
-                if btn isnt button and btn.canToggle() and btn.selected()
-                    btn.selected false
-            
-            # Alert listeners.
-            @_fire 'selectionChanged', button:button
-            
-      # Finish up.
-      if not options.silent
-          @_fire 'add', button:button
-          @_fireChanged()
-      button
+      # Alert listeners.
+      @_fire 'selectionChanged', button:button
+          
+    # Finish up.
+    if not options.silent
+      @_fire 'add', button:button
+      @_fireChanged()
+    button
   
   
   ###
@@ -117,28 +120,28 @@ module.exports = class ButtonSet extends core.Base
   @returns true if the button was removed, of false if the button did not exist in the set.
   ###
   remove: (button, options = {}) -> 
-      # Setup initial conditions.
-      throw 'remove: no button' unless button?
-      return false if not @items.include(button)
-      options._fireChanged ?= true
-      
-      # Add the button to the collection.
-      @items.remove button, options
-      @length = @items.length
-      
-      # Unbind from events.
-      button.unbind 'pre:click'
-      button.unbind 'click'
-      button.selected.unbind 'changed'
-      button.el.unbind 'mouseup'
-      button.el.unbind 'mousedown'
-      
-      # Finish up.
-      if not options.silent
-          @_fire 'remove', button:button
-          @_fireChanged() if options._fireChanged
-      true
-  
+    # Setup initial conditions.
+    throw 'remove: no button' unless button?
+    return false if not @items.include(button)
+    options._fireChanged ?= true
+    
+    # Add the button to the collection.
+    @items.remove button, options
+    @length = @items.length
+    
+    # Unbind from events.
+    button.unbind 'pre:click'
+    button.unbind 'click'
+    button.selected.unbind 'changed'
+    button.el.unbind 'mouseup'
+    button.el.unbind 'mousedown'
+    
+    # Finish up.
+    if not options.silent
+        @_fire 'remove', button:button
+        @_fireChanged() if options._fireChanged
+    true
+
   
   ###
   Removes all buttons from the set.
@@ -146,23 +149,22 @@ module.exports = class ButtonSet extends core.Base
             silent: supresses the 'remove' event (default false).
   ###
   clear: (options = {}) -> 
-        
-      # Setup initial conditions.
-      options.silent ?= false
-      options._fireChanged = false
+    # Setup initial conditions.
+    options.silent ?= false
+    options._fireChanged = false
+    
+    # Remove all items from the buttons collection.
+    buttons = @items.select -> true
+    for btn in buttons
+        @remove btn, options
       
-      # Remove all items from the buttons collection.
-      buttons = @items.select -> true
-      for btn in buttons
-          @remove btn, options
-        
-      # Alert listeners.
-      if not options.silent
-          @_fire 'clear' 
-          @_fireChanged()
-      
-      # Finish up.
-      null
+    # Alert listeners.
+    if not options.silent
+        @_fire 'clear' 
+        @_fireChanged()
+    
+    # Finish up.
+    null
   
   
   ###
@@ -187,16 +189,17 @@ module.exports = class ButtonSet extends core.Base
   @returns the next button, or null if there is no next button.
   ###
   next: (button) -> 
-      index = @items.indexOf(button)
-      index += 1 unless index is -1
-      @items.models[index]
+    index = @items.indexOf(button)
+    index += 1 unless index is -1
+    @items.models[index]
   
   
   # PRIVATE --------------------------------------------------------------------------
-    
+  
+  
   _fire: (event, args = {}) -> 
-      args.source = @
-      @trigger event, args
+    args.source = @
+    @trigger event, args
   _fireChanged: -> @_fire 'changed'
   
   
