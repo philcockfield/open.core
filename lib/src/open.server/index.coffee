@@ -63,6 +63,7 @@ do ->
     #     in turn require the [server] module.
     server.paths       = require './config/paths'
     server.client      = require 'open.client'
+    server.version     = server.client.core.version
     server.util        = require './util'
     server.log         = server.util.log
     server.configure   = require './config/configure'
