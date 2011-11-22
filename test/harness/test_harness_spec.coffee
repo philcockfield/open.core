@@ -68,10 +68,10 @@ describe 'Test Harness', ->
     harness = null
     beforeAll -> harness = new TestHarness().init(debug:true)
     
-    describe 'Code Sample', ->
+    describe 'Tab (Base)', ->
       tab = null
       beforeAll ->
-        tab = new harness.views.CodeSampleTab()
+        tab = new harness.views.Tab()
         page.add tab, width:'80%'
 
   describe 'Page', ->
