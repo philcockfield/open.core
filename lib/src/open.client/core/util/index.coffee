@@ -39,7 +39,7 @@ module.exports = util =
       # Setup initial conditions.
       return el unless el?
       axis = 'y' if axis is undefined
-      axis = _(axis).trim() if axis?
+      axis = _(axis).trim().toLowerCase() if axis?
       prefix = options.prefix ? 'core_scroll_'
       
       toggle = (key, value) -> 

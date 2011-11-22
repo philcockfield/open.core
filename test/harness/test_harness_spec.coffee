@@ -66,18 +66,34 @@ describe 'Test Harness', ->
 
   describe 'Tabs', ->
     harness = null
-    beforeAll -> harness = new TestHarness().init(debug:true)
+    tabs    = null
+    beforeAll -> 
+      harness = new TestHarness().init( debug:true )
+      tabs    = harness.tabs
     
-    describe 'Tab (Base)', ->
+    describe 'Tab (Base)', 'Base class for all common utility tabs provided by the TestHarness.', ->
       tab = null
       beforeAll ->
-        tab = new harness.views.Tab()
-        page.add tab, width:'80%'
-
+        tab = new tabs.views.Base()
+        page.add tab, width:0.8, height: 250, border:true
+      
+      setScroll = (value) -> 
+        tab.el.html "#{loremWide} #{loremLong}"
+        tab.scroll value
+      
+      it 'addToPane()', -> 
+        page.reset()
+        tab = new tabs.views.Base()
+        tab.addToPane label:'My Label'
+      
+      it 'Scroll: XY',    -> setScroll 'xy'
+      it 'Scroll: Y',     -> setScroll 'y'
+      it 'Scroll: null',  -> setScroll null
+      
+  
+  
   describe 'Page', ->
-    
     div = null
-    
     beforeEach ->
       page.reset()
       div = $ '<div style="background:orange">Element</div>'

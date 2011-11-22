@@ -7,9 +7,5 @@ module.exports = (module) ->
     SpecList:       module.view 'spec_list'
     SuiteButton:    module.view 'suite_button'
     SuiteList:      module.view 'suite_list'
-    
-    # Tabs.
-    Tab:            module.view 'tab'
-
 
     

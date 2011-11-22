@@ -39,17 +39,9 @@ describe 'Controls',
           beforeAll ->
             page.reset()
             buttonSet = new controls.ButtonSet()
-            
             for label in ['One', 'Two', 'Three']
               addToSet label:label
-            
-            
-            
-          
-        
-        
-        
-        
+      
       
       describe 'Toggle Buttons', ->
         describe 'Checkbox', ->
@@ -159,7 +151,6 @@ describe 'Controls',
           { label:'Bannana' }
           { label:'Zebra' }
         ]
-      
       
       it 'read properties', ->
         console.log 'cbo.selected()', cbo.selected(), cbo.selected()?.label()
