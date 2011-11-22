@@ -48,6 +48,7 @@ describe 'Services', ->
     codeClass = 'core_simple'
     beforeAll -> toMarkdown codeBlocks
     it 'Markdown Specimen', -> toMarkdown simple
+    it 'No Code Blocks', -> toMarkdown noCode
     it 'Code Blocks', -> toMarkdown codeBlocks
     it 'Code Block Style: inset',  -> codeClass = 'core_inset'
     it 'Code Block Style: simple', -> codeClass = 'core_simple'
@@ -56,6 +57,13 @@ describe 'Services', ->
       classes =
         code: codeClass
       post url, source:source, classes:classes
+    
+    noCode = 
+      """
+      ### Title
+      #{lorem}
+      """
+      
     
     simple = 
       '''

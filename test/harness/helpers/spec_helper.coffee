@@ -11,4 +11,5 @@ window.loremLong = do ->
 window.loremWide = do -> 
   wide = lorem
   wide = wide.replace /\s/g, ''
+  wide += wide for i in [1.3]
   wide

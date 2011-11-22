@@ -68,11 +68,12 @@ syntaxHighlight = (html, options, callback) ->
       callback err
       callback = null # Prevent any more callbacks.
     else
-      callback err, html if count is 0
+      callback err, html if count <= 0
   
   # Retrieve the collection of <code> blocks
   blocks = html.find 'pre > code'
   count  = blocks.length
+  
   if count is 0
     onComplete()
     return

@@ -34,7 +34,7 @@ module.exports = (module) ->
 
         # Update CSS options.
         @css options.css
-        module.util.syncScroll el, options.scroll ? null
+        module.util.syncScroll el, options.scroll if options.scroll?
         
         # Update the host pane elements.
         @trTitle.toggle (options.showTitle ?= true)

@@ -36,6 +36,7 @@ module.exports = (module) ->
       
       # Finish up.
       pane.show() if options.show is yes
+      @
 
 
 

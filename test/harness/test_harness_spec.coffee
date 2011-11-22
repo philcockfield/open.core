@@ -63,33 +63,6 @@ describe 'Test Harness', ->
         
             it 'Does It', ->
               console.log 'Spec C'  
-
-  describe 'Tabs', ->
-    harness = null
-    tabs    = null
-    beforeAll -> 
-      harness = new TestHarness().init( debug:true )
-      tabs    = harness.tabs
-    
-    describe 'Tab (Base)', 'Base class for all common utility tabs provided by the TestHarness.', ->
-      tab = null
-      beforeAll ->
-        tab = new tabs.views.Base()
-        page.add tab, width:0.8, height: 250, border:true
-      
-      setScroll = (value) -> 
-        tab.el.html "#{loremWide} #{loremLong}"
-        tab.scroll value
-      
-      it 'addToPane()', -> 
-        page.reset()
-        tab = new tabs.views.Base()
-        tab.addToPane label:'My Label'
-      
-      it 'Scroll: XY',    -> setScroll 'xy'
-      it 'Scroll: Y',     -> setScroll 'y'
-      it 'Scroll: null',  -> setScroll null
-      
   
   
   describe 'Page', ->
@@ -107,20 +80,74 @@ describe 'Test Harness', ->
     it 'Add - fill:80%', -> page.add div, fill:'80%'
     it 'Add - fill:0.8 (80%)', -> page.add div, fill:0.8
     it 'Add - fill:1 (100%)', -> page.add div, fill:1
+    
+  describe 'Tabs', ->
+    harness = null
+    tabs    = null
+    tab     = null
+    beforeAll -> 
+      harness = new TestHarness().init( debug:true )
+      tabs    = harness.tabs
+    
+    setScroll = (value) -> 
+      tab.el.html "#{loremWide} #{loremLong}"
+      tab.scroll value
+    
+    
+    describe 'Tab (Base)', 'Base class for all common utility tabs provided by the TestHarness.', ->
+      beforeAll ->
+        tab = new tabs.views.Base()
+        page.add tab, width:700, height: 250, border:true
+      it 'addToPane()',   -> 
+        page.reset()
+        tab = new tabs.views.Base().addToPane label:'Base Tab'
       
+      it 'Scroll: XY',    -> setScroll 'xy'
+      it 'Scroll: Y',     -> setScroll 'y'
+      it 'Scroll: null',  -> setScroll null
+    
+    describe 'Markdown Tab', 'Renders markdown', ->
+      beforeAll ->
+        tab = new tabs.views.Markdown markdown:sampleMarkdown
+        page.add tab, width:0.8, height: 250, border:true
       
-    
-    
-    
-
-
-
-
-
-
-
-
-
-        
+      it 'addToPane()', -> 
+        page.reset()
+        tab = new tabs.views.Markdown().addToPane label:'Markdown'
+        tab.markdown sampleMarkdown
       
-    
+      it 'Markdown: null',   -> tab.markdown null
+      it 'Markdown: Sample', -> tab.markdown sampleMarkdown
+      
+      sampleMarkdown =
+         """
+         # H1 Title
+         #{lorem}
+         [Internal linke](/harness/#test%20harness/tabs/markdown%20tab)
+         and [external link](http://www.google.com).
+         
+         - Item 1
+         - Item 2
+         - Item 3
+         
+         Some `code`:
+         
+             :coffee
+             # Comment. <foo> & 'thing' in "quotes".
+             foo = 123
+             fn = (prefix) -> console.log "Thing: ", foo
+             for i in [1..5]
+               foo += 1
+               fn('Item')
+         
+         ## H2 Title
+         ### H3 Title
+         #### H4 Title
+         ##### H5 Title
+         
+         
+         """
+
+
+
+
