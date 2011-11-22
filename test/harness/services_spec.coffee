@@ -4,8 +4,7 @@ describe 'Services', ->
       console.log ''
       console.log 'Posting to: ', url
       console.log 'Data:', data
-      console.log '...'
-      $.ajax
+      promise = $.ajax
         type: 'POST'
         url: url
         data: data
@@ -22,9 +21,11 @@ describe 'Services', ->
             callback? null, 
               el:   el
               data: data
+      console.log '...', promise
   
   describe 'Pygments', 'Source code highlighting service.', -> 
-    url = '/pygments'
+    url        = '/pygments'
+    useService = true # TEMP 
     sampleCode = 
           '''
           # Comment.
@@ -36,13 +37,15 @@ describe 'Services', ->
           '''
     highlight = (source) -> 
       post url, 
-        language: 'coffee'
-        source:   source
+        language:   'coffee'
+        source:     source
+        useService: useService
     
     beforeAll -> highlight sampleCode
     it 'Highlight Code', -> highlight sampleCode
-      
-    
+    it 'Toggle: Use Service', ->
+      useService = not useService
+      console.log 'useService: ', useService
   
   
   describe 'Markdown', 'Markdown to HTML conversion service.', ->

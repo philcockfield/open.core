@@ -12,6 +12,7 @@ module.exports = index =
   testing:    require './testing'
   markdown:   require './converters/markdown'
   pygments:   require './converters/pygments'
+  http:       require './http'
   
   # Classes.
   Timer:      require './timer'

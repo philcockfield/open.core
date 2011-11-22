@@ -89,6 +89,46 @@ task 'deploy', 'Deploys to Heroku', ->
     logDone()
 
 
+task 'temp', -> 
+  http = require 'http'
+  
+  # cmd = 'curl --data "lang=html&code=<h1>Hello World</h1>" http://pygmentize.herokuapp.com'
+  # exec cmd, (err, stdout, stderr) ->
+  #   console.log 'err', err
+  #   console.log 'stdout', stdout
+    # console.log 'stderr', stderr
+
+  
+  foo = -> 
+
+    data = 
+      source: '<h1>Foo</h1>'
+      language: 'html'
+    
+    options =
+      data: data
+      port: 8080
+      host: 'localhost'
+      path: '/pygments'
+    
+    options =
+      data: 'lang=html&code=<h1>Hello World</h1>'
+        # code: '<h1>Foo</h1>'
+        # lang: 'html'
+      host: 'pygmentize.herokuapp.com'
+    
+    core.util.http.post options, (err, result) -> 
+      console.log 'err', err
+      console.log 'result.statusCode', result.statusCode
+      console.log 'result.data', result.data
+  
+  
+  foo()
+  
+
+  
+
+
 # PRIVATE --------------------------------------------------------------------------
 
 

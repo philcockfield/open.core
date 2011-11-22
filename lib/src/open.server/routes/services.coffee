@@ -6,9 +6,13 @@ send    = core.util.send
 # POST: Pygments (source-code highlighting).
 app.post "#{core.baseUrl}/pygments", (req, res) ->
   body = req.body
+  
+  console.log 'PY body', body # TEMP 
+  
   core.util.pygments.toHtml 
-    source:   body.source
-    language: body.language,
+    source:       body.source
+    language:     body.language
+    useService:   body.useService
     (err, html) -> 
       if err?
         res.send err.message, 500

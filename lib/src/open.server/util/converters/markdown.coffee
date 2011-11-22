@@ -24,7 +24,7 @@ module.exports =
     core.util.formatLinks html
     
     # Highlight source code.
-    highlightCode html, (err, result) -> 
+    syntaxHighlight html, (err, result) -> 
       
       if err?
         callback? err
@@ -40,19 +40,12 @@ module.exports =
              """
       # Finish up.
       callback? null, html
-      
-
-    ###
-    TODO
-    - links | internal, external
-    - syntax highlight code - ```coffee
-    ###
 
 
 # PRIVATE --------------------------------------------------------------------------
 
 
-highlightCode = (html, callback) -> 
+syntaxHighlight = (html, callback) -> 
   count = 0
   onComplete = (err) -> 
     count -= 1
@@ -80,16 +73,19 @@ highlightCode = (html, callback) ->
         
         # Remove the language filter prefix.
         source = code.html()
-        source = source.substr language.length + 1, source.length
-        source = core.util.unescapeHtml(source)
+        source = source.substr language.length + 2, source.length
         
         # Syntax highlight the code in the specified language.
         language = mapLanguage language
         pygments.toHtml 
-          source:   source
-          language: language,
+          source:   core.util.unescapeHtml(source)
+          language: language
           (err, htmlCode) -> 
-            unless err?
+            if err?
+              # Failed. Replace <code> block with the source that
+              # had the :language filter removed.
+              code.html source
+            else
               # Replace the parent <pre> with the code color-coded HTML.
               pre = code.parent()
               pre.replaceWith htmlCode
