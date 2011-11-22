@@ -83,10 +83,8 @@
   padding: 15px;
   margin-top: 20px;
   margin-bottom: 20px;
-  background: #fafafa;
-  border-radius: 5px;
-  border: solid 1px #d9d9d9;
-  box-shadow: inset 0px 2px 5px 0px #ebebeb;
+  padding-left: 20px;
+  border-left: solid 12px #ebebeb;
 }
 .core_markdown pre code {
   background: none;

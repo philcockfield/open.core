@@ -472,8 +472,8 @@ describe 'controls/button_set', ->
     describe '[mouseDown]', ->
       beforeEach ->
           buttons.bind 'mouseDown', (e) -> 
-                                  args = e
-                                  fireCount += 1
+            args = e
+            fireCount += 1
       
       it 'fires on the un-selected button', ->
         btn1.el.mousedown()
@@ -490,6 +490,47 @@ describe 'controls/button_set', ->
         btn1.el.mousedown()
         expect(fireCount).toEqual 0
 
+    describe '[click]', ->
+      beforeEach ->
+          buttons.bind 'click', (e) -> 
+            args = e
+            fireCount += 1
+      
+      it 'fires on button [click] method', ->
+        btn1.click()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+        
+      it 'fires on the element click()', ->
+        btn1.el.click()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+      
+      it 'removes event handler', ->
+        buttons.remove btn1
+        btn1.click()
+        expect(fireCount).toEqual 0
+
+    describe '[click]', ->
+      beforeEach ->
+          buttons.bind 'pre:click', (e) -> 
+            args = e
+            fireCount += 1
+      
+      it 'fires on button [click] method', ->
+        btn1.click()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+        
+      it 'fires on the element click()', ->
+        btn1.el.click()
+        expect(fireCount).toEqual 1
+        expect(args.button).toEqual btn1
+      
+      it 'removes event handler', ->
+        buttons.remove btn1
+        btn1.click()
+        expect(fireCount).toEqual 0
 
 
 

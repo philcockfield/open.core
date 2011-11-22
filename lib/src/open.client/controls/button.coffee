@@ -6,10 +6,10 @@ core = require '../core'
 A click-able button.
 
 Events:
-  - selected
-  - pre:click
-  - click
-  - stateChanged
+  - pre:click     : Fires immediately before a click operation is executed (allows cancelling).
+  - click:        : Fires upon successful click (if not cancelled).
+  - selected      : Fires when the button becomes selected.
+  - stateChanged  : Fires when the state changes (mouseenter, mouseleave, mousedown, click)
 
 Overrides:
   - handleStateChanged      : Invoked on each button state change. (no need to call super)
@@ -104,39 +104,40 @@ module.exports = class Button extends core.mvc.View
   @returns true if the click operation completed successfully, or false if it was cancelled.
   ###
   click: (options = {}) =>
-      # Setup initial conditions.
-      srcElement = options.srcElement ?= @el
-      srcElement = core.util.toJQuery srcElement
-      preArgs = 
-          source:     @
-          cancel:     false
-          srcElement: srcElement
-      
-      # Don't allow click if disabled.
-      return if not @enabled()
-      
-      # Determine if event is required.
-      fireEvent = not (options.silent == true)
-      
-      # Fire the pre-click event.
-      if (fireEvent)
-          @trigger('pre:click', preArgs);
-          
-          # Check whether any listeners cancelled the click operation.
-          if preArgs.cancel is yes
-              @_stateChanged('click:cancelled')
-              return false 
-      
-      # Adjust the [selected] state
-      @toggle srcElement:srcElement
-      
-      # Alert listeners.
-      if fireEvent
-        @trigger('click', source: @, srcElement:srcElement)
-      
-      # Finish up.
-      @_stateChanged('click', srcElement:srcElement)
-      true
+    
+    # Setup initial conditions.
+    srcElement = options.srcElement ?= @el
+    srcElement = core.util.toJQuery srcElement
+    preArgs = 
+        source:     @
+        cancel:     false
+        srcElement: srcElement
+    
+    # Don't allow click if disabled.
+    return if not @enabled()
+    
+    # Determine if event is required.
+    fireEvent = not (options.silent == true)
+    
+    # Fire the pre-click event.
+    if (fireEvent)
+        @trigger('pre:click', preArgs);
+        
+        # Check whether any listeners cancelled the click operation.
+        if preArgs.cancel is yes
+            @_stateChanged('click:cancelled')
+            return false 
+    
+    # Adjust the [selected] state
+    @toggle srcElement:srcElement
+    
+    # Alert listeners.
+    if fireEvent
+      @trigger('click', source: @, srcElement:srcElement)
+    
+    # Finish up.
+    @_stateChanged('click', srcElement:srcElement)
+    true
   
   
   ###

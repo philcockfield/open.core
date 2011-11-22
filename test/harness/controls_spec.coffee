@@ -7,22 +7,48 @@ describe 'Controls',
     describe 'Buttons', ->
       describe 'Command (CmdButton)', ->
         buttons   = []
-        addButton = (options) -> 
-            btn = new controls.CmdButton options
-            page.add btn
-            buttons.push btn
-            btn.onClick (e) -> console.log 'CLICK: ', e.source.label(), e
-            btn
+        addCmdButton = (options) -> 
+          btn = new controls.CmdButton options
+          page.add btn
+          buttons.push btn
+          btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
+          # btn.bind 'stateChanged', (e) -> console.log 'stateChanged: ', e.source.label(), e, e.state
+          btn.bind 'selected', (e) -> console.log 'selected: ', e.source.label(), e.source.selected()
+          btn
         
         beforeAll -> 
-          btn = addButton label:'My Label'
+          btn = addCmdButton label:'My Label'
           btn.el.attr 'id', 'cmd_btn'
         
-        it 'Add another',   -> addButton label:"Button #{buttons.length + 1}"
+        it 'Add another',   -> addCmdButton label:"Button #{buttons.length + 1}"
         it 'Color: Blue',   -> btn.color 'blue' for btn in buttons
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
         it 'Width: 200',    -> btn.width 200 for btn in buttons
         it 'Width: null',   -> btn.width null for btn in buttons
+        
+      
+        describe 'ButtonSet', ->
+          buttonSet = null
+          
+          addToSet = (options = {}) -> 
+            options.canToggle = true
+            btn = addCmdButton options
+            buttonSet.add btn
+            btn
+          
+          beforeAll ->
+            page.reset()
+            buttonSet = new controls.ButtonSet()
+            
+            for label in ['One', 'Two', 'Three']
+              addToSet label:label
+            
+            
+            
+          
+        
+        
+        
         
       
       describe 'Toggle Buttons', ->
