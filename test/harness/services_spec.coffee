@@ -100,7 +100,7 @@ describe 'Services', ->
           foo = 123
           fn = -> console.log 'foo', foo
       
-      CoffeeScript - :coffee
+      CoffeeScript - `:coffee`
       
           :coffee
           # Comment. <foo> & 'thing' in "quotes".
@@ -110,7 +110,7 @@ describe 'Services', ->
             foo += 1
             fn('Item')
       
-      HTML - :html
+      HTML - `:html`
       
           :html
             <html>
@@ -128,7 +128,7 @@ describe 'Services', ->
               </body>
             </html>
       
-      CSS - :css
+      CSS - `:css`
       
           :css
           body, head {
@@ -136,22 +136,21 @@ describe 'Services', ->
             overflow: hidden;
           }
       
-      Ruby - :ruby or :rb
+      Ruby - `:ruby` or `:rb`
       
           :ruby
-          # Some ruby code
+          # Some ruby code.
           puts "Hello World!"
       
-      C# - :c# or :cs
+      C# - `:c#` or `:cs`
       
           :c#
           public class Foo<T> 
           {
             void Add(T value) { // ... }
           }
-          
       
-      Python - :py or :python
+      Python - `:py` or `:python`
       
           :python
           from pygments import highlight
@@ -161,6 +160,16 @@ describe 'Services', ->
           code = 'print "Hello World"'
           print highlight(code, PythonLexer(), HtmlFormatter())      
       
+      JSON - `:json` or `:js`
+      
+          :json
+          {
+            "name": "Foo",
+            "version": "1.2.3".
+            "dependencies": {
+              "open.core": ">= 0.1.101"
+            }
+          }
       '''
   
   

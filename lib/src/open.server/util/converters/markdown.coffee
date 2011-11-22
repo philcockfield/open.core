@@ -110,6 +110,7 @@ mapLanguage = (language) ->
     when 'ruby'   then 'rb'
     when 'c#'     then 'cs'
     when 'python' then 'py'
+    when 'json'   then 'js'
     else language
 
 
