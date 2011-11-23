@@ -2,8 +2,12 @@ require './_string'  # Cause string extensions to be loaded (added to underscore
 
 
 module.exports = util =
-  Property: require './property'
   jQuery:   require './_jquery'   # NB: Also causees jQuery extensions to be loaded.
+  
+  # Classes.
+  Property: require './property'
+  Cookie:   require './cookie'
+  
   
   
   ###

@@ -92,7 +92,7 @@ body {
   left: 0px;
   top: 0px;
   right: 0px;
-  height: 34px;
+  height: 33px;
   border-top: solid 1px #666;
   border-bottom: solid 1px #666;
   font-size: 10pt;
@@ -125,7 +125,7 @@ body {
 .th_sidebar > .th_suite_list .th_scroller {
   position: absolute;
   left: 0px;
-  top: 35px;
+  top: 34px;
   right: 0px;
   bottom: 0px;
 }
@@ -157,7 +157,7 @@ body {
 .th_sidebar > .th_spec_list .th_scroller {
   position: absolute;
   left: 0px;
-  top: 36px;
+  top: 35px;
   right: 0px;
   bottom: 0px;
 }
