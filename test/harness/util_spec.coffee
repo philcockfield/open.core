@@ -12,6 +12,7 @@ describe 'Util', ->
       
       console.log 'document.cookie: ', document.cookie
       console.log 'cookie.foo(): ', cookie.foo() # Read.
+      console.log ''
       
       page.pane.add.markdown
         label: 'Sample Code'
@@ -30,29 +31,17 @@ describe 'Util', ->
           
           '''
           
-    it 'Read: foo', -> console.log 'cookie.foo()', cookie.foo()
+    it 'Read: foo', -> 
+      value = cookie.foo()
+      console.log 'cookie.foo(): ', value
+      console.log 'Is Null: ', not value?
+      console.log ''
     it 'Write: foo', -> cookie.foo new Date().getTime()
+    it 'Write: foo (null)', -> cookie.foo null
+    it 'Write: foo (empty-string)', -> cookie.foo ''
     it 'Write: foo (multiple times)', -> cookie.foo i for i in [0..10]
-      
+    it 'Delete', -> cookie.delete()
     it 'document.cookie', -> console.log 'document.cookie: ', document.cookie
-      
-    
-    
-    
-    it 'TEMP', ->
-      
-      foo = new core.util.Cookie name:'bar1'
-      
-      # document.cookie = 'bar={"foo":456}; expires=10000; path=/'
-      # document.cookie = 'bar=; expires=-1; path=/'
-      
-    
-        
-      
-      
-      
-      
-      
-    
-    
-  
+
+
+

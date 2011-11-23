@@ -6,6 +6,8 @@ Events:
 
 ###
 module.exports = (module) ->
+  cookie = module.cookie
+  
   class SignIn extends module.mvc.View
     constructor: () -> 
         # Setup initial conditions.
@@ -16,7 +18,9 @@ module.exports = (module) ->
         
         # Wire up events.
         @enabled.onChanged => @_syncEnabled()
-        @providers.bind 'selectionChanged', => @_syncTitle()
+        @providers.bind 'selectionChanged', => 
+            cookie.provider (@selected()?.value() ? null)
+            @_syncTitle()
         @btnSignIn.onClick => @_fireSignIn()
         
         # Finish up.
@@ -81,8 +85,17 @@ module.exports = (module) ->
         @providers.add btn
         addCell().append btn.el
         
+        # Select the button (if required).
+        savedProvider = cookie.provider()
+        if savedProvider?
+          btn.selected true if options.value is savedProvider
+        else
+          # No previous selection stored in cookie.
+          # Select if this is the first provider.
+          btn.selected true if @providers.count() is 1
+        
         # Finish up.
-        btn.selected true if @providers.count() is 1
+        # btn.selected true if @providers.count() is 1
         btn
     
     

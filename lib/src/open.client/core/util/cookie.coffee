@@ -24,7 +24,7 @@ module.exports = class Cookie extends Base
     
     # Prevent needless updates to the cookie when multiple changes
     # to property values occur in short succession.
-    lazySave = _.debounce (=> save @, store), 50
+    lazySave = _.debounce (=> save @, store, @expires), 50
     
     # Override the READ / WRITE methods.
     @propertyStore = () =>
@@ -32,6 +32,12 @@ module.exports = class Cookie extends Base
             if value != undefined
               
               # Write the new value to the cookie.
+              if value?
+                # Convert empty string to null.
+                value = _(value).trim()
+                value = null if value is ''
+              
+              # Store and save the value.
               store[name] = value
               lazySave()
             
@@ -40,6 +46,12 @@ module.exports = class Cookie extends Base
     
     # Add defaults as Property functions.
     @addProps @defaults
+  
+  
+  ###
+  Deletes the cookie.
+  ###
+  delete: -> save @, null, -1
 
 
 # PRIVATE --------------------------------------------------------------------------
@@ -51,31 +63,34 @@ parseValue = (name) ->
   for part in document.cookie.split ';'
     key = _(part).chain().strLeft('=').trim().value()
     if key is name
-      # Property found - parse the content.
+      # Property found.
       part = _(part).strRight '='
-      return {} if _.isBlank(part)
+      return {} if _.isBlank(part) # No value, return empty object.
+      
+      # Parse JSON the content.
       try
         return JSON.parse part
       catch error
         # Malformed JSON.  Return a fresh object.
-        console.log 'error', error
         return {}
   
   # Not found, return an empty object.
   {}
 
 
-save = (cookie, store) ->
+save = (cookie, store, expiresIn) ->
+  
   # Build the expiry date string.
   expires = ''
-  if cookie.expires?
+  if expiresIn?
     date = new Date()
-    date.setTime date.getTime() + ( cookie.expires * 24 * 60 * 60 * 1000 )
+    date.setTime date.getTime() + ( expiresIn * 24 * 60 * 60 * 1000 )
     expires = "expires=#{date.toGMTString()}; "
   
   # Update the cookie.
-  json = JSON.stringify(store)
-  document.cookie = "#{cookie.name}=#{json}; #{expires}path=#{cookie.path}"
+  json  = if store? then JSON.stringify(store) else ''
+  value = "#{cookie.name}=#{json}; #{expires}path=#{cookie.path}"
+  document.cookie = value
 
 
 

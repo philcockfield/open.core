@@ -1,5 +1,12 @@
 core = require 'open.client/core'
 
+class AuthCookie extends core.util.Cookie
+  defaults:
+    provider: null
+  constructor: () -> super name:'core-auth'
+cookie = new AuthCookie() # Singleton instance.
+
+
 ###
 UI for authentication and authorization.
 
@@ -8,11 +15,13 @@ Events:
 
 ###
 module.exports = class Auth extends core.mvc.Module
+  constructor: (props) -> 
+    super module, props
+    @cookie = cookie    
+  
   defaults:
     mode: 'sign_in' # Gets or sets the mode. Values: null | 'sign_in'
   
-  
-  constructor: (props) -> super module, props
   
   
   ###
