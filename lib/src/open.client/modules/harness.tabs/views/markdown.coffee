@@ -14,9 +14,7 @@ module.exports = (module) ->
         @el.html null
         markdown = @markdown()
         if markdown?
-          post markdown, (err, html) => 
-            console.log 'html', html
-            @el.html html unless err?
+          post markdown, (err, html) => @el.html html unless err?
         
       # Wire up events.
       @markdown.onChanged syncMarkdown

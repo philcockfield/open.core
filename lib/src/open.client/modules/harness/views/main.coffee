@@ -86,8 +86,8 @@ module.exports = (module) ->
         # Initialize the context pane.
         createContextPane = => 
               # Insert the control.
-              ContextPane = module.view('context_pane')
-              pane        = new ContextPane().replace @$('div.th_context_pane')
+              Pane = module.view('pane')
+              pane        = new Pane().replace @$('div.th_context_pane')
               page.pane   = pane
               
               # Keep heights in sync.

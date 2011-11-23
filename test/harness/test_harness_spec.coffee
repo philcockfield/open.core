@@ -113,8 +113,14 @@ describe 'Test Harness', ->
       
       it 'addToPane()', -> 
         page.reset()
-        tab = new tabs.views.Markdown().addToPane label:'Markdown'
-        tab.markdown sampleMarkdown
+        
+        count    = page.pane.count() + 1
+        markdown = sampleMarkdown
+        markdown = markdown.replace 'H1 Title', "H1 Title #{count}"
+        
+        page.pane.add.markdown
+          label:    "Markdown #{count}"
+          markdown: markdown
       
       it 'Markdown: null',   -> tab.markdown null
       it 'Markdown: Sample', -> tab.markdown sampleMarkdown

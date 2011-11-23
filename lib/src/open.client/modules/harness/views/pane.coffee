@@ -1,5 +1,5 @@
 module.exports = (module) ->
-  class ContextPaneView extends module.mvc.View
+  class ContextPane extends module.mvc.View
     defaults:
         height:    250 # Gets or sets the height of the panel (in pixels).
         minHeight: 38  # Gets or sets the minimum height of the panel (in pixels).
@@ -8,6 +8,26 @@ module.exports = (module) ->
         super className:'th_context_pane'
         @render()
         @visible false # Not shown by default.
+        
+        # Append methods onto the 'add' method.
+        @add.markdown = do => 
+          
+          ###
+          Adds a new markdown tab to the pane.
+          @param options:
+                  - markdown     : String of markdown to load.
+                  - {taboptions} : Standard tab/button options eg. label, selected etc.
+                  - show:        : Flag indicating if the pane should be shown (default: true).
+          ###
+          (options = {}) => 
+            
+            # Add the new tab.
+            options.content = new module.tabs.views.Markdown( markdown:options.markdown )
+            tab = @add options
+            
+            # Finish up.
+            @show() if (options.show ? yes) is yes
+            tab
     
     
     # Gets the number of tabs in the pane.
@@ -75,5 +95,4 @@ module.exports = (module) ->
     reset: -> 
         @hide()
         @clear()
-    
     
