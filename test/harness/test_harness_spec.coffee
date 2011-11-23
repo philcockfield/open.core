@@ -175,12 +175,11 @@ describe 'Test Harness', ->
      Some `code`:
      
          :coffee
-         # Comment. <foo> & 'thing' in "quotes".
-         foo = 123
-         fn = (prefix) -> console.log "Thing: ", foo
-         for i in [1..5]
-           foo += 1
-           fn('Item')
+         # Code to add a bunch of Markdown within a tab.
+         page.add.markdown
+           label:    'Markdown Title'
+           markdown: '# My Markdown'
+           
      
      ## H2 Title
      ### H3 Title
