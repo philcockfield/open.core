@@ -60,14 +60,18 @@
       background: linear-gradient(top, darken(white, 10%), darken(white, 1%))
   
   &.core_selected
-    // border solid FAT_BORDER darken(white, 20%)
     border solid FAT_BORDER PRIMARY_BLUE
     .core_inner_border
       background darken(white, 2%)
       border-color PRIMARY_BLUE
-  
 
   &.core_disabled
+    DISABLED_BORDER_COLOR = darken(white, 30%)
+    &.core_selected
+      border-color DISABLED_BORDER_COLOR
+      .core_inner_border
+        border-color DISABLED_BORDER_COLOR
+
     .core_inner_border
       background darken(white, 5%)
       .core_logo

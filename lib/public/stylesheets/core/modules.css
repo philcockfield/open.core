@@ -124,6 +124,12 @@
   background: #fafafa;
   border-color: #00bdf3;
 }
+.core_provider_btn.core_disabled.core_selected {
+  border-color: #b3b3b3;
+}
+.core_provider_btn.core_disabled.core_selected .core_inner_border {
+  border-color: #b3b3b3;
+}
 .core_provider_btn.core_disabled .core_inner_border {
   background: #f2f2f2;
 }
