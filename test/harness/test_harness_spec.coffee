@@ -93,6 +93,20 @@ describe 'Test Harness', ->
       tab.el.html "#{loremWide} #{loremLong}"
       tab.scroll value
     
+    it 'add markdown tab', -> 
+      page.reset()
+      tab = page.pane.add.markdown
+        label:    'Markdown'
+        markdown: markdownSample1
+      tab = tab.content
+    
+    it 'add CSS tab', -> 
+      page.reset()
+      tab = page.pane.add.css
+        label:  'CSS'
+        url:    '/stylesheets/core/base.css'
+      tab = tab.content
+      
     
     describe 'Tab (Base)', 'Base class for all common utility tabs provided by the TestHarness.', ->
       beforeAll ->
@@ -108,51 +122,85 @@ describe 'Test Harness', ->
     
     describe 'Markdown Tab', 'Renders markdown', ->
       beforeAll ->
-        tab = new tabs.views.Markdown markdown:sampleMarkdown
+        tab = new tabs.views.Markdown markdown:markdownSample1
         page.add tab, width:0.8, height: 250, border:true
       
       it 'addToPane()', -> 
         page.reset()
-        
         count    = page.pane.count() + 1
-        markdown = sampleMarkdown
+        markdown = markdownSample1
         markdown = markdown.replace 'H1 Title', "H1 Title #{count}"
-        
-        page.pane.add.markdown
+        tab = page.pane.add.markdown
           label:    "Markdown #{count}"
           markdown: markdown
+        tab = tab.content
       
       it 'Markdown: null',   -> tab.markdown null
-      it 'Markdown: Sample', -> tab.markdown sampleMarkdown
+      it 'Markdown: Sample 1', -> tab.markdown markdownSample1
+      it 'Markdown: Sample 2', -> tab.markdown markdownSample2
+
+    describe 'Remote Content Tab', 'Renders content from a URL', ->
+      urlCss1    = '/stylesheets/core/base.css'
+      urlCss2    = '/stylesheets/core/controls.css'
+      beforeAll ->
+        tab = new tabs.views.Remote()
+        page.add tab, width:0.8, height: 250, border:true
+        
+        tab.load url:urlCss1, language:'css'
       
-      sampleMarkdown =
-         """
-         # H1 Title
-         #{lorem}
-         [Internal linke](/harness/#test%20harness/tabs/markdown%20tab)
-         and [external link](http://www.google.com).
-         
-         - Item 1
-         - Item 2
-         - Item 3
-         
-         Some `code`:
-         
-             :coffee
-             # Comment. <foo> & 'thing' in "quotes".
-             foo = 123
-             fn = (prefix) -> console.log "Thing: ", foo
-             for i in [1..5]
-               foo += 1
-               fn('Item')
-         
-         ## H2 Title
-         ### H3 Title
-         #### H4 Title
-         ##### H5 Title
-         
-         
-         """
+      it 'Load CSS 1', -> tab.load url:urlCss1, language:'css', description:
+        '''
+        # Some Code
+        Here is a description of the code!  It does
+        
+        - This
+        - That
+        - and the Next Thing
+        '''
+      it 'Load CSS 2', -> tab.load url:urlCss2, language:'css'
+      it 'Load CSS (No link)', -> tab.load url:urlCss1, language:'css', showLink:false
+      
+      
+  markdownSample1 =
+     """
+     # H1 Title
+     #{lorem}
+     [Internal link](/harness/#test%20harness/tabs/markdown%20tab)
+     and [external link](http://www.google.com).
+     
+     - Item 1
+     - Item 2
+     - Item 3
+     
+     Some `code`:
+     
+         :coffee
+         # Comment. <foo> & 'thing' in "quotes".
+         foo = 123
+         fn = (prefix) -> console.log "Thing: ", foo
+         for i in [1..5]
+           foo += 1
+           fn('Item')
+     
+     ## H2 Title
+     ### H3 Title
+     #### H4 Title
+     ##### H5 Title
+     
+     """
+
+  markdownSample2 =
+     """
+     Some `code` that has it's syntax highlighted:
+     
+         :coffee
+         # Comment. <foo> & 'thing' in "quotes".
+         foo = 123
+         fn = (prefix) -> console.log "Thing: ", foo
+         for i in [1..5]
+           foo += 1
+           fn('Item')
+     """
 
 
 
