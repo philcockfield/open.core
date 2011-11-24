@@ -25,7 +25,7 @@ describe 'Modules', ->
           { value:'google' }
           { value:'twitter' }
           { value:'yahoo' }
-          { value:'linked_in', label: 'Linked In' }
+          { value:'linkedin', label: 'Linked In' }
         ]
       it 'Toggle: Enabled', -> signIn.enabled.toggle()
     
@@ -42,7 +42,7 @@ describe 'Modules', ->
       it 'Provider: Google',    -> btn.value 'google'
       it 'Provider: Twitter',   -> btn.value 'twitter'
       it 'Provider: Yahoo',     -> btn.value 'yahoo'
-      it 'Provider: Linked In', -> btn.value 'linked_in'
+      it 'Provider: Linked In', -> btn.value 'linkedin'
         
       
         

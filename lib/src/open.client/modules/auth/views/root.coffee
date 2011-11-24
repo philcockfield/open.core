@@ -26,7 +26,7 @@ module.exports = (module) ->
           { value:'google' }
           { value:'twitter' }
           { value:'yahoo' }
-          { value:'linked_in', label: 'Linked In' }
+          { value:'linkedin', label: 'Linked In' }
         ]
         @bubble 'click:signIn', signIn
         @_signIn = signIn
