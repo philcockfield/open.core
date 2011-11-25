@@ -12,16 +12,16 @@ global.color =
     cyan   : "\033[0;36m"
     reset  : "\033[0m"
 
-log = (message, color = '', explanation = '') ->
-        
-        # Exit out if the log has been silenced.
-        return if commonUtil.log.silent is yes
-        
-        # Write the message.
-        if message?
-          console.log "#{color}#{message}#{global.color.reset} #{explanation}"
-        else
-          console.log ''
+
+log        = (message, color = '', explanation = '') -> log.line message, color, explanation
+log.line   = (message, color = '', explanation = '') -> write formatMessage(message, color, explanation) + '\n'
+log.append = (message, color = '', explanation = '') -> write formatMessage(message, color, explanation)
+
+write = (message) -> process.stdout.write(message) unless log.silent is yes
+formatMessage = (message, color = '', explanation = '') ->
+  if message? then "#{color}#{message}#{global.color.reset} #{explanation}" else ''
+
+
 
 module.exports = commonUtil = 
   # Client aliases.
@@ -74,3 +74,9 @@ module.exports = commonUtil =
     if err?
         process.stdout.write "#{color.red}#{err.stack}#{color.reset}\n"
         process.exit -1
+
+
+
+
+
+

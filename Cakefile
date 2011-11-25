@@ -89,13 +89,6 @@ task 'deploy', 'Deploys to Heroku', ->
     logDone()
 
 
-task 'temp', -> 
-  Auth = require "#{core.paths.server}/modules/auth"
-  auth = new Auth().init()
-  
-  
-
-
 # PRIVATE --------------------------------------------------------------------------
 
 

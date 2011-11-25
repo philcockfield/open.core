@@ -23,47 +23,91 @@ module.exports = (module) ->
       do -> 
         
         # Twitter.
-        everyauth.twitter
-          .consumerKey(keys.twitter.key)
-          .consumerSecret(keys.twitter.secret)
-          .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
-              findOrCreate
-                type:   'twitter'
-                id:     userData.id
-                name:   userData.name
-                avatar: userData.profile_image_url
-          )
-          .redirectPath redirectTo
+        if keys.twitter?
+          everyauth.twitter
+            .consumerKey(keys.twitter.key)
+            .consumerSecret(keys.twitter.secret)
+            .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
+                findOrCreate
+                  type:   'twitter'
+                  id:     userData.id
+                  name:   userData.name
+                  avatar: userData.profile_image_url
+            )
+            .redirectPath redirectTo
         
         
         # Facebook.
-        everyauth.facebook
-          .appId(keys.facebook.key)
-          .appSecret(keys.facebook.secret)
-          .handleAuthCallbackError((req, res) -> 
-            # Invoked if user denies access.
-          )
-          .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
-              findOrCreate
-                type:   'facebook'
-                id:     userData.id
-                name:   userData.name
-          )
-          .redirectPath redirectTo
+        if keys.facebook?
+          everyauth.facebook
+            .appId(keys.facebook.key)
+            .appSecret(keys.facebook.secret)
+            .handleAuthCallbackError((req, res) -> 
+              # Invoked if user denies access.
+            )
+            .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
+                findOrCreate
+                  type:   'facebook'
+                  id:     userData.id
+                  name:   userData.name
+            )
+            .redirectPath redirectTo
         
         
         # LinkedIn.
-        everyauth.linkedin
-          .consumerKey(keys.linkedIn.key)
-          .consumerSecret(keys.linkedIn.secret)
-          .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
-              findOrCreate
-                type:   'linkedin'
-                id:     userData.id
-                name:   "#{userData.firstName} #{userData.lastName}"
-                avatar: userData.pictureUrl
-          )
-          .redirectPath redirectTo
+        if keys.linkedin
+          everyauth.linkedin
+            .consumerKey(keys.linkedin.key)
+            .consumerSecret(keys.linkedin.secret)
+            .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
+                findOrCreate
+                  type:   'linkedin'
+                  id:     userData.id
+                  name:   "#{userData.firstName} #{userData.lastName}"
+                  avatar: userData.pictureUrl
+            )
+            .redirectPath redirectTo
+        
+        
+        # Google (OAuth2).
+        if keys.google?
+          everyauth.google
+            .appId(keys.google.key)
+            .appSecret(keys.google.secret)
+            .scope('https://www.google.com/m8/feeds')
+            .handleAuthCallbackError((req, res) -> 
+              # Invoked if user denies access.
+            )
+            .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
+              
+                console.log 'GOOGLE', userData
+              
+                # findOrCreate
+                #   type:   'google'
+                #   id:     userData.id
+                #   name:   "#{userData.firstName} #{userData.lastName}"
+                #   avatar: userData.pictureUrl
+            )
+            .redirectPath redirectTo
+        
+        
+        # Yahoo (OAuth).
+        if keys.yahoo?
+          everyauth.yahoo
+            .consumerKey(keys.yahoo.key)
+            .consumerSecret(keys.yahoo.secret)
+            .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
+                
+                console.log 'YAHOO: ', userData
+                
+                # findOrCreate
+                #   type:   'yahoo'
+                #   id:     userData.id
+                #   name:   "#{userData.firstName} #{userData.lastName}"
+                #   avatar: userData.pictureUrl
+            )
+            .redirectPath redirectTo
+
 
 
 
