@@ -2,7 +2,7 @@ fs     = require 'fs'
 fsUtil = core.util.fs
 
 describe 'util/javascript/build/build_path', ->
-  SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/build_path"
+  SAMPLE_PATH = "#{__dirname}/sample/build_path"
   BuildPath = null
 
   beforeEach ->

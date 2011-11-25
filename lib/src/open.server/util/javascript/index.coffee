@@ -10,6 +10,7 @@ module.exports =
   compress:   minifier.compress
 
   # Classes
-  Builder:          require './build/builder'
-  BuildPath:        require './build/build_path'
-  BuildFile:        require './build/build_file'
+  Builder:            require './build/builder'
+  BuildPath:          require './build/build_path'
+  BuildFile:          require './build/build_file'
+  ModuleDefinition:   require './module_definition'

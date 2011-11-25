@@ -1,7 +1,7 @@
 fsUtil = core.util.fs
 
 describe 'util/javascript/build/builder', ->
-  SAMPLE_PATH = "#{core.paths.specs}/server/util/javascript/build/sample/builder"
+  SAMPLE_PATH = "#{__dirname}/sample/builder"
   FOLDER_1_PATH = "#{SAMPLE_PATH}/folder1"
   FOLDER_2_PATH = "#{SAMPLE_PATH}/folder2"
 
