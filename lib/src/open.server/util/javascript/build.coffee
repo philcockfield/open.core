@@ -70,7 +70,7 @@ module.exports =
         
         # Note: Order is important.  Underscore must come before Backbone.
         paths = [
-          'jquery-1.6.2.js'
+          'jquery-1.7.1.js'
           'underscore-1.1.6.js'
           'underscore.string-1.1.5.js'
           'backbone-0.5.1.js'
