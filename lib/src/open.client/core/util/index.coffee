@@ -21,10 +21,12 @@ module.exports = util =
     throwOnError = options.throw ?= false
     log = options.log ?= false
     try
-        window.require path
+      # NB: The global require is used if running on server (ie. [window] is not available).
+      fnRequire = window?.require ? require
+      fnRequire path
     catch error
-        throw error if throwOnError
-        console?.log '[tryRequire] Failed to load module: ' + path if log
+      throw error if throwOnError
+      console?.log '[tryRequire] Failed to load module: ' + path if log
   
   
   ###

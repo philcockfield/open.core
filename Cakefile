@@ -90,17 +90,8 @@ task 'deploy', 'Deploys to Heroku', ->
 
 
 task 'temp', -> 
-  
-  mvc = core.client.core.mvc
-  
-  # class MyModule extends mvc.Module
-  # 
-  # 
-  # 
-  # module = new MyModule()
-  # 
-  # console.log 'module', module
-  
+  Auth = require "#{core.paths.server}/modules/auth"
+  auth = new Auth().init()
   
   
 

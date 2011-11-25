@@ -174,13 +174,14 @@ createMvcIndex = (module) ->
 
 tryRequire = (module, dir, name = '', options = {}) -> 
     options.throw ?= true
+    options.init  ?= true
     
     # Retrieve the module part.
     path = "#{module.modulePath}/#{dir}/#{name}"
     part = module.tryRequire path, options
     
     # Invoke the [module-init] pattern if required.
-    if part? and options.init ?= true
+    if part? and options.init
         part = Module.initPart module, part
     
     # Finish up.
@@ -206,7 +207,7 @@ CONVENTION:
 Module.requirePart = (fnRequire, name = '') -> 
     
     # Silently try to get the module.
-    part = fnRequire name, throw: false
+    part = fnRequire name, throw:false
     return part unless part?
     
     # If the [part] is a function, it is expected that this is an initialization function.
@@ -225,11 +226,13 @@ Implements the parent [module-init] pattern.
 Module.initPart = (parentModule, childModule) -> 
     # Perform this within a try-catch block, because if it is just exporting a class
     # then invoking the function will fail.
-    try
-        childModule = childModule(parentModule) if _.isFunction(childModule)
-    catch error
+    if _.isFunction(childModule)
+      try
+        childModule = childModule(parentModule)
+      catch error
         # Ignore - was an exported class only
         # It did not implement the module-init pattern.
+        
     childModule
 
 
