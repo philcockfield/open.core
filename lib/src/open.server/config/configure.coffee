@@ -34,19 +34,12 @@ module.exports = (app, options = {}) ->
     require '../routes'
     
     build = (callback) -> 
-        log '  Building:', color.blue, 'Open.Core client-side javascript...'
-        timer = new core.util.Timer()
-        core.util.javascript.build.all 
-                      save: true, 
-                      callback: -> 
-                          log '  - Javascript built', color.blue, "in #{timer.secs()} seconds"
-                          callback?()
+      log '  Building:', color.blue, 'Open.Core client-side javascript...'
+      timer = new core.util.Timer()
+      core.util.javascript.build.all -> 
+        log '  - Javascript built', color.blue, "in #{timer.secs()} seconds"
+        callback?()
     
     # Build client-side JavaScript.
     build(callback)
-    # switch core.app.settings.env
-    #   when 'development'
-    #     build callback
-    #   else 
-    #     callback?()
 

@@ -15,40 +15,40 @@ module.exports = server =
           - asComment: Flag indicating if the copyright notice should be within an HTML comment.
   ###
   copyright: (options = {}) ->
-      notice = "Copyright #{new Date().getFullYear()} Phil Cockfield. All rights reserved."
-      if options.asComment
-                notice = """
-                /*
-                  #{notice}
-                  The MIT License (MIT)
-                  https://github.com/philcockfield/open.core
-                */
-                """
-      notice
-
+    notice = "Copyright #{new Date().getFullYear()} Phil Cockfield. All rights reserved."
+    if options.asComment
+              notice = """
+              /*
+                #{notice}
+                The MIT License (MIT)
+                https://github.com/philcockfield/open.core
+              */
+              """
+    notice
+  
+  
   ###
   Starts the development server.
   @param options
             - port: (optional) The port to start the server on (default 8080).
   ###
   start: (options = {})->
-      
-      # Setup initial conditions.
-      @configure null, 
-          baseUrl: '/', 
-          callback: => 
-            app  = @app
-            log  = @util.log
-          
-            # Determine which port to start on.
-            options.port ?= 8080
-            port = process.env.PORT ?= options.port
-      
-            # Start listening on requested port.
-            app.listen port, =>
-                log ''
-                log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
-                log '---', color.green
+    # Setup initial conditions.
+    @configure null, 
+      baseUrl: '/', 
+      callback: => 
+        app  = @app
+        log  = @util.log
+    
+        # Determine which port to start on.
+        options.port ?= 8080
+        port = process.env.PORT ?= options.port
+
+        # Start listening on requested port.
+        app.listen port, =>
+            log ''
+            log 'Started: ', color.green, "#{@title} listening on port #{app.address().port} in #{app.settings.env} mode"
+            log '---', color.green
 
 
 

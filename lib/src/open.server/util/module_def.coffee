@@ -123,7 +123,7 @@ module.exports = Def = class ModuleDef
     addPath @ if options.includeRoot is yes
     
     if options.includeDependencies is yes
-      addPath dep for dep in @dependencies.resolve()
+      addPath dep for dep in @dependencies.resolve().all
     
     # Construct the builder.
     builder = new Builder(paths, options)
@@ -153,8 +153,10 @@ Def.defaults =
 # Collection of modules.
 Def.modules = []
 
+
 # Resets the static collection of registered modules.
 Def.reset = -> Def.modules = []
+
 
 ###
 Finds the registered module from the static collection
@@ -163,6 +165,7 @@ with the given name.
 @returns the matching module definition, otherwise null
 ###
 Def.find = (name) -> _(Def.modules).find (m) -> m.name is name
+
 
 ###
 Finds all modules within the given folder and

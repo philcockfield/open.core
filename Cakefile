@@ -11,7 +11,8 @@ logDone = -> log 'Done', color.green
 task 'temp', -> 
   build = core.util.javascript.build
   
-  build.harness -> logDone()
+  build.harness -> console.log 'Harness!'
+  build.controls -> console.log 'Controls!'
 
 
 task 'specs', 'Run the server-side Jasmine BDD specs', ->

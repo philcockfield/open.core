@@ -1,0 +1,7 @@
+{
+  "name": "open.client/controls",
+  "file": "controls",
+  "dependencies": [
+    "open.client/core"
+  ]
+}

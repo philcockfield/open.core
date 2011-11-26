@@ -4,19 +4,17 @@ baseUrl = core.baseUrl
 
 # Paths.
 stylesheets = "#{baseUrl}/stylesheets/core"
-sourceUrls = [
-  "#{baseUrl}/libs.js"
-  "#{baseUrl}/core+controls.js" 
-  "#{baseUrl}/harness.js" 
-  "#{baseUrl}/auth.js" 
-]
 
 
 # Unit-test runner (specs).
 core.configure.specs app,
       title:            'Open.Core - Specs'
       url:              "#{baseUrl}/specs"
-      sourceUrls:       sourceUrls
+      sourceUrls:       [
+                          "#{baseUrl}/libs.js" 
+                          "#{baseUrl}/harness.js" # Includes core + controls.
+                          "#{baseUrl}/auth.js" 
+                        ]
       specsDir:         "#{core.paths.specs}/client/"
       samplesDir:       "#{core.paths.specs}/client/samples"
       samplesNamespace: 'core/test'
@@ -25,7 +23,9 @@ core.configure.specs app,
 core.configure.harness app,
       title:      'Open.Core - TestHarness'
       url:        "#{baseUrl}/harness"
-      sourceUrls: sourceUrls
+      sourceUrls: [
+                    "#{baseUrl}/auth.js" 
+                  ]
       specsDir:   "#{core.paths.test}/harness/"
       css:        [
                     "#{stylesheets}/base.css"

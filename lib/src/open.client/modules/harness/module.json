@@ -2,6 +2,7 @@
   "name": "open.client/harness",
   "file": "harness",
   "dependencies": [
-    "open.client/harness.tabs"
+    "open.client/harness.tabs",
+    "open.client/controls"
   ]
 }
