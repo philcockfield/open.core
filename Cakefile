@@ -94,19 +94,17 @@ task 'deploy', 'Deploys to Heroku', ->
 buildLibs = (callback) -> 
   console.log 'Building all 3rd party lib code...'
   core.util.javascript.build.libs -> 
-      log ' - See: ', color.blue, "#{core.paths.public}/libs"
-      logDone()
-      log()
-      callback?()
+    log ' - See: ', color.blue, "#{core.paths.public}/libs"
+    logDone()
+    log()
+    callback?()
 
 buildCore = (callback) -> 
   console.log 'Building all [open.core] client code...'
-  core.util.javascript.build.all
-      save: true
-      callback: (result) ->
-          log ' - See: ', color.blue, "#{core.paths.public}/core"
-          logDone()
-          log()
-          callback?()
+  core.util.javascript.build.all -> 
+    log ' - See: ', color.blue, "#{core.paths.public}/core"
+    logDone()
+    log()
+    callback?()
 
 
