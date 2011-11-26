@@ -1,7 +1,4 @@
 {
-  name: 'grid',
-  
-  libs: {
-    
-  }
+  "name": "open.client/grid",
+  "file": "grid"
 }

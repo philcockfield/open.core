@@ -16,6 +16,7 @@ module.exports = index =
   
   # Classes.
   Timer:      require './timer'
+  ModuleDef:  require './module_def'
   
   # Aliased from client.
   escapeHtml:   clientUtil.escapeHtml

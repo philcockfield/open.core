@@ -13,4 +13,3 @@ module.exports =
   Builder:            require './build/builder'
   BuildPath:          require './build/build_path'
   BuildFile:          require './build/build_file'
-  ModuleDefinition:   require './module_definition'

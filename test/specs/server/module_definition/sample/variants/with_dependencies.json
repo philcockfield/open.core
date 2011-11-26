@@ -1,0 +1,6 @@
+{
+  "name": "ns/with_dependencies",
+  "dependencies": [
+    "ns/folder"
+  ]
+}

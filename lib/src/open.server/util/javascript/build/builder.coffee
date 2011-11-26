@@ -26,16 +26,18 @@ module.exports = class Builder
   
   ###
   constructor: (paths = [], options = {}) -> 
-
-      # Setup initial conditions.
-      paths             = [paths] unless _.isArray(paths)
-      @includeRequireJS = options.includeRequireJS ?= false
-      @header           = options.header ?= null
-      @minify           = options.minify ?= true
-      @code             = {}
-      
-      # Convert paths to wrapper classes.
-      @paths = _(paths).map (path) -> new BuildPath(path)
+    
+    # Setup initial conditions.
+    paths             = [paths] unless _.isArray(paths)
+    @includeRequireJS = options.includeRequireJS ?= false
+    @header           = options.header ?= null
+    @minify           = options.minify ?= true
+    @code             = {}
+    
+    # Convert paths to wrapper classes.
+    paths = _(paths).map (path) -> new BuildPath(path)
+    paths = _(paths).sortBy (p) -> p.namespace
+    @paths = paths
   
   
   ###
@@ -55,17 +57,17 @@ module.exports = class Builder
   Gets the set of files.
   ###
   files: -> 
-      files = []
+    files = []
     
-      # Extract the complete set of files.
-      for buildPath in @paths
-        for buildFile in buildPath.files
-            files.push buildFile
+    # Extract the complete set of files.
+    for buildPath in @paths
+      for buildFile in buildPath.files
+          files.push buildFile
     
-      # Return the sorted set of files.
-      files = _(files).sortBy (file) -> file.id
-      # files.reverse()
-      files
+    # Return the sorted set of files.
+    files = _(files).sortBy (file) -> file.id
+    # files.reverse()
+    files
   
   
   ###
@@ -87,31 +89,31 @@ module.exports = class Builder
     
     # Builds the set of paths.
     buildPaths @paths, =>
-        files = @files(@paths)
-        props = moduleProperties(files)
+      files = @files(@paths)
+      props = moduleProperties(files)
 
-        # Build the uncompressed code.
-        code = if @includeRequireJS then Builder.requireJS else ''
-        code += """
-               require.define({
-               #{props}
-               });
-               """
-        
-        # Compress the code.
-        minified = minifier.compress(code) if @minify is yes
-        
-        # Prepend the header if there is one.
-        if @header?
-            code = "#{@header}\n\n#{code}"
-            minified = "#{@header}\n\n#{minified}"
-        
-        # Store the code function (with a minified version too).
-        @code = fnCode(code, minified)
-        
-        # Finish up.
-        @isBuilt = true
-        callback? @code
+      # Build the uncompressed code.
+      code = if @includeRequireJS then Builder.requireJS else ''
+      code += """
+             require.define({
+             #{props}
+             });
+             """
+      
+      # Compress the code.
+      minified = minifier.compress(code) if @minify is yes
+      
+      # Prepend the header if there is one.
+      if @header?
+          code = "#{@header}\n\n#{code}"
+          minified = "#{@header}\n\n#{minified}"
+      
+      # Store the code function (with a minified version too).
+      @code = fnCode(code, minified)
+      
+      # Finish up.
+      @isBuilt = true
+      callback? @code
 
 
   ###
@@ -125,72 +127,71 @@ module.exports = class Builder
                          extra property of [paths] where the file was saved.
   ###
   save: (options = {}, callback) -> 
-      
-      # Setup initial conditions.
-      minSuffix = options.minSuffix ?= '-min'
-      dir       = _.rtrim(options.dir, '/')
-      name      = options.name
-      name      = _(name).strLeftBack('.js') if _(name).endsWith('.js')
-      
-      # Save files.
-      save = () => 
-          code = @code
-          files = [
-            { path: "#{dir}/#{name}.js",              data: code.standard  }
-            { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
-          ]
-          
-          # Ensure code exists before saving.
-          for file in files
-            file.data ?= '// No code saved by builder.'
-          
-          # Write to disk.
-          fsUtil.writeFiles files, (err) -> 
-              throw err if err?
-              
-              # Create a return object with paths attached.
-              code = fnCode(code.standard, code.minified)
-              code.paths =  
-                  standard: files[0].path
-                  minified: files[1].path
-              
-              # Finish up.
-              callback? code
-      
-      # Build the code (if required).
-      if @isBuilt then save()
-      else @build -> save()
+    # Setup initial conditions.
+    minSuffix = options.minSuffix ?= '-min'
+    dir       = _.rtrim(options.dir, '/')
+    name      = options.name
+    name      = _(name).strLeftBack('.js') if _(name).endsWith('.js')
+    
+    # Save files.
+    save = () => 
+        code = @code
+        files = [
+          { path: "#{dir}/#{name}.js",              data: code.standard  }
+          { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
+        ]
         
+        # Ensure code exists before saving.
+        for file in files
+          file.data ?= '// No code saved by builder.'
+        
+        # Write to disk.
+        fsUtil.writeFiles files, (err) -> 
+            throw err if err?
+            
+            # Create a return object with paths attached.
+            code = fnCode(code.standard, code.minified)
+            code.paths =  
+                standard: files[0].path
+                minified: files[1].path
+            
+            # Finish up.
+            callback? code
+    
+    # Build the code (if required).
+    if @isBuilt then save()
+    else @build -> save()
 
 
-# -- PRIVATE members.
+# PRIVATE --------------------------------------------------------------------------
+
 
 # Builds the collection of paths.    
 buildPaths = (paths, callback) -> 
-    count = 0
-    build = (path) -> 
-        path.build -> 
-            count += 1
-            callback() if count is paths.length
-    build path for path in paths
+  count = 0
+  build = (path) -> 
+      path.build -> 
+          count += 1
+          callback() if count is paths.length
+  build path for path in paths
 
 
 moduleProperties = (files) -> 
-    props = ''
-    for file, i in files
-        props += file.code.moduleProperty
-        unless i is files.length - 1
-            props += ',' 
-            props += '\n'
-    props
+  props = ''
+  for file, i in files
+      props += file.code.moduleProperty
+      unless i is files.length - 1
+          props += ',' 
+          props += '\n'
+  props
 
 
 fnCode = (standardCode, minifiedCode) -> 
-      fn = (minified) -> 
-            if minified then minifiedCode else standardCode
-      fn.standard = standardCode
-      fn.minified = minifiedCode
-      fn
+  fn = (minified) -> 
+        if minified then minifiedCode else standardCode
+  fn.standard = standardCode
+  fn.minified = minifiedCode
+  fn
 
 
 

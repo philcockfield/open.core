@@ -1,10 +1,33 @@
-Builder = require './build/builder'
+core      = require 'open.server'
+Builder   = require './build/builder'
+ModuleDef = require '../module_def'
+
+# Initialize the module builder system.
+ModuleDef.registerPath core.paths.client
+ModuleDef.defaults.header = core.copyright(asComment: true)
+
+
+save = (name, callback) -> 
+  module = ModuleDef.find name
+  throw "Cannot find module [#{name}]" unless module?
+  module.save "#{core.paths.javascripts}/core", callback
+    
+
 
 CoreBuilder: class CoreBuilder
   constructor: (@save = true,  @dir = 'core') -> 
-      core       = require 'open.server'
+      
+      
+      
+      
       @dir       = "#{core.paths.javascripts}/#{@dir}"
       @copyright = core.copyright(asComment: true)
+      
+      
+      ModuleDef.registerPath core.paths.client
+      ModuleDef.defaults.header = @copyright
+      
+      
       
       # Construct paths.
       client = core.paths.client
@@ -24,11 +47,15 @@ CoreBuilder: class CoreBuilder
               else
                 callback? code
   
+    
+    
+  
   coreControls: (callback) -> @build 'core+controls', [ @path.core, @path.controls ], callback
   core:         (callback) -> @build 'core',     @path.core,     callback
   controls:     (callback) -> @build 'controls', @path.controls, callback
+  auth:         (callback) -> save 'open.client/auth', callback
   harness:      (callback) -> @build 'harness',  [ @path.harness, @path.harnessTabs ], callback
-  auth:         (callback) -> @build 'auth',     @path.auth,     callback
+    
 
 module.exports =
   ###
@@ -52,6 +79,9 @@ module.exports =
             builder.harness -> 
               builder.auth -> 
                 options.callback?()  
+  
+  harness: (callback) -> save 'open.client/harness', callback
+  
   ###
   The core builder.
   ###

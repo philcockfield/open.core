@@ -1,0 +1,7 @@
+{
+  "name": "open.client/harness",
+  "file": "harness",
+  "dependencies": [
+    "open.client/harness.tabs"
+  ]
+}
