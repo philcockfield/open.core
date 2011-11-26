@@ -80,6 +80,7 @@ module.exports =
               builder.auth -> 
                 options.callback?()  
   
+  auth:    (callback) -> save 'open.client/auth', callback
   harness: (callback) -> save 'open.client/harness', callback
   
   ###
