@@ -1,4 +1,4 @@
-describe 'util/javascripts/module_definition', ->
+describe 'util/javascripts/module_def', ->
   SAMPLE_DIR  = "#{__dirname}/sample"
   SAMPLE_PATH = "#{SAMPLE_DIR}/module.json"
   ModuleDef   = null

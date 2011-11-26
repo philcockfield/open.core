@@ -68,7 +68,9 @@ describe 'controls/combo_box', ->
         item1 = cbo.add()
         item2 = cbo.add selected:true
         el = cbo._optionEl(item2)
-        expect(el.attr('selected')).toEqual 'selected'
+        
+        html = el.get(0).outerHTML.toLowerCase()
+        expect(_(html).includes 'selected="selected"').toEqual true
       
       it 'unselects the existing item selection upon adding an element that is selected', ->
         item1 = cbo.add()
