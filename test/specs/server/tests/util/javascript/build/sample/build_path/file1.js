@@ -1,0 +1,1 @@
+var jsFile = "file1.js"

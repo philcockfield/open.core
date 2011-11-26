@@ -147,7 +147,7 @@ Def.defaults =
   includeRequireJS:    false
   header:              null
   minify:              true
-  includeDependencies: true
+  includeDependencies: false
   includeRoot:         true
 
 # Collection of modules.

@@ -1,0 +1,1 @@
+coffeeFile = 'file.coffee'
