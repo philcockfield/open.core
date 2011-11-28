@@ -1,6 +1,9 @@
 describe 'util', ->
+  View = null
   util = null
-  beforeEach -> util = core.util
+  beforeEach -> 
+    View = core.mvc.View
+    util = core.util
   
   describe 'tryRequire', ->
     tryRequire = null
@@ -119,7 +122,7 @@ describe 'util', ->
     
     it 'does nothing if null is passed', ->
       util.syncScroll()
-      expect(div[0].outerHTML).toEqual '<div></div>'
+      expect(View.outerHtml(div)).toEqual '<div></div>'
     
     it 'returns the element', ->
       expect(util.syncScroll(div)).toEqual div

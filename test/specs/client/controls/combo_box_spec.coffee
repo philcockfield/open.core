@@ -1,7 +1,9 @@
 describe 'controls/combo_box', ->
+  View     = null
   ComboBox = null
   cbo      = null
   beforeEach ->
+      View     = core.mvc.View
       ComboBox = controls.ComboBox
       cbo      = new ComboBox()
   
@@ -69,7 +71,7 @@ describe 'controls/combo_box', ->
         item2 = cbo.add selected:true
         el = cbo._optionEl(item2)
         
-        html = el.get(0).outerHTML.toLowerCase()
+        html = View.outerHtml(el).toLowerCase()
         expect(_(html).includes 'selected="selected"').toEqual true
       
       it 'unselects the existing item selection upon adding an element that is selected', ->
@@ -90,7 +92,7 @@ describe 'controls/combo_box', ->
         cbo.add model
         el = cbo.$('option')
         html = "<option data-cid=\"#{model.cid}\"></option>"
-        expect(el.get(0).outerHTML.toLowerCase()).toEqual html
+        expect(View.outerHtml(el).toLowerCase()).toEqual html
       
   describe '<option> element synchronization with [Item] model', ->
     item1 = null
@@ -115,12 +117,18 @@ describe 'controls/combo_box', ->
       item2.selected true
       el = cbo.$ 'option:selected'
       expect(el.val()).toEqual '2'
-      
+    
     it 'removes the [selected] attribute', ->
       item2.selected true
       item2.selected false
       el = cbo.$ 'option:selected'
-      expect(el.length).toEqual 0
+      
+      for option in cbo.$ 'option'
+        # NB: This painful HTML conversion is required because
+        # jQuery does not report accurately on the 'selected' attribute
+        #  in Firefox.
+        html = View.outerHtml option
+        expect(_(html).includes('selected')).toEqual false
       
   describe '_optionEl() method', ->
     item1 = null
