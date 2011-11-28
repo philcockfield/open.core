@@ -67,7 +67,46 @@ describe 'mvc/view', ->
       view = new View( tagName:'li' )
       expect(view.el.get(0).tagName).toEqual 'LI'
   
-
+  describe 'outerHtml', ->
+    describe 'instance method', ->
+      it 'renders the complete HTML of the [el]', ->
+        view = new View()
+        view.el.html '<p>Foo</p>'
+        expect(view.outerHtml()).toEqual '<div class="core_enabled"><p>Foo</p></div>'
+      
+      it 'passes execution to the static [View.outerHtml()] method', ->
+        spyOn(View, 'outerHtml')
+        view = new View()
+        view.outerHtml()
+        expect(View.outerHtml).toHaveBeenCalledWith(view.el)
+    
+    describe 'static method', ->
+      it 'return null', ->
+        expect(View.outerHtml()).toEqual null
+        expect(View.outerHtml(null)).toEqual null
+      
+      it 'renders the outerHTML of the given jQuery element', ->
+        html = '<div class="bar"><p>Foo</p></div>'
+        el = $ html
+        expect(View.outerHtml(el)).toEqual html
+      
+      it 'renders the outerHTML of the given HtmlDOM element', ->
+        html = '<div class="bar"><p>Foo</p></div>'
+        el = $(html).get(0)
+        expect(View.outerHtml(el)).toEqual html
+      
+      it 'returns a string if given a string', ->
+        html = '<div class="bar"><p>Foo</p></div>'
+        expect(View.outerHtml(html)).toEqual html
+        
+      
+      
+      
+      
+    
+    
+  
+  
   describe 'css', ->
     describe 'classname', ->
       it 'has a custom class name', ->
@@ -133,21 +172,20 @@ describe 'mvc/view', ->
   describe 'visible', ->
     it 'is a property-function', ->
       expect(view.visible._parent.name).toEqual 'visible'
-  
+    
     it 'persists the visibility state', ->
       view.visible false
       expect(view.visible()).toEqual false
-  
+    
     it 'changes the CSS display value to none', ->
       view.visible false
       expect(view.el.css 'display').toEqual 'none'
-  
+    
     it 'changes the CSS display value to empty string', ->
       view.visible false
       view.visible true
-      
-      display = view.el.css('display') or '' # IE8 work around.
-      expect(display).toEqual ''
+      html = view.outerHtml() # NB: HTML comparison because of Firefox bug.
+      expect(_(html).includes('style=""')).toEqual true
   
   describe 'helper functions', ->
     it 'exposes Backbone [make] method', ->

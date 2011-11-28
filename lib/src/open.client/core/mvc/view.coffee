@@ -148,6 +148,11 @@ module.exports = class View extends Model
       el.append(@.el) if el?
       @
   
+  ###
+  Renders a string version of the element's HTML.
+  ###
+  outerHtml: -> View.outerHtml @el
+  
   
   # PRIVATE INSTANCE --------------------------------------------------------------------------
   
@@ -167,6 +172,20 @@ module.exports = class View extends Model
   
 
 # PRIVATE STATIC --------------------------------------------------------------------------
+
+
+###
+Renders a string version of the element's HTML.
+@param el: The element to render (either a jQuery or HTML DOM element).
+@returns the string.
+###
+View.outerHtml = (el) -> 
+  return null unless el?
+  return el if _(el).isString()
+  el = util.toJQuery el
+  outer = $ '<div></div>'
+  outer.append el.clone(false)
+  outer.html()
 
 
 syncClasses = (view) -> 
