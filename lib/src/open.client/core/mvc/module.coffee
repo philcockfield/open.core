@@ -124,7 +124,7 @@ module.exports = Module = class Module extends Base
   controller: null # (Set in constructor)
   
   # A require function scoped to retrieve [Collections] within the module. (see 'require.*' method comments for more).
-  collections: null # (Set in constructor)
+  collection: null # (Set in constructor)
   
   
   ###
