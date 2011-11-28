@@ -9,18 +9,17 @@ module.exports =
   @param defaultResult: The value to return if there is no corresponding CSS value.
   ###
   cssNum: (el, style, defaultResult = 0) -> 
-            
-            # Setup initial conditions.
-            return defaultResult unless el? and style?
-            value = el.css style
-            return defaultResult if value? is false or value is ''
-            
-            # Extract the number.
-            value = value.replace /[^-\d\.]/g, ''
-            value = parseFloat value
-            
-            # Finish up.
-            value
+    # Setup initial conditions.
+    return defaultResult unless el? and style?
+    value = el.css style
+    return defaultResult if value? is false or value is ''
+  
+    # Extract the number.
+    value = value.replace /[^-\d\.]/g, ''
+    value = parseFloat value
+  
+    # Finish up.
+    value
 
 
 ###
@@ -31,13 +30,13 @@ Example - No text selection on elements with a class of 'noSelect':
 
 ###
 $.extend $.fn.disableTextSelect = -> 
-    return @.each -> 
-        if $.browser.mozilla
-            # Firefox.
-            $(@).css 'MozUserSelect', 'none'
-        else if $.browser.msie
-            # Internet Explorer.
-            $(@).bind 'selectstart', -> false
-        else 
-            # Opera and everything else.
-            $(@).mousedown -> false
+  return @.each -> 
+    if $.browser.mozilla
+      # Firefox.
+      $(@).css 'MozUserSelect', 'none'
+    else if $.browser.msie
+      # Internet Explorer.
+      $(@).bind 'selectstart', -> false
+    else 
+      # Opera and everything else.
+      $(@).mousedown -> false

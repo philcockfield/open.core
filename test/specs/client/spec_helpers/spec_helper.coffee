@@ -1,6 +1,7 @@
 window.core     = require 'open.client/core'
 window.controls = require 'open.client/controls/index'
 window.Harness  = require 'open.client/harness'
+window.View     = core.mvc.View
 
 window.ensure =
   ###

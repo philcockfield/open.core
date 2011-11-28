@@ -42,12 +42,11 @@ describe 'client/util (jQuery)', ->
       expect(jqUtil.cssNum(div, 'margin-top')).toEqual 10
 
     it 'returns a negative number', ->
-      div.css 'margin-top', '-10em'
+      div.css 'margin-top', '-10px'
       expect(jqUtil.cssNum(div, 'margin-top')).toEqual -10
 
     it 'returns a floating point number', ->
-      div.css 'font-size', '10.5pt'
+      div.css 'font-size', '10.5px'
       expect(jqUtil.cssNum(div, 'font-size')).toEqual 10.5
-    
     
   

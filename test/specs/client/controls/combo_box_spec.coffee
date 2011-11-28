@@ -1,9 +1,7 @@
 describe 'controls/combo_box', ->
-  View     = null
   ComboBox = null
   cbo      = null
   beforeEach ->
-      View     = core.mvc.View
       ComboBox = controls.ComboBox
       cbo      = new ComboBox()
   
