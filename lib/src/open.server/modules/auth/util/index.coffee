@@ -1,3 +1,6 @@
+https = require 'https'
+
+
 module.exports = (module) ->
   Promise = module.everyauth.Promise
   User    = module.models.User

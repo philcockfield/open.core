@@ -28,7 +28,8 @@
 		"node-uuid": "1.2.0",
 		"markdown": ">= 0.3.1",
 		"mongoose": ">= 2.1.0",
-		"everyauth": ">= 0.2.23"
+		"everyauth": ">= 0.2.23",
+		"restler": ">= 0.2.1"
 	},
 	"keywords": [
 		"utility",

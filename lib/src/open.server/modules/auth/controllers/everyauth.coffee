@@ -69,18 +69,35 @@ module.exports = (module) ->
             .redirectPath redirectTo
         
         
+        everyauth.debug = true
+        
         # Google (OAuth2).
         if keys.google?
           everyauth.google
             .appId(keys.google.key)
             .appSecret(keys.google.secret)
-            .scope('https://www.google.com/m8/feeds')
+            .scope('https://www.googleapis.com/auth/userinfo.profile')
             .handleAuthCallbackError((req, res) -> 
               # Invoked if user denies access.
+              
+              # https://www.google.com/m8/feeds
+              # https://www.googleapis.com/auth/userinfo.profile
+              # https://www.googleapis.com/auth/plus.me
+              
             )
             .findOrCreateUser((session, accessToken, accessTokenSecret, userData) -> 
-              
-                console.log 'GOOGLE', userData
+                
+                console.log 'accessToken', accessToken
+                console.log 'accessTokenSecret', accessTokenSecret
+                console.log ''
+                
+                # module.util.getGoogleProfile accessToken, (profile) -> 
+                #   console.log 'userData', userData
+                #   console.log 'profile', profile
+                
+                # console.log 'accessToken', accessToken
+                # console.log 'accessTokenSecret', accessTokenSecret
+                # console.log 'GOOGLE', userData
               
                 # findOrCreate
                 #   type:   'google'
