@@ -53,7 +53,7 @@ module.exports = class BuildFile
     fs.readFile @path, (err, data) =>
         throw err if err?
         data = data.toString()
-    
+        
         # Store code values.
         code = @code
         code.javascript = data if @isJavascript is yes
@@ -63,8 +63,6 @@ module.exports = class BuildFile
               code.javascript = CoffeeScript.compile(data)
             catch error
               throw "Failed to compile coffee-script file: [#{@path}].\n#{error}"
-              
-              
         
         # Compose the Common-JS module property.
         code.moduleProperty = """
