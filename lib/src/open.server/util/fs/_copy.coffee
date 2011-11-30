@@ -157,7 +157,6 @@ module.exports =
                               copyFile()
 
 
-
   ###
   Copies a file or directory to a new location, creating the
   target directory if it does not already exist (synchronously).
@@ -168,41 +167,40 @@ module.exports =
               - overwrite : flag indicating if an existing file should be overwritten (default false).
   ###
   copySync: (source, target, options ={}) -> 
-
       # Setup initial conditions.
-      boundsCheck(source, target)
-      self = @
-      mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT
+      boundsCheck source, target
+      self      = @
+      mode      = options.mode ?= fsCommon.FILE_MODE.DEFAULT
       overwrite = options.overwrite ?= false
-
+      
       # The final copy operation.
       copyFile = -> 
-            # Ensure the target directory exists.
-            dir = fsPath.dirname(target)
-            createDirSync dir, options
-
-            # Perform the file copy operation.
-            data = fs.readFileSync(source)
-            fs.writeFileSync target, data
-
+        # Ensure the target directory exists.
+        dir = fsPath.dirname(target)
+        createDirSync dir, options
+        
+        # Perform the file copy operation.
+        data = fs.readFileSync(source)
+        fs.writeFileSync target, data
+      
       # 1. Check whether the source is a directory.
       stats = fs.statSync(source)
       if stats.isDirectory()
-          # 2a. Copy the directory.
-          copyDirSync source, target, options
+        # 2a. Copy the directory.
+        copyDirSync source, target, options
       else
         if overwrite
-            # 2b. Copy - overwriting any existing file.
-            copyFile()
+          # 2b. Copy - overwriting any existing file.
+          copyFile()
         else
-            # 2c. Check whether the target file already exists
-            #    and if so don't overwrite it.
-            if not fsCommon.existsSync(target)
-
-                # 3. File does not exist - copy it now.
-                copyFile()
-
-
+          # 2c. Check whether the target file already exists
+          #    and if so don't overwrite it.
+          if not fsCommon.existsSync(target)
+            
+            # 3. File does not exist - copy it now.
+            copyFile()
+  
+  
   ###
   Copies a collection of files/folders to a new location providing a
   single callback when complete.
@@ -219,26 +217,33 @@ module.exports =
   @param callback: (err)
   ###
   copyAll: (items, options..., callback) ->
-    self = @
     options = options[0] ?= {}
-    copied = 0
-    failed = false
-
-    onCopied = (file) ->
-          return if failed
-          copied += 1
-          callback?() if copied >= items.length
-
-    for file in items
-        self.copy file.source, file.target, options, (err) ->
-            unless err?
-              onCopied(file) # Success.
-            else
-              failed = true
-              callback?(err) # Failure.
-              return
-
-
+    copied  = 0
+    failed  = false
+    
+    onComplete = (err) -> 
+      return if failed
+      failed = true if err?
+      callback? err
+      
+    # NB: Copy sequentially to avoid a 'too many files open' error.
+    copyFile = (index) =>
+      return if failed
+      
+      # Check if the last file has been reached.
+      file = items[index]
+      unless file?
+        onComplete()
+        return
+      
+      @copy file.source, file.target, options, (err) ->
+          if err?
+            onCopied err # Failure.
+          else
+            copyFile index + 1 # Success.
+    copyFile 0
+  
+  
   ###
   Copies a collection of files/folders to a new location (synchronously).
   See the [copySync] method for more information.
@@ -255,14 +260,6 @@ module.exports =
   copyAllSync: (items, options = {}) ->
       for file in items
         @copySync file.source, file.target, options
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+
+
+

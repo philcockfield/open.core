@@ -1,7 +1,7 @@
-fs     = require 'fs'
-fsUtil = core.util.fs
-coffee = require 'coffee-script'
-
+fs        = require 'fs'
+fsUtil    = core.util.fs
+coffee    = require 'coffee-script'
+WAIT_TIME = 500
 
 describe 'util/javascript/build/build_file', ->
   SAMPLE_PATH = "#{__dirname}/sample/build_path"
@@ -83,7 +83,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile jsPath
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         expect(result.javascript).toEqual jsFile
     
@@ -91,7 +91,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile jsPath
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         expect(result).toEqual buildFile.code
 
@@ -99,7 +99,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile jsPath
       result = null
       buildFile.build (code, instance) -> result = instance
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         expect(result).toEqual buildFile
 
@@ -112,7 +112,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile coffeePath
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         expect(result.coffeescript).toEqual coffeeFile
     
@@ -120,7 +120,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile coffeePath
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         compiled = coffee.compile(coffeeFile)
         expect(result.javascript).toEqual compiled
@@ -129,7 +129,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile jsPath, 'ns'
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         moduleProperty = """
                          "ns/file1": function(exports, require, module) {
@@ -142,7 +142,7 @@ describe 'util/javascript/build/build_file', ->
       buildFile = new BuildFile jsPath, 'ns'
       result = null
       buildFile.build (code) -> result = code
-      waitsFor (-> result?), 100
+      waitsFor (-> result?), WAIT_TIME
       runs -> 
         expect(buildFile.isBuilt).toEqual true
       

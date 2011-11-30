@@ -1,5 +1,6 @@
-fs     = require 'fs'
-fsUtil = core.util.fs
+fs        = require 'fs'
+fsUtil    = core.util.fs
+WAIT_TIME = 500
 
 describe 'util/javascript/build/build_path', ->
   SAMPLE_PATH = "#{__dirname}/sample/build_path"
@@ -71,7 +72,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath def2
         files = null
         buildPath.build (m) -> files = m
-        waitsFor (-> files?), 100
+        waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files.length).toEqual 1
           buildFile = files[0]
@@ -82,7 +83,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath def2
         files = null
         buildPath.build (m) -> files = m
-        waitsFor (-> files?), 100
+        waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files[0].namespace).toEqual 'ns2'
 
@@ -90,7 +91,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath def2
         files = null
         buildPath.build (m) -> files = m
-        waitsFor (-> files?), 100
+        waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files).toEqual buildPath.files
     
@@ -100,7 +101,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath def3
         files = null
         buildPath.build (m) -> files = m
-        waitsFor (-> files?), 100
+        waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files.length).toEqual 2
           for m in files
@@ -111,7 +112,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath def3
         files = null
         buildPath.build (m) -> files = m
-        waitsFor (-> files?), 100
+        waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files.length).toEqual 5
           
@@ -127,7 +128,7 @@ describe 'util/javascript/build/build_path', ->
         done = no
         buildPath.build (m) -> 
           buildPath.build (m) -> done = yes
-        waitsFor (-> done is yes), 100
+        waitsFor (-> done is yes), WAIT_TIME
         runs -> 
           expect(buildPath.files.length).toEqual 5
 

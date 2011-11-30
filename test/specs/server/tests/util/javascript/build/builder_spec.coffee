@@ -1,5 +1,8 @@
 fsUtil = core.util.fs
 
+WAIT_TIME = 500
+
+
 describe 'util/javascript/build/builder', ->
   SAMPLE_PATH = "#{__dirname}/sample/builder"
   FOLDER_1_PATH = "#{SAMPLE_PATH}/folder1"
@@ -79,7 +82,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder(paths)
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         files = builder.files()
         expect(files[0].id).toEqual 'ns1/file3'
@@ -110,7 +113,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder [{ path:FOLDER_1_PATH }, { path:FOLDER_2_PATH }] 
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         paths = builder.paths
         expect(paths[0].isBuilt()).toEqual true
@@ -120,7 +123,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder(paths)
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         expect(builder.isBuilt).toEqual true
       
@@ -128,7 +131,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder(paths)
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         code = builder.code.standard
         for file in builder.files()
@@ -139,7 +142,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder(paths)
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         fnCompress = core.util.javascript.minifier.compress
         minified = builder.code.minified
@@ -149,7 +152,7 @@ describe 'util/javascript/build/builder', ->
       builder = new Builder(paths, minify:false)
       done = no
       builder.build (m) -> done = yes
-      waitsFor (-> done is yes), 100
+      waitsFor (-> done is yes), WAIT_TIME
       runs -> 
         minified = builder.code.minified
         expect(minified).toEqual null
@@ -158,7 +161,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         code = null
         builder.build (c) -> code = c
-        waitsFor (-> code?), 100
+        waitsFor (-> code?), WAIT_TIME
         runs -> 
           expect(code).toEqual builder.code
           expect(code instanceof Function).toEqual true 
@@ -168,7 +171,7 @@ describe 'util/javascript/build/builder', ->
           builder = new Builder(paths)
           code = null
           builder.build (c) -> code = c
-          waitsFor (-> code?), 100
+          waitsFor (-> code?), WAIT_TIME
           runs -> 
             expect(code()).toEqual builder.code.standard
             expect(code(false)).toEqual builder.code.standard
@@ -177,7 +180,7 @@ describe 'util/javascript/build/builder', ->
           builder = new Builder(paths)
           code = null
           builder.build (c) -> code = c
-          waitsFor (-> code?), 100
+          waitsFor (-> code?), WAIT_TIME
           runs -> 
             expect(code(true)).toEqual builder.code.minified
       
@@ -186,7 +189,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths, header:COPYRIGHT)
         code = null
         builder.build (c) -> code = c
-        waitsFor (-> code?), 100
+        waitsFor (-> code?), WAIT_TIME
         runs -> 
           expect(_(code.standard).startsWith(COPYRIGHT)).toEqual true
           expect(_(code.minified).startsWith(COPYRIGHT)).toEqual true
@@ -200,7 +203,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         code = null
         builder.build (c) -> code = c
-        waitsFor (-> code?), 100
+        waitsFor (-> code?), WAIT_TIME
         runs -> 
           includes = _(code.standard).include(Builder.requireJS)
           expect(includes).toEqual false
@@ -209,7 +212,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths, { includeRequireJS: true })
         code = null
         builder.build (c) -> code = c
-        waitsFor (-> code?), 100
+        waitsFor (-> code?), WAIT_TIME
         runs -> 
           includes = _(code.standard).include(Builder.requireJS)
           expect(includes).toEqual true
@@ -229,7 +232,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         done = no
         builder.save dir:DIR + '///', name:'sample', -> done = yes
-        waitsFor (-> done is yes), 100
+        waitsFor (-> done is yes), WAIT_TIME
         runs -> 
           fileContent = fsUtil.fs.readFileSync("#{DIR}/sample.js").toString()
           expect(fileContent).toEqual builder.code.standard
@@ -238,7 +241,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         done = no
         builder.save dir:DIR, name:'sample.foo.js', -> done = yes
-        waitsFor (-> done is yes), 100
+        waitsFor (-> done is yes), WAIT_TIME
         runs -> 
           fileContent = fsUtil.fs.readFileSync("#{DIR}/sample.foo.js").toString()
           expect(fileContent).toEqual builder.code.standard
@@ -247,7 +250,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         done = no
         builder.save dir:DIR + '///', name:'sample', -> done = yes
-        waitsFor (-> done is yes), 100
+        waitsFor (-> done is yes), WAIT_TIME
         runs -> 
           fileContent = fsUtil.fs.readFileSync("#{DIR}/sample-min.js").toString()
           fileContent = core.util.javascript.minifier.compress(fileContent)
@@ -260,7 +263,7 @@ describe 'util/javascript/build/builder', ->
         done = no
         builder.build -> 
           builder.save dir:DIR, name:'sample', -> done = yes
-        waitsFor (-> done is yes), 100
+        waitsFor (-> done is yes), WAIT_TIME
         runs -> 
           expect(builder.build.callCount).toEqual 1
 
@@ -268,7 +271,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         result = null
         builder.save dir:DIR, name:'sample', (code) -> result = code
-        waitsFor (-> result?), 100
+        waitsFor (-> result?), WAIT_TIME
         runs -> 
           expect(result(true)).toEqual builder.code.minified
 
@@ -276,7 +279,7 @@ describe 'util/javascript/build/builder', ->
         builder = new Builder(paths)
         result = null
         builder.save dir:DIR, name:'sample', (code) -> result = code
-        waitsFor (-> result?), 100
+        waitsFor (-> result?), WAIT_TIME
         runs -> 
           expect(result.paths.standard).toEqual "#{DIR}/sample.js"
           expect(result.paths.minified).toEqual "#{DIR}/sample-min.js"
