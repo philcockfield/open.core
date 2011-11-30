@@ -2,6 +2,7 @@ core    = require 'open.server'
 fs      = require 'fs'
 fsUtil  = require './fs'
 Builder = require './javascript/build/builder'
+fnCode  = require('./javascript/_common').codeFunction
 
 
 ###
@@ -24,7 +25,7 @@ module.exports = Def = class ModuleDef
     unless _(path).endsWith('.json')
       path = _(path).rtrim('/') + '/module.json'
     @path = path
-    @dir = _(path).strLeftBack '/'
+    @dir  = _(path).strLeftBack '/'
     
     # Load the data.
     try
@@ -98,7 +99,7 @@ module.exports = Def = class ModuleDef
                              Use this to build dependencies only (default true).
   @returns a new [Builder].
   ###
-  builder: (options = {}) -> 
+  toBuilder: (options = {}) -> 
     
     # Setup initial conditions.
     defaults = Def.defaults
@@ -130,6 +131,37 @@ module.exports = Def = class ModuleDef
   
   
   ###
+  Builds the JavaScript module.
+  @param options:  
+      Builder options - see [Builder] constructor.
+      NB: Defaults of these can be set as static properties on [ModuleDef.defaults]
+        - includeRequireJS:  Flag indicating if the CommonJS require script should be included (default: false).
+        - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
+        - minify:            Optional. Flag indicating if code should be minified.  Default true.
+      
+      - includeDependencies: Flag indicating if paths to dependencies should be included (default true).
+      - includeRoot:         Flag indicating if the root path to the module should be included.
+                             Use this to build dependencies only (default true).
+      - includeLibs:         Flag indicating if libs should be appended (default true).
+  @param callback(code): Invoked upon completion. 
+                         fnCode(minified):
+                          - standard : Property, uncompressed.
+                          - minified : Property, compressed.
+  ###
+  build: (options = {}, callback) -> 
+    
+    
+    @toBuilder(options).build (moduleCode) -> 
+      
+      # TODO 
+      
+      console.log 'moduleCode+++++', moduleCode
+      
+    
+    
+  
+  
+  ###
   Builds and saves the code.
   @param dir:             The directory to save the file to (the file name is within the [module.json]).
   @param options:         Builder options.  See 'builder' method.
@@ -137,7 +169,7 @@ module.exports = Def = class ModuleDef
   ###
   save: (dir, options..., callback) -> 
     options = options[0] ? {}
-    @builder(options).save dir:dir, name:@file, callback
+    @toBuilder(options).save dir:dir, name:@file, callback
 
 
 # STATIC --------------------------------------------------------------------------

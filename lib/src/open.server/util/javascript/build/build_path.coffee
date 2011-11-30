@@ -110,8 +110,8 @@ buildFilesInFolder = (buildPath, callback) ->
             # NB: Each file built sequentially to avoid a 'Too many open files' error.
             index = 0
             count = paths.length
+            
             build = (index) -> 
-                
                 # Get the path.
                 path = paths[index]
                 

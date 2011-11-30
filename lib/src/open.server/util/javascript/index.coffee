@@ -1,6 +1,6 @@
 minifier = require './minifier'
 
-module.exports =
+module.exports = index =
 
   # Index
   minifier:   minifier
@@ -13,3 +13,6 @@ module.exports =
   Builder:            require './build/builder'
   BuildPath:          require './build/build_path'
   BuildFile:          require './build/build_file'
+
+
+_.extend index, require './_common'

@@ -1,7 +1,7 @@
 fsUtil    = require '../../fs'
 BuildPath = require './build_path'
 minifier  = require '../minifier'
-
+fnCode    = require('../_common').codeFunction
 
 ###
 Stitches together a set of javascript/coffee-script files
@@ -84,14 +84,17 @@ module.exports = class Builder
   ###
   build: (callback) -> 
     
-    # Setup initial conditions.
-    callback?() unless @paths.length > 0
+    # console.log '@paths', @paths
     
-    # Builds the set of paths.
+    # Setup initial conditions.
+    callback? fnCode(null, null) unless @paths.length > 0
+    
+    # Build the set of paths.
     buildPaths @paths, =>
+      
       files = @files(@paths)
       props = moduleProperties(files)
-
+      
       # Build the uncompressed code.
       code = if @includeRequireJS then Builder.requireJS else ''
       code += """
@@ -105,7 +108,7 @@ module.exports = class Builder
       
       # Prepend the header if there is one.
       if @header?
-          code = "#{@header}\n\n#{code}"
+          code     = "#{@header}\n\n#{code}"
           minified = "#{@header}\n\n#{minified}"
       
       # Store the code function (with a minified version too).
@@ -114,8 +117,8 @@ module.exports = class Builder
       # Finish up.
       @isBuilt = true
       callback? @code
-
-
+  
+  
   ###
   Builds and saves the code to the specified location(s).
   @param options
@@ -184,15 +187,6 @@ moduleProperties = (files) ->
           props += ',' 
           props += '\n'
   props
-
-
-fnCode = (standardCode, minifiedCode) -> 
-  fn = (minified) -> 
-        if minified then minifiedCode else standardCode
-  fn.standard = standardCode
-  fn.minified = minifiedCode
-  fn
-
 
 
 # -- STATIC members.

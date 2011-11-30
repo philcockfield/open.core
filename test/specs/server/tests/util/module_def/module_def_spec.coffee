@@ -107,7 +107,7 @@ describe 'util/javascripts/module_def', ->
     
     describe 'Builder options', ->
       it 'uses explicitly passed in Builder options', ->
-        builder = new ModuleDef(SAMPLE_DIR).builder
+        builder = new ModuleDef(SAMPLE_DIR).toBuilder
           includeRequireJS: true
           header: 'copyright foo'
           minify: false
@@ -117,7 +117,7 @@ describe 'util/javascripts/module_def', ->
         expect(builder.minify).toEqual false
       
       it 'uses default Builder option defaults', ->
-        builder = new ModuleDef(SAMPLE_DIR).builder()
+        builder = new ModuleDef(SAMPLE_DIR).toBuilder()
         expect(builder.includeRequireJS).toEqual false
         expect(builder.header).toEqual null
         expect(builder.minify).toEqual true
@@ -130,7 +130,7 @@ describe 'util/javascripts/module_def', ->
           includeDependencies:  false
           includeRoot:          false
         
-        builder = new ModuleDef(SAMPLE_DIR).builder()
+        builder = new ModuleDef(SAMPLE_DIR).toBuilder()
         expect(builder.includeRequireJS).toEqual true
         expect(builder.header).toEqual 'Foo!'
         expect(builder.minify).toEqual false
@@ -138,13 +138,13 @@ describe 'util/javascripts/module_def', ->
     
     
     it 'has a single path', ->
-      builder = new ModuleDef("#{DIR}/simple.json").builder()
+      builder = new ModuleDef("#{DIR}/simple.json").toBuilder()
       expect(builder.paths[0].path).toEqual DIR
       expect(builder.paths[0].namespace).toEqual 'ns'
     
     it 'has dependent paths', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.builder()
+      builder = def.toBuilder()
       paths   = builder.paths
       
       expect(paths.length).toEqual 3
@@ -154,14 +154,14 @@ describe 'util/javascripts/module_def', ->
 
     it 'excludes dependent paths with flag', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.builder includeDependencies:false
+      builder = def.toBuilder includeDependencies:false
       paths   = builder.paths
       expect(paths.length).toEqual 1
       expect(paths[0].namespace).toEqual 'ns/folder'
     
     it 'includes dependent paths excludes the root module with flag', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.builder includeRoot:false
+      builder = def.toBuilder includeRoot:false
       paths   = builder.paths
       expect(paths.length).toEqual 2
       expect(paths[0].namespace).toEqual 'ns/child1'
@@ -169,10 +169,41 @@ describe 'util/javascripts/module_def', ->
 
     it 'includes no paths', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.builder includeRoot:false, includeDependencies:false
+      builder = def.toBuilder includeRoot:false, includeDependencies:false
       paths   = builder.paths
       expect(paths.length).toEqual 0
   
+  
+  describe 'build() method', ->
+    beforeEach ->
+      ModuleDef.registerPath "#{SAMPLE_DIR}/libs"
+    
+    # it 'passes options to the [toBuilder] factory method', ->
+    #   options =
+    #     includeLibs: false
+    #   
+    #   def = ModuleDef.find 'libs-sample'
+    #   spyOn(def, 'toBuilder').andCallThrough()
+    #   def.build options
+    #   
+    #   args = def.toBuilder.mostRecentCall.args[0]
+    #   expect(args).toEqual options
+    # 
+    
+    it 'foo', ->
+      
+      runs -> 
+        console.log 'FOO'
+        def = ModuleDef.find 'libs-sample'
+      
+        def.build (code) -> 
+          console.log 'DONE', code
+      
+      waits 500
+      
+    
+    
+    
   
   describe 'save', ->
     it 'saves to the given directory and the module file name', ->
@@ -182,7 +213,7 @@ describe 'util/javascripts/module_def', ->
         save: (options, callback) -> 
           @options  = options
           @callback = callback
-      spyOn(def, 'builder').andCallFake (args) -> fakeBuilder
+      spyOn(def, 'toBuilder').andCallFake (args) -> fakeBuilder
       
       fn = -> 
       def.save '/dir', header:'abc', fn

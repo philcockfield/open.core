@@ -1,0 +1,7 @@
+{
+  "name": "libs-sample",
+  "libs": [
+    "file1.js",
+    "libs/file2.js"
+  ]
+}

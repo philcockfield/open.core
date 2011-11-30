@@ -38,6 +38,7 @@ module.exports =
       
       # Execution.
       if flags.deep is yes 
+          
           # Deep read (-- RECURSION --).
           # 1. Read the current level without folders.
           @readDir path, dirs:false, deep:false, files:options.files, hidden:options.hidden, (err, result) => 
@@ -69,8 +70,8 @@ module.exports =
                       readChild 0
       
       else
-          # Read the current level only.
-          read()
+        # Read the current level only.
+        read()
   
   
   ###
