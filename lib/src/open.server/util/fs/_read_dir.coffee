@@ -129,67 +129,58 @@ Filters out a set of paths.
 @param callback(err, paths)
 ###
 filterPaths = (paths, fnInclude, callback) ->
-        count = 0
-        result = []
-        failed = false
-
-        returnResult = -> callback?(null, result)
-        returnResult() if paths.length is 0
-        
-        statRetrieved = (path, stats) ->
-            return if failed
-            count += 1
-            result.push path if fnInclude?(path, stats)
-            returnResult() if count == paths.length
-        
-        readStats = (path) ->
-            fs.stat path, (err, stats) ->
-                if err?
-                    callback?(err)
-                    failed = true
-                    return
-                else
-                    statRetrieved path, stats
-        
-        readStats path for path in paths
+  result = []
+  
+  # NB: Read sequentially to avoid a 'too many files open' error.
+  readStats = (index) ->
+    path = paths[index]
+    unless path?
+      # The last path has been reached.
+      callback?(null, result)
+      return
+    
+    fs.stat path, (err, stats) =>
+      if err?
+        callback?(err)
+      else
+        result.push path if fnInclude?(path, stats)
+        readStats index + 1
+  
+  readStats 0
 
 
 filterPathsSync = (paths, fnInclude) ->
-        result = []
-        for path in paths
-            stats = fs.statSync(path)
-            result.push path if fnInclude?(path, stats)
-        result
+  result = []
+  for path in paths
+      stats = fs.statSync(path)
+      result.push path if fnInclude?(path, stats)
+  result
 
 
 getFlags = (options) -> 
-        flags = 
-            includeDirs:    options.dirs ?= true
-            includeFiles:   options.files ?= true
-            includeHidden:  options.hidden ?= true
-            deep:           options.deep ?= false
-        flags.isFiltered = not flags.includeDirs or not flags.includeFiles or not flags.includeHidden
-        flags
+  flags = 
+      includeDirs:    options.dirs ?= true
+      includeFiles:   options.files ?= true
+      includeHidden:  options.hidden ?= true
+      deep:           options.deep ?= false
+  flags.isFiltered = not flags.includeDirs or not flags.includeFiles or not flags.includeHidden
+  flags
 
 
 includePath = (flags, path, stats) ->
-        # return false if _(path).endsWith 'DS_Store'
-        
-        # Never retrn the .DS_Store
-        return false if _(path).endsWith( '.DS_Store')
-          # console.log ' > .DS_Store', _(path).endsWith( '.DS_Store'), path
-          # return false
-        
-        # Return if there is not filter.
-        return true if not flags.isFiltered is yes
-        
-        # Perform filter checks.
-        return false if not flags.includeHidden and fsCommon.isHidden(path)
-        return false if not flags.includeDirs and stats.isDirectory()
-        return false if not flags.includeFiles and stats.isFile()
-        
-        # Finish up.
-        true
+  # Never return the .DS_Store
+  return false if _(path).endsWith( '.DS_Store')
+  
+  # Return if there is not filter.
+  return true if not flags.isFiltered is yes
+  
+  # Perform filter checks.
+  return false if not flags.includeHidden and fsCommon.isHidden(path)
+  return false if not flags.includeDirs and stats.isDirectory()
+  return false if not flags.includeFiles and stats.isFile()
+  
+  # Finish up.
+  true
 
 
 
