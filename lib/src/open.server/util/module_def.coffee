@@ -94,7 +94,7 @@ module.exports = Def = class ModuleDef
         - minify:            Optional. Flag indicating if code should be minified.  Default true.
       
       - includeDependencies: Flag indicating if paths to dependencies should be included (default true).
-      - includeRoot:         Flag indicating if the root path to the module shoudl be included.
+      - includeRoot:         Flag indicating if the root path to the module should be included.
                              Use this to build dependencies only (default true).
   @returns a new [Builder].
   ###

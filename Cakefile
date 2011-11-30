@@ -8,6 +8,12 @@ git      = core.util.git
 logDone = -> log 'Done', color.green
 
 
+task 'temp', -> buildCore() # TEMP 
+  
+  
+  
+
+
 task 'specs', 'Run the server-side Jasmine BDD specs', ->
   exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
@@ -25,8 +31,11 @@ task 'specs:client', 'Run the client-side Jasmine BDD specs in a new process on 
 
 
 task 'build', 'Build and save all JavaScript files', ->
+  timer = new core.util.Timer()
   buildLibs -> 
-    buildCore()
+    buildCore -> 
+      log 'Built in:', color.blue, "#{timer.secs()} seconds"
+      log()
 
 
 task 'css:images', "Converts all the core images into Data-URI's for use as Stylus constants", -> 

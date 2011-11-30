@@ -31,8 +31,10 @@ module.exports = class BuildFile
   
   ###
   An object containing built code strings.  This is populated via the 'build' method.
-  - javascript:   The javascript (compiled from coffee-script if a .coffee file was specified)
-  - coffeescript: The raw coffees-script value.
+  {
+    javascript:   The javascript (compiled from coffee-script if a .coffee file was specified)
+    coffeescript: The raw coffees-script value.
+  }
   ###
   code: undefined
 
@@ -51,28 +53,28 @@ module.exports = class BuildFile
   ###
   build: (callback) -> 
     fs.readFile @path, (err, data) =>
-        throw err if err?
-        data = data.toString()
-        
-        # Store code values.
-        code = @code
-        code.javascript = data if @isJavascript is yes
-        if @isCoffee is yes
-            code.coffeescript = data
-            try
-              code.javascript = CoffeeScript.compile(data)
-            catch error
-              throw "Failed to compile coffee-script file: [#{@path}].\n#{error}"
-        
-        # Compose the Common-JS module property.
-        code.moduleProperty = """
-                              "#{@id}": function(exports, require, module) {
-                                #{code.javascript}
-                              }
-                              """
-        # Finish up.
-        @isBuilt = true
-        callback? code, @
+      throw err if err?
+      data = data.toString()
+      
+      # Store code values.
+      code = @code
+      code.javascript = data if @isJavascript is yes
+      if @isCoffee is yes
+          code.coffeescript = data
+          try
+            code.javascript = CoffeeScript.compile(data)
+          catch error
+            throw "Failed to compile coffee-script file: [#{@path}].\n#{error}"
+      
+      # Compose the Common-JS module property.
+      code.moduleProperty = """
+                            "#{@id}": function(exports, require, module) {
+                              #{code.javascript}
+                            }
+                            """
+      # Finish up.
+      @isBuilt = true
+      callback? code, @
 
 
 # Static methods.

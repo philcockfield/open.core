@@ -81,11 +81,12 @@ buildSingleFile = (buildPath, callback) ->
             files.push buildFile
             callback files
 
+
 buildFilesInFolder = (buildPath, callback) -> 
         
         # Setup initial conditions.
         files = buildPath.files
-
+        
         returnSorted = -> 
             files = _(files).sortBy (item) -> item.id
             callback files
@@ -106,8 +107,13 @@ buildFilesInFolder = (buildPath, callback) ->
             paths = _(paths).compact()
             
             # Build each file.
-            count = 0
-            build = (path) -> 
+            # NB: Each file built sequentially to avoid a 'Too many open files' error.
+            index = 0
+            count = paths.length
+            build = (index) -> 
+                
+                # Get the path.
+                path = paths[index]
                 
                 # Calcualte the namespace.
                 ns = _(path).strRight buildPath.path
@@ -117,8 +123,11 @@ buildFilesInFolder = (buildPath, callback) ->
                 # Run the file-builder.
                 (new BuildFile path, ns).build (code, buildFile) -> 
                       files.push buildFile
-                      count += 1
-                      returnSorted() if count is paths.length
-            build path for path in paths
-
-
+                      
+                      if index < paths.length - 1
+                        build index + 1
+                      else
+                        # Finish if all paths have been built.
+                        returnSorted()
+            
+            build 0
