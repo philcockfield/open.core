@@ -16,52 +16,57 @@ module.exports =
   ###
   readDir: (path, options..., callback) ->
       # Setup initial conditions.
-      self = @
       options = options[0] ?= {}
       flags = getFlags(options)
       
       failed = (err) ->
-            callback?(err) if err?
-            err?
+        callback?(err) if err?
+        err?
             
-      returnPaths = (files) ->
-            callback? null, files
+      returnPaths = (files) -> callback? null, files
       
       read = -> 
-          fs.readdir path, (err, files) ->
+        fs.readdir path, (err, files) ->
+          return if failed(err)
+          files = fsCommon.expandPaths(path, files)
+          
+          # Apply the filter (if any).
+          fnFilter = (path, stats) -> includePath(flags, path, stats)
+          filterPaths files, fnFilter, (err, filteredPaths) ->
               return if failed(err)
-              files = fsCommon.expandPaths(path, files)
-              
-              # Apply the filter (if any).
-              fnFilter = (path, stats) -> includePath(flags, path, stats)
-              filterPaths files, fnFilter, (err, filteredPaths) ->
-                  return if failed(err)
-                  returnPaths filteredPaths
+              returnPaths filteredPaths
       
       # Execution.
       if flags.deep is yes 
           # Deep read (-- RECURSION --).
           # 1. Read the current level without folders.
-          self.readDir path, dirs:false, deep:false, files:options.files, hidden:options.hidden, (err, result) -> 
+          @readDir path, dirs:false, deep:false, files:options.files, hidden:options.hidden, (err, result) => 
               return if failed(err)
               
               # 2. Read the contents of each folder, and fill the root return array.
-              self.readDir path, dirs:true, deep:false, files:false, hidden:options.hidden, (err, folders) -> 
+              @readDir path, dirs:true, deep:false, files:false, hidden:options.hidden, (err, folders) => 
                   return if failed(err)
-                  count = 0
-                  onFolderRead = (paths) -> 
-                          result.push p for p in paths if paths?
-                          count += 1
-                          returnPaths(result) if count is folders.length
                   
                   if folders.length is 0
                     returnPaths(result)
                   else
-                      for folder in folders
-                          result.push folder if flags.includeDirs # 3a. Add the folder itself.
-                          self.readDir folder, options, (err, paths) -> 
-                              return if failed(err)
-                              onFolderRead paths # 3b. Add each each child.
+                      # NB: Read sequentially to avoid a 'too many files open' error.
+                      readChild = (index) =>
+                        folder = folders[index]
+                        unless folder?
+                          # Last child folder reached.
+                          returnPaths result
+                          return
+                        
+                        # 3a. Add the folder itself.
+                        result.push folder if flags.includeDirs 
+                        
+                        @readDir folder, options, (err, paths) => 
+                          return if failed(err)
+                          result.push p for p in paths if paths? # 3b. Add each child.
+                          readChild index + 1
+                        
+                      readChild 0
       
       else
           # Read the current level only.
@@ -80,7 +85,6 @@ module.exports =
   ###
   readDirSync: (path, options = {}) ->
       # Setup initial conditions.
-      self = @
       flags = getFlags(options)
       
       read = -> 
@@ -95,16 +99,16 @@ module.exports =
       if flags.deep is yes
           # Deep read (-- RECURSION --).
           # 1. Read the current level without folders.
-          result = self.readDirSync path, dirs:false, deep:false, files:options.files, hidden:options.hidden
+          result = @readDirSync path, dirs:false, deep:false, files:options.files, hidden:options.hidden
           
           # 2. Read the contents of each folder, and fill the root return array.
-          folders = self.readDirSync path, dirs:true, deep:false, files:false, hidden:options.hidden
+          folders = @readDirSync path, dirs:true, deep:false, files:false, hidden:options.hidden
           if folders.length is 0
               return result
           else
               for folder in folders
                   result.push folder if flags.includeDirs is yes # 3a. Add the folder itself.
-                  paths = self.readDirSync folder, options
+                  paths = @readDirSync folder, options
                   result.push p for p in paths if paths?
               
               # Finish up.
