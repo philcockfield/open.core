@@ -173,6 +173,27 @@ describe 'util/javascripts/module_def', ->
       paths   = builder.paths
       expect(paths.length).toEqual 0
   
+  describe 'libs', ->
+    beforeEach ->
+      ModuleDef.registerPath "#{SAMPLE_DIR}/libs"
+    
+    it 'has an empty libs array', ->
+      def = new ModuleDef(SAMPLE_DIR)
+      expect(def.libs).toEqual []
+    
+    it 'converts lib paths into objects', ->
+      def  = ModuleDef.find 'libs-sample'
+      libs = def.libs
+      expect(libs[0].path).toEqual "#{def.dir}/file1.js"
+      expect(libs[1].path).toEqual "#{def.dir}/libs/file2.js"
+      expect(libs[2].path).toEqual "#{def.dir}/libs/file3.js"
+    
+    it 'extracts titles', ->
+      def  = ModuleDef.find 'libs-sample'
+      libs = def.libs
+      expect(libs[0].title).toEqual 'file1.js'
+      expect(libs[1].title).toEqual 'file2.js'
+      expect(libs[2].title).toEqual 'My Title'
   
   describe 'build() method', ->
     beforeEach ->
@@ -192,14 +213,14 @@ describe 'util/javascripts/module_def', ->
     
     it 'foo', ->
       
-      runs -> 
-        console.log 'FOO'
-        def = ModuleDef.find 'libs-sample'
-      
-        def.build (code) -> 
-          console.log 'DONE', code
-      
-      waits 500
+      # runs -> 
+      #   console.log 'FOO'
+      #   def = ModuleDef.find 'libs-sample'
+      # 
+      #   def.build (code) -> 
+      #     console.log 'DONE', code
+      # 
+      # waits 500
       
     
     

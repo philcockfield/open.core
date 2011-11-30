@@ -38,6 +38,8 @@ module.exports = Def = class ModuleDef
     for prop of file
       @[prop] = file[prop]
     @file ?= @name
+    @libs ?= []
+    formatLibs @
     
     # Ensure required properties exist.
     unless @name?
@@ -83,7 +85,12 @@ module.exports = Def = class ModuleDef
       # Finish up.
       result.all = all
       result
-  
+    
+      
+    
+    
+
+    
   
   ###
   Creates a new JavaScript [Builder] for the module.
@@ -149,15 +156,10 @@ module.exports = Def = class ModuleDef
                           - minified : Property, compressed.
   ###
   build: (options = {}, callback) -> 
-    
-    
     @toBuilder(options).build (moduleCode) -> 
-      
-      # TODO 
-      
-      console.log 'moduleCode+++++', moduleCode
-      
-    
+      loadLibs @, (libsCode) -> 
+        console.log '+ moduleCode: ', moduleCode
+        console.log '+ libsCode: ', libsCode
     
   
   
@@ -170,6 +172,33 @@ module.exports = Def = class ModuleDef
   save: (dir, options..., callback) -> 
     options = options[0] ? {}
     @toBuilder(options).save dir:dir, name:@file, callback
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+
+formatLibs = (def) -> 
+  def.libs = _(def.libs).map (lib) -> 
+    # Convert single strings into the standard libs object definition.
+    lib = { path:lib } if _(lib).isString()
+    lib.path = "#{def.dir}/#{_(lib.path).ltrim('/')}"
+    unless lib.title?
+      lib.title = _(lib.path).strRightBack '/'
+    lib
+
+
+loadLibs = (def, callback) -> 
+  libs = def.libs
+  if libs.length is 0
+    # No libs to load, exit now.
+    callback fnCode(null, null)
+    return
+  
+  
+  
+  
+  
+  
 
 
 # STATIC --------------------------------------------------------------------------
