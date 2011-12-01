@@ -85,12 +85,7 @@ module.exports = Def = class ModuleDef
       # Finish up.
       result.all = all
       result
-    
-      
-    
-    
-
-    
+  
   
   ###
   Creates a new JavaScript [Builder] for the module.
@@ -155,12 +150,13 @@ module.exports = Def = class ModuleDef
                           - standard : Property, uncompressed.
                           - minified : Property, compressed.
   ###
-  build: (options = {}, callback) -> 
+  build: (options..., callback) -> 
+    options = options[0] ? {}
     @toBuilder(options).build (moduleCode) => 
       loadLibs @, options, (libsCode) -> 
-        console.log '+ moduleCode: ', moduleCode
-        console.log '+ libsCode: ', libsCode
-    
+        standard = "#{moduleCode.standard}\n\n\n#{libsCode.standard}"
+        minified = "#{moduleCode.minified}\n\n\n#{libsCode.minified}"
+        callback? fnCode standard, minified
   
   
   ###
@@ -171,7 +167,11 @@ module.exports = Def = class ModuleDef
   ###
   save: (dir, options..., callback) -> 
     options = options[0] ? {}
-    @toBuilder(options).save dir:dir, name:@file, callback
+    @build options, (code) => 
+      options.code = code
+      options.dir  = dir
+      options.name = @file
+      Builder.save options, callback
 
 
 # PRIVATE --------------------------------------------------------------------------
@@ -197,20 +197,14 @@ loadLibs = (def, options, callback) ->
   
   # Load the code files.
   paths = _(libs).map (lib) -> lib.path
-  fsUtil.concatenate.toCode paths:paths, minified:options.minified, (code) ->
-    
-    console.log 'code', code
-    console.log 'code.standard', code.standard
-    
-  
-  
-  
-  
-  
-  
+  fsUtil.concatenate.toCode 
+    paths:    paths
+    minified: options.minified, 
+    callback
 
 
 # STATIC --------------------------------------------------------------------------
+
 
 # Default values.
 Def.defaults =

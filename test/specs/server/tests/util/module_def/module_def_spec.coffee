@@ -195,53 +195,6 @@ describe 'util/javascripts/module_def', ->
       expect(libs[1].title).toEqual 'file2.js'
       expect(libs[2].title).toEqual 'My Title'
   
-  describe 'build() method', ->
-    beforeEach ->
-      ModuleDef.registerPath "#{SAMPLE_DIR}/libs"
-    
-    # it 'passes options to the [toBuilder] factory method', ->
-    #   options =
-    #     includeLibs: false
-    #   
-    #   def = ModuleDef.find 'libs-sample'
-    #   spyOn(def, 'toBuilder').andCallThrough()
-    #   def.build options
-    #   
-    #   args = def.toBuilder.mostRecentCall.args[0]
-    #   expect(args).toEqual options
-    # 
-    
-    it 'foo', ->
-      
-      runs -> 
-        console.log 'FOO'
-        def = ModuleDef.find 'libs-sample'
-      
-        def.build (code) -> 
-          console.log 'DONE', code
-      
-      waits 500
-      
-    
-    
-    
-  
-  describe 'save', ->
-    it 'saves to the given directory and the module file name', ->
-      def = new ModuleDef SAMPLE_PATH
-      
-      fakeBuilder =
-        save: (options, callback) -> 
-          @options  = options
-          @callback = callback
-      spyOn(def, 'toBuilder').andCallFake (args) -> fakeBuilder
-      
-      fn = -> 
-      def.save '/dir', header:'abc', fn
-      expect(fakeBuilder.options.dir).toEqual '/dir'
-      expect(fakeBuilder.options.name).toEqual def.file
-      expect(fakeBuilder.callback).toEqual fn
-  
   
   describe 'static methods', ->
     DIR = "#{SAMPLE_DIR}/collection"

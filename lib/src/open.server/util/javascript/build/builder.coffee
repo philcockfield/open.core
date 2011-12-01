@@ -130,36 +130,9 @@ module.exports = class Builder
                          extra property of [paths] where the file was saved.
   ###
   save: (options = {}, callback) -> 
-    # Setup initial conditions.
-    minSuffix = options.minSuffix ?= '-min'
-    dir       = _.rtrim(options.dir, '/')
-    name      = options.name
-    name      = _(name).strLeftBack('.js') if _(name).endsWith('.js')
-    
-    # Save files.
-    save = () => 
-        code = @code
-        files = [
-          { path: "#{dir}/#{name}.js",              data: code.standard  }
-          { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
-        ]
-        
-        # Ensure code exists before saving.
-        for file in files
-          file.data ?= '// No code saved by builder.'
-        
-        # Write to disk.
-        fsUtil.writeFiles files, (err) -> 
-            throw err if err?
-            
-            # Create a return object with paths attached.
-            code = fnCode(code.standard, code.minified)
-            code.paths =  
-                standard: files[0].path
-                minified: files[1].path
-            
-            # Finish up.
-            callback? code
+    save = => 
+      options.code = @code
+      Builder.save options, callback
     
     # Build the code (if required).
     if @isBuilt then save()
@@ -191,5 +164,49 @@ moduleProperties = (files) ->
 
 # -- STATIC members.
 Builder.requireJS = fsUtil.fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
+
+
+###
+Saves the code to the specified location(s).
+@param options
+          - code:      The fnCode object to save.
+          - dir:       The path to directory to save the files in.
+          - name:      The file name (without an extension).
+          - minSuffix: (optional). The minified suffix (default: -min)
+@param callback(code): Invoked upon completion. 
+                       Returns the 'code' property value (a function), which contains an
+                       extra property of [paths] where the file was saved.
+###
+Builder.save = (options = {}, callback) -> 
+  
+  # Setup initial conditions.
+  code      = options.code
+  minSuffix = options.minSuffix ?= '-min'
+  dir       = _.rtrim(options.dir, '/')
+  name      = options.name
+  name      = _(name).strLeftBack('.js') if _(name).endsWith('.js')
+  
+  files = [
+    { path: "#{dir}/#{name}.js",              data: code.standard  }
+    { path: "#{dir}/#{name}#{minSuffix}.js",  data: code.minified  }
+  ]
+  
+  # Ensure code exists before saving.
+  for file in files
+    file.data ?= '// No code saved by builder.'
+  
+  # Write to disk.
+  fsUtil.writeFiles files, (err) -> 
+      throw err if err?
+      
+      # Create a return object with paths attached.
+      code = fnCode(code.standard, code.minified)
+      code.paths =  
+          standard: files[0].path
+          minified: files[1].path
+      
+      # Finish up.
+      callback? code
+
 
 
