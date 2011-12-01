@@ -40,7 +40,7 @@ module.exports = class BuildPath
   ###
   Builds the code at the source path, storing the results in the 'files' property.
   @param callback(files): Invoked when complete. 
-                            Returns the 'files' collection.
+                          Returns the 'files' collection.
   ###
   build: (callback) -> 
     

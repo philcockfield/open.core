@@ -88,51 +88,6 @@ module.exports = Def = class ModuleDef
   
   
   ###
-  Creates a new JavaScript [Builder] for the module.
-  @param options:  
-      Builder options - see [Builder] constructor.
-      NB: Defaults of these can be set as static properties on [ModuleDef.defaults]
-        - includeRequireJS:  Flag indicating if the CommonJS require script should be included (default: false).
-        - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
-        - minify:            Optional. Flag indicating if code should be minified.  Default true.
-      
-      - includeDependencies: Flag indicating if paths to dependencies should be included (default true).
-      - includeRoot:         Flag indicating if the root path to the module should be included.
-                             Use this to build dependencies only (default true).
-  @returns a new [Builder].
-  ###
-  toBuilder: (options = {}) -> 
-    
-    # Setup initial conditions.
-    defaults = Def.defaults
-    
-    # - Module defaults.
-    options.includeDependencies ?= defaults.includeDependencies
-    options.includeRoot         ?= defaults.includeRoot
-    
-    # - Builder defaults.
-    options.includeRequireJS    ?= defaults.includeRequireJS
-    options.header              ?= defaults.header
-    options.minify              ?= defaults.minify
-    
-    # Build the set of paths.
-    paths = []
-    addPath = (module) -> 
-      paths.push 
-        path:       module.dir
-        namespace:  module.name
-        deep:       true 
-    
-    addPath @ if options.includeRoot is yes
-    
-    if options.includeDependencies is yes
-      addPath dep for dep in @dependencies.resolve().all
-    
-    # Construct the builder.
-    builder = new Builder(paths, options)
-  
-  
-  ###
   Builds the JavaScript module.
   @param options:  
       Builder options - see [Builder] constructor.
@@ -141,10 +96,10 @@ module.exports = Def = class ModuleDef
         - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
         - minify:            Optional. Flag indicating if code should be minified.  Default true.
       
-      - includeDependencies: Flag indicating if paths to dependencies should be included (default true).
+      - withDependencies:    Flag indicating if paths to dependencies should be included (default true).
       - includeRoot:         Flag indicating if the root path to the module should be included.
                              Use this to build dependencies only (default true).
-      - includeLibs:         Flag indicating if libs should be appended (default true).
+      - withLibs:            Flag indicating if libs should be appended (default true).
   @param callback(code): Invoked upon completion. 
                          fnCode(minified):
                           - standard : Property, uncompressed.
@@ -152,7 +107,8 @@ module.exports = Def = class ModuleDef
   ###
   build: (options..., callback) -> 
     options = options[0] ? {}
-    @toBuilder(options).build (moduleCode) => 
+    options.withLibs ?= true
+    @_toBuilder(options).build (moduleCode) => 
       loadLibs @, options, (libsCode) -> 
         standard = "#{moduleCode.standard}\n\n\n#{libsCode.standard}"
         minified = "#{moduleCode.minified}\n\n\n#{libsCode.minified}"
@@ -172,9 +128,57 @@ module.exports = Def = class ModuleDef
       options.dir  = dir
       options.name = @file
       Builder.save options, callback
+  
+  
+  # PRIVATE --------------------------------------------------------------------------
+  
+  
+  ###
+  Creates a new JavaScript [Builder] for the module.
+  @param options:  
+      Builder options - see [Builder] constructor.
+      NB: Defaults of these can be set as static properties on [ModuleDef.defaults]
+        - includeRequireJS:  Flag indicating if the CommonJS require script should be included (default: false).
+        - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
+        - minify:            Optional. Flag indicating if code should be minified.  Default true.
+      
+      - withDependencies:    Flag indicating if paths to dependencies should be included (default true).
+      - includeRoot:         Flag indicating if the root path to the module should be included.
+                             Use this to build dependencies only (default true).
+  @returns a new [Builder].
+  ###
+  _toBuilder: (options = {}) -> 
+    
+    # Setup initial conditions.
+    defaults = Def.defaults
+    
+    # - Module defaults.
+    options.withDependencies    ?= defaults.withDependencies
+    options.includeRoot         ?= defaults.includeRoot
+    
+    # - Builder defaults.
+    options.includeRequireJS    ?= defaults.includeRequireJS
+    options.header              ?= defaults.header
+    options.minify              ?= defaults.minify
+    
+    # Build the set of paths.
+    paths = []
+    addPath = (module) -> 
+      paths.push 
+        path:       module.dir
+        namespace:  module.name
+        deep:       true 
+    
+    addPath @ if options.includeRoot is yes
+    
+    if options.withDependencies is yes
+      addPath dep for dep in @dependencies.resolve().all
+    
+    # Construct the builder.
+    builder = new Builder(paths, options)
 
 
-# PRIVATE --------------------------------------------------------------------------
+# PRIVATE STATIC --------------------------------------------------------------------------
 
 
 formatLibs = (def) -> 
@@ -190,6 +194,7 @@ formatLibs = (def) ->
 loadLibs = (def, options, callback) -> 
   # Setup initial conditions.
   libs = def.libs
+  
   if libs.length is 0
     # No libs to load, exit now.
     callback fnCode(null, null)
@@ -211,7 +216,7 @@ Def.defaults =
   includeRequireJS:    false
   header:              null
   minify:              true
-  includeDependencies: false
+  withDependencies:    false
   includeRoot:         true
 
 # Collection of modules.

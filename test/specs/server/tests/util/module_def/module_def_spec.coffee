@@ -1,3 +1,5 @@
+TIMEOUT = 500
+
 describe 'util/javascripts/module_def', ->
   SAMPLE_DIR  = "#{__dirname}/sample"
   SAMPLE_PATH = "#{SAMPLE_DIR}/module.json"
@@ -11,7 +13,7 @@ describe 'util/javascripts/module_def', ->
       includeRequireJS:    false
       header:              null
       minify:              true
-      includeDependencies: true
+      withDependencies:    true
       includeRoot:         true
   
   it 'exists', -> expect(ModuleDef).toBeDefined()
@@ -100,14 +102,14 @@ describe 'util/javascripts/module_def', ->
       expect(deps.length).toEqual 0
   
   
-  describe 'builder() method', ->
+  describe '_builder() method', ->
     DIR = "#{SAMPLE_DIR}/variants"
     beforeEach ->
       ModuleDef.registerPath "#{SAMPLE_DIR}/collection/folder"
     
     describe 'Builder options', ->
       it 'uses explicitly passed in Builder options', ->
-        builder = new ModuleDef(SAMPLE_DIR).toBuilder
+        builder = new ModuleDef(SAMPLE_DIR)._toBuilder
           includeRequireJS: true
           header: 'copyright foo'
           minify: false
@@ -117,7 +119,7 @@ describe 'util/javascripts/module_def', ->
         expect(builder.minify).toEqual false
       
       it 'uses default Builder option defaults', ->
-        builder = new ModuleDef(SAMPLE_DIR).toBuilder()
+        builder = new ModuleDef(SAMPLE_DIR)._toBuilder()
         expect(builder.includeRequireJS).toEqual false
         expect(builder.header).toEqual null
         expect(builder.minify).toEqual true
@@ -127,24 +129,23 @@ describe 'util/javascripts/module_def', ->
           includeRequireJS:     true
           header:               'Foo!'
           minify:               false
-          includeDependencies:  false
+          withDependencies:     false
           includeRoot:          false
         
-        builder = new ModuleDef(SAMPLE_DIR).toBuilder()
+        builder = new ModuleDef(SAMPLE_DIR)._toBuilder()
         expect(builder.includeRequireJS).toEqual true
         expect(builder.header).toEqual 'Foo!'
         expect(builder.minify).toEqual false
         expect(builder.paths.length).toEqual 0
     
-    
     it 'has a single path', ->
-      builder = new ModuleDef("#{DIR}/simple.json").toBuilder()
+      builder = new ModuleDef("#{DIR}/simple.json")._toBuilder()
       expect(builder.paths[0].path).toEqual DIR
       expect(builder.paths[0].namespace).toEqual 'ns'
     
     it 'has dependent paths', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.toBuilder()
+      builder = def._toBuilder()
       paths   = builder.paths
       
       expect(paths.length).toEqual 3
@@ -154,14 +155,14 @@ describe 'util/javascripts/module_def', ->
 
     it 'excludes dependent paths with flag', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.toBuilder includeDependencies:false
+      builder = def._toBuilder withDependencies:false
       paths   = builder.paths
       expect(paths.length).toEqual 1
       expect(paths[0].namespace).toEqual 'ns/folder'
     
     it 'includes dependent paths excludes the root module with flag', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.toBuilder includeRoot:false
+      builder = def._toBuilder includeRoot:false
       paths   = builder.paths
       expect(paths.length).toEqual 2
       expect(paths[0].namespace).toEqual 'ns/child1'
@@ -169,7 +170,7 @@ describe 'util/javascripts/module_def', ->
 
     it 'includes no paths', ->
       def     = ModuleDef.find 'ns/folder'
-      builder = def.toBuilder includeRoot:false, includeDependencies:false
+      builder = def._toBuilder includeRoot:false, withDependencies:false
       paths   = builder.paths
       expect(paths.length).toEqual 0
   
@@ -194,6 +195,28 @@ describe 'util/javascripts/module_def', ->
       expect(libs[0].title).toEqual 'file1.js'
       expect(libs[1].title).toEqual 'file2.js'
       expect(libs[2].title).toEqual 'My Title'
+  
+  
+  describe 'build() method', ->
+    def = null
+    beforeEach ->
+      ModuleDef.registerPath "#{SAMPLE_DIR}/libs"
+      ModuleDef.registerPath "#{SAMPLE_DIR}/simple"
+      def  = ModuleDef.find 'libs-sample'
+    
+    it 'builds with libs', ->
+      code = null
+      waitsFor (-> code?), TIMEOUT
+      
+      def.build (c) -> code = c
+      runs -> 
+        code = code.standard
+        console.log 'code', code
+        console.log 'TODO - do not build libs into modules'
+    #     expect(_(code).include('var file1 = 123')).toEqual true
+    #     expect(_(code).include('"libs-sample/file1": function')).toEqual false
+    #     expect(_(code).include('"libs-sample/libs/file2": function')).toEqual false
+    #     expect(_(code).include('"libs-sample/libs/file3": function')).toEqual false
   
   
   describe 'static methods', ->

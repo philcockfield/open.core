@@ -30,6 +30,7 @@ describe 'Services', ->
           # Comment.
           foo = 123
           fn = (prefix) -> console.log "#{prefix}: ", foo
+          
           for i in [1..5]
             foo += 1
             fn('Item')
@@ -120,6 +121,7 @@ describe 'Services', ->
           # Comment. <foo> & 'thing' in "quotes".
           foo = 123
           fn = (prefix) -> console.log "#{prefix}: ", foo
+          
           for i in [1..5]
             foo += 1
             fn('Item')

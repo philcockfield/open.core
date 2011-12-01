@@ -141,7 +141,7 @@ toJQuery = (html) ->
     lines = html.split '\n'
     html = ''
     for line in lines
-        html += line + '\n' unless _.isBlank(line)
+        html += line + '\n' 
     $("<body>#{html}</body>")
 
 

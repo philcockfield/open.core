@@ -77,7 +77,7 @@ for key of buildList
   do (key) -> 
     build[key] = (callback) -> 
       save "open.client/#{key}", 
-        includeDependencies:buildList[key], 
+        withDependencies: buildList[key], 
         callback
 
 
