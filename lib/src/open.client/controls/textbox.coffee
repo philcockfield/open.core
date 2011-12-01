@@ -36,7 +36,6 @@ module.exports = class Textbox extends core.mvc.View
           @enterPress()  if e.keyCode is 13
           @escapePress() if e.keyCode is 27
       
-      
       # Key handlers.
       _.extend @_, keyHandlers =
           press: (event) => @trigger 'press:' + event,  source: self 

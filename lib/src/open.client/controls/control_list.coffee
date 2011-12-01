@@ -34,23 +34,60 @@ module.exports = class ControlList extends core.mvc.View
   
   
   ###
+  Initializes the list with a set of controls.
+  @param controls: The collection of button definitions to add.  
+                   These are passed to the 'add' method.
+  @returns the list instance.
+  ###  
+  init: (controls = []) -> 
+    @clear()
+    @add ctrl for ctrl in controls
+    @
+  
+  
+  ###
   Adds a control to the list.
   @param control: The MVC [View] control to add.
   @returns the added control
   ###
   add: (control) -> 
-      
-      # Store reference to contol in collection.
-      @controls.add control
-      
-      # Prepare for DOM.
-      li = $('<li></li>')
-      li.append control.el
-      @el.append li
-      
-      # Finish up.
-      control
-
+    # Store reference to contol in collection.
+    @controls.add control
+    
+    # Prepare for DOM.
+    li = $('<li></li>')
+    li.append control.el
+    @el.append li
+    
+    # Finish up.
+    control
+  
+  
+  ###
+  Removes the given control from the list.
+  @param control: The MVC [View] control to remove.
+  @returns the list.
+  ###
+  remove: (control) -> 
+    # Setup initial conditions.
+    return @ unless control?
+    @controls.remove control
+    
+    # Remove the corresponding <li>.
+    for li in @$('li')
+      li = $ li
+      if li.children()[0] is control.el.get(0)
+        li.remove()
+        return @
+    
+    # Finish up.
+    @
+  
+  
+  ###
+  Clears all items from the list.
+  ###
+  clear: -> @remove control for control in _.clone(@controls.models)
 
 
 # PRIVATE --------------------------------------------------------------------------

@@ -213,14 +213,14 @@ describe 'util/javascripts/module_def', ->
     
     it 'foo', ->
       
-      # runs -> 
-      #   console.log 'FOO'
-      #   def = ModuleDef.find 'libs-sample'
-      # 
-      #   def.build (code) -> 
-      #     console.log 'DONE', code
-      # 
-      # waits 500
+      runs -> 
+        console.log 'FOO'
+        def = ModuleDef.find 'libs-sample'
+      
+        def.build (code) -> 
+          console.log 'DONE', code
+      
+      waits 500
       
     
     

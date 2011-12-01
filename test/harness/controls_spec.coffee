@@ -66,18 +66,52 @@ describe 'Controls',
           it 'add', -> addButtonToSet(chkSet)
           it 'orientation: X', -> chkSet.orientation 'x'
           it 'orientation: Y (default)', -> chkSet.orientation 'y'
+          it 'init', ->
+            chkSet.init [
+              { label: 'Egocentric', selected:true }
+              { label: 'Ethnocentric' }
+              { label: 'Worldcentric', selected:true }
+            ]
+          it 'clear', -> chkSet.clear()
+          it 'remove first', -> chkSet.remove chkSet.controls.first()
         
         describe 'RadioButtonSet', ->
           rdoSet = null
           beforeAll -> 
-              rdoSet = initButtonSet new controls.RadioButtonSet()
-              rdoSet.buttons.first().selected true          
+            rdoSet = initButtonSet new controls.RadioButtonSet()
+            rdoSet.buttons.first().selected true          
+            
+            page.pane.add.markdown
+              label:'Sample Code'
+              markdown:
+                '''
+                    :coffee
+                    # Create the control.
+                    controls = require 'open.client/controls'
+                    rdoSet   = new controls.RadioButtonSet()
+                    
+                    # Initialize a set of buttons.
+                    rdoSet.init [
+                      { label: 'Egocentric' }
+                      { label: 'Ethnocentric' }
+                      { label: 'Worldcentric', selected:true }
+                    ]
+                
+                '''
               
           it 'add', -> addButtonToSet(rdoSet)
           it 'orientation: X', -> rdoSet.orientation 'x'
           it 'orientation: Y (default)', -> rdoSet.orientation 'y'
           it 'select first', -> rdoSet.buttons.first().selected true
           it 'select last', -> rdoSet.buttons.last().selected true
+          it 'init', ->
+            rdoSet.init [
+              { label: 'Egocentric' }
+              { label: 'Ethnocentric' }
+              { label: 'Worldcentric', selected:true }
+            ]
+          it 'clear', -> rdoSet.clear()
+          it 'remove first', -> rdoSet.remove rdoSet.buttons.first()
           
           
     describe 'TabStrip', ->

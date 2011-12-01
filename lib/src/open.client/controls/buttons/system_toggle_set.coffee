@@ -18,13 +18,12 @@ module.exports = class SystemToggleButtonSet extends ControlList
   ButtonType: undefined
   
   constructor: -> 
-      
-      # Setup initial conditions.
-      super
-      @buttons = new ButtonSet()
-      
-      # Wire up events.
-      @buttons.bind SELECTION_CHANGED, (e) => @trigger SELECTION_CHANGED, e
+    # Setup initial conditions.
+    super
+    @buttons = new ButtonSet()
+    
+    # Wire up events.
+    @buttons.bind SELECTION_CHANGED, (e) => @trigger SELECTION_CHANGED, e
   
   
   ###
@@ -35,13 +34,31 @@ module.exports = class SystemToggleButtonSet extends ControlList
   
   
   ###
+  Initializes the toggle-set with a collection of buttons.
+  @param buttons : The collection of button definitions to add.  
+                   These are passed to the 'add' method.
+  @returns the toggle-set instance.
+  ###  
+  init: (buttons = []) -> super buttons
+  
+  
+  ###
   Adds a new Button to the collection.
   The button is created using the type specified within the [ButtonType] property.
   @param options : The options to pass to the Button's constructor.
   @returns the newly created Button.
   ###
   add: (options = {}) -> 
-      btn = super new @ButtonType options
-      @buttons.add btn
-      btn
+    btn = super new @ButtonType options
+    @buttons.add btn
+    btn
   
+  
+  ###
+  Removes the given button from the set.
+  @param button: The button to remove.
+  @returns the toggle-set.
+  ###
+  remove: (button) -> 
+    @buttons.remove button
+    super button

@@ -48,8 +48,6 @@ describe 'controls/control_list', ->
       list.add(new core.mvc.View())
       list.add(new core.mvc.View())
       expect(list.count()).toEqual 2
-    
-    
   
   describe 'first / last', ->
     describe 'with three controls', ->
@@ -73,7 +71,6 @@ describe 'controls/control_list', ->
     describe 'with no controls', ->
       it 'retrieves the first control', -> expect(list.first()).toEqual null
       it 'retrieves the last control', -> expect(list.last()).toEqual null
-    
   
   
   describe 'orientation', ->
@@ -105,12 +102,90 @@ describe 'controls/control_list', ->
       it 'constructs with the horizontal CSS class (X)', ->
         list = new ControlList orientation:'x'
         expect(list.el.hasClass('core_x')).toEqual true
-        
+  
+  describe 'remove() method', ->
+    item1 = null
+    item2 = null
+    beforeEach ->
+      add = (text) -> 
+        view = list.add(new core.mvc.View())
+        view.html text
+        view
+      item1 = add 'one'
+      item2 = add 'two'
+    
+    it 'does nothing when no item is provided', ->
+      list.remove()
+      expect(list.count()).toEqual 2
+    
+    it 'returns the list', ->
+      expect(list.remove()).toEqual list
+      expect(list.remove(item1)).toEqual list
+    
+    it 'removes the given item from the [controls] collection', ->
+      list.remove item1
+      expect(list.controls.include(item1)).toEqual false
+    
+    it 'removes the given item from the DOM', ->
+      list.remove item1
+      for el in list.$('li > div')
+        expect(el).not.toEqual item1.el.get(0)
+  
+    it 'removes both items from the DOM', ->
+      list.remove item1
+      list.remove item2
+      expect(list.el.children().length).toEqual 0
+    
+    it 'does nothing when remove is called with the same control multiple times.', ->
+      list.remove item1
+      list.remove item1
+      expect(list.count()).toEqual 1
+  
+  describe 'clear() method', ->
+    beforeEach ->
+      add = (text) -> 
+        view = list.add(new core.mvc.View())
+        view.html text
+        view
+      item1 = add 'one'
+      item2 = add 'two'
+    
+    it 'removes items from the DOM', ->
+      list.clear()
+      expect(list.el.children().length).toEqual 0
       
+    it 'removes items from the [controls] collection', ->
+      list.clear()
+      expect(list.controls.length).toEqual 0
+  
+    it 'invokes the [remove] method', ->
+      spyOn(list, 'remove')
+      list.clear()
+      expect(list.remove.callCount).toEqual 2
     
+  describe 'init() method', ->
+    controls = []
+    beforeEach ->
+      controls = [
+        new core.mvc.View()
+        new core.mvc.View()
+      ]
+    
+    it 'returns the [list] instance', ->
+      expect(list.init()).toEqual list
+    
+    it 'passes the controls to the [add] method', ->
+      spyOn(list, 'add')
+      list.init controls
+      expect(list.add.calls[0].args[0]).toEqual controls[0]
+      expect(list.add.calls[1].args[0]).toEqual controls[1]
+    
+    it 'clears before initializing', ->
+      spyOn(list, 'clear')
+      list.init controls
+      expect(list.clear).toHaveBeenCalled()
   
     
-  
-  
-  
-  
+
+
+

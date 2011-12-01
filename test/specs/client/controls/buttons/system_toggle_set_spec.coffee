@@ -53,7 +53,51 @@ describe 'controls/buttons/system_toggle_set', ->
       
       elRdo = li.children().get(0)
       expect(elRdo).toEqual rdo.el.get(0)
-
+  
+  describe 'count() method', ->
+    it 'has two items', ->
+      toggleSet.add()
+      toggleSet.add()
+      expect(toggleSet.count()).toEqual 2
+  
+  describe 'clear() method', ->
+    it 'does nothing when there are not buttons', ->
+      toggleSet.clear()
+      expect(toggleSet.buttons.length).toEqual 0
+      expect(toggleSet.count()).toEqual 0
+    
+    it 'removes items from the collection', ->
+      toggleSet.add()
+      toggleSet.add()
+      toggleSet.clear()
+      expect(toggleSet.count()).toEqual 0
+      expect(toggleSet.buttons.length).toEqual 0
+  
+    it 'removes items from the DOM', ->
+      toggleSet.add()
+      toggleSet.add()
+      toggleSet.clear()
+  
+  describe 'init() method', ->
+    buttons = [
+      { label:'one' }
+      { label:'two' }
+    ]
+    
+    it 'returns the [toggleSet] instance', ->
+      expect(toggleSet.init()).toEqual toggleSet
+    
+    it 'passes the buttons to the [add] method', ->
+      spyOn(toggleSet, 'add')
+      toggleSet.init buttons
+      expect(toggleSet.add.calls[0].args[0]).toEqual buttons[0]
+      expect(toggleSet.add.calls[1].args[0]).toEqual buttons[1]
+    
+    it 'clears before initializing', ->
+      spyOn(toggleSet, 'clear')
+      toggleSet.init buttons
+      expect(toggleSet.clear).toHaveBeenCalled()
+  
   describe 'events', ->
     it 'fires the [selectionChanged] event', ->
       rdo1 = toggleSet.add()

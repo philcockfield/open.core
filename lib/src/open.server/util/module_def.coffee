@@ -1,8 +1,8 @@
-core    = require 'open.server'
-fs      = require 'fs'
-fsUtil  = require './fs'
-Builder = require './javascript/build/builder'
-fnCode  = require('./javascript/_common').codeFunction
+core        = require 'open.server'
+fs          = require 'fs'
+fsUtil      = require './fs'
+Builder     = require './javascript/build/builder'
+fnCode      = require('./javascript/_common').codeFunction
 
 
 ###
@@ -156,8 +156,8 @@ module.exports = Def = class ModuleDef
                           - minified : Property, compressed.
   ###
   build: (options = {}, callback) -> 
-    @toBuilder(options).build (moduleCode) -> 
-      loadLibs @, (libsCode) -> 
+    @toBuilder(options).build (moduleCode) => 
+      loadLibs @, options, (libsCode) -> 
         console.log '+ moduleCode: ', moduleCode
         console.log '+ libsCode: ', libsCode
     
@@ -187,12 +187,21 @@ formatLibs = (def) ->
     lib
 
 
-loadLibs = (def, callback) -> 
+loadLibs = (def, options, callback) -> 
+  # Setup initial conditions.
   libs = def.libs
   if libs.length is 0
     # No libs to load, exit now.
     callback fnCode(null, null)
     return
+  
+  # Load the code files.
+  paths = _(libs).map (lib) -> lib.path
+  fsUtil.concatenate.toCode paths:paths, minified:options.minified, (code) ->
+    
+    console.log 'code', code
+    console.log 'code.standard', code.standard
+    
   
   
   
