@@ -13,6 +13,13 @@ module.exports = class BuildPath
                     path:       The path to a folder or single file.
                     namespace:  The CommonJS namespace the source files reside within.
                     deep:       Flag indicating if the child tree of a folder should be recursed (default: true).
+                    exclude:    A path, or array of paths, to exclude from building.
+                                Relevant to folders only.
+                                That path is relative to the folder 'path', for example:
+                                  - '/lib', or
+                                  - 'lib'   would exclude all files within {path}/lib/
+                                Alternatively specific file(s) can be excluded, for example:
+                                  - '/views/foo.coffee'
                  }
   ###
   constructor: (definition = {}) -> 
@@ -25,7 +32,6 @@ module.exports = class BuildPath
       
       # Set path-type flags.
       if @path?
-          # @isFile   = hasExtension('.js') or hasExtension('.coffee')
           @isFile   = hasSupportedExtension @path
           @isFolder = not @isFile
       @deep = false if @isFile
@@ -65,8 +71,9 @@ module.exports = class BuildPath
     not _(@files).any (m) -> m.isBuilt == false
 
 
+# PRIVATE --------------------------------------------------------------------------
 
-# PRIVATE
+
 hasExtension = (path, extension) => _(path).endsWith extension
 hasSupportedExtension = (path) -> 
     hasExtension(path, '.js') or hasExtension(path, '.coffee')

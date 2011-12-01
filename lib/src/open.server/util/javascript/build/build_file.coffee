@@ -77,8 +77,16 @@ module.exports = class BuildFile
       callback? code, @
 
 
-# Static methods.
+# STATIC --------------------------------------------------------------------------
+
+
 BuildFile.formatNamespace = (ns) -> 
     return '' unless ns?
     _(ns).rtrim('/') if ns?
     
+
+
+
+
+
+

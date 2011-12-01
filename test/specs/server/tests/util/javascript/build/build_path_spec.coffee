@@ -16,20 +16,20 @@ describe 'util/javascript/build/build_path', ->
     describe 'default values', ->
       buildPath = null
       beforeEach -> buildPath = new BuildPath()
-
+      
       it 'performs deep builds by default', ->
         expect(buildPath.deep).toEqual true
-
+      
       it 'does not perform a deep build if the path is a file', ->
         buildPath = new BuildPath path:'foo.js'
         expect(buildPath.deep).toEqual false
       
-      it 'null path by default', ->
+      it 'has a null path by default', ->
         expect(buildPath.path).toEqual null
         
-      it 'empty-string namespace by default', ->
+      it 'has an empty-string namespace by default', ->
         expect(buildPath.namespace).toEqual ''
-
+      
       it 'formats namspace', ->
         expect(new BuildPath(namespace:'/ns//').namespace).toEqual '/ns'
       
@@ -44,7 +44,7 @@ describe 'util/javascript/build/build_path', ->
       it 'stores namespace as property', ->
         buildPath = new BuildPath namespace:'ns'
         expect(buildPath.namespace).toEqual 'ns'
-
+      
       it 'stores deep flag as property', ->
         buildPath = new BuildPath deep:false
         expect(buildPath.deep).toEqual false
@@ -54,7 +54,7 @@ describe 'util/javascript/build/build_path', ->
         buildPath = new BuildPath path:'/foo/bar'
         expect(buildPath.isFolder).toEqual true
         expect(buildPath.isFile).toEqual false
-
+      
       it 'is a file', ->
         buildPath = new BuildPath path:'/foo/bar.js'
         expect(buildPath.isFolder).toEqual false
