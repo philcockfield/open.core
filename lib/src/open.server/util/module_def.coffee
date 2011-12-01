@@ -161,6 +161,9 @@ module.exports = Def = class ModuleDef
     options.header              ?= defaults.header
     options.minify              ?= defaults.minify
     
+    # Exclude lib paths from being built.
+    exclude = _(@libs).map (lib) -> lib.path
+    
     # Build the set of paths.
     paths = []
     addPath = (module) -> 
@@ -168,6 +171,7 @@ module.exports = Def = class ModuleDef
         path:       module.dir
         namespace:  module.name
         deep:       true 
+        exclude:    exclude
     
     addPath @ if options.includeRoot is yes
     

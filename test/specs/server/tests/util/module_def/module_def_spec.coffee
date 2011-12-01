@@ -211,13 +211,14 @@ describe 'util/javascripts/module_def', ->
       def.build (c) -> code = c
       runs -> 
         code = code.standard
-        console.log 'code', code
-        console.log 'TODO - do not build libs into modules'
-    #     expect(_(code).include('var file1 = 123')).toEqual true
-    #     expect(_(code).include('"libs-sample/file1": function')).toEqual false
-    #     expect(_(code).include('"libs-sample/libs/file2": function')).toEqual false
-    #     expect(_(code).include('"libs-sample/libs/file3": function')).toEqual false
-  
+        
+        # Has the module file.
+        expect(_(code).include('var file1 = 123')).toEqual true
+        
+        # Has not compiled the lib files into Common-JS modules.
+        expect(_(code).include('"libs-sample/file1": function')).toEqual false
+        expect(_(code).include('"libs-sample/libs/file2": function')).toEqual false
+        expect(_(code).include('"libs-sample/libs/file3": function')).toEqual false
   
   describe 'static methods', ->
     DIR = "#{SAMPLE_DIR}/collection"

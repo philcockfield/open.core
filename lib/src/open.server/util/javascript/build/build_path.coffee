@@ -25,23 +25,31 @@ module.exports = class BuildPath
   constructor: (definition = {}) -> 
       
       # Setup initial conditions.
-      @deep      = definition.deep ?= true
-      @path      = definition.path ?= null
+      @deep      = definition.deep ? true
+      @path      = definition.path ? null
+      @path      = _(@path).rtrim '/' if @path?
       @namespace = BuildFile.formatNamespace(definition.namespace)
       @code      = {}
-      
-      # Set path-type flags.
       if @path?
           @isFile   = hasSupportedExtension @path
           @isFolder = not @isFile
-      @deep = false if @isFile
-
+      @deep    = false if @isFile
+      @dir     = getDir @
+      @exclude = formatExcludePaths @, ( definition.exclude ? [] )
+  
+  
+  # The collection of [BuildFile]'s.
+  files: []
+  
   
   ###
-  Gets the collection of [BuildFile]'s.
+  The collection of paths to exclude.  
+    Paths are relative to the root [path].
+    - '/lib', or
+    - 'lib'   would exclude all files within {path}/lib/
   ###
-  files: []
-
+  exclude: []
+  
   
   ###
   Builds the code at the source path, storing the results in the 'files' property.
@@ -54,15 +62,15 @@ module.exports = class BuildPath
     @files = []
     
     returnFiles = (files) -> 
-        @files = files
-        callback? files
-
+      @files = files
+      callback? files
+    
     if @isFile is yes
-        buildSingleFile @, (files) => returnFiles files
+      buildSingleFile @, (files) => returnFiles files
     
     else if @isFolder
-        buildFilesInFolder @, (files) => returnFiles files
-
+      buildFilesInFolder @, (files) => returnFiles files
+  
   ###
   Determines whether the code for the path has been built.
   ###
@@ -75,66 +83,97 @@ module.exports = class BuildPath
 
 
 hasExtension = (path, extension) => _(path).endsWith extension
-hasSupportedExtension = (path) -> 
-    hasExtension(path, '.js') or hasExtension(path, '.coffee')
+hasSupportedExtension = (path) -> hasExtension(path, '.js') or hasExtension(path, '.coffee')
+isExcluded = (buildPath, path) -> _(buildPath.exclude).any (p) -> _(path).startsWith(p)
+
+
+getDir = (buildPath) -> 
+  return buildPath.path if buildPath.isFolder
+  if buildPath.path?
+    path = _(buildPath.path)
+    return path.strLeftBack '/' if path.include('/') 
+  null
+
+
+formatExcludePaths = (buildPath, exclude) -> 
+  exclude = [exclude] unless _(exclude).isArray()
+  exclude = _(exclude).map (path) -> 
+    dir  = ''
+    dir  = buildPath.dir + '/' if buildPath.dir?
+    path = _(path).strRight(dir) if _(path).startsWith dir
+    path = _(path).trim '/'
+    path = dir + path
 
 
 buildSingleFile = (buildPath, callback) -> 
-        buildFile = new BuildFile buildPath.path, buildPath.namespace
-        buildFile.build => 
-            
-            # Add the built code file to the [files] collection.
-            files = buildPath.files
-            files.push buildFile
-            callback files
+  # Determine whether teh path has been excluded.
+  path = buildPath.path
+  if isExcluded buildPath, path
+    callback []
+    return
+  
+  # Build the file.
+  buildFile = new BuildFile path, buildPath.namespace
+  buildFile.build => 
+    # Add the built code file to the [files] collection.
+    files = buildPath.files
+    files.push buildFile
+    callback files
 
 
 buildFilesInFolder = (buildPath, callback) -> 
-        
-        # Setup initial conditions.
-        files = buildPath.files
-        
-        returnSorted = -> 
-            files = _(files).sortBy (item) -> item.id
-            callback files
-        
-        # Build all files in the folder.
-        options =
-              files:  true
-              dirs:   false
-              hidden: false
-              deep:   buildPath.deep
-        
-        # Get the complete list of files to build.
-        fsUtil.readDir buildPath.path, options, (err, paths) -> 
-            throw err if err?
-            
-            # Ensure only supported files types are included.
-            paths = _(paths).map (p) -> p if hasSupportedExtension(p)
-            paths = _(paths).compact()
-            
-            # Build each file.
-            # NB: Each file built sequentially to avoid a 'Too many open files' error.
-            index = 0
-            count = paths.length
-            
-            build = (index) -> 
-                # Get the path.
-                path = paths[index]
-                
-                # Calcualte the namespace.
-                ns = _(path).strRight buildPath.path
-                ns = _(ns).strLeftBack '/'
-                ns = buildPath.namespace + ns
-                
-                # Run the file-builder.
-                (new BuildFile path, ns).build (code, buildFile) -> 
-                      files.push buildFile
-                      
-                      if index < paths.length - 1
-                        build index + 1
-                      else
-                        # Finish if all paths have been built.
-                        returnSorted()
-            
-            build 0
+  # Setup initial conditions.
+  files = buildPath.files
+  
+  returnSorted = -> 
+    files = _(files).sortBy (item) -> item.id
+    callback files
+  
+  # Build all files in the folder.
+  options =
+    files:  true
+    dirs:   false
+    hidden: false
+    deep:   buildPath.deep
+  
+  # Get the complete list of files to build.
+  fsUtil.readDir buildPath.path, options, (err, paths) -> 
+    throw err if err?
+    
+    # Ensure only supported files types are included.
+    paths = _(paths).map (p) -> p if hasSupportedExtension(p)
+    paths = _(paths).compact()
+    
+    # Build each file.
+    # NB: Each file built sequentially to avoid a 'Too many open files' error.
+    index = 0
+    count = paths.length
+    
+    build = (index) -> 
+      if index >= paths.length
+        # All paths have been built.
+        returnSorted()
+        return
+      
+      # Get the path, and ensure it has not been excluded.
+      path = paths[index]
+      if isExcluded buildPath, path
+        build index + 1  # <== RECURSION.
+        return
+      
+      # Calcualte the namespace.
+      ns = _(path).strRight buildPath.path
+      ns = _(ns).strLeftBack '/'
+      ns = buildPath.namespace + ns
+      
+      # Run the file-builder.
+      (new BuildFile path, ns).build (code, buildFile) -> 
+          files.push buildFile
+          build index + 1  # <== RECURSION.
+    
+    build 0
+
+
+
+
+

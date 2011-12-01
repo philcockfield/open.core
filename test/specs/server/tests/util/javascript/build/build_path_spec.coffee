@@ -26,6 +26,9 @@ describe 'util/javascript/build/build_path', ->
       
       it 'has a null path by default', ->
         expect(buildPath.path).toEqual null
+      
+      it 'has null [dir] by default', ->
+        expect(buildPath.dir).toEqual null
         
       it 'has an empty-string namespace by default', ->
         expect(buildPath.namespace).toEqual ''
@@ -36,9 +39,16 @@ describe 'util/javascript/build/build_path', ->
       it 'has no [files] by default', ->
         expect(buildPath.files).toEqual []
       
+      it 'has no [exclude] paths by default', ->
+        expect(buildPath.exclude).toEqual []
+      
     describe 'storing options as properties', ->
       it 'stores source path as property', ->
         buildPath = new BuildPath path:'foo'
+        expect(buildPath.path).toEqual 'foo'
+
+      it 'removes "/" suffix from path', ->
+        buildPath = new BuildPath path:'foo/'
         expect(buildPath.path).toEqual 'foo'
       
       it 'stores namespace as property', ->
@@ -48,6 +58,39 @@ describe 'util/javascript/build/build_path', ->
       it 'stores deep flag as property', ->
         buildPath = new BuildPath deep:false
         expect(buildPath.deep).toEqual false
+      
+      describe 'dir', ->
+        it 'is the same as the path', ->
+          buildPath = new BuildPath path:'/foo'
+          expect(buildPath.dir).toEqual buildPath.path
+        
+        it 'is the directory of a single file', ->
+          buildPath = new BuildPath path:'/foo/file.js'
+          expect(buildPath.dir).toEqual '/foo'
+        
+        it 'has no directory for a single file with no path', ->
+          buildPath = new BuildPath path:'file.js'
+          expect(buildPath.dir).toEqual null
+      
+      describe 'exclude paths', ->
+        it 'converts a single string to an array', ->
+          buildPath = new BuildPath exclude:'/libs'
+          expect(_.isArray(buildPath.exclude)).toEqual true
+        
+        it 'converts exclude paths to fully qualified paths', ->
+          buildPath = new BuildPath path:'/foo/', exclude:['/libs', 'views/', '/models/foo.coffee' ]
+          paths = buildPath.exclude
+          expect(paths[0]).toEqual "#{buildPath.path}/libs"
+          expect(paths[1]).toEqual "#{buildPath.path}/views"
+          expect(paths[2]).toEqual "#{buildPath.path}/models/foo.coffee"
+        
+        it 'excludes a single file with path', ->
+          buildPath = new BuildPath path:'/foo/file.js', exclude:'/foo/file.js'
+          expect(buildPath.exclude[0]).toEqual '/foo/file.js'
+        
+        it 'excludes a single file with no path', ->
+          buildPath = new BuildPath path:'file.js', exclude:'file.js'
+          expect(buildPath.exclude[0]).toEqual 'file.js'
     
     describe 'path type flags', ->
       it 'is a folder', ->
@@ -94,6 +137,17 @@ describe 'util/javascript/build/build_path', ->
         waitsFor (-> files?), WAIT_TIME
         runs -> 
           expect(files).toEqual buildPath.files
+      
+      it 'has no files to build if excluded', ->
+        def = _.clone(def1)
+        def.exclude = def.path
+        buildPath = new BuildPath def
+        
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), WAIT_TIME
+        runs -> 
+          expect(files.length).toEqual 0
     
     describe 'building a folder', ->
       it 'build all files in folder, but not child folders (deep = false)', ->
@@ -132,7 +186,25 @@ describe 'util/javascript/build/build_path', ->
         runs -> 
           expect(buildPath.files.length).toEqual 5
 
-
+      it 'excludes a specific file', ->
+        def = _.clone(def3)
+        def.deep = true
+        def.exclude = [
+          'file1.js'
+          'folder1/foo/bar.coffee'
+        ]
+        buildPath = new BuildPath def
+        
+        files = null
+        buildPath.build (m) -> files = m
+        waitsFor (-> files?), WAIT_TIME
+        runs -> 
+          paths = _(files).map (f) -> f.path
+          paths = _(paths)
+          expect(paths.include('/file1.js')).toEqual false
+          expect(paths.include('folder1/foo/bar.coffee')).toEqual false
+  
+  
   describe 'isBuilt', ->
     it 'is not built when the [files] is empty', ->
       buildPath = new BuildPath()
