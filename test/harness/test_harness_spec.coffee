@@ -81,6 +81,10 @@ describe 'Test Harness', ->
     it 'Add - fill:0.8 (80%)', -> page.add div, fill:0.8
     it 'Add - fill:1 (100%)', -> page.add div, fill:1
     
+    it 'Markdown', -> page.markdown markdownSample1
+      
+    
+    
   describe 'Tabs', ->
     harness = null
     tabs    = null
@@ -176,10 +180,11 @@ describe 'Test Harness', ->
      
          :coffee
          # Code to add a bunch of Markdown within a tab.
-         page.add.markdown
+         tab = page.add.markdown
            label:    'Markdown Title'
            markdown: '# My Markdown'
-           
+         
+         console.log 'Returned tab:', tab
      
      ## H2 Title
      ### H3 Title
@@ -196,6 +201,7 @@ describe 'Test Harness', ->
          # Comment. <foo> & 'thing' in "quotes".
          foo = 123
          fn = (prefix) -> console.log "Thing: ", foo
+         
          for i in [1..5]
            foo += 1
            fn('Item')

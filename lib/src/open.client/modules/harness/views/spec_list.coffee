@@ -15,7 +15,7 @@ module.exports = (module) ->
     # Gets the pixel height of the contained list.
     listHeight: -> 
         ul = @ul
-        cssNum = module.util.jQuery.cssNum
+        cssNum = module.core.util.jQuery.cssNum
         ul.height() + cssNum(ul, 'margin-top') + cssNum(ul, 'margin-bottom')
     
     

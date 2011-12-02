@@ -8,13 +8,14 @@ module.exports = (module) ->
       @el.addClass 'th_markdown'
       @addProps
         markdown: null # Gets or sets the source markdown.
+      util = module.parent.util
       
       # Syncers.
       syncMarkdown = => 
         @el.html null
         markdown = @markdown()
         if markdown?
-          post markdown, (err, html) => @el.html html unless err?
+          util.postMarkdown markdown, (err, html) => @el.html html unless err?
         
       # Wire up events.
       @markdown.onChanged syncMarkdown
@@ -23,26 +24,4 @@ module.exports = (module) ->
       syncMarkdown()
 
 
-# PRIVATE --------------------------------------------------------------------------
 
-
-post = (markdown, callback) -> 
-    data =
-      source: markdown
-      classes:
-        code: 'core_simple'
-    
-    $.ajax
-      type:     'POST'
-      url:      '/markdown'
-      data:     data
-      dataType: 'html'
-      success: (data) -> callback? null, data
-      error: (err) -> 
-          console.log 'Failed to load markdown.'
-          console.log ' - Error: ', err
-          console.log ' - Message:',  err.responseText
-          callback? err, null
-
-
-    

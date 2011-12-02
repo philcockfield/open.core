@@ -317,18 +317,24 @@ body {
   font-size: 10pt;
   line-height: 150%;
 }
-.th_tab.th_markdown .core_markdown h1 {
+.th_markdown {
+  padding-bottom: 50px;
+}
+.th_markdown .core_markdown {
+  font-size: 10pt;
+}
+.th_markdown .core_markdown h1 {
   font-size: 20pt;
 }
-.th_tab.th_markdown .core_markdown h2 {
+.th_markdown .core_markdown h2 {
   font-size: 17pt;
 }
-.th_tab.th_markdown .core_markdown h3 {
+.th_markdown .core_markdown h3 {
   font-size: 14pt;
 }
-.th_tab.th_markdown .core_markdown h4 {
+.th_markdown .core_markdown h4 {
   font-size: 12pt;
 }
-.th_tab.th_markdown .core_markdown h5 {
+.th_markdown .core_markdown h5 {
   font-size: 11pt;
 }

@@ -10,11 +10,14 @@ module.exports = (module) ->
         # Wire up events.
         module.selectedSuite.onChanged (e) => @_updateState()
         
-        # Page events.
-        module.page.bind 'add',     (e) => @add e.element, e.options
-        module.page.bind 'clear',   (e) => @clear()
-        module.page.bind 'reset',   (e) => @reset()
-        module.page.bind 'css',     (e) => @css e.urls
+        # - Page events.
+        page = module.page
+        page.bind 'add',       (e) => @add e.element, e.options
+        page.bind 'clear',     (e) => @clear()
+        page.bind 'reset',     (e) => @reset()
+        page.bind 'css',       (e) => @css e.urls
+        page.title.onChanged   (e) => @pTitle.html   e.newValue
+        page.summary.onChanged (e) => @pSummary.html e.newValue
     
     
     # See [page] object for documentation on available options.
@@ -34,7 +37,7 @@ module.exports = (module) ->
 
         # Update CSS options.
         @css options.css
-        module.util.syncScroll el, options.scroll if options.scroll?
+        module.core.util.syncScroll el, options.scroll if options.scroll?
         
         # Update the host pane elements.
         @trTitle.toggle (options.showTitle ?= true)
@@ -111,16 +114,6 @@ module.exports = (module) ->
         
         # Update title.
         @divTitle.toggle suite?
-        if suite?
-            # Format title and summary.
-            title   = suite.title() ? ''
-            title   = _(title).capitalize()
-            summary = suite.summary() ? ''
-            summary = _(summary).capitalize()
-            
-            # Update DOM elements.
-            @pTitle.html    title
-            @pSummary.html  summary
   
   
   # PRIVATE --------------------------------------------------------------------------

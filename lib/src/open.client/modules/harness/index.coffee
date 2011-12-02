@@ -12,10 +12,6 @@ module.exports = class TestHarness extends core.mvc.Module
       selectedSuite: null
       selectedSpec:  null
     
-    # Store common references.
-    @util = core.util
-    @tabs = new Tabs().init()
-    
     # Wire up events.
     @selectedSuite.onChanged (e) => 
       # Setup initial conditions.
@@ -25,6 +21,15 @@ module.exports = class TestHarness extends core.mvc.Module
       # Update state.
       @page.reset()
       @selectedSpec null # Reset the spec when the suite changes.
+      
+      # - Title and Summary
+      if newSuite?
+        formatText = (text) -> 
+          text = text ? ''
+          text = _(text).capitalize()
+          text
+        @page.title   formatText( newSuite.title() )
+        @page.summary formatText( newSuite.summary() )
       
       # Invoke the [afterAll] if a current suite is being unloaded.
       # This starts at the the closest suite and works out to the most distant ancestor suite.
@@ -54,6 +59,15 @@ module.exports = class TestHarness extends core.mvc.Module
     super options
     @options = options
     window.HARNESS ?= {} # Used for testing.  This would otherwise be set in the page.
+
+    # Set default strings.
+    strings = @strings = options.strings ?= {}
+    strings.suites  ?= 'Suites'
+    strings.specs   ?= 'Specs'
+    strings.baseUrl ?= ''
+    
+    # Create the tabs sub-module.
+    @tabs = new Tabs(@).init()
     
     # Exit out if in debug mode.
     # This mode is just so sub-views can be pulled up within the TestHarness itself.
@@ -63,11 +77,6 @@ module.exports = class TestHarness extends core.mvc.Module
     # by storing it in the global object.
     Page = @model 'page'
     window.page = @page = new Page()
-    
-    # Set default strings.
-    strings = options.strings ?= {}
-    strings.suites = 'Suites'
-    strings.specs  = 'Specs'
     
     # Configure for iOS.
     document.ontouchmove = (e) -> e.preventDefault() # Suppress page scroll bouncing.

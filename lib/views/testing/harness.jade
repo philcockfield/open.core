@@ -7,7 +7,10 @@ html(lang='en')
     // Stylesheets.
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/normalize.css")
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/pygments.css")
+    link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/base.css")
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/modules/harness.css")
+    link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/markdown.css")
+
     - each url in options.css
       link(type='text/css', rel='stylesheet', href="#{url}")
     
@@ -20,7 +23,8 @@ html(lang='en')
       window.HARNESS = {
         strings: {
           suites: "#{options.strings.suites}",
-          specs: "#{options.strings.specs}"
+          specs: "#{options.strings.specs}",
+          baseUrl: "#{baseUrl}"
         }
       };
     

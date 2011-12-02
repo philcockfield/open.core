@@ -9,9 +9,11 @@ Events:
 
 ###
 module.exports = (module) ->
-  class Page
-    constructor: -> 
-        _.extend @, Backbone.Events
+  class Page extends module.mvc.Model
+    constructor: -> super
+    defaults:
+      title:   null   # Gets or sets the title of the page.
+      summary: null   # Gets or sets the summary of the page.
     
     
     # Gets the [ContextPane] - the panel to display options below the control host.
@@ -41,9 +43,9 @@ module.exports = (module) ->
               - reset:     Flag indicating if the 'Reset' method should be invoked before adding.
     ###
     add: (el, options = {}) -> 
-        @reset() if options.reset is yes
-        @trigger 'add', element: module.util.toJQuery(el), options: options
-        el
+      @reset() if options.reset is yes
+      @trigger 'add', element: module.core.util.toJQuery(el), options: options
+      el
     
     
     ###
@@ -61,4 +63,16 @@ module.exports = (module) ->
     reset: -> @trigger 'reset'
     
     
+    ###
+    Adds the given markdown content to the host.
+    @param content: a string of markdown.
+    ###
+    markdown: (content) -> 
+      @clear()
+      module.util.postMarkdown content, (err, html) => 
+        return if err?
+        el = $ "<div class=\"th_markdown\">#{html}</div>"
+        @add el, fill:true, scroll:'y'
+  
+  
   

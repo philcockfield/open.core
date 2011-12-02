@@ -8,7 +8,7 @@ module.exports = (module) ->
       super _.extend props, className:'th_tab'
       
       # Syncers.
-      syncScroll = => module.util.syncScroll @el, @scroll()
+      syncScroll = => module.core.util.syncScroll @el, @scroll()
       
       # Wire up events.
       @scroll.onChanged syncScroll

@@ -31,6 +31,5 @@ core.configure.harness app,
                     "#{stylesheets}/base.css"
                     "#{stylesheets}/controls.css"
                     "#{stylesheets}/modules.css"
-                    "#{stylesheets}/markdown.css"
                   ]
 

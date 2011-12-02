@@ -28,6 +28,7 @@ module.exports = (module) ->
                   - markdown      : String of markdown to load.
                   - {tab options} : Standard tab/button options eg. label, selected etc.
                   - show:         : Flag indicating if the pane should be shown (default: true).
+          @returns the inserted tab.
           ###
           @add.markdown = do => 
             (options = {}) => addTab options, -> new tabs.Markdown( markdown:options.markdown )
@@ -41,6 +42,7 @@ module.exports = (module) ->
                   - language      : The language of the content (eg. 'css' or 'js').
                   - description   : Optional.  Markdown containing a description of the content.
                   - showLink:     : Optional.  Flag indicating if a link to the raw content should be shown (default: true).
+          @returns the inserted tab.
           ###
           @add.remote = do => (options = {}) => 
             tab = addTab options, -> new tabs.Remote( options )
@@ -53,6 +55,7 @@ module.exports = (module) ->
                   - {tab options} : Standard tab/button options eg. label, selected etc.
                   - url           : The URL to retrieve the CSS from.
                   - show:         : Flag indicating if the pane should be shown (default: true).
+          @returns the inserted tab.
           ###
           @add.css = do => 
             (options = {}) => 
@@ -104,7 +107,7 @@ module.exports = (module) ->
         # Insert tab content element.
         tab.elContent.addClass 'th_tab_content'
         if options.content?
-              tab.elContent.append module.util.toJQuery(options.content)
+              tab.elContent.append module.core.util.toJQuery(options.content)
               tab.content = options.content
         @divBody.append tab.elContent
         
