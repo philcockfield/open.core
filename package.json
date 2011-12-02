@@ -1,6 +1,6 @@
 {
 	"name": "open.core",
-	"version": "0.1.183",
+	"version": "0.1.184",
 	"description": "Common utility functionality used between multiple applications.",
 	"homepage": "https://github.com/philcockfield/open.core",
 	"author": {
