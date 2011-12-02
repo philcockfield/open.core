@@ -1,10 +1,15 @@
-server = require(process.env.PWD)
+express = require 'express'
+core    = require(process.env.PWD)
 
-global.core = server
+# Initialize the server.
+core.init express.createServer(), baseUrl: '/'
+
+
+global.core = core
 global.test =
-  paths: server.paths
-  server: server
-  client: server.client
+  paths: core.paths
+  server: core
+  client: core.client
   
   authKeys:
     twitter:

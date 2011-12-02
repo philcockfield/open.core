@@ -2,6 +2,7 @@ core      = require 'open.server'
 Builder   = require './build/builder'
 ModuleDef = require '../module_def'
 
+
 # Initialize the module builder system.
 ModuleDef.registerPath core.paths.client
 ModuleDef.defaults.header = core.copyright asComment:true

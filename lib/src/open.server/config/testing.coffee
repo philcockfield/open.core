@@ -2,12 +2,13 @@ core    = require 'open.server'
 app     = core.app
 baseUrl = core.baseUrl
 
+
 # Paths.
 stylesheets = "#{baseUrl}/stylesheets/core"
 
 
 # Unit-test runner (specs).
-core.configure.specs app,
+core.init.specs app,
       title:            'Open.Core - Specs'
       url:              "#{baseUrl}/specs"
       sourceUrls:       [
@@ -20,7 +21,7 @@ core.configure.specs app,
       samplesNamespace: 'core/test'
 
 # Test Harness.
-core.configure.harness app,
+core.init.harness app,
       title:      'Open.Core - TestHarness'
       url:        "#{baseUrl}/harness"
       sourceUrls: [

@@ -1,6 +1,7 @@
 core    = require 'open.server'
 options = core.options
 
+
 # Setup initial conditions.
 baseUrl = core.baseUrl
 paths   = core.paths
