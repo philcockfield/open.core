@@ -18,8 +18,12 @@ module.exports = paths =
     specs:        "#{root}/test/specs"
 
 
-# Put the root modules into the global paths.
-# require.paths.unshift paths.client
-require.paths.unshift paths.src
+# Put the root module into the global paths.
+# NOTE: Only do this if another reference to [open.core] has not
+#       already been registered.  This will happen if there is more 
+#       than one dependency reference to [open.core].
+unless _(require.paths).include 'node_modules/open.core/'
+  require.paths.unshift paths.src
+
 
 

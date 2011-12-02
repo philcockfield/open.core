@@ -3,4 +3,3 @@ require('coffee-script');
 module.exports = require('./lib/src/open.server/index.coffee');
 
 
-
