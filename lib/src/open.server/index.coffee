@@ -94,8 +94,8 @@ module.exports = core =
 
 
 log = (message, color = '', explanation = '') ->
-    return # Temporarily don't write out.  Figure out how to only write this when running in Core app
-    core.log message, color, explanation
+  return if core.isSubModule
+  core.log message, color, explanation
 
 
 # Bootstrap.
@@ -111,7 +111,6 @@ do ->
   core.client      = require 'open.client'
   core.version     = core.client.core.version
   core.mvc         = core.client.core.mvc
-  
   core.util        = require './util'
   core.log         = core.util.log
   core.modules     = require './modules'
@@ -119,5 +118,9 @@ do ->
   # Test runners.
   core.init.specs   = require './routes/testing/jasmine'
   core.init.harness = require './routes/testing/harness'
+  
+  # Store a reference to whether this is running as a sub-module of
+  # another project, or stand-alone.
+  core.isSubModule = not _(process.env.PWD).endsWith 'open.core'
 
 
