@@ -33,34 +33,21 @@ module.exports = build =
   @param callback: invoked upon completion.
   ###
   libs: (callback) ->
-        core       = require 'open.server'
-        fs         = core.util.fs
-        sourceLibs = "#{__dirname}/libs.src"
-        targetLibs = "#{core.paths.public}/javascripts/libs"
+    # Setup initial conditions.
+    module    = ModuleDef.find 'open.client/libs'
+    targetDir = "#{core.paths.public}/javascripts/libs"
+    
+    # Save.
+    module.save targetDir,
+      includeRoot: false
+      withLibs:    true
+      -> 
         
-        # Note: Order is important.  Underscore must come before Backbone.
-        paths = [
-          'jquery-1.7.1.js'
-          'underscore-1.1.6.js'
-          'underscore.string-1.1.5.js'
-          'backbone-0.5.1.js'
-          'spin.js'
-          'require.js'
-        ]
-        paths = _(paths).map (path) -> "#{sourceLibs}/#{path}"
+        # Copy the [require.js] file.
+        core.util.fs.copy "#{module.dir}/src/require.js", "#{targetDir}/require.js", -> 
         
-        # Concatenate the JS libraries into a single file and save.
-        options =
-            paths: paths
-            standard: "#{targetLibs}/libs.js"
-            minified: "#{targetLibs}/libs-min.js"
-        fs.concatenate.save options, -> 
-            
-            # Copy the [require.js] file.
-            fs.copy "#{sourceLibs}/require.js", "#{targetLibs}/require.js", -> 
-            
-                # Finish up.
-                callback?()
+        # Finish up.
+        callback?()
 
 
 # PRIVATE --------------------------------------------------------------------------

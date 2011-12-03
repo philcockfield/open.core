@@ -305,18 +305,6 @@ body {
   bottom: 0px;
   overflow: hidden;
 }
-.th_tab {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: #fafafa;
-  padding: 20px;
-  padding-top: 10px;
-  font-size: 10pt;
-  line-height: 150%;
-}
 .th_markdown {
   padding-bottom: 50px;
 }
@@ -337,4 +325,22 @@ body {
 }
 .th_markdown .core_markdown h5 {
   font-size: 11pt;
+}
+.th_host .th_markdown .core_markdown {
+  position: relative;
+  width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.th_tab {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: #fafafa;
+  padding: 20px;
+  padding-top: 10px;
+  font-size: 10pt;
+  line-height: 150%;
 }

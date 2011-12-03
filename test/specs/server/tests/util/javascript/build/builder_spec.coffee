@@ -209,7 +209,7 @@ describe 'util/javascript/build/builder', ->
           expect(includes).toEqual false
     
       it 'includes the require JS in the built code', ->
-        builder = new Builder(paths, { includeRequireJS: true })
+        builder = new Builder(paths, includeRequireJS: true )
         code = null
         builder.build (c) -> code = c
         waitsFor (-> code?), WAIT_TIME

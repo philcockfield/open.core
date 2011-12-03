@@ -1,4 +1,4 @@
-@import '../_functions'
+@import './_functions'
 
 .th_markdown
   padding-bottom 50px
@@ -14,3 +14,14 @@
       font-size 12pt
     h5
       font-size 11pt
+
+// Markdown rendered in main host.
+
+.th_host .th_markdown
+  .core_markdown
+    position relative
+    width 850px
+    margin-left auto
+    margin-right auto
+
+

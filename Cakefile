@@ -8,11 +8,6 @@ git      = core.util.git
 logDone = -> log 'Done', color.green
 
 
-task 'temp', -> buildCore() # TEMP 
-  
-  
-  
-
 
 task 'specs', 'Run the server-side Jasmine BDD specs', ->
   exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->

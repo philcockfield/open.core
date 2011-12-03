@@ -1,3 +1,4 @@
+core      = require 'open.server'
 fsUtil    = require '../../fs'
 BuildPath = require './build_path'
 minifier  = require '../minifier'
@@ -163,7 +164,7 @@ moduleProperties = (files) ->
 
 
 # -- STATIC members.
-Builder.requireJS = fsUtil.fs.readFileSync("#{__dirname}/../libs.src/require.js").toString()
+Builder.requireJS = fsUtil.fs.readFileSync("#{core.paths.client}/libs/src/require.js").toString()
 
 
 ###

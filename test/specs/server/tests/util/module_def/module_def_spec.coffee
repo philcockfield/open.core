@@ -14,6 +14,7 @@ describe 'util/javascripts/module_def', ->
       header:              null
       minify:              true
       withDependencies:    true
+      withLibs:            true
       includeRoot:         true
   
   it 'exists', -> expect(ModuleDef).toBeDefined()
@@ -129,8 +130,6 @@ describe 'util/javascripts/module_def', ->
           includeRequireJS:     true
           header:               'Foo!'
           minify:               false
-          withDependencies:     false
-          includeRoot:          false
         
         builder = new ModuleDef(SAMPLE_DIR)._toBuilder()
         expect(builder.includeRequireJS).toEqual true
@@ -204,11 +203,12 @@ describe 'util/javascripts/module_def', ->
       ModuleDef.registerPath "#{SAMPLE_DIR}/simple"
       def  = ModuleDef.find 'libs-sample'
     
+    
     it 'builds with libs', ->
       code = null
       waitsFor (-> code?), TIMEOUT
       
-      def.build (c) -> code = c
+      def.build withLibs:true, (c) -> code = c
       runs -> 
         code = code.standard
         
@@ -219,6 +219,24 @@ describe 'util/javascripts/module_def', ->
         expect(_(code).include('"libs-sample/file1": function')).toEqual false
         expect(_(code).include('"libs-sample/libs/file2": function')).toEqual false
         expect(_(code).include('"libs-sample/libs/file3": function')).toEqual false
+      
+    it 'builds without libs', ->
+      code = null
+      waitsFor (-> code?), TIMEOUT
+      
+      def.build withLibs:false, (c) -> code = c
+      runs -> 
+        code = code.standard
+        
+        libsHeader = '''
+                      /* 
+                        - file1.js
+                        - file2.js
+                        - file3.js
+                      */
+                     '''
+        expect(_(code).include(libsHeader)).toEqual false
+
   
   describe 'static methods', ->
     DIR = "#{SAMPLE_DIR}/collection"

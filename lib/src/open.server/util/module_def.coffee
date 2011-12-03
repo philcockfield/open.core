@@ -96,37 +96,52 @@ module.exports = Def = class ModuleDef
         - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
         - minify:            Optional. Flag indicating if code should be minified.  Default true.
       
-      - withDependencies:    Flag indicating if paths to dependencies should be included (default true).
       - includeRoot:         Flag indicating if the root path to the module should be included.
                              Use this to build dependencies only (default true).
-      - withLibs:            Flag indicating if libs should be appended (default true).
+      - withDependencies:    Flag indicating if paths to dependencies should be included (default false).
+      - withLibs:            Flag indicating if libs should be appended (default false).
   @param callback(code): Invoked upon completion. 
                          fnCode(minified):
                           - standard : Property, uncompressed.
                           - minified : Property, compressed.
   ###
   build: (options..., callback) -> 
+    # Setup initial conditions.
     options = options[0] ? {}
-    options.withLibs ?= true
+    options.withLibs ?= ModuleDef.defaults.withLibs
+    
+    # Build the module and libs code.
     @_toBuilder(options).build (moduleCode) => 
       loadLibs @, options, (libsCode) -> 
-        standard = "#{moduleCode.standard}\n\n\n#{libsCode.standard}"
-        minified = "#{moduleCode.minified}\n\n\n#{libsCode.minified}"
-        callback? fnCode standard, minified
+        
+        code = (propName) -> 
+          standard = moduleCode[propName] ? ''
+          libs = libsCode[propName] ? ''
+          result = "#{standard}\n\n\n#{libs}\n"
+          result = _(result).ltrim '\n'
+        
+        # Finish up.
+        callback? fnCode code('standard'), code('minified')
   
   
   ###
   Builds and saves the code.
   @param dir:             The directory to save the file to (the file name is within the [module.json]).
-  @param options:         Builder options.  See 'builder' method.
+  @param options:         See 'build' method options for details.
+                          Plus:
+                          - name:      The file name (without an extension) - if required to override file name in [module.json].
+                          - minSuffix: (optional). The minified suffix (default: -min)
   @param callback(code):  Invoked up completion.
   ###
   save: (dir, options..., callback) -> 
+    # Setup initial conditions.
     options = options[0] ? {}
+    
+    # Build and save.
     @build options, (code) => 
       options.code = code
       options.dir  = dir
-      options.name = @file
+      options.name = (options.name ? @file)
       Builder.save options, callback
   
   
@@ -142,9 +157,9 @@ module.exports = Def = class ModuleDef
         - header:            Optional. A notice to prepend to the head of the code (eg. a copyright notice).
         - minify:            Optional. Flag indicating if code should be minified.  Default true.
       
-      - withDependencies:    Flag indicating if paths to dependencies should be included (default true).
       - includeRoot:         Flag indicating if the root path to the module should be included.
                              Use this to build dependencies only (default true).
+      - withDependencies:    Flag indicating if paths to dependencies should be included (default true).
   @returns a new [Builder].
   ###
   _toBuilder: (options = {}) -> 
@@ -199,7 +214,7 @@ loadLibs = (def, options, callback) ->
   # Setup initial conditions.
   libs = def.libs
   
-  if libs.length is 0
+  if libs.length is 0 or options.withLibs is no
     # No libs to load, exit now.
     callback fnCode(null, null)
     return
@@ -221,6 +236,7 @@ Def.defaults =
   header:              null
   minify:              true
   withDependencies:    false
+  withLibs:            true
   includeRoot:         true
 
 # Collection of modules.
