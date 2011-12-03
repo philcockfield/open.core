@@ -29,9 +29,9 @@ module.exports = core =
     # Setup initial conditions.
     @init null, 
       baseUrl: '/', 
-      callback: => 
+      => 
         app  = @app
-        log  = @util.log
+        log  = @log
         
         # Determine which port to start on.
         options.port ?= 8080
@@ -51,12 +51,12 @@ module.exports = core =
   @param options:
           - baseUrl:  Optional. The base URL path to put the Core app within (default: /core).
           - express:  Optional. The instance of Express being used.
-          - callback: Optional. Function to invoke upon completion.
+  @param callback: Optional. Function to invoke upon completion.
   ###
-  init: (app, options = {}) -> 
+  init: (app, options..., callback) -> 
     
     # Setup initial conditions.
-    callback = options.callback
+    options  = options[0] ? {}
     paths    = @paths
     baseUrl  = options.baseUrl ?= '/core'
     baseUrl  = _.trim(baseUrl)
