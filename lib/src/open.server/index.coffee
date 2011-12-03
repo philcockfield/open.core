@@ -1,13 +1,6 @@
 module.exports = core =
   title:       'Open.Core (Server)'
   
-  # Set in bootstrap below.
-  paths:       undefined 
-  util:        undefined
-  log:         undefined
-  client:      undefined
-  configure:   undefined
-  
   
   ###
   Generates the standard copyright notice (MIT).
@@ -80,10 +73,10 @@ module.exports = core =
     require './routes'
     
     build = (callback) => 
-      log '  Building:', color.blue, 'Open.Core client-side javascript...'
+      log '  Building:', color.blue, 'Open.Core javascript...'
       timer = new @util.Timer()
-      @util.javascript.build.all -> 
-        log '  - Javascript built', color.blue, "in #{timer.secs()} seconds"
+      @build.all -> 
+        log '  - Built', color.blue, "in #{timer.secs()} seconds"
         callback?()
     
     # Build client-side JavaScript.
@@ -114,6 +107,7 @@ do ->
   core.util        = require './util'
   core.log         = core.util.log
   core.modules     = require './modules'
+  core.build        = require './config/build'
   
   # Test runners.
   core.init.specs   = require './routes/testing/jasmine'

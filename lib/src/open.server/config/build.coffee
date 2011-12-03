@@ -1,6 +1,6 @@
 core      = require 'open.server'
-Builder   = require './build/builder'
-ModuleDef = require '../module_def'
+Builder   = core.util.javascript.Builder
+ModuleDef = core.util.ModuleDef
 
 
 # Initialize the module builder system.
@@ -24,7 +24,7 @@ module.exports = build =
     count = 0
     for key of buildList
       count += 1
-      @[key] => 
+      build[key] => 
         count -= 1
         callback?() if count is 0
   

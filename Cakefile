@@ -26,10 +26,15 @@ task 'specs:client', 'Run the client-side Jasmine BDD specs in a new process on 
 
 
 task 'build', 'Build and save all JavaScript files', ->
+  build = (msg, fn, callback) -> 
+    log ' - Building', color.blue, msg
+    fn callback
+  
+  log 'Building client-side JavaScript...', color.blue
   timer = new core.util.Timer()
-  buildLibs -> 
-    buildCore -> 
-      log 'Built in:', color.blue, "#{timer.secs()} seconds"
+  build '[Open.Core] modules', core.build.all, -> 
+    build '3rd party libs', core.build.all, -> 
+      log 'Built in:', color.green, "#{timer.secs()} seconds"
       log()
 
 
@@ -91,24 +96,5 @@ task 'deploy', 'Deploys to Heroku', ->
     onExec err, stdout, stderr
     logDone()
 
-
-# PRIVATE --------------------------------------------------------------------------
-
-
-buildLibs = (callback) -> 
-  console.log 'Building all 3rd party lib code...'
-  core.util.javascript.build.libs -> 
-    log ' - See: ', color.blue, "#{core.paths.public}/libs"
-    logDone()
-    log()
-    callback?()
-
-buildCore = (callback) -> 
-  console.log 'Building all [open.core] client code...'
-  core.util.javascript.build.all -> 
-    log ' - See: ', color.blue, "#{core.paths.public}/core"
-    logDone()
-    log()
-    callback?()
 
 
