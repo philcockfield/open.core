@@ -11,14 +11,14 @@ module.exports =
   ###
   Converts markdown to HTML.
   @param options: 
-            - source:     The source markdown to convert.
+            - source:     String. The source markdown to convert.
             - classes:    The CSS classes to assign to various elements
                 - prefix:   The prefix to assign to default CSS class names (default: 'core_').
                 - root:     The root CSS class (default: 'core_markdown').
                 - code:     The <pre> CSS class for code blocks.
                             Options:
-                              - {core_}inset  : Sunken border.
-                              - {core_}simple : Simple left vertical line (Default).
+                              - {core_}inset  : Sunken border. (Default)
+                              - {core_}simple : Simple left vertical line.
   @param callback(err, html) : Invoked when the highlight is complete.  Passes back the resulting HTML.
   ###
   toHtml: (options = {}, callback) ->
@@ -92,7 +92,7 @@ syntaxHighlight = (html, options, callback) ->
         source = source.substr language.length + 2, source.length
         
         # Syntax highlight the code in the specified language.
-        language = mapLanguage language
+        language = toFileExtension language
         pygments.toHtml 
           source:   core.util.unescapeHtml(source)
           language: language
@@ -127,13 +127,13 @@ matchFilter = (str) ->
   match = _(match).chain().ltrim(':').rtrim('\n').value()
 
 
-mapLanguage = (language) -> 
+toFileExtension = (language) -> 
   switch language
     when 'coffeescript', 'coffee-script' then 'coffee'
+    when 'json', 'javascript'            then 'js'
     when 'ruby'   then 'rb'
     when 'c#'     then 'cs'
     when 'python' then 'py'
-    when 'json'   then 'js'
     else language
 
 

@@ -51,12 +51,13 @@ module.exports = core =
   @param options:
           - baseUrl:  Optional. The base URL path to put the Core app within (default: /core).
           - express:  Optional. The instance of Express being used.
-  @param callback: Optional. Function to invoke upon completion.
+  @param callback:    Function to invoke upon completion.
   ###
   init: (app, options..., callback) -> 
     
     # Setup initial conditions.
     options  = options[0] ? {}
+    
     paths    = @paths
     baseUrl  = options.baseUrl ?= '/core'
     baseUrl  = _.trim(baseUrl)

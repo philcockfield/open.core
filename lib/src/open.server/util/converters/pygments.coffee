@@ -1,7 +1,7 @@
 {exec} = require 'child_process'
 uuid   = require 'node-uuid'
 core   = require 'open.server'
-http   = require 'http'
+rest   = require 'restler'
 
 
 ###
@@ -41,13 +41,42 @@ module.exports =
       # Functions.
       saveSource   = (onComplete) => fsUtil.writeFile file, source, onComplete
       deleteSource = (onComplete) -> fsUtil.delete file, onComplete
+      
+      highlightService = (onComplete) -> 
+        # Use the service if the local version of pygments is not installed.
+        url  = 'http://pygmentize.herokuapp.com'
+        post = rest.post url,
+          data:
+            code: source
+            lang: toLanguage(language)
+        
+        post.on 'complete', (data, res) -> 
+          onComplete(null, data) if res.statusCode is 200
+        
+        post.on 'error', (err) -> onComplete err, null
+      
       highlight = (onComplete) -> 
-          cmd = "pygmentize -f html #{file}"
-          exec cmd, (err, stdout, stderr) -> onComplete err, stdout
+        cmd = "pygmentize -f html #{file}"
+        exec cmd, (err, stdout, stderr) -> 
+          if err?
+            # Failed locally, attempt conversion via web-service.
+            highlightService onComplete
+          else 
+            onComplete err, stdout
       
       # Execute sequence.
       saveSource -> 
         highlight (err, html) -> 
           deleteSource -> 
               callback? err, html
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+toLanguage = (fileExtension) -> 
+  switch fileExtension
+    when 'coffee' then 'coffeescript'
+    else fileExtension
+
+
 

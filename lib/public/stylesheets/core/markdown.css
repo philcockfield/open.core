@@ -34,9 +34,9 @@
   color: #808080;
 }
 .core_markdown p {
-  line-height: 170%;
+  line-height: 160%;
   margin-top: 0px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .core_markdown hr {
   border: none;
