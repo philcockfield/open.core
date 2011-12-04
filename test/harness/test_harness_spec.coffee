@@ -82,9 +82,13 @@ describe 'Test Harness', ->
     it 'Add - fill:1 (100%)', -> page.add div, fill:1
     
     it 'Markdown', -> page.markdown markdownSample1
-      
-    
-    
+  
+  
+  describe 'Suite', ->
+    describe 'Summary | Options', 'Summary text!', foo:'summary and options', ->
+    describe 'Options', foo:'options only', ->
+  
+  
   describe 'Tabs', ->
     harness = null
     tabs    = null

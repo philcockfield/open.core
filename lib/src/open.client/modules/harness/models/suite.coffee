@@ -11,6 +11,7 @@ module.exports = (module) ->
         title:          null
         summary:        null
         func:           null
+        options:        null
         isInitialized:  false
     
     ###
@@ -25,8 +26,11 @@ module.exports = (module) ->
         
         # Setup initial conditions.
         super
-        params = [params] unless _(params).isArray()
-        last = _(params).last()
+        params      = [params] unless _(params).isArray()
+        firstParam  = params[0]
+        secondParam = params[1]
+        thirdParam  = params[2]
+        lastParam   = _(params).last()
         
         # Collections.
         @childSuites  = new Suite.Collection()
@@ -37,10 +41,20 @@ module.exports = (module) ->
         @specs        = new Spec.Collection()
         
         # Store parts.
-        @title params[0] if _(params[0]).isString()
-        @summary params[1] if _(params[1]).isString()
-        @func last if _(last).isFunction()
-        @id = buildId @
+        @id = createId @
+        @title firstParam if _(firstParam).isString()
+        @func lastParam if _(lastParam).isFunction()
+        
+        if _(secondParam).isString()
+          # Second parameter is summary text.
+          @summary secondParam if _(params[1]).isString()
+        else if not _(secondParam).isFunction()
+          # Second parameter is an options object.
+          @options secondParam
+        
+        if params.length >= 3 and   (not _(thirdParam).isFunction())
+          # Thrid parameter is an options object.
+          @options thirdParam
         
         # Store this instance in the flat master list of suites.
         Suite.all.add @
@@ -118,7 +132,7 @@ module.exports = (module) ->
   # PRIVATE --------------------------------------------------------------------------
   
   
-  buildId = (suite, childId = null) -> 
+  createId = (suite, childId = null) -> 
         
         # Setup initial conditions.
         id = formatId suite.title()
@@ -130,7 +144,7 @@ module.exports = (module) ->
         # Prepend the parent part of the id
         parent = suite.parentSuite
         if parent?
-            id = buildId suite.parentSuite, id  # <== RECURSION
+            id = createId suite.parentSuite, id  # <== RECURSION
         
         # Finish up.
         id
