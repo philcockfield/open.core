@@ -41,7 +41,6 @@ module.exports = (module) ->
         @specs        = new Spec.Collection()
         
         # Store parts.
-        @id = createId @
         @title firstParam if _(firstParam).isString()
         @func lastParam if _(lastParam).isFunction()
         
@@ -58,6 +57,9 @@ module.exports = (module) ->
         
         # Store this instance in the flat master list of suites.
         Suite.all.add @
+        
+        # Finish up.
+        @id = createId @
     
     
     ###

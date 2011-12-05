@@ -15,6 +15,9 @@ module.exports = (module) ->
     # Updates the URL hash to match the currently selected hash.
     syncUrl: () -> 
         id = module.selectedSuite()?.id ? ''
+        
+        console.log 'syncUrl', id, module.selectedSuite()
+        
         @ignoreHashChanged    = true
         window.location.hash  = id
         @ignoreHashChanged    = false
