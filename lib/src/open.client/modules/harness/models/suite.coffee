@@ -1,5 +1,18 @@
 ###
 Model: Represents a 'describe' block.
+
+
+Declared using the following configurations:
+
+  describe 'text description', ->
+  describe 'text description', 'summary...' ->
+  describe 'text description', {options} ->
+  describe 'text description', 'summary...', {options} ->
+  
+  Options:
+    - sortSuites:   Boolean. Sort order for child suites. (default: false)
+    - sortSpecs:    Boolean. Sort order for child specs.  (default: false)
+
 ###
 module.exports = (module) ->
   Spec      = module.model 'spec'
@@ -11,7 +24,7 @@ module.exports = (module) ->
         title:          null
         summary:        null
         func:           null
-        options:        {}
+        options:        null
         isInitialized:  false
     
     ###
@@ -19,7 +32,8 @@ module.exports = (module) ->
     @param params:      The array of arguments retreived from the "describe" function.
                         This will be a set of strings:
                         [0]: The title
-                        [1]: Summary (optional).
+                        [1]: Summary or options (optional).
+                        [2]: options (optional).
     @param parentSuite: The parent suite if this is not a root suite.
     ###
     constructor: (params, @parentSuite) -> 
@@ -55,10 +69,16 @@ module.exports = (module) ->
           # Thrid parameter is an options object.
           @options thirdParam
         
+        # Ensure there is an options object.
+        @options {} unless @options()?
+        options       = @options()
+        parentOptions = @parentSuite?.options()
+        
         # Set option defaults.
-        options = @options()
-        options.sortSuites ?= ( if @parentSuite? then @parentSuite.options().sortSuites else false )
-        options.sortSpecs ?= false
+        defaultFromParent = (propName, defaultValue) => 
+          options[propName] ?= ( if parentOptions? then parentOptions[propName] else defaultValue )
+        defaultFromParent 'sortSuites', false
+        defaultFromParent 'sortSpecs', false
         
         # Store this instance in the flat master list of suites.
         Suite.all.add @
