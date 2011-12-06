@@ -11,7 +11,7 @@ module.exports = (module) ->
         title:          null
         summary:        null
         func:           null
-        options:        null
+        options:        {}
         isInitialized:  false
     
     ###
@@ -55,6 +55,11 @@ module.exports = (module) ->
           # Thrid parameter is an options object.
           @options thirdParam
         
+        # Set option defaults.
+        options = @options()
+        options.sortSuites ?= ( if @parentSuite? then @parentSuite.options().sortSuites else false )
+        options.sortSpecs ?= false
+        
         # Store this instance in the flat master list of suites.
         Suite.all.add @
         
@@ -66,27 +71,36 @@ module.exports = (module) ->
     Invokes the 'describe' function to get child specs and suites.
     ###
     init: -> 
-        # Setup initial conditions.
-        return if @isInitialized() is yes
-        @isInitialized yes
-        
-        # Invoke the function to get the child "describe" and "it" blocks.
-        fn = @func()
-        if fn?
-            # Clear the cache of params and run the test function, which will fill the cache again.
-            resetGlobalArrays()
-            fn()
-            
-            # Collect each type of operation.
-            Suite.getSuites     @childSuites, @
-            Suite.getBeforeEach @beforeEach, @
-            Suite.getAfterEach  @afterEach, @
-            Suite.getBeforeAll  @beforeAll, @
-            Suite.getAfterAll   @afterAll, @
-            Suite.getSpecs      @specs, @
-            
-            # Re-clear the cache.
-            resetGlobalArrays()
+      # Setup initial conditions.
+      return if @isInitialized() is yes
+      @isInitialized yes
+      options = @options()
+      
+      # Invoke the function to get the child "describe" and "it" blocks.
+      fn = @func()
+      if fn?
+          # Clear the cache of params and run the test function, which will fill the cache again.
+          resetGlobalArrays()
+          fn()
+          
+          # Collect each type of operation.
+          Suite.getSuites     @childSuites, @
+          Suite.getBeforeEach @beforeEach, @
+          Suite.getAfterEach  @afterEach, @
+          Suite.getBeforeAll  @beforeAll, @
+          Suite.getAfterAll   @afterAll, @
+          Suite.getSpecs      @specs, @
+          
+          # Re-clear the cache.
+          resetGlobalArrays()
+          
+        # Set sorting on collection (if required).
+        sort = (collection, doSort) => 
+          return unless doSort is yes
+          collection.comparator = (model) -> model.title()
+          collection.sort()
+        sort @childSuites, options.sortSuites
+        sort @specs, options.sortSpecs
     
     
     ###
@@ -197,7 +211,6 @@ module.exports = (module) ->
   
   class Suite.Collection extends module.mvc.Collection
     model: Suite
-    comparator: (model) -> model.title()
   
   
   # A collection that contains a flat list of all suites.
