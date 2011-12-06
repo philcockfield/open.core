@@ -115,12 +115,18 @@ module.exports = (module) ->
           resetGlobalArrays()
           
         # Set sorting on collection (if required).
-        sort = (collection, doSort) => 
-          return unless doSort is yes
-          collection.comparator = (model) -> model.title()
-          collection.sort()
-        sort @childSuites, options.sortSuites
-        sort @specs, options.sortSpecs
+        # sort = (collection, doSort) => 
+        #   return unless doSort is yes
+        #   collection.comparator = (model) -> model.title()
+        #   collection.sort()
+        
+        if options.sortSuites is yes
+          @childSuites.comparator = (model) -> model.title()
+          @childSuites.sort()
+        
+        if options.sortSpecs is yes
+          @specs.comparator = (model) -> model.description()
+          @specs.sort()
     
     
     ###
