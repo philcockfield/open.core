@@ -23,6 +23,10 @@ module.exports = (module) ->
         # Store parts.
         @description first if _(first).isString()
         @func last if _(last).isFunction()
+        
+        # Format descriptions.
+        if @suite.options().capitalizeSpecs is yes
+          @description _(@description()).capitalize()
     
     
     ###

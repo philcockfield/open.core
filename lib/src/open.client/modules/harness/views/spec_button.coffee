@@ -27,7 +27,7 @@ module.exports = (module) ->
     
     
     render: -> 
-        text = _(@model.description()).capitalize()
+        text = @model.description()
         @html module.tmpl.specButton text:text
     
     

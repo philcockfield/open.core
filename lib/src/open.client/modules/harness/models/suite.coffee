@@ -10,8 +10,10 @@ Declared using the following configurations:
   describe 'text description', 'summary...', {options} ->
   
   Options:
-    - sortSuites:   Boolean. Sort order for child suites. (default: false)
-    - sortSpecs:    Boolean. Sort order for child specs.  (default: false)
+    - sortSuites:         Boolean. Sort order for child suites. (default: false)
+    - sortSpecs:          Boolean. Sort order for child specs.  (default: false)
+    - capitalizeSuites:   Boolean. Whether suite names should be capitalized (default: true)
+    - capitalizeSpecs:   Boolean. Whether specs names should be capitalized (default: true)
 
 ###
 module.exports = (module) ->
@@ -77,8 +79,17 @@ module.exports = (module) ->
         # Set option defaults.
         defaultFromParent = (propName, defaultValue) => 
           options[propName] ?= ( if parentOptions? then parentOptions[propName] else defaultValue )
-        defaultFromParent 'sortSuites', false
-        defaultFromParent 'sortSpecs', false
+        defaultFromParent 'sortSuites', no
+        defaultFromParent 'sortSpecs',  no
+        defaultFromParent 'capitalizeSuites', yes
+        defaultFromParent 'capitalizeSpecs',  yes
+        
+        # Format suite strings.
+        capitalize = (propName) =>
+          if options.capitalizeSuites is yes
+            @[propName] _(@[propName]()).capitalize()
+        capitalize 'title'
+        capitalize 'summary'
         
         # Store this instance in the flat master list of suites.
         Suite.all.add @
@@ -90,7 +101,7 @@ module.exports = (module) ->
     ###
     Invokes the 'describe' function to get child specs and suites.
     ###
-    init: -> 
+    init: ->
       # Setup initial conditions.
       return if @isInitialized() is yes
       @isInitialized yes

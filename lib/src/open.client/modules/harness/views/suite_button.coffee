@@ -56,22 +56,20 @@ module.exports = (module) ->
             
             # Enumerate each child spec.
             model.childSuites.each (suite) ->
-                      
-                      # Create the sub-suite button.
-                      btn = childButton suite
-                      
-                      # Insert the LI.
-                      title = _(suite.title()).capitalize()
-                      li    = $("<li class='th_suite th_child'></li>")
-                      li.append btn.el
-                      # li.html $("<p>#{title}</p>")
-                      
-                      # Insert child suites in a new child UL.
-                      suite.init()
-                      renderChildSuites li, suite # <== Recursion.
-                      
-                      # Insert the LI into the UL
-                      ul.append li
+                # Create the sub-suite button.
+                btn = childButton suite
+                
+                # Insert the LI.
+                title = suite.title()
+                li    = $("<li class='th_suite th_child'></li>")
+                li.append btn.el
+                
+                # Insert child suites in a new child UL.
+                suite.init()
+                renderChildSuites li, suite # <== Recursion.
+                
+                # Insert the LI into the UL
+                ul.append li
         renderChildSuites @el, @model
         
         # Finish up.
@@ -121,9 +119,7 @@ module.exports = (module) ->
                 @selected(true) if e.newValue is @model
     
     
-    render: -> 
-        title = _(@model.title()).capitalize()
-        @html title
+    render: -> @html @model.title()
   
   
   

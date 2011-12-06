@@ -26,7 +26,6 @@ module.exports = class TestHarness extends core.mvc.Module
       if newSuite?
         formatText = (text) -> 
           text = text ? ''
-          text = _(text).capitalize()
           text
         @page.title   formatText( newSuite.title() )
         @page.summary formatText( newSuite.summary() )
