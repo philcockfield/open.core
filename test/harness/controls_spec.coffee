@@ -29,7 +29,7 @@ describe 'Controls',
         it 'Width: 200',    -> btn.width 200 for btn in buttons
         it 'Width: null',   -> btn.width null for btn in buttons
         
-      
+        
         describe 'ButtonSet', ->
           buttonSet = null
           

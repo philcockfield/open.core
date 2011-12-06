@@ -34,77 +34,77 @@ module.exports = (module) ->
         # Finish up.
         @_updateState()
     
-    render: -> 
-        # Render base HTML.
-        @html module.tmpl.suiteButton()
-        
-        childButton = (suite) => 
-                        btn = new SubSuiteButton model:suite
-                        @childSuiteButtons.add btn
-                        btn
-        
-        # Insert the root suite title as a button.
-        @rootButton = childButton(@model).replace @$('.th_title')
-        
-        # Render any child-suites that may exist.
-        renderChildSuites = (elParent, model) ->
-            return if model.childSuites.length is 0
-            
-            # Insert the containing UL.
-            ul = $('<ul class="th_sub_suites"></ul>')
-            elParent.append ul
-            
-            # Enumerate each child spec.
-            model.childSuites.each (suite) ->
-                # Create the sub-suite button.
-                btn = childButton suite
-                
-                # Insert the LI.
-                title = suite.title()
-                li    = $("<li class='th_suite th_child'></li>")
-                li.append btn.el
-                
-                # Insert child suites in a new child UL.
-                suite.init()
-                renderChildSuites li, suite # <== Recursion.
-                
-                # Insert the LI into the UL
-                ul.append li
-        renderChildSuites @el, @model
-        
-        # Finish up.
-        @ulChildSuites = @el.children('ul.th_sub_suites')
+    
+    render: ->
+      # Render base HTML.
+      @html module.tmpl.suiteButton()
+      
+      childButton = (suite) => 
+                      btn = new SubSuiteButton model:suite
+                      @childSuiteButtons.add btn
+                      btn
+      
+      # Insert the root suite title as a button.
+      @rootButton = childButton(@model).replace @$('.th_title')
+      
+      # Render any child-suites that may exist.
+      renderChildSuites = (elParent, model) =>
+          return if model.childSuites.length is 0
+          
+          # Insert the containing UL.
+          @ulSubSuites = ul = $('<ul class="th_sub_suites"></ul>')
+          elParent.append ul
+          
+          # Enumerate each child spec.
+          model.childSuites.each (suite) ->
+              # Create the sub-suite button.
+              btn = childButton suite
+              
+              # Insert the LI.
+              title = suite.title()
+              li    = $("<li class='th_suite th_child'></li>")
+              li.append btn.el
+              
+              # Insert child suites in a new child UL.
+              suite.init()
+              renderChildSuites li, suite # <== Recursion.
+              
+              # Insert the LI into the UL
+              ul.append li
+      renderChildSuites @el, @model
+      
+      # Finish up.
+      @ulChildSuites = @el.children('ul.th_sub_suites')
     
     
     handleSelectedChanged: -> @_updateState true
     
     
     _updateState: (animate = false) -> 
-          
-          # Setup initial conditions.
-          isSelected = @selected()
-          @_updateSubButtons()
-          
-          # Show or hide the list of child-suites.
-          aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
-          do => 
-              ul       = @ulChildSuites
-              isHidden = ul.is(':hidden')
-              show     = (isSelected and @model.childSuites.length > 0) and isHidden
-              if animate then aniToggle(ul, show) else ul.toggle show
+      # Setup initial conditions.
+      isSelected = @selected()
+      @_updateSubButtons()
+      
+      # Show or hide the list of child-suites.
+      aniToggle = (el, show, duration = 100) -> if show then el.show(duration) else el.hide(duration)
+      do => 
+          ul       = @ulChildSuites
+          isHidden = ul.is(':hidden')
+          show     = (isSelected and @model.childSuites.length > 0) and isHidden
+          if animate then aniToggle(ul, show) else ul.toggle show
     
     
     _updateSubButtons: -> 
-          buttons = @childSuiteButtons
-          
-          # Select or unselect the sub-suite button.
-          if @selected()
-            
-            # Select first button - unless a selection already exists.
-            buttons.items.first().selected true unless buttons.selected()?
-            
-          else
-            buttons.selected()?.selected false
+      buttons = @childSuiteButtons
+      
+      # Select or unselect the sub-suite button.
+      if @selected()
+        
+        # Select first button - unless a selection already exists.
+        buttons.items.first().selected true unless buttons.selected()?
+        
+      else
+        buttons.selected()?.selected false
   
   
   class SubSuiteButton extends Button
@@ -115,8 +115,8 @@ module.exports = (module) ->
         
         # EVENT: Selected 'suite' changed on root module.
         module.selectedSuite.onChanged (e) => 
-                # Ensure the button is selected if the model is set as the selected suite.
-                @selected(true) if e.newValue is @model
+            # Ensure the button is selected if the model is set as the selected suite.
+            @selected(true) if e.newValue is @model
     
     
     render: -> @html @model.title()
@@ -125,6 +125,6 @@ module.exports = (module) ->
   
   # Export.
   SuiteButton
-  
+
 
         
