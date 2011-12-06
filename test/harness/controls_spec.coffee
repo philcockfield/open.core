@@ -1,6 +1,6 @@
 describe 'Controls', 
   '''
-  controls are visual elements that encapsulate a piece of common UI behavior behind an API. +++++
+  controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
   sortSuites:true, sortSpecs:true, ->
     

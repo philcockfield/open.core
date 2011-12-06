@@ -14,13 +14,13 @@ describe 'harness/models/suite', ->
       suite = new Suite()
       expect(suite.title()).toEqual null
 
-    it 'has a title', ->
+    it 'has a title (capitalized by default)', ->
       suite = new Suite(['foo'])
-      expect(suite.title()).toEqual 'foo'
+      expect(suite.title()).toEqual 'Foo'
       
-    it 'has a summary', ->
+    it 'has a summary (capitalized by default)', ->
       suite = new Suite(['foo', 'bar'])
-      expect(suite.summary()).toEqual 'bar'
+      expect(suite.summary()).toEqual 'Bar'
 
     it 'has no summary', ->
       suite = new Suite(['foo', -> ])
@@ -31,10 +31,10 @@ describe 'harness/models/suite', ->
       suite = new Suite(['foo', fn ])
       expect(suite.func()).toEqual fn
       
-    it 'has a func and summary', ->
+    it 'has a func and summary ((capitalized by default))', ->
       fn = -> 
       suite = new Suite(['foo', 'bar', fn ])
-      expect(suite.summary()).toEqual 'bar'
+      expect(suite.summary()).toEqual 'Bar'
       expect(suite.func()).toEqual fn
     
     it 'has a func only', ->
