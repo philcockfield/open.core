@@ -6,9 +6,9 @@ module.exports = (module) ->
         
         # Setup initial conditions.
         super _.extend options, tagName: 'li', className: 'th_btn th_suite th_root', canToggle:true
-        @model = options.model
+        @suite = options.suite
         @childSuiteButtons = new module.controls.ButtonSet()
-        @model.init()
+        @suite.init()
         
         # Render the button.
         @render()
@@ -27,7 +27,7 @@ module.exports = (module) ->
                 # Ensure the button is selected if the model is set as the selected suite.
                 if e.newValue?
                   rootSuite = e.newValue.root()
-                  @selected true if rootSuite is @model
+                  @selected true if rootSuite is @suite
                 else
                   @selected false # Ensure the button is de-selected when nothing is selected on the module.
         
@@ -44,7 +44,7 @@ module.exports = (module) ->
                         btn
         
         # Insert the root suite title as a button.
-        @rootButton = childButton(@model).replace @$('.th_title')
+        @rootButton = childButton(@suite).replace @$('.th_title')
         
         # Render any child-suites that may exist.
         renderChildSuites = (elParent, model) ->
@@ -72,7 +72,7 @@ module.exports = (module) ->
                       
                       # Insert the LI into the UL
                       ul.append li
-        renderChildSuites @el, @model
+        renderChildSuites @el, @suite
         
         # Finish up.
         @ulChildSuites = @el.children('ul.th_sub_suites')
@@ -92,7 +92,7 @@ module.exports = (module) ->
           do => 
               ul       = @ulChildSuites
               isHidden = ul.is(':hidden')
-              show     = (isSelected and @model.childSuites.length > 0) and isHidden
+              show     = (isSelected and @suite.childSuites.length > 0) and isHidden
               if animate then aniToggle(ul, show) else ul.toggle show
     
     
@@ -112,17 +112,17 @@ module.exports = (module) ->
   class SubSuiteButton extends Button
     constructor: (options = {}) -> 
         super _.extend options, className: 'th_btn th_suite', canToggle:true
-        @model = options.model
+        @suite = options.model
         @render()
         
         # EVENT: Selected 'suite' changed on root module.
         module.selectedSuite.onChanged (e) => 
                 # Ensure the button is selected if the model is set as the selected suite.
-                @selected(true) if e.newValue is @model
+                @selected(true) if e.newValue is @suite
     
     
     render: -> 
-        title = _(@model.title()).capitalize()
+        title = _(@suite.title()).capitalize()
         @html title
   
   
