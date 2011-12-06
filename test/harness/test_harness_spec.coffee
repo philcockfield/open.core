@@ -1,13 +1,10 @@
-describe 'Test Harness', sortSuites:true, ->
+describe 'Test Harness', ->
   TestHarness = null
   pane        = null
   beforeAll ->
     TestHarness = require 'open.client/harness'
     pane = page.pane
     pane.reset()
-  
-  describe 'Zebra', ->
-    
   
   describe 'Pane', ->
     SampleView = null
@@ -90,9 +87,6 @@ describe 'Test Harness', sortSuites:true, ->
   describe 'Suite', ->
     describe 'Summary | Options', 'Summary text!', foo:'summary and options', ->
     describe 'Options', foo:'options only', ->
-    describe 'Sort suites (false)', ->
-    describe 'Sort specs (true)', ->
-      
   
   
   describe 'Tabs', ->

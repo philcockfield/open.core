@@ -1,8 +1,8 @@
 describe 'Controls', 
   '''
-  Controls are visual elements that encapsulate a piece of common UI behavior behind an API.
+    Controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
-  sortSuites: true, ->
+  ->
     
     describe 'Buttons', ->
       describe 'Command (CmdButton)', ->

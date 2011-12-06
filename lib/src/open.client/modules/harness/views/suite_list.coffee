@@ -17,12 +17,12 @@ module.exports = (module) ->
         ul = @$('ul.th_suite_root')
         ul.empty()
         @buttons.clear()
-        
+      
         # Enumerate each root 'suite'.
         module.suites.each (d) => 
           
             # Create the button.
-            btn = new SuiteButton suite:d
+            btn = new SuiteButton model:d
             @buttons.add btn
           
             # Insert into the list.
