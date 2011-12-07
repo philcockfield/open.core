@@ -2,7 +2,7 @@ describe 'Controls',
   '''
   controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
-  sortSuites:true, sortSpecs:true, ->
+  sortSuites:true, ->
     
     describe 'zebra', ->
       
@@ -157,6 +157,7 @@ describe 'Controls',
           textbox = new controls.Textbox prompt:'Prompt Watermark'
           page.add textbox, width:300
       it 'Focus', -> textbox.focus()
+      it 'Change prompt', -> textbox.prompt 'New Prompt (example.com)'
     
     describe 'Form', ->
       form = null
