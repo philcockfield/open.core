@@ -24,7 +24,7 @@
 		"jquery": "1.6.2",
 		"uglify-js": ">= 1.0.3",
 		"rimraf": ">= 1.0.2",
-		"zombie": "0.10.2",
+		"zombie": "0.12.1",
 		"node-uuid": "1.2.0",
 		"markdown": ">= 0.3.1",
 		"mongoose": ">= 2.1.0",
