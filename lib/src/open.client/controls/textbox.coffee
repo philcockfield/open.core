@@ -14,15 +14,15 @@ module.exports = class Textbox extends core.mvc.View
     text:       ''      # Gets or sets the content of the textbox.
     multiline:  false   # Gets whether the textbox supports multi-line input.
     password:   false   # Gets or sets whether the textbox is a password (only valid if not multi-line).
-    watermark:  ''      # Gets or sets the watermark.
+    prompt:     ''      # Gets or sets the watermark prompt.
   
   constructor: (params = {}) -> 
       # Setup initial conditions.
       super _.extend params, tagName: 'span', className: @_className('textbox')
       @render()
       
-      syncWatermark = => 
-            @_.watermark.html (if @empty() then @watermark() else '')
+      syncPrompt = => 
+            @_.prompt.html (if @empty() then @prompt() else '')
       
       syncFocus = (hasFocus) => 
         hasFocus = @hasFocus() unless hasFocus?
@@ -31,8 +31,8 @@ module.exports = class Textbox extends core.mvc.View
       # Wire up events.
       @multiline.onChanged => @render()
       @password.onChanged  => @render()
-      @watermark.onChanged syncWatermark
-      @text.onChanged      syncWatermark
+      @prompt.onChanged    syncPrompt
+      @text.onChanged      syncPrompt
       @_.input.focusin => syncFocus(true)
       @_.input.focusout => syncFocus(false)
       
@@ -47,7 +47,7 @@ module.exports = class Textbox extends core.mvc.View
           onPress: (event, callback) => @bind 'press:' + event, callback
       
       # Finish up.
-      syncWatermark()
+      syncPrompt()
       syncFocus()
       
       
@@ -62,12 +62,12 @@ module.exports = class Textbox extends core.mvc.View
       
       # Reference elements.
       elInput     = if @multiline() then @$('textarea') else @$('input')
-      elWatermark = @$ "span.#{@_className('watermark')}"
+      elPrompt    = @$ "span.#{@_className('prompt')}"
       
       # Finish up.
       @_.syncer    = new textSyncer(@.text, elInput)
       @_.input     = elInput
-      @_.watermark = elWatermark
+      @_.prompt    = elPrompt
       @
   
   
@@ -151,7 +151,7 @@ class Tmpl extends core.mvc.Template
     """
       <span class="<%= prefix %>_inner">
         &nbsp;
-        <span class="<%= prefix %>_watermark"></span>
+        <span class="<%= prefix %>_prompt"></span>
         <% if (textbox.multiline()) { %>
           <textarea></textarea>
         <% } else { %>

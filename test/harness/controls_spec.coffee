@@ -154,7 +154,7 @@ describe 'Controls',
     describe 'Textbox', ->
       textbox = null
       beforeAll ->
-          textbox = new controls.Textbox watermark:'Watermark'
+          textbox = new controls.Textbox prompt:'Prompt Watermark'
           page.add textbox, width:300
       it 'Focus', -> textbox.focus()
     

@@ -296,7 +296,7 @@ ul.core_tab_strip li.core_tab.core_disabled p {
 .core_textbox span.core_inner textarea {
   resize: none;
 }
-.core_textbox span.core_inner span.core_watermark {
+.core_textbox span.core_inner span.core_prompt {
   position: absolute;
   left: 2px;
   top: 8px;

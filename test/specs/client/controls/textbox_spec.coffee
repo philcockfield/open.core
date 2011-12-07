@@ -162,9 +162,9 @@ describe 'client/controls/textbox', ->
         textbox.text undefined
         expect(textbox.empty()).toEqual true
 
-  describe 'watermark', ->
-    it 'does not have a watermark by default', ->
-      expect(textbox.watermark()).toEqual ''
+  describe 'prompt (watermark)', ->
+    it 'does not have a [prompt] by default', ->
+      expect(textbox.prompt()).toEqual ''
     
           
     
