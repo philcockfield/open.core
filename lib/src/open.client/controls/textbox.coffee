@@ -21,17 +21,22 @@ module.exports = class Textbox extends core.mvc.View
       super _.extend params, tagName: 'span', className: @_className('textbox')
       @render()
       
-      syncWatermark = () => 
+      syncWatermark = => 
             @_.watermark.html (if @empty() then @watermark() else '')
+      
+      syncFocus = (hasFocus) => 
+        hasFocus = @hasFocus() unless hasFocus?
+        @el.toggleClass @_className('focused'), hasFocus
       
       # Wire up events.
       @multiline.onChanged => @render()
       @password.onChanged  => @render()
       @watermark.onChanged syncWatermark
       @text.onChanged      syncWatermark
+      @_.input.focusin => syncFocus(true)
+      @_.input.focusout => syncFocus(false)
       
       # Key events.
-      # core.keyEvents.onEnter => @enterPress() if @hasFocus()
       @_.input.keyup (e) => 
           @enterPress()  if e.keyCode is 13
           @escapePress() if e.keyCode is 27
@@ -43,6 +48,8 @@ module.exports = class Textbox extends core.mvc.View
       
       # Finish up.
       syncWatermark()
+      syncFocus()
+      
       
   render: -> 
       # Setup initial conditions.
