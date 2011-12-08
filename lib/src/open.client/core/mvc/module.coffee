@@ -172,49 +172,20 @@ createMvcIndex = (module) ->
   setView 'Tmpl', 'tmpl'
 
 
-partCache = {}
 tryRequire = (module, dir, name = '', options = {}) -> 
   # Setup initial conditions.
   options.throw ?= true
   options.init  ?= true
-  path = "#{module.modulePath}/#{dir}/#{name}"
-  
-  # Check if the part has already been retreived.
-  cached = partCache[path]
-
-
-  # if cached?
-    
-    # TEMP 
-    # if path is 'open.client/harness/views/pane'
-    #   console.log '+++ cached', path
-    #   console.log 'options.init', options.init
-    #   console.log 'part', cached.toString().substring 0, 100
-    #   console.log ''
-      
-    # return cached
   
   # Retrieve the module part.
+  path = "#{module.modulePath}/#{dir}/#{name}"
   part = module.tryRequire path, options
-  
   
   # Invoke the [module-init] pattern if required.
   if part? and options.init
       part = Module.initPart module, part
   
-  # if path is 'open.client/harness/views/pane'
-  #   part = module.tryRequire path, options
-  #   part = part(module)
-    # console.log '**** path', path
-    # console.log 'part', part.toString().substring 0, 100
-    
-    
-    
-    # p = new part() if _.isFunction(part)
-    # console.log 'p', p
-  
   # Finish up.
-  partCache[path] = part
   part
 
 

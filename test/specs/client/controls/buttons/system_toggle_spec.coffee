@@ -4,7 +4,7 @@ describe 'controls/buttons/system_toggle', ->
   btn          = null
   
   beforeEach ->
-      SystemToggle = require 'open.client/controls/buttons/system_toggle'
+      SystemToggle = require 'open.client/controls/views/system_toggle'
       
       class SampleButton extends SystemToggle
         constructor: (params) -> 

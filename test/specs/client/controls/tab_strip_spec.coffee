@@ -13,12 +13,6 @@ describe 'controls/tab_strip', ->
   
   it 'has static [Tab] property that is a [Button]', ->
     tab = new Tab(tabStrip)
-    
-    console.log 'tab', tab
-    
-    # isOf = (tab instanceof Button)
-    # console.log 'isOf', isOf
-    
     expect(tab instanceof controls.Button).toEqual true 
   
   it 'has a [tabs] property that is a [ButtonSet]', ->
