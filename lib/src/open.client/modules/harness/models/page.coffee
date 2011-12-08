@@ -69,7 +69,7 @@ module.exports = (module) ->
     ###
     markdown: (content) -> 
       @clear()
-      module.util.postMarkdown content, (err, html) => 
+      module.utils.postMarkdown content, (err, html) => 
         return if err?
         el = $ "<div class=\"th_markdown\">#{html}</div>"
         @add el, fill:true, scroll:'y'

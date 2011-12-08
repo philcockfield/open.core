@@ -14,6 +14,9 @@ module.exports = (module) ->
         # Append methods onto the 'add' method.
         do => 
           addTab = (options, fnCreate) =>
+              # Setup initial conditions.
+              @clear() if options.clear is yes
+              
               # Add the new tab.
               options.content = fnCreate()
               tab = @add options
@@ -27,7 +30,8 @@ module.exports = (module) ->
           @param options:
                   - markdown      : String of markdown to load.
                   - {tab options} : Standard tab/button options eg. label, selected etc.
-                  - show:         : Flag indicating if the pane should be shown (default: true).
+                  - show          : Flag indicating if the pane should be shown (default: true).
+                  - clear         : Flag indicating if the pane should be cleared before adding the tab.
           @returns the inserted tab.
           ###
           @add.markdown = do => 
@@ -42,6 +46,7 @@ module.exports = (module) ->
                   - language      : The language of the content (eg. 'css' or 'js').
                   - description   : Optional.  Markdown containing a description of the content.
                   - showLink:     : Optional.  Flag indicating if a link to the raw content should be shown (default: true).
+                  - clear         : Flag indicating if the pane should be cleared before adding the tab.
           @returns the inserted tab.
           ###
           @add.remote = do => (options = {}) => 
@@ -50,11 +55,12 @@ module.exports = (module) ->
             tab
           
           ###
-          Adds a new tab loading css.
+          Adds a new tab containing css.
           @param options:
                   - {tab options} : Standard tab/button options eg. label, selected etc.
                   - url           : The URL to retrieve the CSS from.
                   - show:         : Flag indicating if the pane should be shown (default: true).
+                  - clear         : Flag indicating if the pane should be cleared before adding the tab.
           @returns the inserted tab.
           ###
           @add.css = do => 

@@ -8,14 +8,14 @@ module.exports = (module) ->
       @el.addClass 'th_markdown'
       @addProps
         markdown: null # Gets or sets the source markdown.
-      util = module.parent.util
+      utils = module.parent.utils
       
       # Syncers.
       syncMarkdown = => 
         @el.html null
         markdown = @markdown()
         if markdown?
-          util.postMarkdown markdown, (err, html) => @el.html html unless err?
+          utils.postMarkdown markdown, (err, html) => @el.html html unless err?
         
       # Wire up events.
       @markdown.onChanged syncMarkdown

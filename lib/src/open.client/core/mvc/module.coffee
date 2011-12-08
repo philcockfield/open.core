@@ -65,6 +65,7 @@ module.exports = Module = class Module extends Base
       @view       = req 'views'
       @controller = req 'controllers'
       @collection = req 'collections'
+      @util       = req 'utils'
       
       # Store [require] part functions as object structure.
       @require = 
@@ -72,6 +73,7 @@ module.exports = Module = class Module extends Base
           view:       @view
           controller: @controller
           collection: @collection
+          util:       @util
   
   
   ###
@@ -137,7 +139,6 @@ module.exports = Module = class Module extends Base
   init: (options = {}) -> 
       options.within = util.toJQuery(options.within) # Translate [within] option to jQuery object.
       createMvcIndex @
-      @util = tryRequire(@, 'util', 'index', throw:false) unless @util?
       @
 
 
@@ -145,47 +146,47 @@ module.exports = Module = class Module extends Base
 
 
 createMvcIndex = (module) -> 
-
-      # Setup initial conditions.
-      req = module.require
-      get = Module.requirePart
-      
-      # Assign as properties (don't overwrite an existing property).
-      setIndex = (propName, fnRequire) => 
-              return if module[propName]?
-              getIndex = (fnRequire) ->  
-                              index = get(fnRequire, '')
-                              index ?= {} # Empty object representing [index] if there was no module.
-              module[propName] = getIndex fnRequire
-      
-      setIndex 'models',      module.model
-      setIndex 'views',       module.view
-      setIndex 'controllers', module.controller
-      setIndex 'collections', module.collection
-      
-      # Assign default views (if they exist).
-      setView = (prop, name) => 
-                    return if module.views[prop]? # View has already been setup.
-                    view = get req.view, name
-                    module.views[prop] = view if view? # Only assign the property if the view was found.
-      setView 'Root', 'root'
-      setView 'Tmpl', 'tmpl'
+  # Setup initial conditions.
+  req = module.require
+  get = Module.requirePart
+  
+  # Assign as properties (don't overwrite an existing property).
+  setIndex = (propName, fnRequire) => 
+          return if module[propName]?
+          getIndex = (fnRequire) ->  
+                          index = get(fnRequire, '')
+                          index ?= {} # Empty object representing [index] if there was no module.
+          module[propName] = getIndex fnRequire
+  
+  setIndex 'models',      module.model
+  setIndex 'views',       module.view
+  setIndex 'controllers', module.controller
+  setIndex 'collections', module.collection
+  setIndex 'utils',       module.util
+  
+  # Assign default views (if they exist).
+  setView = (prop, name) => 
+                return if module.views[prop]? # View has already been setup.
+                view = get req.view, name
+                module.views[prop] = view if view? # Only assign the property if the view was found.
+  setView 'Root', 'root'
+  setView 'Tmpl', 'tmpl'
 
 
 tryRequire = (module, dir, name = '', options = {}) -> 
-    options.throw ?= true
-    options.init  ?= true
-    
-    # Retrieve the module part.
-    path = "#{module.modulePath}/#{dir}/#{name}"
-    part = module.tryRequire path, options
-    
-    # Invoke the [module-init] pattern if required.
-    if part? and options.init
-        part = Module.initPart module, part
-    
-    # Finish up.
-    part
+  options.throw ?= true
+  options.init  ?= true
+  
+  # Retrieve the module part.
+  path = "#{module.modulePath}/#{dir}/#{name}"
+  part = module.tryRequire path, options
+  
+  # Invoke the [module-init] pattern if required.
+  if part? and options.init
+      part = Module.initPart module, part
+  
+  # Finish up.
+  part
 
 
 # STATIC METHODS --------------------------------------------------------------------------
@@ -205,17 +206,16 @@ CONVENTION:
 @returns the module or null if the MVC part does not exist.
 ###
 Module.requirePart = (fnRequire, name = '') -> 
-    
-    # Silently try to get the module.
-    part = fnRequire name, throw:false
-    return part unless part?
-    
-    # If the [part] is a function, it is expected that this is an initialization function.
-    # Invoke it passing in the module.
-    part = Module.initPart(fnRequire.module, part)
-    
-    # Finish up.
-    part
+  # Silently try to get the module.
+  part = fnRequire name, throw:false
+  return part unless part?
+  
+  # If the [part] is a function, it is expected that this is an initialization function.
+  # Invoke it passing in the module.
+  part = Module.initPart(fnRequire.module, part)
+  
+  # Finish up.
+  part
 
 
 ###
@@ -224,16 +224,16 @@ Implements the parent [module-init] pattern.
 @param childModule: The child module to initialize.
 ###
 Module.initPart = (parentModule, childModule) -> 
-    # Perform this within a try-catch block, because if it is just exporting a class
-    # then invoking the function will fail.
-    if _.isFunction(childModule)
-      try
-        childModule = childModule(parentModule)
-      catch error
-        # Ignore - was an exported class only
-        # It did not implement the module-init pattern.
-        
-    childModule
+  # Perform this within a try-catch block, because if it is just exporting a class
+  # then invoking the function will fail.
+  if _.isFunction(childModule)
+    try
+      childModule = childModule(parentModule)
+    catch error
+      # Ignore - was an exported class only
+      # It did not implement the module-init pattern.
+      
+  childModule
 
 
 ###

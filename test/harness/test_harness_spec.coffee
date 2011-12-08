@@ -6,7 +6,7 @@ describe 'Test Harness', ->
     pane = page.pane
     pane.reset()
   
-  describe 'Pane', ->
+  describe 'page.pane', ->
     SampleView = null
     pane       = null
     beforeAll -> 

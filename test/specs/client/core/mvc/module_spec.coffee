@@ -110,6 +110,11 @@ describe 'mvc/module', ->
       module.collection 'bar'
       expect(args.name).toEqual 'modules/foo/collections/bar'
       expect(args.options.throw).toEqual true
+
+    it 'pulls a require from the [util] folder', ->
+      module.util 'bar'
+      expect(args.name).toEqual 'modules/foo/utils/bar'
+      expect(args.options.throw).toEqual true
     
     describe 'MVC part functions as object structure', ->
       it 'aliases the [model] method', ->
@@ -123,6 +128,9 @@ describe 'mvc/module', ->
 
       it 'aliases the [collection] method', ->
         expect(module.require.collection).toEqual module.collection
+
+      it 'aliases the [util] method', ->
+        expect(module.require.util).toEqual module.util
     
     describe 'init-module pattern', ->
       module  = null
@@ -154,7 +162,12 @@ describe 'mvc/module', ->
 
       it 'store modules on [controller] require function', ->
         expect(module.controller.module).toEqual module
+
+      it 'store modules on [collection] require function', ->
+        expect(module.collection.module).toEqual module
     
+      it 'store modules on [util] require function', ->
+        expect(module.util.module).toEqual module
     
   describe 'init() method', ->
     args = []
@@ -182,6 +195,16 @@ describe 'mvc/module', ->
         module.init()
         expect(args[2].name).toEqual 'modules/foo/controllers/'
         expect(args[2].options.throw).toEqual false
+
+      it 'indexes the [collections] folder', ->
+        module.init()
+        expect(args[3].name).toEqual 'modules/foo/collections/'
+        expect(args[3].options.throw).toEqual false
+
+      it 'indexes the [utils] folder', ->
+        module.init()
+        expect(args[4].name).toEqual 'modules/foo/utils/'
+        expect(args[4].options.throw).toEqual false
 
     describe 'translation of [within] option to jQuery object', ->
       it 'does nothing if not [within] option was specified', ->
@@ -267,7 +290,7 @@ describe 'mvc/module', ->
               @views       = 'views'
               @controllers = 'controllers'
               @collections = 'collections'
-              @util        = 'util'
+              @utils        = 'utils'
         module = new MyModule()
         module.init()
     
@@ -284,7 +307,7 @@ describe 'mvc/module', ->
       expect(module.collections).toEqual 'collections'
       
     it 'does not overwrite [util] property', ->
-      expect(module.util).toEqual 'util'
+      expect(module.utils).toEqual 'utils'
   
   describe '[requirePart] static method', ->
     it 'does not fail when the MVC part does not exist', ->
@@ -449,17 +472,12 @@ describe 'mvc/module', ->
       className = foo.__proto__.constructor.name
       expect(className).toEqual 'FooCollection'
       
-  describe 'Util', ->
-    it 'does not have a util property', ->
-      Module = require('core/test/modules/module1')
-      module = new Module().init()
-      expect(module.util).toEqual null
-    
-    it 'has a util property', ->
-      Module = require('core/test/modules/module7')
-      module = new Module().init()
-      expect(module.util).toBeDefined()
-      expect(module.util.add instanceof Function).toEqual true 
+  # describe 'Util', ->
+  #   it 'has a util property', ->
+  #     Module = require('core/test/modules/module7')
+  #     module = new Module().init()
+  #     expect(module.util).toBeDefined()
+  #     expect(module.util.add instanceof Function).toEqual true 
 
 
 
