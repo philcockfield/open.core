@@ -1,4 +1,4 @@
-describe 'controls/buttons/rdo (Radio Button)', ->
+describe 'controls/rdo (Radio Button)', ->
   RadioButton = null
   rdo         = null
   beforeEach ->

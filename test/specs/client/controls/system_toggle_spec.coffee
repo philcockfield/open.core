@@ -1,4 +1,4 @@
-describe 'controls/buttons/system_toggle', ->
+describe 'controls/system_toggle', ->
   SampleButton = null
   SystemToggle  = null
   btn          = null

@@ -1,4 +1,4 @@
-describe 'controls/buttons/chk_set', ->
+describe 'controls/chk_set', ->
   CheckboxSet = null
   chkSet     = null
   beforeEach ->
