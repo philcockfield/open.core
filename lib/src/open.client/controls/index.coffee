@@ -6,9 +6,9 @@ class Controls extends Module
 
 
 controls         = new Controls().init()
-core.controls    = controls.views
-Module::controls = core.controls
+views            = controls.views
+Module::controls = views
+
 
 # Export.
-module.exports   = core.controls
-
+module.exports   = views

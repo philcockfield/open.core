@@ -12,7 +12,14 @@ describe 'controls/tab_strip', ->
     expect(TabStrip).toBeDefined()
   
   it 'has static [Tab] property that is a [Button]', ->
-    expect(new Tab(tabStrip) instanceof controls.Button).toEqual true 
+    tab = new Tab(tabStrip)
+    
+    console.log 'tab', tab
+    
+    # isOf = (tab instanceof Button)
+    # console.log 'isOf', isOf
+    
+    expect(tab instanceof controls.Button).toEqual true 
   
   it 'has a [tabs] property that is a [ButtonSet]', ->
     expect(tabStrip.tabs instanceof controls.ButtonSet).toEqual true 
@@ -49,7 +56,7 @@ describe 'controls/tab_strip', ->
   describe 'add() method', ->
     it 'returns a new tab intance', ->
       tab = tabStrip.add()
-      expect(tab instanceof controls.Button).toEqual true 
+      expect(tab instanceof TabStrip.Tab).toEqual true 
     
     it 'assigns the given options to the tab', ->
       tab = tabStrip.add label:'foo'

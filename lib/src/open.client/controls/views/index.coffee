@@ -19,4 +19,26 @@ module.exports = (module) ->
     SystemToggle:    view 'system_toggle'
     SystemToggleSet: view 'system_toggle_set'
     
-  
+    # 
+    # index.Button          = view 'button'
+    # index.ButtonSet       = view 'button_set'
+    # index.ControlList     = view 'control_list'
+    # 
+    # index.Textbox         = view 'textbox'
+    # index.TabStrip        = view 'tab_strip'
+    # index.Form            = view 'form'
+    # index.ComboBox        = view 'combo_box'
+    # 
+    # # Buttons.
+    # index.CmdButton       = view 'cmd'
+    # 
+    # index.SystemToggle    = view 'system_toggle'
+    # index.SystemToggleSet = view 'system_toggle_set'
+    # 
+    # index.Checkbox        = view 'chk'
+    # index.CheckboxSet     = view 'chk_set'
+    # index.RadioButton     = view 'rdo'
+    # index.RadioButtonSet  = view 'rdo_set'
+    # 
+    # index
+    # 

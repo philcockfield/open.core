@@ -5,6 +5,7 @@ module.exports = (module) ->
   core   = module.core
   Button = module.view 'button'
   
+  
   class CmdButton extends Button
       defaults:
           size: 'm'        # The size of the button (default 'm' - medium). Options: s, m, l.

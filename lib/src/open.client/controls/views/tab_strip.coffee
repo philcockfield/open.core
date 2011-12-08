@@ -13,6 +13,7 @@ module.exports = (module) ->
   ButtonSet         = module.view 'button_set'
   SELECTION_CHANGED = 'selectionChanged'
   
+  
   class TabStrip extends mvc.View
     constructor: () -> 
         
@@ -179,6 +180,7 @@ module.exports = (module) ->
       <p class="<%= prefix %>_label"></p>
       <div class="<%= prefix %>_div_right"></div>
       """
+  
   
   # Export.
   TabStrip

@@ -17,7 +17,7 @@ module.exports = core =
   ###
   init: -> 
     # core.controls - Assignment is made within the controls module.
-    @tryRequire 'open.client/controls' 
+    @controls = @tryRequire 'open.client/controls' 
 
 
 # PRIVATE --------------------------------------------------------------------------
