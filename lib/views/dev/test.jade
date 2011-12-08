@@ -1,0 +1,54 @@
+!!!
+html
+  head
+    title Test
+    link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/libs/normalize.css")
+    link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/base.css")
+    
+    script(type='text/javascript', src="#{baseUrl}/javascripts/libs/libs.js")
+    script(type='text/javascript', src="#{baseUrl}/javascripts/core/core.js")
+    script(type='text/javascript', src="#{baseUrl}/javascripts/core/controls.js")
+    
+    :stylus
+      body
+        padding 30px
+        padding-top 10px
+      
+  body.core
+    h1 Test
+    
+    
+    :coffeescript
+      core      = require 'open.client/core'
+      console.log 'core', core
+      
+      controls  = require 'open.client/controls'
+      console.log 'controls', controls
+      console.log ''
+      
+      create = (name) -> 
+        ctrl = new controls[name]()
+        console.log name, ctrl
+      
+      # create 'Textbox'
+      # create 'ControlList'
+      # create 'TabStrip'
+      # create 'Form'
+      # create 'ComboBox'
+      # create 'Button'
+      # create 'ButtonSet'
+      # create 'CmdButton'
+      # create 'Checkbox'
+      # create 'CheckboxSet'
+      # create 'RadioButton'
+      # create 'RadioButtonSet'
+      # create 'SystemToggle'
+      # create 'SystemToggleSet'
+      
+      
+      set = new controls.RadioButtonSet()
+      console.log 'set', set
+      
+      set.add()
+      
+      

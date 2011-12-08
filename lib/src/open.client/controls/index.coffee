@@ -1,21 +1,14 @@
-button = (name) -> require './buttons/' + name
+core   = require 'open.client/core'
+Module = core.mvc.Module
 
-module.exports = 
-  Textbox:         require './textbox'
-  ControlList:     require './control_list'
-  TabStrip:        require './tab_strip'
-  Form:            require './form'
-  ComboBox:        require './combo_box'
-  
-  # Buttons.
-  Button:          require './button'
-  ButtonSet:       require './button_set'
-  
-  CmdButton:       button 'cmd'
-  Checkbox:        button 'chk'
-  CheckboxSet:     button 'chk_set'
-  RadioButton:     button 'rdo'
-  RadioButtonSet:  button 'rdo_set'
-  SystemToggle:    button 'system_toggle'
-  SystemToggleSet: button 'system_toggle_set'
-  
+class Controls extends Module
+  constructor: -> super module
+
+
+controls         = new Controls().init()
+core.controls    = controls.views
+Module::controls = core.controls
+
+# Export.
+module.exports   = core.controls
+

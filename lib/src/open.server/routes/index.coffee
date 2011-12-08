@@ -21,6 +21,10 @@ app.get "#{core.baseUrl}/dev", (req, res) ->
                         html:    core.util.html
                         baseUrl: core.baseUrl
 
+# Dev (Test).
+app.get "#{core.baseUrl}/test", (req, res) -> core.util.render res, 'dev/test', layout:false
+
+
 
 # GET: Stylesheets.
 app.get "#{core.baseUrl}/:stylesheet?.css", (req, res) ->

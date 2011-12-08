@@ -16,7 +16,8 @@ module.exports = core =
   are attached to this root index.
   ###
   init: -> 
-    @controls = @tryRequire 'open.client/controls'
+    # core.controls - Assignment is made within the controls module.
+    @tryRequire 'open.client/controls' 
 
 
 # PRIVATE --------------------------------------------------------------------------

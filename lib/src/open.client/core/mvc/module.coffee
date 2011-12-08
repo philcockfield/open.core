@@ -33,7 +33,6 @@ module.exports = Module = class Module extends Base
         core.init()
         Module::core     = core
         Module::mvc      = core.mvc
-        Module::controls = core.controls
       
       # Write property values passed into the constructor.
       if properties?

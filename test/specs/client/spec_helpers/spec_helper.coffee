@@ -3,6 +3,7 @@ window.controls = require 'open.client/controls/index'
 window.Harness  = require 'open.client/harness'
 window.View     = core.mvc.View
 
+
 window.ensure =
   ###
   Ensures the parent constructor of the given class was called.

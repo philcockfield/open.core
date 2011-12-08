@@ -4,6 +4,7 @@ module.exports = (module) ->
   class SuiteList extends module.mvc.View
     constructor: () -> 
         super className: 'th_suite_list'
+        
         @buttons = new module.controls.ButtonSet()
         @render()
     
@@ -20,12 +21,10 @@ module.exports = (module) ->
       
         # Enumerate each root 'suite'.
         module.suites.each (d) => 
-          
+            
             # Create the button.
             btn = new SuiteButton model:d
             @buttons.add btn
-          
+            
             # Insert into the list.
             ul.append btn.el
-    
-

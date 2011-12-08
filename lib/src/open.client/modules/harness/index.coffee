@@ -53,12 +53,13 @@ module.exports = class TestHarness extends core.mvc.Module
               specs:   Display title of the 'Specs' list.
   ###
   init: (options = {}) -> 
+    
     # Setup initial conditions.
     options.within ?= 'body'
     super options
     @options = options
     window.HARNESS ?= {} # Used for testing.  This would otherwise be set in the page.
-
+    
     # Set default strings.
     strings = @strings = options.strings ?= {}
     strings.suites  ?= 'Suites'
@@ -103,16 +104,14 @@ module.exports = class TestHarness extends core.mvc.Module
   ###
   logError: (error) -> 
     return unless console?
-  
+    
     logProperty = (propName) -> 
         text = error[propName]
         if text?
           console.log " - #{propName}:"
           console.log "       #{text}"
-  
+    
     console.log ' - Error: ', error
     logProperty 'message'
     logProperty 'stack'
-  
-  
     
