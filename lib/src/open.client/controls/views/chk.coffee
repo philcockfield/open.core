@@ -1,3 +1,5 @@
+core = require 'open.client/core'
+
 ###
 Standard Checkbox with label.
 ###

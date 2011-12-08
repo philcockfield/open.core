@@ -1,21 +1,19 @@
+core = require 'open.client/core'
+
 ###
 Renders a vertical list of input fields with labels.
 ###
-module.exports = (module) ->
-  class Form extends module.mvc.View
-    constructor: (args = {}) -> 
-        super _.extend args, className:@_className('form')
-        @render()
-    
-    
-    render: -> @html new Tmpl().root()
+module.exports = class Form extends core.mvc.View
+  constructor: (args = {}) -> 
+      super _.extend args, className:@_className('form')
+      @render()
   
   
-  class Tmpl extends module.mvc.Template
-    root:
-      """
-      Form!    
-      """
-  
-  # Export.
-  Form
+  render: -> @html new Tmpl().root()
+
+
+class Tmpl extends core.mvc.Template
+  root:
+    """
+    Form!    
+    """

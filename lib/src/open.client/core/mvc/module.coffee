@@ -181,14 +181,16 @@ tryRequire = (module, dir, name = '', options = {}) ->
   
   # Check if the part has already been retreived.
   cached = partCache[path]
-  if cached?
+
+
+  # if cached?
     
     # TEMP 
-    if path is 'open.client/harness/views/pane'
-      console.log '+++ cached', path
-      console.log 'options.init', options.init
-      console.log 'part', cached.toString().substring 0, 100
-      console.log ''
+    # if path is 'open.client/harness/views/pane'
+    #   console.log '+++ cached', path
+    #   console.log 'options.init', options.init
+    #   console.log 'part', cached.toString().substring 0, 100
+    #   console.log ''
       
     # return cached
   
