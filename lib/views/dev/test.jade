@@ -4,11 +4,11 @@ html
     title Test
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/libs/normalize.css")
     link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/core/base.css")
+    link(type='text/css', rel='stylesheet', href="#{baseUrl}/stylesheets/dev/test.css")
     
     script(type='text/javascript', src="#{baseUrl}/javascripts/libs/libs.js")
     script(type='text/javascript', src="#{baseUrl}/javascripts/core/core.js")
     script(type='text/javascript', src="#{baseUrl}/javascripts/core/controls.js")
-    
     :stylus
       body
         padding 30px
@@ -17,42 +17,47 @@ html
   body.core
     h1 Test
     
-    
     :coffeescript
-      core      = require 'open.client/core'
-      console.log 'core', core
+      markup = (text) -> 
+        toStyle = (def) -> 
+          style = ''
+          for key of def
+            style += key + ':' + def[key] + '; '
+          style
+        css = toStyle
+          'position':       'absolute'
+          'bottom':         '0px'
+          'left':           '0px'
+          'right':          '0px'
+          'padding':        '15px'
+          'color':          '#333'
+          'font-size':      '11pt'
+          'font-family':    'Lucida Grande, Helvetica Neue, Tahoma, Arial'
+          'border-top':     'solid 1px #4d4d4d'
+          'background':     '#f5f5f5'
+          'box-shadow':     '0px -3px 10px 0px rgba(0,0,0,0.06)'
+          
+        html =  "<div class='gwt_step' style='" + css  + "'>"
+        html += text
+        html += "</div>"
+        html
       
-      controls  = require 'open.client/controls'
-      console.log 'controls', controls
-      console.log ''
+      createJs = (html) -> 
+        js =  'var el = document.createElement("div");'
+        js += 'el.innerHTML = "' + html + '";'
+        js += 'document.body.appendChild(el);'
+        js
       
-      create = (name) -> 
-        ctrl = new controls[name]()
-        console.log "+ #{name}: ", ctrl
-      
-      create 'ControlList'
-      create 'TabStrip'
-      create 'Form'
-      create 'ComboBox'
-      create 'Button'
-      create 'ButtonSet'
-      create 'CmdButton'
-      create 'Checkbox'
-      create 'CheckboxSet'
-      create 'RadioButton'
-      create 'RadioButtonSet'
-      create 'SystemToggle'
-      create 'SystemToggleSet'
-      create 'Textbox'
-      
-      # tabStrip = new controls.TabStrip()
-      # tab = new controls.TabStrip.Tab(tabStrip)
-      # isOf = (tab instanceof controls.Button)
-      # console.log 'isOf', isOf
-      
+      html = markup 'GIVEN: I do something cool'
+      js = createJs html
+      eval js
       
       
 
+
+        
+          
+        
       
       
-      
+    
