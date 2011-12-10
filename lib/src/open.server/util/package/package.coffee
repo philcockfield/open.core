@@ -1,4 +1,3 @@
-fs      = require 'fs'
 version = require '../tasks/version'
 JsonFile = require '../json_file'
 
@@ -9,7 +8,7 @@ A wrapper around a node [package.json].
 module.exports = class Package extends JsonFile
   ###
   Constructor.
-  @param path : The path or directory containing the package.
+  @param path : The path or directory containing the [package.json] file.
   ###
   constructor: (path) -> 
     super path, 'package.json'
