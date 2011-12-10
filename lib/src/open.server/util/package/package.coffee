@@ -1,26 +1,18 @@
 fs      = require 'fs'
-version = require './version'
+version = require '../tasks/version'
+JsonFile = require '../json_file'
 
 
 ###
 A wrapper around a node [package.json].
 ###
-module.exports = class Package
+module.exports = class Package extends JsonFile
   ###
   Constructor.
   @param path : The path or directory containing the package.
   ###
   constructor: (path) -> 
-    # Format the path.
-    path = _(path).trim()
-    path = _(path).strLeft 'package.json'
-    path = _(path).rtrim('/')
-    path = "#{path}/package.json"
-    @path = path
-    
-    # Load the data.
-    @data = fs.readFileSync path, 'utf8'
-    @data = JSON.parse @data.toString()
+    super path, 'package.json'
   
   
   ###

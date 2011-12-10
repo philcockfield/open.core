@@ -1,5 +1,5 @@
 core    = require 'open.server'
-Package = require './package'
+Package = require '../package/package'
 
 
 ###
