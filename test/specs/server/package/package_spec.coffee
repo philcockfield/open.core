@@ -1,4 +1,5 @@
-fs = require 'fs'
+fs     = require 'fs'
+
 
 describe 'util/package/package', ->
   SAMPLE_DIR      = "#{__dirname}/sample"
@@ -22,22 +23,16 @@ describe 'util/package/package', ->
     
     it 'stores the directory path', ->
       expect(package.dir).toEqual SAMPLE_DIR
-
+    
     it 'loads the JSON data from file', ->
       data = fs.readFileSync SAMPLE_PACKAGE, 'utf8'
       data = JSON.parse data.toString()
       data = JSON.stringify data
       expect(JSON.stringify(package.data)).toEqual data
+  
+
+      
+      
     
     
-  
-  
-  
-    
-    
-    
-    
-  
-  
-  
   

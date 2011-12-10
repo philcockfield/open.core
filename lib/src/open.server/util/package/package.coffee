@@ -52,12 +52,6 @@ module.exports = class Package extends JsonFile
     null
   
   
-  ###
-  Saves the package to disk.
-  ###
-  saveSync: -> 
-    str = JSON.stringify(@data, null, '\t')
-    fs.writeFileSync @path, str, 'utf8'
 
 
 

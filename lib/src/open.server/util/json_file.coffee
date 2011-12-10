@@ -31,6 +31,14 @@ module.exports = class JsonFile
       @data = JSON.parse @data.toString()
     catch error
       throw new Error "Failed to parse JSON from the file: #{@path}\nERROR: #{error.message}"
+  
+  
+  ###
+  Saves the package to disk (synchronously).
+  ###
+  saveSync: -> 
+    json = JSON.stringify(@data, null, '\t')
+    fs.writeFileSync @path, json, 'utf8'
     
 
 

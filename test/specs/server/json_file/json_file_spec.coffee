@@ -41,19 +41,6 @@ describe 'server/util/json_file', ->
       
     it ' throw an error if the JSON cannot be parsed', ->
       expect(-> json = new JsonFile("#{SAMPLE_DIR}/invalid.json")).toThrow()
-    
-    
-    
-      
-      
-    
-    
-    
-    
-      
-      
-    
-    
   
   
   describe 'formatPath() method [static]', ->
@@ -83,7 +70,7 @@ describe 'server/util/json_file', ->
         result = JsonFile.formatPath('   ', 'package.json')
         expect(result.path).toEqual 'package.json'
         expect(result.dir).toEqual null
-
+      
       it 'returns the [dir + file-name]', ->
         result = JsonFile.formatPath('/foo/bar/', 'package.json')
         expect(result.path).toEqual '/foo/bar/package.json'
@@ -93,36 +80,26 @@ describe 'server/util/json_file', ->
         result = JsonFile.formatPath('   /foo/bar/  ', '  package.json   ')
         expect(result.path).toEqual '/foo/bar/package.json'
         expect(result.dir).toEqual '/foo/bar'
-
+      
       it 'strips leading / from file-name', ->
         result = JsonFile.formatPath('/foo/bar/', '///package.json')
         expect(result.path).toEqual '/foo/bar/package.json'
       
       
+  describe 'saveSync() method', ->
+    it 'passes execution to the [writeFileSync] method', ->
+      data = fs.readFileSync SAMPLE_FOO, 'utf8'
+      data = JSON.parse data.toString()
+      data = JSON.stringify data, null, '\t'
       
+      path = null
+      data = null
+      spyOn(fs, 'writeFileSync').andCallFake (p, d) -> 
+        path = p
+        data = d
       
+      json.saveSync()
+      expect(fs.writeFileSync.callCount).toEqual 1
+      expect(path).toEqual json.path
+      expect(data).toEqual data
       
-      
-      
-      
-    
-  
-  
-  # describe 'construction', ->
-  #   it 'puts stores the path to the file', ->
-  #     expect(json.path).toEqual SAMPLE_FOO
-  #     
-  #   it 'puts stores the directory to the file', ->
-  #     expect(json.dir).toEqual SAMPLE_DIR
-  #     
-      
-      
-      
-    
-    
-  
-    
-  
-  
-  
-  
