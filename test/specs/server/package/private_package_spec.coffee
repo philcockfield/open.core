@@ -22,6 +22,10 @@ describe 'util/package/private_package', ->
     data = JSON.parse data.toString()
     data = JSON.stringify data
     expect(JSON.stringify(package.data)).toEqual data
+  
+  
+  it 'has a reference to the node libs folder', ->
+    expect(_(package.linkDir).endsWith('node/lib/node_modules')).toEqual true
     
   
   

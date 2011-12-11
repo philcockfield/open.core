@@ -13,7 +13,7 @@ module.exports = version =
       version = ''
       version += part + '.' for part in parts
       version.substr(0, version.length - 1)
-
+  
   ###
   Increments the version of the given package.
   @param package : {object}. The [package.json] to increment.

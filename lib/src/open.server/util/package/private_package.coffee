@@ -12,3 +12,11 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   constructor: (path) -> 
     super path, 'package.private.json'
+  
+  
+  ###
+  The path to the directory that NPM stores symbolic link references 
+  to linked modules within.
+  ###
+  linkDir: _(process.env.NODE_PATH).strRight ':'
+    
