@@ -19,4 +19,11 @@ module.exports = class PrivatePackage extends JsonFile
   to linked modules within.
   ###
   linkDir: "#{process.installPrefix}/lib/node_modules"
+  
+  
+  
+  link: -> 
     
+    
+    
+  

@@ -107,8 +107,7 @@ do ->
   core.mvc         = core.client.core.mvc
   core.util        = require './util'
   core.log         = core.util.log
-  core.modules     = require './modules'
-  core.build        = require './config/build'
+  core.build       = require './config/build'
   
   # Test runners.
   core.init.specs   = require './routes/testing/jasmine'
