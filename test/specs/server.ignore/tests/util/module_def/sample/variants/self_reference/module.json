@@ -1,6 +1,0 @@
-{
-  "name": "ns/parent",
-  "dependencies": [
-    "ns/parent"
-  ]
-}

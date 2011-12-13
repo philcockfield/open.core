@@ -1,1 +1,0 @@
-simple = 'Simple Module'

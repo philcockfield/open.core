@@ -1,8 +1,0 @@
-{
-  "name": "libs-sample",
-  "libs": [
-    { "path": "/file1.js" },
-    "libs/file2.js",
-    { "path": "libs/file3.js", "title":"My Title" }
-  ]
-}

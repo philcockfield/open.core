@@ -1,6 +1,0 @@
-{
-  "name": "sample/simple",
-  "dependencies": [
-    "sample/simple"
-  ]
-}
