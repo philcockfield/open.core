@@ -1,3 +1,5 @@
+fs       = require 'fs'
+fsUtil   = require '../fs'
 JsonFile = require '../json_file'
 
 
@@ -12,6 +14,7 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   constructor: (path) -> 
     super path, 'package.private.json'
+    @modulesDir = "#{@dir}/node_modules.private"
   
   
   ###
@@ -22,8 +25,45 @@ module.exports = class PrivatePackage extends JsonFile
   
   
   
-  link: -> 
-    
-    
-    
+  ###
+  Sets up symbolic links for each dependent module
+  that has been installed locally.
   
+  To make a module available for linking, from it's folder
+  execute:
+  
+      npm link
+      
+  This will publish a symbolic link to it within the global
+  modules folder.
+  ###
+  link: -> 
+    # Ensure the modules directory exists.
+    createModulesDir @
+    
+    # Enumerate each dependnecy.
+    for item in @data.dependencies
+      sourcePath = "#{@linkDir}/#{item.name}"
+      targetPath = "#{@modulesDir}/#{item.name}"
+      
+      # Delete the existing directory or link (if there is one).
+      if fsUtil.existsSync targetPath
+        stats = fs.lstatSync targetPath
+        
+        console.log 'stats.isSymbolicLink()', stats.isSymbolicLink()
+        
+        if stats.isSymbolicLink()
+          fs.unlinkSync targetPath
+        else
+          fsUtil.deleteSync targetPath, force:true
+      
+      # Setup the sumbolic link.
+      fs.symlinkSync sourcePath, targetPath
+
+
+# PRIVATE --------------------------------------------------------------------------
+
+
+createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
+
+
