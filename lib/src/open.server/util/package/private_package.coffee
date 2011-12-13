@@ -46,11 +46,12 @@ module.exports = class PrivatePackage extends JsonFile
       sourcePath = "#{@linkDir}/#{item.name}"
       targetPath = "#{@modulesDir}/#{item.name}"
       
+      # Ensure the source module exists.
+      continue unless fsUtil.existsSync sourcePath
+      
       # Delete the existing directory or link (if there is one).
       if fsUtil.existsSync targetPath
         stats = fs.lstatSync targetPath
-        
-        console.log 'stats.isSymbolicLink()', stats.isSymbolicLink()
         
         if stats.isSymbolicLink()
           fs.unlinkSync targetPath
