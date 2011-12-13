@@ -1,0 +1,9 @@
+{
+  "name": "ns/child2",
+  "dependencies": [
+    "ns/child1",
+    "ns/child1",
+    "ns/folder",
+    "ns/with_dependencies"
+  ]
+}

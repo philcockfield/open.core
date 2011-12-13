@@ -25,8 +25,8 @@ describe 'util/package/private_package', ->
   
   
   it 'has a reference to the node libs folder', ->
-    expect(_(package.linkDir).endsWith('node/lib/node_modules')).toEqual true
-    
+    path = package.linkDir
+    expect(fs.statSync(path).isDirectory()).toEqual true
   
   
   

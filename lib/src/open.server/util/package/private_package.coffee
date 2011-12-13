@@ -18,5 +18,5 @@ module.exports = class PrivatePackage extends JsonFile
   The path to the directory that NPM stores symbolic link references 
   to linked modules within.
   ###
-  linkDir: _(process.env.NODE_PATH).strRight ':'
+  linkDir: "#{process.installPrefix}/lib/node_modules"
     
