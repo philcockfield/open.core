@@ -233,12 +233,10 @@ module.exports = class PrivatePackage extends JsonFile
     
   
   
-  # PRIVATE INSTANCE --------------------------------------------------------------------------
+  # PRIVATE INSTANCE ----------------------------------------------------------------------
   
   
   _exec: (cmd, callback) -> exec cmd, callback
-  
-  
 
 
 # PRIVATE STATIC --------------------------------------------------------------------------
