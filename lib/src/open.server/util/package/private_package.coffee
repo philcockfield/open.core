@@ -194,6 +194,45 @@ module.exports = class PrivatePackage extends JsonFile
     log.append ' Cloning now...', color.blue if cloningCount > 0
   
   
+  ###
+  Alias to list.
+  ###
+  ls: -> @list()
+  
+  
+  ###
+  Lists all the dependencies, printing their state to the console.
+  ###
+  list: -> 
+    
+    # Setup initial conditions.
+    if @dependencies.length > 0
+      log 'Private packages:', color.blue
+    else
+      log 'No private packages.', color.blue
+      return
+    
+    # Enumerate each dependnecy.
+    for item in @dependencies
+      log " ├─ #{item.name}", color.blue
+      paths = dependencyPaths @, item
+      
+      if fsUtil.existsSync paths.target
+        lstat = fs.lstatSync paths.target
+        if lstat.isSymbolicLink()
+          log "    ├─ Linked", color.green
+          log "       ├─ From:", color.green, paths.source
+          log "       ├─ To:  ", color.green, paths.target
+        else
+          log "    ├─ Cloned", color.green
+          log "       ├─ From:", color.green, item.repository.url
+          log "       ├─ To:  ", color.green, paths.target
+      else
+        log "    ├─ Not found.", color.red
+    
+    
+  
+  
   # PRIVATE INSTANCE --------------------------------------------------------------------------
   
   
