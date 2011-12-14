@@ -1,8 +1,11 @@
+{exec} = require 'child_process'
 fs       = require 'fs'
 fsUtil   = require '../fs'
 JsonFile = require '../json_file'
 common   = require '../common'
 log      = common.log
+Timer    = require '../timer'
+
 
 ###
 A wrapper around a node [package.private.json] file used for deploying
@@ -102,6 +105,77 @@ module.exports = class PrivatePackage extends JsonFile
     
     # Finish up.
     log()
+  
+  
+  ###
+  Clones dependencies that have remote repositories defined
+  to the [node_modules.private] folder.
+  
+  @param callback(err): Invoked upon completion.
+  
+  ###
+  update: (callback) -> 
+    # Setup initial conditions.
+    dependencies = @data.dependencies
+    if dependencies?.length > 0
+      log 'Updating private packages:', color.blue
+    else
+      log 'No private packages to update', color.red
+      callback?()
+      return
+    
+    timer        = new Timer()
+    cloningCount = 0
+    count        = 0
+    onCloned = -> 
+      count += 1
+      return unless count is cloningCount
+      log ' Update complete.', color.green, "#{cloningCount} repositores cloned in #{timer.secs()} seconds."
+      log()
+      callback?()
+    
+    # Enumerate each dependnecy.
+    for item in dependencies
+      log " ├─ #{item.name}", color.blue
+      repo = item.repository
+      
+      unless repo?
+        log '    ├─ No repository defined.', color.red
+        continue
+      
+      # Ensure the repository is supported.
+      switch repo.type
+        when 'git' then 
+        else 
+          log "    ├─ Repositories of type '#{repo.type}' are not supported.", color.red
+          continue
+      
+      # Get the url.
+      url = repo.url
+      unless url?
+          log "    ├─ No url provided for the #{repo.type} repository.", color.red
+          continue
+      
+      # Delete the existing repsitory.
+      paths = dependencyPaths @, item
+      deleteLink paths.target, linkOnly:false
+      
+      # Clone the repository.
+      log "    ├─ Url: ", color.blue, url
+      cloningCount += 1
+      cmd = "git clone #{url} #{paths.target}"
+      exec cmd, (err, stdout, stderr) ->
+        if err?
+          callback? err
+          callback = null
+          return
+        else
+          onCloned()  
+    
+    # Finish up.
+    log()
+    log ' Cloning...', color.blue if cloningCount > 0
+
 
 # PRIVATE --------------------------------------------------------------------------
 
