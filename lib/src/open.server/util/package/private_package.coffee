@@ -19,6 +19,7 @@ module.exports = class PrivatePackage extends JsonFile
   constructor: (path) -> 
     super path, 'package.private.json'
     @modulesDir = "#{@dir}/node_modules.private"
+    @dependencies = @data.dependencies ? []
   
   
   ###
@@ -42,8 +43,7 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   link: -> 
     # Setup initial conditions.
-    dependencies = @data.dependencies
-    if dependencies?.length > 0
+    if @dependencies.length > 0
       log 'Linking private packages:', color.blue
     else
       log 'No private packages to link', color.red
@@ -53,7 +53,7 @@ module.exports = class PrivatePackage extends JsonFile
     createModulesDir @
     
     # Enumerate each dependnecy.
-    for item in dependencies
+    for item in @dependencies
       log " ├─ #{item.name}", color.blue
       paths = dependencyPaths @, item
       
@@ -63,12 +63,15 @@ module.exports = class PrivatePackage extends JsonFile
         continue
       
       # Delete the existing directory or link.
-      deleteLink paths.target, linkOnly:false
+      if deleteLink(paths.target)
+        
+        # Create the sumbolic link.
+        fs.symlinkSync paths.source, paths.target
+        log '    ├─ Linked from:', color.green, paths.source
+        log '    ├─ Linked to:  ', color.green, paths.target
+      else
+        log '    ├─ Not linked.  Directory already exists:', color.red, paths.target
       
-      # Setup the sumbolic link.
-      fs.symlinkSync paths.source, paths.target
-      log '    ├─ Linked from:', color.green, paths.source
-      log '    ├─ Linked to:  ', color.green, paths.target
     
     # Finish up.
     log()
@@ -79,15 +82,14 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   unlink: -> 
     # Setup initial conditions.
-    dependencies = @data.dependencies
-    if dependencies?.length > 0
+    if @dependencies?.length > 0
       log 'Unlinking private packages:', color.blue
     else
       log 'No private packages to unlink', color.red
       return
     
     # Enumerate each dependnecy.
-    for item in dependencies
+    for item in @dependencies
       log " ├─ #{item.name}", color.blue
       paths      = dependencyPaths @, item
       targetPath = paths.target
@@ -98,7 +100,7 @@ module.exports = class PrivatePackage extends JsonFile
         continue
       
       # Delete the link.
-      if deleteLink(targetPath, linkOnly:true)
+      if deleteLink(targetPath)
         log '    ├─ Removed link from:', color.green, targetPath
       else
         log '    ├─ Not removed (not a linked folder):', color.red, targetPath
@@ -116,8 +118,7 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   update: (callback) -> 
     # Setup initial conditions.
-    dependencies = @data.dependencies
-    if dependencies?.length > 0
+    if @dependencies.length > 0
       log 'Updating private packages:', color.blue
     else
       log 'No private packages to update', color.red
@@ -138,7 +139,7 @@ module.exports = class PrivatePackage extends JsonFile
       callback?()
     
     # Enumerate each dependnecy.
-    for item in dependencies
+    for item in @dependencies
       log " ├─ #{item.name}", color.blue
       repo = item.repository
       
@@ -189,15 +190,13 @@ createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
 
 
 deleteLink = (path, options = {}) -> 
-  return unless fsUtil.existsSync path
-  stats = fs.lstatSync path
-  if stats.isSymbolicLink()
+  return true unless fsUtil.existsSync path
+  if fs.lstatSync(path).isSymbolicLink()
     fs.unlinkSync path
+    return true
   else
-    return false if options.linkOnly is yes
-    fsUtil.deleteSync path, force:true 
+    return false
   
-  true
   
 
 dependencyPaths = (package, item) -> 
