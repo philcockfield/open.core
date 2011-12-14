@@ -15,6 +15,7 @@ describe 'util/package/private_package', ->
     PrivatePackage  = core.util.PrivatePackage
     package         = new PrivatePackage SAMPLE_DIR
     package.linkDir = "#{SAMPLE_DIR}/global_modules"
+    core.log.silent = true
   
   afterEach ->
     fsUtil.deleteSync "#{SAMPLE_DIR}/node_modules.private", force:true
@@ -59,12 +60,12 @@ describe 'util/package/private_package', ->
     it 'does nothing if the source link does not exist', ->
       expect(fsUtil.existsSync("#{MODULES_DIR}/fake")).toEqual false
     
-    it 'does not delete an existing real directory', ->
+    it 'deletes an existing real directory', ->
       fsUtil.deleteSync "#{SAMPLE_DIR}/node_modules.private", force:true
       fsUtil.createDirSync "#{MODULES_DIR}/module1"
       package.link()
       lstat = fs.lstatSync("#{MODULES_DIR}/module1")
-      expect(lstat.isSymbolicLink()).toEqual false, 'Is not a symbolic link'
+      expect(lstat.isSymbolicLink()).toEqual true, 'Is a symbolic link'
     
     it 'does nothing when there are no dependencies', ->
       package = new PrivatePackage EMPTY_PACKAGE
@@ -80,7 +81,6 @@ describe 'util/package/private_package', ->
     it 'does not remove a real directory', ->
       fsUtil.deleteSync "#{SAMPLE_DIR}/node_modules.private", force:true
       fsUtil.createDirSync "#{MODULES_DIR}/module1"
-      package.link()
       package.unlink()
       expect(fsUtil.existsSync("#{MODULES_DIR}/module1")).toEqual true
     
@@ -89,6 +89,21 @@ describe 'util/package/private_package', ->
       package.link()
       package.unlink()
       expect(fsUtil.existsSync(MODULES_DIR)).toEqual false
+  
+  
+  describe 'delete() method', ->
+    it 'deletes the private modules folder', ->
+      package.link()
+      expect(fsUtil.existsSync(MODULES_DIR)).toEqual true
+      package.delete()
+      expect(fsUtil.existsSync(MODULES_DIR)).toEqual false
+      
+      
+      
     
+    
+    
+    
+  
     
     

@@ -18,8 +18,14 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   constructor: (path) -> 
     super path, 'package.private.json'
-    @modulesDir = "#{@dir}/node_modules.private"
+    @modulesDir   = "#{@dir}/node_modules.private"
     @dependencies = @data.dependencies ? []
+  
+  
+  ###
+  Deletes the [node_modules.private] directory.
+  ###
+  delete: -> fsUtil.deleteSync @modulesDir, force:true
   
   
   ###
@@ -63,15 +69,12 @@ module.exports = class PrivatePackage extends JsonFile
         continue
       
       # Delete the existing directory or link.
-      if deleteLink(paths.target)
-        
-        # Create the sumbolic link.
-        fs.symlinkSync paths.source, paths.target
-        log '    ├─ Linked from:', color.green, paths.source
-        log '    ├─ Linked to:  ', color.green, paths.target
-      else
-        log '    ├─ Not linked.  Directory already exists:', color.red, paths.target
+      deleteLink paths.target, force:true
       
+      # Create the sumbolic link.
+      fs.symlinkSync paths.source, paths.target
+      log '    ├─ Linked from:', color.green, paths.source
+      log '    ├─ Linked to:  ', color.green, paths.target
     
     # Finish up.
     log()
@@ -134,7 +137,7 @@ module.exports = class PrivatePackage extends JsonFile
     onCloned = -> 
       count += 1
       return unless count is cloningCount
-      log ' Update complete.', color.green, "#{cloningCount} repositores cloned in #{timer.secs()} seconds."
+      log 'Update complete.', color.green, "#{cloningCount} repositores cloned in #{timer.secs()} seconds."
       log()
       callback?()
     
@@ -160,18 +163,26 @@ module.exports = class PrivatePackage extends JsonFile
           log "    ├─ No url provided for the #{repo.type} repository.", color.red
           continue
       
-      # TODO - DON'T DELETE SYM LINK.
-      
-      # Delete the existing repsitory.
+      # Check for existing directory.
       paths = dependencyPaths @, item
-      deleteLink paths.target, linkOnly:false
+      if fsUtil.existsSync paths.target
+        lstat = fs.lstatSync paths.target
+        if lstat.isSymbolicLink()
+          # It's been linked, ignore it.
+          log "    ├─ Ignoring linked dependency:", color.blue, paths.target
+          continue
+        else
+          # It's a cloned directory - delete it.
+          fsUtil.deleteSync paths.target, force:true
+          
       
       # Clone the repository.
       log "    ├─ Url: ", color.blue, url
       cloningCount += 1
       cmd = "git clone #{url} #{paths.target}"
-      exec cmd, (err, stdout, stderr) ->
+      @_exec cmd, (err, stdout, stderr) ->
         if err?
+          log "Failed: #{err.message}", color.red
           callback? err
           callback = null
           return
@@ -180,10 +191,18 @@ module.exports = class PrivatePackage extends JsonFile
     
     # Finish up.
     log()
-    log ' Cloning...', color.blue if cloningCount > 0
+    log.append ' Cloning now...', color.blue if cloningCount > 0
+  
+  
+  # PRIVATE INSTANCE --------------------------------------------------------------------------
+  
+  
+  _exec: (cmd, callback) -> exec cmd, callback
+  
+  
 
 
-# PRIVATE --------------------------------------------------------------------------
+# PRIVATE STATIC --------------------------------------------------------------------------
 
 
 createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
@@ -195,7 +214,10 @@ deleteLink = (path, options = {}) ->
     fs.unlinkSync path
     return true
   else
-    return false
+    if options.force is yes
+      fsUtil.deleteSync path, force:true
+    else
+      return false
   
   
 
