@@ -1,3 +1,10 @@
 {
-  
+  "dependencies": [
+    {
+      "name": "module1"
+    },
+    {
+      "name": "fake"
+    }
+  ]
 }

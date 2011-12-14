@@ -124,9 +124,12 @@ module.exports = class PrivatePackage extends JsonFile
       callback?()
       return
     
-    timer        = new Timer()
+    # Ensure the modules directory exists.
+    createModulesDir @
+    
     cloningCount = 0
     count        = 0
+    timer        = new Timer()
     onCloned = -> 
       count += 1
       return unless count is cloningCount
@@ -156,6 +159,8 @@ module.exports = class PrivatePackage extends JsonFile
           log "    ├─ No url provided for the #{repo.type} repository.", color.red
           continue
       
+      # TODO - DON'T DELETE SYM LINK.
+      
       # Delete the existing repsitory.
       paths = dependencyPaths @, item
       deleteLink paths.target, linkOnly:false
@@ -181,6 +186,7 @@ module.exports = class PrivatePackage extends JsonFile
 
 
 createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
+
 
 deleteLink = (path, options = {}) -> 
   return unless fsUtil.existsSync path
