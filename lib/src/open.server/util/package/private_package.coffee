@@ -25,7 +25,7 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   Deletes the [node_modules.private] directory.
   ###
-  delete: -> fsUtil.deleteSync @modulesDir, force:true
+  reset: -> fsUtil.deleteSync @modulesDir, force:true
   
   
   ###
@@ -195,14 +195,9 @@ module.exports = class PrivatePackage extends JsonFile
   
   
   ###
-  Alias to list.
-  ###
-  ls: -> @list()
-  
-  
-  ###
   Lists all the dependencies, printing their state to the console.
   ###
+  ls: -> @list() # Alias the list method.
   list: -> 
     
     # Setup initial conditions.
@@ -229,39 +224,33 @@ module.exports = class PrivatePackage extends JsonFile
           log "       ├─ To:  ", color.green, paths.target
       else
         log "    ├─ Not found.", color.red
+  
+  
+  ###
+  Clones the repository to given path.
+  @param path:  The path to the directory to clone to.
+  @param options
+              - force: Replaces an existing directory (default: true).
+  @returns callback(err, package): Invoked upon completion.
+              - err:     The error if one occured.
+              - package: The [PrivatePackage] for the new clone.
+  ###
+  clone: (path, options..., callback) -> 
+    
+    # Setup initial conditions.
+    throw new Error('No path specified') unless path?
+    options = options[0] ? {}
+    options.force ?= yes
+    
+    # Delete the directory if it already exists.
+    if fsUtil.existsSync path
+      if options.force is yes
+        fsUtil.delete path
+      else
+        throw new Error "Cannot clone. Directory already exists: #{path}"
     
     
-  
-  
-  # PRIVATE INSTANCE ----------------------------------------------------------------------
-  
-  
-  _exec: (cmd, callback) -> exec cmd, callback
-
-
-# PRIVATE STATIC --------------------------------------------------------------------------
-
-
-createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
-
-
-deleteLink = (path, options = {}) -> 
-  return true unless fsUtil.existsSync path
-  if fs.lstatSync(path).isSymbolicLink()
-    fs.unlinkSync path
-    return true
-  else
-    if options.force is yes
-      fsUtil.deleteSync path, force:true
-    else
-      return false
-  
-  
-
-dependencyPaths = (package, item) -> 
-  paths =
-    source: "#{package.linkDir}/#{item.name}"
-    target: "#{package.modulesDir}/#{item.name}"
-
-
-
+    # Copy the directory.
+    # fsUtil.copySync @dir, path
+    
+    
