@@ -1,10 +1,11 @@
-{exec} = require 'child_process'
+{exec}   = require 'child_process'
 fs       = require 'fs'
 fsUtil   = require '../fs'
 JsonFile = require '../json_file'
 common   = require '../common'
 log      = common.log
 Timer    = require '../timer'
+git      = require '../git'
 
 
 ###
@@ -243,18 +244,102 @@ module.exports = class PrivatePackage extends JsonFile
     throw new Error('No path specified') unless path?
     options = options[0] ? {}
     options.force ?= yes
+    log 'Cloning to:', color.blue, path
     
     # Delete the directory if it already exists.
     if fsUtil.existsSync path
       if options.force is yes
-        fsUtil.delete path
+        fsUtil.deleteSync path
       else
+        
         throw new Error "Cannot clone. Directory already exists: #{path}"
-    
+        return
     
     # Copy the directory.
-    # fsUtil.copySync @dir, path
+    fsUtil.copySync @dir, path, filter: (sourcePath) -> 
+      exclude = [
+        '/node_modules'
+        '/node_modules.private'
+        '.DS_Store'
+      ]
+      for item in exclude
+        return false if _(sourcePath).endsWith item
+      true
     
+    # Create a private-package of the clone.
+    path         = fs.realpathSync path
+    packageClone = new PrivatePackage(path)
+
+    
+    # Update private packages.
+    @update (err) => 
+      if err?
+        callback? err
+        return
+      
+      # Remove the ignore statement for [node_modules.private]
+      scrubGitIgnore @
+      
+      # Finish up.
+      callback? null, packageClone
+    
+    
+    ###
+    Branches the package and prepares it for deployment.
+     
+     - Delete the {deploy} branch - [make the name and whether an error is thrown an option]
+     - Checkout new branch: {deploy}
+     - 
+     - Delete 'node_modules'
+     - Delete 'node_modules.private'
+     - Remove .gitignore references to 'node_modules*'
+     - Apply tag. (make an option)
+     
+     
+     - Branch to: private_deploy
+     - Tag
+       - Remove the ignore statement for [node_modules.private]
+       - Commit in all changes.
+       - 
+    
+    @param options
+        - initial:  The name of the initial branch to start on.
+                    The current branch is used if nothing is specified.
+        - branch:   The name of the branch (default: 'deploy')
+        - tag:      The name of the tag to apply to the new branch.
+    
+    @param callback(err)
+    ###
+  branch: (options = {}, callback) -> 
+    
+    # Setup initial conditions.
+    options.branch ?= 'deploy'
+    
+    # Branch.
+    switchToInitial = (done) -> 
+      if options.initial?
+        git.exec "checkout #{options.initial}", done 
+      else
+        done()
+    deleteBranch = (done) -> git.deleteBranch options.branch, done
+    branch = (done) -> git.exec "checkout -b #{options.branch}", done
+    
+    switchToInitial -> deleteBranch -> branch -> 
+    
+    
+    # Update the .gitignore file.
+    scrubGitIgnore @
+    
+    # Update the private packages.
+    @clear()
+    @update (err) -> 
+      
+      callback? err
+    
+      
+    
+    
+  
   
   # PRIVATE INSTANCE ----------------------------------------------------------------------
    
@@ -284,4 +369,32 @@ dependencyPaths = (package, item) ->
   paths =
     source: "#{package.linkDir}/#{item.name}"
     target: "#{package.modulesDir}/#{item.name}"
+
+
+scrubGitIgnore = (package) -> 
+  # Setup initial conditions.
+  path = "#{package.dir}/.gitignore"
+  
+  # Read the file.
+  gitignore = fs.readFileSync(path).toString()
+  lines = _(gitignore).lines()
+  
+  console.log 'BEFORE\n', lines
+  
+  # Remove the private node modules ignore statement.
+  for line, i in lines
+    lines[i] = null if line is 'node_modules.private'
+  lines = _(lines).compact()
+  
+  # Save the results back to the [.gitignore] file.
+  data = ''
+  for line in lines
+    data += "#{line}\n"
+  fsUtil.writeFileSync path, data
+  
+  
+  
+  
+
+
 

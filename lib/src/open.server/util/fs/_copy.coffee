@@ -66,24 +66,24 @@ copyDir = (source, target, options..., callback) ->
 
 
 copyDirSync = (source, target, options = {}) ->
-      # Setup initial conditions.
-      self = @
-      mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT 
-
-      # Sanitize the paths.
-      source  = fsCommon.cleanDirPath(source)
-      target  = fsCommon.cleanDirPath(target)
-
-      # 1. Ensure the target directory exists.
-      createDirSync target, options
-
-      # 2. Get the files.
-      files = fs.readdirSync source
-      return if files.length == 0
+  # Setup initial conditions.
+  self = @
+  mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT 
   
-      # 3. Copy each file (at this level).
-      files = toCopyList(files, source, target)
-      module.exports.copyAllSync files, options
+  # Sanitize the paths.
+  source  = fsCommon.cleanDirPath(source)
+  target  = fsCommon.cleanDirPath(target)
+  
+  # 1. Ensure the target directory exists.
+  createDirSync target, options
+  
+  # 2. Get the files.
+  files = fs.readdirSync source
+  return if files.length == 0
+  
+  # 3. Copy each file (at this level).
+  files = toCopyList(files, source, target)
+  module.exports.copyAllSync files, options
 
 
 
