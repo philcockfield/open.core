@@ -553,13 +553,20 @@ describe 'util/fs', ->
           
           expect(fs.readFileSync(target).toString()).toEqual 'New content'
           resetTarget()
-          
+        
+        it 'filters out a file', ->
+          fn = (path) -> not _(path).endsWith 'folder2'
+          source = sourcePath folder1
+          target = targetPath folder1
+          fsUtil.copySync source, target, filter:fn
+          expect(targetExists(folder2)).toEqual false
+        
       describe 'folder copy', ->
         it 'copies to a deep location with content', ->
           source = sourcePath(folder2)
           target = targetPath(folder2)
           result = fsUtil.copySync source, target
-  
+          
           expect(targetExists(folder2)).toEqual true
           expect(targetExists(file4)).toEqual true
           expect(targetExists(file5)).toEqual true
@@ -608,6 +615,17 @@ describe 'util/fs', ->
               expect(fs.readFileSync(target).toString()).toEqual 'New content'
               resetTarget()
   
+        it 'filters out a file', ->
+          fn = (path) -> not _(path).endsWith 'folder2'
+          result = null
+          source = sourcePath folder1
+          target = targetPath folder1
+          fsUtil.copy source, target, filter:fn, (err) -> result = true
+          waitsFor -> result?
+          runs ->
+            expect(targetExists(folder2)).toEqual false
+            resetTarget()
+      
       describe 'folder copy', ->
         it 'copies to a deep location with content', ->
           result = null

@@ -97,64 +97,73 @@ module.exports =
   @param source:    path the file/directory to copy.
   @param target:    path to copy to.
   @param options:
-              - mode      : copy code (defaults to 0777 - see: FILE_MODE.DEFAULT).
-              - overwrite : flag indicating if an existing file should be overwritten (default false).
+              - mode                : copy code (defaults to 0777 - see: FILE_MODE.DEFAULT).
+              - overwrite           : flag indicating if an existing file should be overwritten (default false).
+              - filter(sourcePath)  : Function to filter items out with. 
+                                      Return true to copy the item, otherwise False to ignore.
   @param callback: (err)
   ###
   copy: (source, target, options..., callback) ->
-
-      # Setup initial conditions.
-      boundsCheck(source, target)
-      self = @
-      options = options[0] ?= {}
-      mode = options.mode ?= fsCommon.FILE_MODE.DEFAULT
-      overwrite = options.overwrite ?= false
-
-      prepareDir = (file, onComplete) ->
-            dir = fsPath.dirname(file)
-            createDir dir, options, (err) ->
-                  unless err?
-                    onComplete() # Success.
-                  else
-                    callback(err)
-                    return # Failed - exit out completely.
-
-      # The final copy operation.
-      copyFile = ->
-            # Ensure the target directory exists.
-            prepareDir target, ->
-                  # Perform the file copy operation.
-                  reader = fs.createReadStream(source)
-                  writer = fs.createWriteStream(target, mode:mode)
-                  util.pump reader, writer, (err) -> callback?(err)
-
-      # 1. Check whether the source is a directory.
-      fs.stat source, (err, stats) ->
-          if err?
-              callback?(err)
-              return # Failed - exit out completely.
-          else
-              if stats.isDirectory()
-                  # 2a. Copy the directory.
-                  copyDir source, target, options, (err) ->
-                            if err?
-                                callback?(err)
-                                return # Failed - exit out completely.
-                            callback?()
-              else
-                  if overwrite
-                      # 2b. Copy - overwriting any existing file.
-                      copyFile()
-                  else
-                      # 2c. Check whether the target file already exists
-                      #    and if so don't overwrite it.
-                      fsPath.exists target, (exists) ->
-                            if exists
-                                callback?()
-                                return # File exists - do nothing.
-                            else
-                              # 3. File does not exist - copy it now.
-                              copyFile()
+      
+    # Setup initial conditions.
+    boundsCheck(source, target)
+    self      = @
+    options   = options[0] ?= {}
+    mode      = options.mode ?= fsCommon.FILE_MODE.DEFAULT
+    overwrite = options.overwrite ?= false
+    filter    = options.filter
+    
+    # Check whether the file is to be filtered out.
+    if _(filter).isFunction()
+      unless filter(source)
+        callback?()
+        return
+    
+    prepareDir = (file, onComplete) ->
+          dir = fsPath.dirname(file)
+          createDir dir, options, (err) ->
+                unless err?
+                  onComplete() # Success.
+                else
+                  callback(err)
+                  return # Failed - exit out completely.
+    
+    # The final copy operation.
+    copyFile = ->
+          # Ensure the target directory exists.
+          prepareDir target, ->
+                # Perform the file copy operation.
+                reader = fs.createReadStream(source)
+                writer = fs.createWriteStream(target, mode:mode)
+                util.pump reader, writer, (err) -> callback?(err)
+    
+    # 1. Check whether the source is a directory.
+    fs.stat source, (err, stats) ->
+        if err?
+            callback?(err)
+            return # Failed - exit out completely.
+        else
+            if stats.isDirectory()
+                # 2a. Copy the directory.
+                copyDir source, target, options, (err) ->
+                          if err?
+                              callback?(err)
+                              return # Failed - exit out completely.
+                          callback?()
+            else
+                if overwrite
+                    # 2b. Copy - overwriting any existing file.
+                    copyFile()
+                else
+                    # 2c. Check whether the target file already exists
+                    #    and if so don't overwrite it.
+                    fsPath.exists target, (exists) ->
+                          if exists
+                              callback?()
+                              return # File exists - do nothing.
+                          else
+                            # 3. File does not exist - copy it now.
+                            copyFile()
 
 
   ###
@@ -163,43 +172,50 @@ module.exports =
   @param source:    path the file/directory to copy.
   @param target:    path to copy to.
   @param options:
-              - mode      : copy code (defaults to 0777 - see: FILE_MODE.DEFAULT).
-              - overwrite : flag indicating if an existing file should be overwritten (default false).
+              - mode                : copy code (defaults to 0777 - see: FILE_MODE.DEFAULT).
+              - overwrite           : flag indicating if an existing file should be overwritten (default false).
+              - filter(sourcePath)  : Function to filter items out with. 
+                                      Return true to copy the item, otherwise False to ignore.
   ###
-  copySync: (source, target, options ={}) -> 
-      # Setup initial conditions.
-      boundsCheck source, target
-      self      = @
-      mode      = options.mode ?= fsCommon.FILE_MODE.DEFAULT
-      overwrite = options.overwrite ?= false
+  copySync: (source, target, options = {}) -> 
+    # Setup initial conditions.
+    boundsCheck source, target
+    self      = @
+    mode      = options.mode ?= fsCommon.FILE_MODE.DEFAULT
+    overwrite = options.overwrite ?= false
+    filter    = options.filter
+    
+    # Check whether the file is to be filtered out.
+    if _(filter).isFunction()
+      return unless filter(source)
+    
+    # The final copy operation.
+    copyFile = -> 
+      # Ensure the target directory exists.
+      dir = fsPath.dirname(target)
+      createDirSync dir, options
       
-      # The final copy operation.
-      copyFile = -> 
-        # Ensure the target directory exists.
-        dir = fsPath.dirname(target)
-        createDirSync dir, options
-        
-        # Perform the file copy operation.
-        data = fs.readFileSync(source)
-        fs.writeFileSync target, data
-      
-      # 1. Check whether the source is a directory.
-      stats = fs.statSync(source)
-      if stats.isDirectory()
-        # 2a. Copy the directory.
-        copyDirSync source, target, options
+      # Perform the file copy operation.
+      data = fs.readFileSync(source)
+      fs.writeFileSync target, data
+    
+    # 1. Check whether the source is a directory.
+    stats = fs.statSync(source)
+    if stats.isDirectory()
+      # 2a. Copy the directory.
+      copyDirSync source, target, options
+    else
+      if overwrite
+        # 2b. Copy - overwriting any existing file.
+        copyFile()
       else
-        if overwrite
-          # 2b. Copy - overwriting any existing file.
+        # 2c. Check whether the target file already exists
+        #    and if so don't overwrite it.
+        if not fsCommon.existsSync(target)
+          
+          # 3. File does not exist - copy it now.
           copyFile()
-        else
-          # 2c. Check whether the target file already exists
-          #    and if so don't overwrite it.
-          if not fsCommon.existsSync(target)
-            
-            # 3. File does not exist - copy it now.
-            copyFile()
-  
+
   
   ###
   Copies a collection of files/folders to a new location providing a
@@ -212,8 +228,10 @@ module.exports =
                    { source:'/folder',        target:'/folder_new' }
                  ]
   @param options:
-              - mode: copy code (defaults to 0777).
-              - overwrite : flag indicating if an existing file should be overwritten (default false).
+              - mode                : copy code (defaults to 0777).
+              - overwrite           : flag indicating if an existing file should be overwritten (default false).
+              - filter(sourcePath)  : Function to filter items out with. 
+                                      Return true to copy the item, otherwise False to ignore.
   @param callback: (err)
   ###
   copyAll: (items, options..., callback) ->
@@ -254,8 +272,10 @@ module.exports =
                    { source:'/folder',        target:'/folder_new' }
                  ]
   @param options:
-              - mode: copy code (defaults to 0777).
-              - overwrite : flag indicating if an existing file should be overwritten (default false).
+              - mode                : copy code (defaults to 0777).
+              - overwrite           : flag indicating if an existing file should be overwritten (default false).
+              - filter(sourcePath)  : Function to filter items out with. 
+                                      Return true to copy the item, otherwise False to ignore.
   ###
   copyAllSync: (items, options = {}) ->
       for file in items
