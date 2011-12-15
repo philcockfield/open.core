@@ -91,12 +91,12 @@ describe 'util/package/private_package', ->
       expect(fsUtil.existsSync(MODULES_DIR)).toEqual false
   
   
-  describe 'delete() method', ->
-    it 'deletes the private modules folder', ->
+  describe 'clear() method', ->
+    it 'clears the private modules folder', ->
       package.link()
-      expect(fsUtil.existsSync(MODULES_DIR)).toEqual true
-      package.delete()
-      expect(fsUtil.existsSync(MODULES_DIR)).toEqual false
+      expect(fsUtil.readDirSync(MODULES_DIR).length).not.toEqual 0, 'Has contents'
+      package.clear()
+      expect(fsUtil.readDirSync(MODULES_DIR).length).toEqual 0, 'Empty'
       
       
       

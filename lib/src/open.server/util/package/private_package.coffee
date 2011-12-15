@@ -25,7 +25,9 @@ module.exports = class PrivatePackage extends JsonFile
   ###
   Deletes the [node_modules.private] directory.
   ###
-  reset: -> fsUtil.deleteSync @modulesDir, force:true
+  clear: -> 
+    fsUtil.deleteSync @modulesDir, force:true
+    createModulesDir @
   
   
   ###
@@ -253,4 +255,33 @@ module.exports = class PrivatePackage extends JsonFile
     # Copy the directory.
     # fsUtil.copySync @dir, path
     
-    
+  
+  # PRIVATE INSTANCE ----------------------------------------------------------------------
+   
+   
+  _exec: (cmd, callback) -> exec cmd, callback
+
+
+# PRIVATE STATIC --------------------------------------------------------------------------
+
+
+createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
+
+
+deleteLink = (path, options = {}) -> 
+  return true unless fsUtil.existsSync path
+  if fs.lstatSync(path).isSymbolicLink()
+    fs.unlinkSync path
+    return true
+  else
+    if options.force is yes
+      fsUtil.deleteSync path, force:true
+    else
+      return false
+
+
+dependencyPaths = (package, item) -> 
+  paths =
+    source: "#{package.linkDir}/#{item.name}"
+    target: "#{package.modulesDir}/#{item.name}"
+
