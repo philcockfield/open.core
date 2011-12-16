@@ -5,6 +5,7 @@
 .core_btn_cmd button {
   width: 100%;
   height: 100%;
+  outline: none;
 }
 .core_btn_cmd.core_color_silver > button {
   margin: 0;
@@ -265,9 +266,6 @@ ul.core_tab_strip li.core_tab.core_disabled p {
 }
 .core_textbox.core_focused {
   border-color: #5c88b6;
-  -webkit-box-shadow: 0 0 3px 3px rgba(0,153,228,0.10), #e6e6e6 0px 3px 2px inset;
-  -moz-box-shadow: 0 0 3px 3px rgba(0,153,228,0.10), #e6e6e6 0px 3px 2px inset;
-  box-shadow: 0 0 3px 3px rgba(0,153,228,0.10), #e6e6e6 0px 3px 2px inset;
 }
 .core_textbox span.core_inner {
   position: absolute;

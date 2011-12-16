@@ -1,5 +1,7 @@
-core = require 'open.client/core'
-mvc  = core.mvc
+core            = require 'open.client/core'
+focusController = require '../controllers/focus'
+mvc             = core.mvc
+
 
 ###
 A general purpose textbox.
@@ -16,6 +18,7 @@ module.exports = class Textbox extends mvc.View
     password:   false   # Gets or sets whether the textbox is a password (only valid if not multi-line).
     prompt:     ''      # Gets or sets the watermark prompt.
   
+  
   constructor: (params = {}) -> 
       # Setup initial conditions.
       super _.extend params, tagName: 'span', className: @_className('textbox')
@@ -24,17 +27,14 @@ module.exports = class Textbox extends mvc.View
       syncPrompt = => 
             @_.prompt.html (if @empty() then @prompt() else '')
       
-      syncFocus = (hasFocus) => 
-        hasFocus = @hasFocus() unless hasFocus?
-        @el.toggleClass @_className('focused'), hasFocus
+      # Create controllers.
+      new focusController @, @_.input
       
       # Wire up events.
       @multiline.onChanged => @render()
       @password.onChanged  => @render()
       @prompt.onChanged    syncPrompt
       @text.onChanged      syncPrompt
-      @_.input.focusin => syncFocus(true)
-      @_.input.focusout => syncFocus(false)
       
       # Key events.
       @_.input.keyup (e) => 
@@ -48,7 +48,6 @@ module.exports = class Textbox extends mvc.View
       
       # Finish up.
       syncPrompt()
-      syncFocus()
   
   
   render: -> 
@@ -72,7 +71,7 @@ module.exports = class Textbox extends mvc.View
   
   
   # Applies focus to the INPUT element.
-  focus: -> @_.input.focus()
+  focus: undefined # Delcared by the focus controller.
   
   
   # Determines whether the textbox has the focus.

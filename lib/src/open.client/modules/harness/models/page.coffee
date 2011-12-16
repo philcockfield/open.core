@@ -41,6 +41,8 @@ module.exports = (module) ->
               - scroll:    Scroll behavior for container. 'x', 'y', 'xy', null.  Default:null
               - border:    A color (string) or a bolean (yes/no) for whether a border should be put around the hosted control.
               - reset:     Flag indicating if the 'Reset' method should be invoked before adding.
+              - className: The class name to add to the containing host element (use this to set special styles for testing).
+                           This is added to the [page.el], and is reset for each new suite that is loaded.
     ###
     add: (el, options = {}) -> 
       @reset() if options.reset is yes

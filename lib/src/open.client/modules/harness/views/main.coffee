@@ -43,11 +43,14 @@ module.exports = (module) ->
         @trTitle.toggle (options.showTitle ?= true)
         
         # Insert the element into the host DIV.
+        @tdHost.addClass options.className if options.className?
         @tdHost.append el
     
     
     # Removes the test element from the DOM.
-    clear: -> @tdHost.empty()
+    clear: -> 
+      @tdHost.empty()
+      @tdHost.attr 'class', 'th_host'
     
     
     ###

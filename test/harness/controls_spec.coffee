@@ -23,7 +23,8 @@ describe 'Controls',
           btn = addCmdButton label:'My Label'
           btn.el.attr 'id', 'cmd_btn'
         
-        it 'Add another',   -> addCmdButton label:"Button #{buttons.length + 1}"
+        it 'Add: Blue',      -> addCmdButton label:"Button #{buttons.length + 1}", color:'blue'
+        it 'Add: Silver',    -> addCmdButton label:"Button #{buttons.length + 1}"
         it 'Color: Blue',   -> btn.color 'blue' for btn in buttons
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
         it 'Width: 200',    -> btn.width 200 for btn in buttons
