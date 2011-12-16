@@ -3,10 +3,38 @@
 
 icon(prefix = CLASS_PREFIX)
   .{prefix}_icon
-    background orange
+    position relative
+    cursor default
+    display inline-block
+    vertical-align bottom
+    margin 0px
+    padding 0px
+
+    // min-height 30px // NB: Minimum height is 32px including top and bottom border.
+    // min-width 38px
+    
+    // Enabled.
+    // &.{prefix}_enabled
+    //   cursor pointer
+    //   color PRIMARY_BLUE
+    
+    // Inner wrapper.  Resets margin offsets.
+    span.{prefix}_inner
+      abs-pos()
+      background rgba(black, 0.1)
+      
+    
     
     // div.{prefix}_icon
+    //   display inline-block
+    //   abs-pos 0, 0, 0, 0
+      
+      
+    
     // div.{prefix}_carat
     // p.{prefix}_label
+    //   display inline-block
+    //   font-size 9pt
+    //   background darken(white, 8%)
 
     

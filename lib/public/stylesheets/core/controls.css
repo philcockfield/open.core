@@ -128,7 +128,20 @@
   padding: 12px 34px;
 }
 .core_icon {
-  background: #ffa500;
+  position: relative;
+  cursor: default;
+  display: inline-block;
+  vertical-align: bottom;
+  margin: 0px;
+  padding: 0px;
+}
+.core_icon span.core_inner {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: rgba(0,0,0,0.10);
 }
 span.core_system_toggle_btn {
   position: relative;

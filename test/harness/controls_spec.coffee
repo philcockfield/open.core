@@ -121,24 +121,33 @@ describe 'Controls',
         describe 'Icon', ->
           icon = null
           beforeAll ->
-            icon = add label:'My Label'
-          
+            icon = add()
+            icon = add()
+            
+            page.pane.add.remote 
+              label: 'CSS'
+              url:   '/stylesheets/core/controls/buttons/icon.css'
+            
+            page.pane.add.markdown
+              label:'Sample Code'
+              markdown:
+                '''
+                    :coffee
+                    # Create the control.
+                    controls = require 'open.client/controls'
+                    btn      = new controls.Icon label:'My Label'
+                
+                '''          
+            
           add = (params = {})-> 
+            params.label ?= "My Label #{page.el.children().length + 1}"
             btn = new controls.Icon params
-            page.add btn
+            page.add btn, className:'test_icon'
             btn
           
           it 'Toggle: enabled', -> icon.enabled.toggle()
           it 'Add new', -> add()
-          
           it 'Change: label', -> icon.label new Date().getTime()
-            
-          
-          
-          
-          
-            
-          
 
           
     describe 'TabStrip', ->
@@ -178,10 +187,17 @@ describe 'Controls',
     describe 'Textbox', ->
       textbox = null
       beforeAll ->
-          textbox = new controls.Textbox prompt:'Prompt Watermark'
-          page.add textbox, width:300
+          textbox = add()
+      
+      add = -> 
+        textbox = new controls.Textbox prompt:'Prompt Watermark'
+        page.add textbox, width:300, className:'test_textbox'
+        textbox
+      
       it 'Focus', -> textbox.focus()
       it 'Change prompt', -> textbox.prompt 'New Prompt (example.com)'
+      it 'Add new', -> add()
+    
     
     describe 'Form', ->
       form = null

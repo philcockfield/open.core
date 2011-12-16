@@ -32,5 +32,6 @@ core.init.harness app,
                     "#{stylesheets}/base.css"
                     "#{stylesheets}/controls.css"
                     "#{stylesheets}/modules.css"
+                    "#{baseUrl}/stylesheets/dev/test.css"
                   ]
 

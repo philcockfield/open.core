@@ -1,3 +1,8 @@
-.gwt_step {
-  background: #f5f5f5;
+.test_icon .core_icon {
+  margin-left: 10px;
+  border: solid 1px #008000;
+  background: #ffa500;
+}
+.test_textbox .core_textbox {
+  margin-left: 5px;
 }
