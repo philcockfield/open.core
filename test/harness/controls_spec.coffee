@@ -117,6 +117,26 @@ describe 'Controls',
           it 'clear', -> rdoSet.clear()
           it 'remove first', -> rdoSet.remove rdoSet.buttons.first()
           
+
+        describe 'Icon', ->
+          icon = null
+          beforeAll ->
+            icon = add()
+          
+          add = (params = {})-> 
+            btn = new controls.Icon params
+            page.add btn
+            btn
+          
+          it 'Toggle: enabled', -> icon.enabled.toggle()
+          it 'Add new', -> add()
+            
+          
+          
+          
+            
+          
+
           
     describe 'TabStrip', ->
       tabStrip = null
