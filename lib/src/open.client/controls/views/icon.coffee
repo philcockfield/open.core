@@ -6,21 +6,30 @@ Button = require './button'
 A button that presents an icon and optionally a text label.
 ###
 module.exports = class Icon extends Button
+  defaults:
+    iconSize:     { x:16, y:16 }  # Gets or sets the pixel size of the icon (this may be larger than the actual image used - which will be centered).
+    iconOffset:   { x:0, y:0 }    # Gets or sets the X:Y pixel offset to apply the icon.
+    icon:         null            # Gets or sets the source of the icon (either a URL or a CSS class for embedded images).
+    labelOffset:  { x:6, y:1 }    # Gets or sets the X:Y pixel offset to apply to the label.
+    iconType:    'url'            # Gets or sets the type of value for icons ('css' or 'url').
+    tooltip:     null             # Gets or sets the tooltip.
+  
+  
   constructor: (props = {}) -> 
-    
     # Setup initial conditions.
     super _.extend props, tagName:'span', className:@_className 'icon'
     @render()
     @el.disableTextSelect()
     
-    # Syncers.
-    syncLabel = => @_label.html @label()
-    
     # Wire up events.
-    @label.onChanged syncLabel
+    @label.onChanged   => syncText @
+    @tooltip.onChanged => syncText @
+    @icon.onChanged    => syncIcon @
+    
     
     # Finish up.
-    syncLabel()
+    @update()
+    
   
   
   render: -> 
@@ -30,38 +39,70 @@ module.exports = class Icon extends Button
     # Retrieve element refs.
     el = (className) => @$ '.' + @_className(className)
     @_label = el 'label'
-    @_icon  = el 'icon'
+    @_icon  = el 'left_icon'
     @_carat = el 'carat'
+  
+  # Updates the visual state of the control.
+  update: -> 
+    syncText @
+    syncSize  @
+    syncIcon  @
 
 
 # PRIVATE --------------------------------------------------------------------------
 
 
+css = (el, style, pixelValue) -> el.css style, pixelValue + 'px'
+
+
+syncText = (view) -> 
+  view._label.html view.label()
+  view.el.attr 'title', (view.tooltip() ? '')
+
+
+syncSize = (view) -> 
+  # Setup initial conditions.
+  iconSize     = view.iconSize()
+  labelOffset  = view.labelOffset()
+  elLabel      = view._label
+  
+  # Update label styles.
+  css elLabel, 'margin-left', iconSize.x + labelOffset.x
+  css elLabel, 'margin-top', labelOffset.y
+  
+  # Height.
+  css view.el, 'min-height', iconSize.y
+
+
+syncIcon = (view) -> 
+  el   = view._icon
+  icon = view.icon()
+  
+  switch view.iconType()
+    when 'url' 
+      el.css 'background-image', "url(#{icon})"
+      
+      console.log 'view._icon', view._icon
+      
+      
+      # css view._icon, 'background-image', "url(#{icon})"
+      
+      
+    when 'path' 
+      
+      console.log 'path image: ', icon # TEMP 
+      
+    else return
+  
+  
+  
+  
+  
+  
+
 class Tmpl extends core.mvc.Template
   root:
     """
-    <span class="<%= prefix %>_inner">
-    </span>
+    <div class='<%= prefix %>_left_icon'></div>
     <p class="<%= prefix %>_label">Label</p>
     """
-  
-  foo:
-    '''
-    <div class='<%= prefix %>_icon'></div>
-
-
-    <div class='<%= prefix %>_wrapper'>
-      wrapper
-    </div>
-
-
-      <div class='<%= prefix %>_carat'></div>        
-        
-    '''
-    
-
-
-
-
-
-

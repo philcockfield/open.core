@@ -119,6 +119,7 @@ describe 'Controls',
           
 
         describe 'Icon', ->
+          FOLDER = '/images/test/controls/icon'
           icon = null
           beforeAll ->
             icon = add()
@@ -141,14 +142,21 @@ describe 'Controls',
             
           add = (params = {})-> 
             params.label ?= "My Label #{page.el.children().length + 1}"
+            params.icon ?= "#{FOLDER}/accept.png"
+            
             btn = new controls.Icon params
             page.add btn, className:'test_icon'
+            btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
             btn
           
           it 'Toggle: enabled', -> icon.enabled.toggle()
           it 'Add new', -> add()
           it 'Change: label', -> icon.label new Date().getTime()
-
+          it 'Icon: Accept', -> icon.icon "#{FOLDER}/accept.png"
+          it 'Icon: Warning', -> icon.icon "#{FOLDER}/warning.png"
+          it 'Set: tooltip', -> icon.tooltip 'A tooltip value \nover two lines'
+          
+          
           
     describe 'TabStrip', ->
       tabStrip = null
@@ -182,8 +190,8 @@ describe 'Controls',
           { label:'Two' }
           { label:'Three', enabled:false }
         ]
-  
-  
+    
+    
     describe 'Textbox', ->
       textbox = null
       beforeAll ->

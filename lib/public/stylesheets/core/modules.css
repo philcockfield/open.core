@@ -118,11 +118,11 @@
   background: linear-gradient(top, #e6e6e6 0%, #fcfcfc 100%);
 }
 .core_provider_btn.core_selected {
-  border: solid 6px #00bdf3;
+  border: solid 6px #00a5d5;
 }
 .core_provider_btn.core_selected .core_inner_border {
   background: #fafafa;
-  border-color: #00bdf3;
+  border-color: #00a5d5;
 }
 .core_provider_btn.core_disabled.core_selected {
   border-color: #b3b3b3;

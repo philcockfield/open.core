@@ -5,12 +5,24 @@
   vertical-align: bottom;
   margin: 0px;
   padding: 0px;
+  background: #e6e6e6;
 }
-.core_icon span.core_inner {
+.core_icon div.core_left_icon {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
-  background: rgba(0,0,0,0.10);
+  background-repeat: no-repeat;
+  background-position: 0px 50%;
+}
+.core_icon p.core_label {
+  font-size: 9pt;
+}
+.core_icon.core_enabled {
+  cursor: pointer;
+  color: #00a5d5;
+}
+.core_icon.core_enabled:hover p.core_label {
+  text-decoration: underline;
 }

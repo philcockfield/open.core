@@ -25,16 +25,12 @@ module.exports = (module) ->
         callback?()
         return
       
-      console.log 'url', url
-      
       # Load the content.
       $.get url, (data) =>
         
         # Prepare the data.
         data = ":#{options.language}\n#{data}" if language?
         data = prependEachLine data
-        
-        console.log 'data', data
         
         # Prepare the link.
         link = ''

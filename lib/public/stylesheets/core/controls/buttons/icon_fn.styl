@@ -9,32 +9,29 @@ icon(prefix = CLASS_PREFIX)
     vertical-align bottom
     margin 0px
     padding 0px
-
-    // min-height 30px // NB: Minimum height is 32px including top and bottom border.
-    // min-width 38px
     
-    // Enabled.
-    // &.{prefix}_enabled
-    //   cursor pointer
-    //   color PRIMARY_BLUE
+    // TEMP
+    background darken(white, 10%)
+      
     
-    // Inner wrapper.  Resets margin offsets.
-    span.{prefix}_inner
+    // Left icon.
+    div.{prefix}_left_icon
       abs-pos()
-      background rgba(black, 0.1)
-      
+      background-repeat no-repeat
+      background-position 0px 50%
     
-    
-    // div.{prefix}_icon
-    //   display inline-block
-    //   abs-pos 0, 0, 0, 0
-      
-      
-    
-    // div.{prefix}_carat
-    // p.{prefix}_label
-    //   display inline-block
-    //   font-size 9pt
-    //   background darken(white, 8%)
+    // Label.
+    p.{prefix}_label
+      font-size 9pt
 
-    
+    // Enabled.
+    &.{prefix}_enabled
+      cursor pointer
+      color PRIMARY_BLUE
+      &:hover
+        p.{prefix}_label
+          text-decoration underline
+
+
+
+
