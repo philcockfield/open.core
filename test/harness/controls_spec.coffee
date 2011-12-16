@@ -121,7 +121,7 @@ describe 'Controls',
         describe 'Icon', ->
           icon = null
           beforeAll ->
-            icon = add()
+            icon = add label:'My Label'
           
           add = (params = {})-> 
             btn = new controls.Icon params
@@ -130,7 +130,10 @@ describe 'Controls',
           
           it 'Toggle: enabled', -> icon.enabled.toggle()
           it 'Add new', -> add()
+          
+          it 'Change: label', -> icon.label new Date().getTime()
             
+          
           
           
           
