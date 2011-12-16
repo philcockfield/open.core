@@ -155,6 +155,13 @@ describe 'Controls',
           it 'Icon: Accept', -> icon.icon "#{FOLDER}/accept.png"
           it 'Icon: Warning', -> icon.icon "#{FOLDER}/warning.png"
           it 'Set: tooltip', -> icon.tooltip 'A tooltip value \nover two lines'
+          it 'Change: labelOffset', -> icon.labelOffset x:15, y:-5
+          it 'Change: iconOffset', -> icon.iconOffset x:7, y:-15
+          it 'Change: iconSize', -> icon.iconSize x:30, y:30
+            
+          
+            
+          
           
           
           

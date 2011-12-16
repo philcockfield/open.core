@@ -10,7 +10,7 @@ module.exports = class Icon extends Button
     iconSize:     { x:16, y:16 }  # Gets or sets the pixel size of the icon (this may be larger than the actual image used - which will be centered).
     iconOffset:   { x:0, y:0 }    # Gets or sets the X:Y pixel offset to apply the icon.
     icon:         null            # Gets or sets the source of the icon (either a URL or a CSS class for embedded images).
-    labelOffset:  { x:6, y:1 }    # Gets or sets the X:Y pixel offset to apply to the label.
+    labelOffset:  { x:5, y:1 }    # Gets or sets the X:Y pixel offset to apply to the label.
     iconType:    'url'            # Gets or sets the type of value for icons ('css' or 'url').
     tooltip:     null             # Gets or sets the tooltip.
   
@@ -22,10 +22,12 @@ module.exports = class Icon extends Button
     @el.disableTextSelect()
     
     # Wire up events.
-    @label.onChanged   => syncText @
-    @tooltip.onChanged => syncText @
-    @icon.onChanged    => syncIcon @
-    
+    @label.onChanged        => syncText @
+    @tooltip.onChanged      => syncText @
+    @icon.onChanged         => syncIcon @
+    @iconSize.onChanged     => syncSize @
+    @iconOffset.onChanged   => syncSize @
+    @labelOffset.onChanged  => syncSize @
     
     # Finish up.
     @update()
@@ -45,8 +47,8 @@ module.exports = class Icon extends Button
   # Updates the visual state of the control.
   update: -> 
     syncText @
-    syncSize  @
-    syncIcon  @
+    syncSize @
+    syncIcon @
 
 
 # PRIVATE --------------------------------------------------------------------------
@@ -63,8 +65,10 @@ syncText = (view) ->
 syncSize = (view) -> 
   # Setup initial conditions.
   iconSize     = view.iconSize()
+  iconOffset   = view.iconOffset()
   labelOffset  = view.labelOffset()
   elLabel      = view._label
+  elIcon       = view._icon
   
   # Update label styles.
   css elLabel, 'margin-left', iconSize.x + labelOffset.x
@@ -72,6 +76,10 @@ syncSize = (view) ->
   
   # Height.
   css view.el, 'min-height', iconSize.y
+  
+  # Icon offset.
+  css elIcon, 'left', iconOffset.x 
+  css elIcon, 'top', iconOffset.y
 
 
 syncIcon = (view) -> 
@@ -81,9 +89,6 @@ syncIcon = (view) ->
   switch view.iconType()
     when 'url' 
       el.css 'background-image', "url(#{icon})"
-      
-      console.log 'view._icon', view._icon
-      
       
       # css view._icon, 'background-image', "url(#{icon})"
       

@@ -12,7 +12,6 @@ icon(prefix = CLASS_PREFIX)
     
     // TEMP
     background darken(white, 10%)
-      
     
     // Left icon.
     div.{prefix}_left_icon
@@ -32,6 +31,9 @@ icon(prefix = CLASS_PREFIX)
         p.{prefix}_label
           text-decoration underline
 
+    // Disabled.
+    &.{prefix}_disabled
+      color darken(white, 40%)
 
 
 

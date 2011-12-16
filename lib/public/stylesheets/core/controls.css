@@ -155,6 +155,9 @@
 .core_icon.core_enabled:hover p.core_label {
   text-decoration: underline;
 }
+.core_icon.core_disabled {
+  color: #999;
+}
 span.core_system_toggle_btn {
   position: relative;
   cursor: default;
