@@ -119,7 +119,16 @@ describe 'Controls',
           
 
         describe 'Icon', ->
+          btn = null
           FOLDER = '/images/test/controls/icon'
+          ICONS =
+            warning:
+              url: "#{FOLDER}/warning.png"
+              css: 'icon_warning'
+            accept:
+              url: "#{FOLDER}/accept.png"
+              css: 'icon_accept'
+          
           icon = null
           beforeAll ->
             icon = add()
@@ -129,6 +138,10 @@ describe 'Controls',
               label: 'CSS'
               url:   '/stylesheets/core/controls/buttons/icon.css'
             
+            page.pane.add.remote 
+              label: 'Test CSS'
+              url:   '/stylesheets/dev/test.css'
+
             page.pane.add.markdown
               label:'Sample Code'
               markdown:
@@ -139,30 +152,40 @@ describe 'Controls',
                     btn      = new controls.Icon label:'My Label'
                 
                 '''          
+          
+          changeIconType = (type) -> 
+            page.el.html ''
+            add iconType: type
+            add iconType: type
+          
+          changeIcon = (iconSample) -> 
+            value = if btn.iconType() is 'url' then iconSample.url else iconSample.css
+            btn.icon value
+            btn
             
+          
           add = (params = {})-> 
             params.label ?= "My Label #{page.el.children().length + 1}"
-            params.icon ?= "#{FOLDER}/accept.png"
+            params.icon ?= if params.iconType is 'css' then ICONS.accept.css else ICONS.accept.url
             
             btn = new controls.Icon params
             page.add btn, className:'test_icon'
             btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
             btn
           
-          it 'Toggle: enabled', -> icon.enabled.toggle()
+          it 'Toggle: enabled', -> btn.enabled.toggle()
           it 'Add new', -> add()
-          it 'Change: label', -> icon.label new Date().getTime()
-          it 'Icon: Accept', -> icon.icon "#{FOLDER}/accept.png"
-          it 'Icon: Warning', -> icon.icon "#{FOLDER}/warning.png"
-          it 'Set: tooltip', -> icon.tooltip 'A tooltip value \nover two lines'
-          it 'Change: labelOffset', -> icon.labelOffset x:15, y:-5
-          it 'Change: iconOffset', -> icon.iconOffset x:7, y:-15
-          it 'Change: iconSize', -> icon.iconSize x:30, y:30
-            
-          
-            
-          
-          
+          it 'Change: label', -> btn.label new Date().getTime()
+          it 'Change: iconType - url', -> changeIconType 'url'
+          it 'Change: iconType - css', -> changeIconType 'css'
+          it 'Icon: Accept (url)', -> changeIcon ICONS.accept
+          it 'Icon: Warning (url)', -> changeIcon ICONS.warning
+          # it 'Icon: Accept (css)', -> btn.icon 'icon_warning'
+          # it 'Icon: Warning (css)', -> btn.icon 'icon_accept'
+          it 'Set: tooltip', -> btn.tooltip 'A tooltip value \nover two lines'
+          it 'Change: labelOffset', -> btn.labelOffset x:15, y:-5
+          it 'Change: iconOffset', -> btn.iconOffset x:7, y:-15
+          it 'Change: iconSize', -> btn.iconSize x:30, y:30
           
           
     describe 'TabStrip', ->

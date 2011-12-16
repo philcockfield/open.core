@@ -10,8 +10,8 @@ module.exports = class Icon extends Button
     iconSize:     { x:16, y:16 }  # Gets or sets the pixel size of the icon (this may be larger than the actual image used - which will be centered).
     iconOffset:   { x:0, y:0 }    # Gets or sets the X:Y pixel offset to apply the icon.
     icon:         null            # Gets or sets the source of the icon (either a URL or a CSS class for embedded images).
-    labelOffset:  { x:5, y:1 }    # Gets or sets the X:Y pixel offset to apply to the label.
     iconType:    'url'            # Gets or sets the type of value for icons ('css' or 'url').
+    labelOffset:  { x:5, y:1 }    # Gets or sets the X:Y pixel offset to apply to the label.
     tooltip:     null             # Gets or sets the tooltip.
   
   
@@ -25,13 +25,13 @@ module.exports = class Icon extends Button
     @label.onChanged        => syncText @
     @tooltip.onChanged      => syncText @
     @icon.onChanged         => syncIcon @
+    @iconType.onChanged     => syncIcon @
     @iconSize.onChanged     => syncSize @
     @iconOffset.onChanged   => syncSize @
     @labelOffset.onChanged  => syncSize @
     
     # Finish up.
     @update()
-    
   
   
   render: -> 
@@ -43,6 +43,7 @@ module.exports = class Icon extends Button
     @_label = el 'label'
     @_icon  = el 'left_icon'
     @_carat = el 'carat'
+  
   
   # Updates the visual state of the control.
   update: -> 
@@ -86,21 +87,24 @@ syncIcon = (view) ->
   el   = view._icon
   icon = view.icon()
   
+  bg = (url) -> 
+    url = if url? then "url(#{url})" else null
+    el.css 'background-image', url
+  
   switch view.iconType()
     when 'url' 
-      el.css 'background-image', "url(#{icon})"
-      
-      # css view._icon, 'background-image', "url(#{icon})"
-      
-      
-    when 'path' 
+      bg icon
+      el.removeClass icon
+    when 'css' 
+      bg null
+      el.addClass icon
       
       console.log 'path image: ', icon # TEMP 
       
     else return
   
   
-  
+  console.log 'el', el
   
   
   
