@@ -33,7 +33,7 @@ task 'build', 'Build and save all JavaScript files', ->
   log 'Building client-side JavaScript...', color.blue
   timer = new core.util.Timer()
   build '[Open.Core] modules', core.build.all, -> 
-    build '3rd party libs', core.build.all, -> 
+    build '3rd party libs', core.build.libs, -> 
       log 'Built in:', color.green, "#{timer.secs()} seconds"
       log()
 

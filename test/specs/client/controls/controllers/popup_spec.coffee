@@ -1,0 +1,2 @@
+describe 'controls/controllers/popup', ->
+  

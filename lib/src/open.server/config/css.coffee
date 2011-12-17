@@ -13,6 +13,7 @@ module.exports =
               .include("#{paths.stylesheets}/core/controls")
               .include("#{paths.stylesheets}/core/controls/buttons")
               .include("#{paths.stylesheets}/core/modules")
+              .include("#{paths.stylesheets}/dev")
               .use(nib())
       use stylus.middleware
               src:     paths.public

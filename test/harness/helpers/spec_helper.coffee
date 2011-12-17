@@ -13,3 +13,9 @@ window.loremWide = do ->
   wide = wide.replace /\s/g, ''
   wide += wide for i in [1.3]
   wide
+
+
+window.test = require 'core/test'
+  
+  
+  

@@ -34,4 +34,6 @@ core.init.harness app,
                     "#{stylesheets}/modules.css"
                     "#{baseUrl}/stylesheets/dev/test.css"
                   ]
+      samplesDir: "#{core.paths.test}/harness/samples"
+      samplesNamespace: 'core/test'
 

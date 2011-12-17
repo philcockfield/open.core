@@ -133,14 +133,6 @@ describe 'Controls',
           icon = add()
           icon = add()
           
-          page.pane.add.css
-            label: 'CSS'
-            url:   '/stylesheets/core/controls/buttons/icon.css'
-          
-          page.pane.add.remote 
-            label: 'Test CSS'
-            url:   '/stylesheets/dev/test.css'
-
           page.pane.add.markdown
             label:'Sample Code'
             markdown:
@@ -151,6 +143,12 @@ describe 'Controls',
                   btn      = new controls.Icon label:'My Label'
               
               '''          
+          page.pane.add.css
+            label: 'CSS'
+            url:   '/stylesheets/core/controls/buttons/icon.css'
+          page.pane.add.remote 
+            label: 'Test CSS'
+            url:   '/stylesheets/dev/test.css'
         
         changeIconType = (type) -> 
           page.el.html ''
