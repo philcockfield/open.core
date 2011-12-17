@@ -3,7 +3,63 @@
 
 popup(prefix = CLASS_PREFIX, ctrl = 'popup')
   .{prefix}_{ctrl}
+    position relative
     
-    background orange
+    // Inner body.
+    > .{prefix}_inner
+      position relative
+      overflow hidden
+      background darken(white, 4%)
+      border-radius 5px
+      border solid 1px darken(white, 40%)
+      height 100%
+      width 100%
+      box-shadow 2px 2px 15px 2px darken(white, 20%)
     
+    // Anchor pointers.
+    ANCHOR_SIZE   = 15
+    ANCHOR_MARGIN = 10
     
+    // All anchors.
+    > .{prefix}_n, > .{prefix}_s, > .{prefix}_w, > .{prefix}_e
+      background-repeat no-repeat
+    
+    // Anchors: north | south.
+    > .{prefix}_n, > .{prefix}_s
+      abs-pos ANCHOR_MARGIN, null, ANCHOR_MARGIN, null
+      height unit(ANCHOR_SIZE, px)
+    
+    // Anchors: west | east.
+    > .{prefix}_w, > .{prefix}_e
+      abs-pos null, ANCHOR_MARGIN, null, ANCHOR_MARGIN
+      width unit(ANCHOR_SIZE, px)
+    
+    // Anchor: north.
+    > .{prefix}_n
+      top unit(0 - ANCHOR_SIZE + 1, px)
+      background-image CONTROLS__POPUP__ARROW_N
+    
+    // Anchor: south.
+    > .{prefix}_s
+      bottom unit(0 - ANCHOR_SIZE - 1, px)
+      background-image CONTROLS__POPUP__ARROW_S
+    
+    // Anchor: west.
+    > .{prefix}_w
+      left unit(0 - ANCHOR_SIZE + 1, px)
+      background-image CONTROLS__POPUP__ARROW_W
+    
+    // Anchor: east.
+    > .{prefix}_e
+      right unit(0 - ANCHOR_SIZE - 1, px)
+      background-image CONTROLS__POPUP__ARROW_E
+
+
+
+
+
+
+
+
+
+

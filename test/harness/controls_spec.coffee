@@ -327,7 +327,7 @@ describe 'Controls',
       popup = null
       beforeAll ->
         popup = new controls.Popup()
-        page.add popup
+        page.add popup, width: 300, height:280
         
         page.pane.reset()
         page.pane.add.css
