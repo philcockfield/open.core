@@ -5,7 +5,18 @@ describe 'Test Harness', ->
     TestHarness = require 'open.client/harness'
     pane = page.pane
     pane.reset()
-  
+
+  describe 'Dummy View', ->
+    dummy = null
+    beforeAll -> 
+      dummy = new test.Dummy width:200, height:80
+      page.add dummy
+    
+    it 'Color: red', -> dummy.color 'red'
+    it 'Color: green', -> dummy.color 'green'
+    it 'Color: orange', -> dummy.color 'orange'
+    
+    
   describe 'page.pane', ->
     SampleView = null
     pane       = null
