@@ -98,14 +98,7 @@ syncIcon = (view) ->
     when 'css' 
       bg null
       el.addClass icon
-      
-      console.log 'path image: ', icon # TEMP 
-      
     else return
-  
-  
-  console.log 'el', el
-  
   
   
 

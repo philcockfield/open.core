@@ -3,9 +3,8 @@ describe 'Controls',
   controls are visual elements that encapsulate a piece of common UI behavior behind an API.
   ''',
   sortSuites:true, ->
+    beforeAll -> page.pane.reset()
     
-    describe 'zebra', ->
-      
     
     describe 'Buttons', ->
       describe 'Command (CmdButton)', ->
@@ -118,75 +117,75 @@ describe 'Controls',
           it 'remove first', -> rdoSet.remove rdoSet.buttons.first()
           
 
-        describe 'Icon', ->
-          btn = null
-          FOLDER = '/images/test/controls/icon'
-          ICONS =
-            warning:
-              url: "#{FOLDER}/warning.png"
-              css: 'icon_warning'
-            accept:
-              url: "#{FOLDER}/accept.png"
-              css: 'icon_accept'
+      describe 'Icon', ->
+        btn = null
+        FOLDER = '/images/test/controls/icon'
+        ICONS =
+          warning:
+            url: "#{FOLDER}/warning.png"
+            css: 'icon_warning'
+          accept:
+            url: "#{FOLDER}/accept.png"
+            css: 'icon_accept'
+        
+        icon = null
+        beforeAll ->
+          icon = add()
+          icon = add()
           
-          icon = null
-          beforeAll ->
-            icon = add()
-            icon = add()
-            
-            page.pane.add.remote 
-              label: 'CSS'
-              url:   '/stylesheets/core/controls/buttons/icon.css'
-            
-            page.pane.add.remote 
-              label: 'Test CSS'
-              url:   '/stylesheets/dev/test.css'
+          page.pane.add.css
+            label: 'CSS'
+            url:   '/stylesheets/core/controls/buttons/icon.css'
+          
+          page.pane.add.remote 
+            label: 'Test CSS'
+            url:   '/stylesheets/dev/test.css'
 
-            page.pane.add.markdown
-              label:'Sample Code'
-              markdown:
-                '''
-                    :coffee
-                    # Create the control.
-                    controls = require 'open.client/controls'
-                    btn      = new controls.Icon label:'My Label'
-                
-                '''          
+          page.pane.add.markdown
+            label:'Sample Code'
+            markdown:
+              '''
+                  :coffee
+                  # Create the control.
+                  controls = require 'open.client/controls'
+                  btn      = new controls.Icon label:'My Label'
+              
+              '''          
+        
+        changeIconType = (type) -> 
+          page.el.html ''
+          add iconType: type
+          add iconType: type
+        
+        changeIcon = (iconSample) -> 
+          value = if btn.iconType() is 'url' then iconSample.url else iconSample.css
+          btn.icon value
+          btn
           
-          changeIconType = (type) -> 
-            page.el.html ''
-            add iconType: type
-            add iconType: type
+        
+        add = (params = {})-> 
+          params.label ?= "My Label #{page.el.children().length + 1}"
+          params.icon ?= if params.iconType is 'css' then ICONS.accept.css else ICONS.accept.url
           
-          changeIcon = (iconSample) -> 
-            value = if btn.iconType() is 'url' then iconSample.url else iconSample.css
-            btn.icon value
-            btn
-            
-          
-          add = (params = {})-> 
-            params.label ?= "My Label #{page.el.children().length + 1}"
-            params.icon ?= if params.iconType is 'css' then ICONS.accept.css else ICONS.accept.url
-            
-            btn = new controls.Icon params
-            page.add btn, className:'test_icon'
-            btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
-            btn
-          
-          it 'Toggle: enabled', -> btn.enabled.toggle()
-          it 'Add new', -> add()
-          it 'Change: label', -> btn.label new Date().getTime()
-          it 'Change: iconType - url', -> changeIconType 'url'
-          it 'Change: iconType - css', -> changeIconType 'css'
-          it 'Icon: Accept (url)', -> changeIcon ICONS.accept
-          it 'Icon: Warning (url)', -> changeIcon ICONS.warning
-          # it 'Icon: Accept (css)', -> btn.icon 'icon_warning'
-          # it 'Icon: Warning (css)', -> btn.icon 'icon_accept'
-          it 'Set: tooltip', -> btn.tooltip 'A tooltip value \nover two lines'
-          it 'Change: labelOffset', -> btn.labelOffset x:15, y:-5
-          it 'Change: iconOffset', -> btn.iconOffset x:7, y:-15
-          it 'Change: iconSize', -> btn.iconSize x:30, y:30
-          
+          btn = new controls.Icon params
+          page.add btn, className:'test_icon'
+          btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
+          btn
+        
+        it 'Toggle: enabled', -> btn.enabled.toggle()
+        it 'Add new', -> add()
+        it 'Change: label', -> btn.label new Date().getTime()
+        it 'Change: iconType - url', -> changeIconType 'url'
+        it 'Change: iconType - css', -> changeIconType 'css'
+        it 'Icon: Accept (url)', -> changeIcon ICONS.accept
+        it 'Icon: Warning (url)', -> changeIcon ICONS.warning
+        # it 'Icon: Accept (css)', -> btn.icon 'icon_warning'
+        # it 'Icon: Warning (css)', -> btn.icon 'icon_accept'
+        it 'Set: tooltip', -> btn.tooltip 'A tooltip value \nover two lines'
+        it 'Change: labelOffset', -> btn.labelOffset x:15, y:-5
+        it 'Change: iconOffset', -> btn.iconOffset x:7, y:-15
+        it 'Change: iconSize', -> btn.iconSize x:30, y:30
+        
           
     describe 'TabStrip', ->
       tabStrip = null
@@ -328,7 +327,17 @@ describe 'Controls',
       
       it 'read properties', ->
         console.log 'cbo.selected()', cbo.selected(), cbo.selected()?.label()
-      
-      
-      
+    
+    
+    describe 'Popup', ->
+      popup = null
+      beforeAll ->
+        popup = new controls.Popup()
+        page.add popup
+        
+        page.pane.reset()
+        page.pane.add.css
+          label: 'CSS'
+          url:   '/stylesheets/core/controls/popup.css'
+    
   

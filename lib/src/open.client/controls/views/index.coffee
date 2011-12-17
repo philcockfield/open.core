@@ -2,12 +2,12 @@ view = (name) -> require './' + name
 
 
 module.exports = 
-  foo:123
   ControlList:     view 'control_list'
   TabStrip:        view 'tab_strip'
   Form:            view 'form'
   ComboBox:        view 'combo_box'
   Textbox:         view 'textbox'
+  Popup:           view 'popup'
   
   # Buttons.
   Button:          view 'button'
@@ -20,9 +20,4 @@ module.exports =
   SystemToggle:    view 'system_toggle'
   SystemToggleSet: view 'system_toggle_set'
   Icon:            view 'icon'
-
-
-
-
-
 
