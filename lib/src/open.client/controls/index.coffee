@@ -5,9 +5,10 @@ class Controls extends Module
   constructor: -> super module
 
 
-controls         = new Controls().init()
-views            = controls.views
-Module::controls = views
+controls          = new Controls().init()
+views             = controls.views
+views.controllers = controls.controllers
+Module::controls  = views
 
 
 # Export.
