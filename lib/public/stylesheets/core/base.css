@@ -27,6 +27,9 @@ div.core_bevel_highlight {
   right: 0px;
   bottom: 0px;
 }
+.core_hidden {
+  display: none;
+}
 .core_inset_pane {
   background: #f7f7f7;
   border: solid 1px #bdbdbd;

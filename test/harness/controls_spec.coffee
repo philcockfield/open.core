@@ -333,5 +333,21 @@ describe 'Controls',
         page.pane.add.css
           label: 'CSS'
           url:   '/stylesheets/core/controls/popup.css'
-    
+      
+      it 'Anchor: n',  -> popup.anchor 'n'
+      it 'Anchor: s',  -> popup.anchor 's'
+      it 'Anchor: w',  -> popup.anchor 'w'
+      it 'Anchor: e',  -> popup.anchor 'e'
+      it 'Anchor: ne', -> popup.anchor 'ne'
+      it 'Anchor: nw', -> popup.anchor 'nw'
+      it 'Anchor: en', -> popup.anchor 'en'
+      it 'Anchor: es', -> popup.anchor 'es'
+      it 'Anchor: wn', -> popup.anchor 'wn'
+      it 'Anchor: ws', -> popup.anchor 'ws'
+      it 'Anchor: se', -> popup.anchor 'se'
+      it 'Anchor: sw', -> popup.anchor 'sw'
+        
+      
+      
+      
   
