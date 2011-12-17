@@ -14,6 +14,27 @@ module.exports = class PopupController
   ###
   constructor: (@context, @popup) -> 
     
+    # Setup initial conditions.
+    toJQuery = core.util.toJQuery
     
+    # Extract jQuery elements.
+    @elContext = toJQuery @context
+    @elPopup   = toJQuery @popup
+    
+    # Hide the popup by default.
+    
+    
+  
+  
+  ###
+  Reveals the popup.
+  ###
+  show: -> 
+  
+  
+  # Hides the popup.
+  hide: -> 
+  
+  
     
   
