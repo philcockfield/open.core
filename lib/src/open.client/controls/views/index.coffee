@@ -4,7 +4,6 @@ view = (name) -> require './' + name
 module.exports = 
   ControlList:     view 'control_list'
   TabStrip:        view 'tab_strip'
-  Form:            view 'form'
   ComboBox:        view 'combo_box'
   Textbox:         view 'textbox'
   Popup:           view 'popup'

@@ -236,12 +236,6 @@ describe 'Controls',
       it 'Add new', -> add()
     
     
-    describe 'Form', ->
-      form = null
-      beforeAll ->
-          form = new controls.Form()
-          page.add form, width:550
-    
     describe 'ComboBox', ->
       cbo = null
       beforeAll ->
