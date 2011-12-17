@@ -1,4 +1,4 @@
-describe 'controls/tab_strip', ->
+describe 'controls/views/tab_strip', ->
   TabStrip = null
   Tab      = null
   tabStrip = null

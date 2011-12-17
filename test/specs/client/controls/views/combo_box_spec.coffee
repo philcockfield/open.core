@@ -1,4 +1,4 @@
-describe 'controls/combo_box', ->
+describe 'controls/views/combo_box', ->
   ComboBox = null
   cbo      = null
   beforeEach ->

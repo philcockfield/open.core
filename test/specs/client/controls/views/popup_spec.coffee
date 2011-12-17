@@ -1,4 +1,4 @@
-describe 'controls/popup', ->
+describe 'controls/views/popup', ->
   
   Popup = null
   beforeEach ->

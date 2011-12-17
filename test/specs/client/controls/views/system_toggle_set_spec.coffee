@@ -1,4 +1,4 @@
-describe 'controls/system_toggle_set', ->
+describe 'controls/views/system_toggle_set', ->
   SystemToggleSet = null
   toggleSet      = null
   beforeEach ->

@@ -1,4 +1,4 @@
-describe 'controls/chk (Checkbox)', ->
+describe 'controls/views/chk (Checkbox)', ->
   Checkbox = null
   chk         = null
   beforeEach ->

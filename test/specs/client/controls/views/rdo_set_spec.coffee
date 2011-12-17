@@ -1,4 +1,4 @@
-describe 'controls/rdo_set', ->
+describe 'controls/views/rdo_set', ->
   RadioButtonSet = null
   radioSet       = null
   beforeEach ->

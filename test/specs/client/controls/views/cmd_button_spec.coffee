@@ -1,4 +1,4 @@
-describe 'controls/cmd_button', ->
+describe 'controls/views/cmd_button', ->
   CmdButton = null
   button = null
   beforeEach ->

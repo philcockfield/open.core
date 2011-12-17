@@ -1,4 +1,4 @@
-describe 'controls/control_list', ->
+describe 'controls/views/control_list', ->
   ControlList = null
   list        = null
   beforeEach ->

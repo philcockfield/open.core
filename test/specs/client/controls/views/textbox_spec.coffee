@@ -1,6 +1,6 @@
 Textbox = controls.Textbox
 
-describe 'client/controls/textbox', ->
+describe 'client/controls/views/textbox', ->
   textbox = null
   beforeEach ->
       textbox = new Textbox()  

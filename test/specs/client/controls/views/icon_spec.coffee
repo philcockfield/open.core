@@ -1,4 +1,4 @@
-describe 'controls/icon', ->
+describe 'controls/views/icon', ->
   Icon = null
   icon = null
   

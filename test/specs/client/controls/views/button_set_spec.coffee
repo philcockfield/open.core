@@ -1,4 +1,4 @@
-describe 'controls/button_set', ->
+describe 'controls/views/button_set', ->
   ButtonSet = controls.ButtonSet
   Button    = controls.Button
   buttons   = null
