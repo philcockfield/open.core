@@ -33,16 +33,51 @@ describe 'controls/controllers/popup', ->
         
       it 'exposes the popup element', ->
         expect(controller.elPopup).toEqual popup.el
+  
+  describe 'show()', ->
+    it 'invokes show when element is clicked', ->
+      spyOn(controller, 'show')
+      context.el.click()
+      expect(controller.show).toHaveBeenCalled()
     
-    describe 'Hiding', ->
-      it 'hides the popup by default on an element', ->
-        popup = new core.mvc.View()
-        new PopupController context, popup.el
-        expect(_(popup.outerHtml()).includes('display: none;')).toEqual true
+    it 'invokes show when a [Button] is clicked', ->
+      contextBtn  = new controls.CmdButton()
+      controller  = new PopupController contextBtn, popup
+      spyOn(controller, 'show')
+      contextBtn.click()
+      expect(controller.show).toHaveBeenCalled()
+    
+    it 'invokes show when a simple [element] is clicked', ->
+      context = $('<div>Foo</div>')
+      controller  = new PopupController context, popup
+      spyOn(controller, 'show')
+      context.click()
+      expect(controller.show).toHaveBeenCalled()
       
-      it 'hides the popup by changing the view visibility', ->
-        expect(popup.visible()).toEqual false
-        expect(_(popup.outerHtml()).includes('display: none;')).toEqual true
+      
+      
+      
+    
+    
+    it 'does not show when a disabled [View] is clicked', ->
+      spyOn(controller, 'show')
+      context.enabled false
+      context.el.click()
+      expect(controller.show).not.toHaveBeenCalled()
+      
+      
+      
+      
+    
+    
+      
+      
+    
+    
+      
+    
+    
+  
 
 
 

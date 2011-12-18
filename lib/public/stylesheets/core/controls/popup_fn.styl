@@ -1,5 +1,6 @@
 @import '../functions'
 
+MAX_Z_INDEX = 2147483647
 
 popup(prefix = CLASS_PREFIX, ctrl = 'popup')
   .{prefix}_{ctrl}
@@ -53,6 +54,16 @@ popup(prefix = CLASS_PREFIX, ctrl = 'popup')
     > .{prefix}_e
       right unit(0 - ANCHOR_SIZE - 1, px)
       background-image CONTROLS__POPUP__ARROW_E
+
+
+  // Popup mask
+  .{prefix}_popup_mask
+    abs-pos()
+    background transparent
+    z-index MAX_Z_INDEX - 1
+
+
+
 
 
 
