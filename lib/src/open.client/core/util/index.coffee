@@ -1,8 +1,11 @@
 require './_string'  # Cause string extensions to be loaded (added to underscore.string).
 
+jQueryUtil = require './_jquery'   # NB: Also causees jQuery extensions to be loaded.
+
 
 module.exports = util =
-  jQuery:   require './_jquery'   # NB: Also causees jQuery extensions to be loaded.
+  jQuery:   jQueryUtil
+  toJQuery: jQueryUtil.toJQuery
   
   # Classes.
   Property: require './property'

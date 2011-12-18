@@ -17,6 +17,18 @@ describe 'controls/controllers/popup', ->
   it 'exists', ->
     expect(PopupController).toBeDefined()
   
+  it 'copies the options as properties', ->
+    options = 
+      cssPrefix: 'foo'
+      clickable: false
+      edge: 'e'
+      offset: { x:50, y:20 }
+    controller = new PopupController context, fnPopup, options
+    
+    for key, value of options
+      expect(controller[key]).toEqual value
+  
+  
   describe 'element extraction', ->
     describe 'from views', ->
       beforeEach ->
@@ -71,13 +83,6 @@ describe 'controls/controllers/popup', ->
       controller.show()
       controller.hide()
       expect(controller.isShowing()).toEqual false
-    
-      
-      
-      
-    
-    
-      
       
     
     

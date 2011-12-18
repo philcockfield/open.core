@@ -38,28 +38,6 @@ module.exports =
       
   
   ###
-  Attempts to convert the given [view/element/string] to a jQuery object.
-  @param value : The value to convert.  This can be either a:
-                  - jQuery object (returns same value)
-                  - string (CSS selector)
-                  - an MVC View (returns .el)
-                  - HTMLElement (wraps in jQuery object)
-  @returns a jQuery object, or null if the value was undefined/null.
-  ###
-  toJQuery: (value) ->       
-      
-      # Setup initial conditions.
-      return value if not value?
-      
-      # Check whether the object is already a jQuery object, or is an MVC [View].
-      return value if (value instanceof jQuery) 
-      return value.el if (value.el instanceof jQuery) 
-      
-      # Not a known type - wrap it as a jQuery object.
-      return $(value)
-      
-  
-  ###
   Converts < and > ' and " and & characters to corresponding ascii codes.
   @param html: The HTML string to convert.
   @returns the converted string.

@@ -16,22 +16,33 @@ module.exports = class PopupController
   @param fnPopup:   Function that produces the [View] or jQuery that is the Popup
                     to be displayed as the popup when the context is clicked.
   @param options:
-          - cssPrefix:  The CSS prefix to use (default 'core_')
-          - clickable:  Flag indicating if the popup should be displayed when
-                        the [content] is clicked (default true).
+          - cssPrefix:        The CSS prefix to use (default 'core_').
+          - clickable:        Flag indicating if the popup should be displayed when
+                              the [content] is clicked (default true).
+          - edge:             The cardinal representing the edge to snap the popup relative to.
+                              Values:  'n', 's', 'w', 'e'
+                              Default: 's'.
+          - offset:           x:y pixel offset to nudge the popup away from the context by.
+                              Positive values are interpretted as pushin away (out) from the context
+                              irrespective of what 'edge' the popup is snapping to.
+          - handleOverflow:   Flag indicating if the edge of the Popup should be inverted if
+                              if the popup would overflow the bounds of the page.
   ###
-  constructor: (@context, @fnPopup, @options = {}) -> 
+  constructor: (@context, @fnPopup, options = {}) -> 
     
     # Setup initial conditions.
     Button ?= require '../views/button' # NB: Required here so that the proper singleton instance is used.
     
     toJQuery  = core.util.toJQuery
-    options   = @options
     context   = @context
     popup     = @popup
     
-    options.cssPrefix ?= 'core_'
-    options.clickable ?= true
+    options.cssPrefix       ?= 'core_'
+    options.clickable       ?= true
+    options.edge            ?= 's'
+    options.offset          ?= { x:0, y:0 }
+    options.handleOverflow  ?= true
+    _.extend @, options
     
     # Extract jQuery elements.
     @elContext = elContext = toJQuery context
@@ -44,6 +55,8 @@ module.exports = class PopupController
         elContext.click => 
           return if context.enabled? and context.enabled() is no
           @show() 
+    
+    core.bind 'window:resize', => @update()
   
   
   ###
@@ -65,7 +78,7 @@ module.exports = class PopupController
     @elMask = do => 
       
       # Create and insert the mask.
-      elMask = $ "<div class='#{@options.cssPrefix}popup_mask'></div>"
+      elMask = $ "<div class='#{@cssPrefix}popup_mask'></div>"
       body.append elMask
       
       # Wire up events.
@@ -83,6 +96,7 @@ module.exports = class PopupController
     
     # Finish up.
     @elPopup = elPopup
+    @update()
   
   
   ###
@@ -96,19 +110,166 @@ module.exports = class PopupController
     
     # Hide the screen mask.
     @elMask?.remove()
+  
+  
+  ###
+  Updates the visual state of the elements.
+  ###
+  update: -> 
+    # Setup initial conditions.
+    return unless @isShowing()
+    elPopup         = @elPopup
+    elContext       = @elContext
+    offset          = @offset
+    contextPosition = elContext.offset()
     
-  
-  
+    # Determine the X:Y plane for the popup.
+    
+    
+    willOverflow = (plane, relativeToEdge, value) -> 
+      
+      switch plane
+        when 'x' 
+          screenWidth = $(window).width()
+          
+          # TODO 
+        
+        when 'y' 
+          switch relativeToEdge
+            when 'n'
+              return false if value > 0
+            when 's' 
+              bottom       = value + elPopup.height()
+              screenHeight = $(window).height()
+              return false if bottom < screenHeight
+          
+      # Finish up.
+      true
+          
+          
+    topForVerticalEdge = (edge) -> 
+      switch edge
+        when 'n' then return contextPosition.top - elPopup.height() - offset.y
+        when 's' then return contextPosition.top + elContext.height() + offset.y
+
+    topForHorizontalEdge = (edge) -> 
+      switch edge
+        when 'n' then return contextPosition.top + offset.y
+        when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
+    
+    
+    
+    switch toPlane @edge
+      when 'x'  
+        top = topForHorizontalEdge 'n'
+
+        if willOverflow 'y', 's', top
+          oppositeTop = topForHorizontalEdge 's'
+          unless willOverflow 'y', 'n', oppositeTop
+            top = oppositeTop
+        
+        
+        
+      when 'y' 
+        top = topForVerticalEdge @edge
+        
+        if willOverflow 'y', @edge, top
+          oppositeEdge  = toOppositeEdge @edge
+          oppositeTop   = topForVerticalEdge oppositeEdge
+          unless willOverflow 'y', oppositeEdge, oppositeTop
+            top = oppositeTop
+          
+        
+    
+    left = contextPosition.left # TEMP 
+    
+    
+    # Update the popup position.
+    elPopup.css 'top',  top
+    elPopup.css 'left', left
+          
+          
+          # right  = position.left + elPopup.width()
+          # bottom = position.top + elPopup.height()
+          
+      
+    
+    
+    # willOverflow = (position, edge) -> 
+    #   win = $(window)
+    #   screenWidth  = win.width()
+    #   screenHeight = win.height()
+    #   
+    #   switch edge
+    #     when 'n' then 
+    #     when 's' then 
+    #     when 'w' then # TODO 
+    #     when 'e' then # TODO 
+    #     else 
+    #   
+    #   right  = position.left + elPopup.width()
+    #   bottom = position.top + elPopup.height()
+    #   
+    #   return true if right > screenWidth
+    #   return true if bottom > screenHeight
+    #   return false
+    
+    # getPosition = (edge) -> 
+    #   left = 0
+    #   top  = 0
+    #   
+    #   # Calcualte the left position.
+    #   switch edge
+    #     when 'n', 's' then left = contextPosition.left + offset.x
+    #   
+    #   # Calcualte the top position.
+    #   switch edge
+    #     when 'n' then top = contextPosition.top - elPopup.height() - offset.y
+    #     when 's' then top = contextPosition.top + elContext.height() + offset.y
+    #     
+    #     when 'w' then # TODO 
+    #     when 'e' then # TODO 
+    #   
+    #   position = left:left, top:top
+    # 
+    # # Get the position for the popup.
+    # pos = getPosition @edge
+    # if @handleOverflow is yes and willOverflow(pos, @edge)
+    #   
+    #   edge = oppositeEdge @edge
+    #   console.log 'handle overflow - opposite edge:', edge
+    #   
+    #   oppositeEdge = oppositeEdge(@edge)
+    #   oppositePos  = getPosition oppositeEdge
+    #   
+    #   console.log 'new pos will overflow', oppositePos, willOverflow(oppositePos, oppositeEdge)
+    #   console.log ''
+    #   
+    
+    
+    
+    
+
 # PRIVATE --------------------------------------------------------------------------
 
 
-mask = -> 
-  return elMask if elMask?
-  
-  elMask = $ 'div '
-  
-  
+toOppositeEdge = (edge) ->
+  switch edge
+    when 'n' then return 's'
+    when 's' then return 'n'
+    when 'w' then return 'e'
+    when 'e' then return 'w'
 
 
-  
+toPlane = (edge) -> 
+  switch edge
+    when 'n', 's' then return 'y'
+    when 'w', 'e' then return 'x'
+
+
+
+
+
+
+
   
