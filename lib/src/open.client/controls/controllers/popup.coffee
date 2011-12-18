@@ -122,13 +122,12 @@ module.exports = class PopupController
     elContext       = @elContext
     offset          = @offset
     contextPosition = elContext.offset()
-    
+    plane           = toPlane @edge
     # Determine the X:Y plane for the popup.
     
     
-    willOverflow = (plane, relativeToEdge, value) -> 
-      
-      switch plane
+    willOverflow = (onPlane, relativeToEdge, value) -> 
+      switch onPlane
         when 'x' 
           screenWidth = $(window).width()
           
@@ -146,40 +145,47 @@ module.exports = class PopupController
       # Finish up.
       true
           
+    
+    getTop = => 
+      
+      topForVerticalEdge = (edge) -> 
+        switch edge
+          when 'n' then return contextPosition.top - elPopup.height() - offset.y
+          when 's' then return contextPosition.top + elContext.height() + offset.y
+      
+      topForHorizontalEdge = (edge) -> 
+        switch edge
+          when 'n' then return contextPosition.top + offset.y
+          when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
+      
+      switch plane
+        when 'x'  
+          top = topForHorizontalEdge 'n'
           
-    topForVerticalEdge = (edge) -> 
-      switch edge
-        when 'n' then return contextPosition.top - elPopup.height() - offset.y
-        when 's' then return contextPosition.top + elContext.height() + offset.y
-
-    topForHorizontalEdge = (edge) -> 
-      switch edge
-        when 'n' then return contextPosition.top + offset.y
-        when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
-    
-    
-    
-    switch toPlane @edge
-      when 'x'  
-        top = topForHorizontalEdge 'n'
-
-        if willOverflow 'y', 's', top
-          oppositeTop = topForHorizontalEdge 's'
-          unless willOverflow 'y', 'n', oppositeTop
-            top = oppositeTop
+          if willOverflow 'y', 's', top
+            oppositeTop = topForHorizontalEdge 's'
+            unless willOverflow 'y', 'n', oppositeTop
+              top = oppositeTop
         
         
         
-      when 'y' 
-        top = topForVerticalEdge @edge
+        when 'y' 
+          top = topForVerticalEdge @edge
         
-        if willOverflow 'y', @edge, top
-          oppositeEdge  = toOppositeEdge @edge
-          oppositeTop   = topForVerticalEdge oppositeEdge
-          unless willOverflow 'y', oppositeEdge, oppositeTop
-            top = oppositeTop
+          if willOverflow 'y', @edge, top
+            oppositeEdge  = toOppositeEdge @edge
+            oppositeTop   = topForVerticalEdge oppositeEdge
+            unless willOverflow 'y', oppositeEdge, oppositeTop
+              top = oppositeTop
           
-        
+      # Finish up.
+      top
+    
+    
+    
+    top = getTop()
+    
+    console.log 'top', top
     
     left = contextPosition.left # TEMP 
     
@@ -187,66 +193,6 @@ module.exports = class PopupController
     # Update the popup position.
     elPopup.css 'top',  top
     elPopup.css 'left', left
-          
-          
-          # right  = position.left + elPopup.width()
-          # bottom = position.top + elPopup.height()
-          
-      
-    
-    
-    # willOverflow = (position, edge) -> 
-    #   win = $(window)
-    #   screenWidth  = win.width()
-    #   screenHeight = win.height()
-    #   
-    #   switch edge
-    #     when 'n' then 
-    #     when 's' then 
-    #     when 'w' then # TODO 
-    #     when 'e' then # TODO 
-    #     else 
-    #   
-    #   right  = position.left + elPopup.width()
-    #   bottom = position.top + elPopup.height()
-    #   
-    #   return true if right > screenWidth
-    #   return true if bottom > screenHeight
-    #   return false
-    
-    # getPosition = (edge) -> 
-    #   left = 0
-    #   top  = 0
-    #   
-    #   # Calcualte the left position.
-    #   switch edge
-    #     when 'n', 's' then left = contextPosition.left + offset.x
-    #   
-    #   # Calcualte the top position.
-    #   switch edge
-    #     when 'n' then top = contextPosition.top - elPopup.height() - offset.y
-    #     when 's' then top = contextPosition.top + elContext.height() + offset.y
-    #     
-    #     when 'w' then # TODO 
-    #     when 'e' then # TODO 
-    #   
-    #   position = left:left, top:top
-    # 
-    # # Get the position for the popup.
-    # pos = getPosition @edge
-    # if @handleOverflow is yes and willOverflow(pos, @edge)
-    #   
-    #   edge = oppositeEdge @edge
-    #   console.log 'handle overflow - opposite edge:', edge
-    #   
-    #   oppositeEdge = oppositeEdge(@edge)
-    #   oppositePos  = getPosition oppositeEdge
-    #   
-    #   console.log 'new pos will overflow', oppositePos, willOverflow(oppositePos, oppositeEdge)
-    #   console.log ''
-    #   
-    
-    
     
     
 
