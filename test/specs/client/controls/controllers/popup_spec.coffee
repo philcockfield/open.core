@@ -1,14 +1,18 @@
 describe 'controls/controllers/popup', ->
   PopupController = null
   controller      = null
-  context = null
-  popup   = null
+  context         = null
+  popupView       = null
+  
+  fnPopup = -> 
+    popupView = new core.mvc.View()
+  
   
   beforeEach ->
     PopupController = controls.controllers.Popup
     context         = new core.mvc.View()
     popup           = new core.mvc.View()
-    controller      = new PopupController context, popup
+    controller      = new PopupController context, fnPopup
   
   it 'exists', ->
     expect(PopupController).toBeDefined()
@@ -16,23 +20,17 @@ describe 'controls/controllers/popup', ->
   describe 'element extraction', ->
     describe 'from views', ->
       beforeEach ->
-        controller = new PopupController context, popup
+        controller = new PopupController context, fnPopup
       
       it 'exposes the context element', ->
         expect(controller.elContext).toEqual context.el
-        
-      it 'exposes the popup element', ->
-        expect(controller.elPopup).toEqual popup.el
     
     describe 'from jQuery elements', ->
       beforeEach ->
-        controller = new PopupController context.el, popup.el
+        controller = new PopupController context.el, fnPopup
         
       it 'exposes the context element', ->
         expect(controller.elContext).toEqual context.el
-        
-      it 'exposes the popup element', ->
-        expect(controller.elPopup).toEqual popup.el
   
   describe 'show()', ->
     it 'invokes show when element is clicked', ->
@@ -42,14 +40,14 @@ describe 'controls/controllers/popup', ->
     
     it 'invokes show when a [Button] is clicked', ->
       contextBtn  = new controls.CmdButton()
-      controller  = new PopupController contextBtn, popup
+      controller  = new PopupController contextBtn, fnPopup
       spyOn(controller, 'show')
       contextBtn.click()
       expect(controller.show).toHaveBeenCalled()
     
     it 'invokes show when a simple [element] is clicked', ->
       context = $('<div>Foo</div>')
-      controller  = new PopupController context, popup
+      controller  = new PopupController context, fnPopup
       spyOn(controller, 'show')
       context.click()
       expect(controller.show).toHaveBeenCalled()
