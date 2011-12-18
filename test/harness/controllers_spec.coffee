@@ -5,7 +5,7 @@ describe 'Controllers', ->
     
     beforeAll -> initWithView()
     
-    fnPopup = -> new test.Dummy width: 100, height:180, color:'green' 
+    fnPopup = -> new test.Dummy width: 200, height:180, color:'green' 
     
     init = (fnContext) -> 
       context = fnContext()

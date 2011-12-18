@@ -52,17 +52,26 @@ describe 'controls/controllers/popup', ->
       context.click()
       expect(controller.show).toHaveBeenCalled()
       
-      
-      
-      
-    
-    
     it 'does not show when a disabled [View] is clicked', ->
       spyOn(controller, 'show')
       context.enabled false
       context.el.click()
       expect(controller.show).not.toHaveBeenCalled()
       
+  
+  describe 'isShowing()', ->
+    it 'reports as showing', ->
+      controller.show()
+      expect(controller.isShowing()).toEqual true
+
+    it 'reports as not showing by default', ->
+      expect(controller.isShowing()).toEqual false
+      
+    it 'reports as not showing after being hidden', ->
+      controller.show()
+      controller.hide()
+      expect(controller.isShowing()).toEqual false
+    
       
       
       

@@ -1,7 +1,6 @@
 core   = require 'open.client/core'
 util   = core.util
 Button = null
-elMask = null
 
 MAX = 2147483647
 
@@ -48,14 +47,22 @@ module.exports = class PopupController
   
   
   ###
+  Gets whether the popup is currently visble.
+  ###
+  isShowing: -> @elPopup?
+  
+  
+  ###
   Reveals the popup.
   ###
   show: -> 
+    
+    # Setup initial conditions.
+    return if @isShowing()
     body = $ 'body'
     
     # Get and display the screen mask.
-    mask = do => 
-      return elMask if elMask?
+    @elMask = do => 
       
       # Create and insert the mask.
       elMask = $ "<div class='#{@options.cssPrefix}popup_mask'></div>"
@@ -66,7 +73,6 @@ module.exports = class PopupController
       
       # Finish up.
       elMask
-    mask.toggle true
     
     # Create and insert the popup.
     popup   = @fnPopup()
@@ -75,13 +81,8 @@ module.exports = class PopupController
     elPopup.css 'position', 'absolute'
     body.append elPopup
     
-    
     # Finish up.
     @elPopup = elPopup
-    
-    
-    
-    
   
   
   ###
@@ -90,13 +91,11 @@ module.exports = class PopupController
   hide: -> 
     
     #  Remove the popup.
-    @elPopup.remove()
+    @elPopup?.remove()
     delete @elPopup
     
     # Hide the screen mask.
-    elMask?.toggle false
-    
-    console.log 'hide'
+    @elMask?.remove()
     
   
   
