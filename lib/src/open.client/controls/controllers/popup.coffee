@@ -25,8 +25,6 @@ module.exports = class PopupController
           - offset:           x:y pixel offset to nudge the popup away from the context by.
                               Positive values are interpretted as pushin away (out) from the context
                               irrespective of what 'edge' the popup is snapping to.
-          - handleOverflow:   Flag indicating if the edge of the Popup should be inverted if
-                              if the popup would overflow the bounds of the page.
   ###
   constructor: (@context, @fnPopup, options = {}) -> 
     
@@ -123,15 +121,20 @@ module.exports = class PopupController
     offset          = @offset
     contextPosition = elContext.offset()
     plane           = toPlane @edge
-    # Determine the X:Y plane for the popup.
     
-    
+    willOverflowVertically    = (relativeToEdge, value) -> willOverflow 'y', relativeToEdge, value
+    willOverflowHorizontally  = (relativeToEdge, value) -> willOverflow 'x', relativeToEdge, value
     willOverflow = (onPlane, relativeToEdge, value) -> 
       switch onPlane
         when 'x' 
-          screenWidth = $(window).width()
-          
-          # TODO 
+          switch relativeToEdge
+            when 'w'
+              console.log '+++', value
+              return false if value > 0
+            when 'e'
+              right       = value + elPopup.width()
+              screenWidth = $(window).width()
+              return false if right < screenWidth
         
         when 'y' 
           switch relativeToEdge
@@ -142,59 +145,66 @@ module.exports = class PopupController
               screenHeight = $(window).height()
               return false if bottom < screenHeight
           
-      # Finish up.
-      true
-          
+      return true # Will overfow.
     
     getTop = => 
-      
-      topForVerticalEdge = (edge) -> 
-        switch edge
-          when 'n' then return contextPosition.top - elPopup.height() - offset.y
-          when 's' then return contextPosition.top + elContext.height() + offset.y
-      
-      topForHorizontalEdge = (edge) -> 
+      forHorizontalPlaneEdge = (edge) -> 
         switch edge
           when 'n' then return contextPosition.top + offset.y
           when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
       
+      forVerticalPlaneEdge = (edge) -> 
+        switch edge
+          when 'n' then return contextPosition.top - elPopup.height() - offset.y
+          when 's' then return contextPosition.top + elContext.height() + offset.y
+      
       switch plane
-        when 'x'  
-          top = topForHorizontalEdge 'n'
+        when 'x'
+          # Snapping to West or East edge.
+          top = forHorizontalPlaneEdge 'n'
+          if willOverflowVertically 's', top
+            top = forHorizontalPlaneEdge 's'
+        
+        when 'y'
+          # Snapping to North or South edge.
+          top = forVerticalPlaneEdge @edge
+          if willOverflowVertically @edge, top
+            top = forVerticalPlaneEdge toOppositeEdge(@edge)
           
-          if willOverflow 'y', 's', top
-            oppositeTop = topForHorizontalEdge 's'
-            unless willOverflow 'y', 'n', oppositeTop
-              top = oppositeTop
-        
-        
-        
-        when 'y' 
-          top = topForVerticalEdge @edge
-        
-          if willOverflow 'y', @edge, top
-            oppositeEdge  = toOppositeEdge @edge
-            oppositeTop   = topForVerticalEdge oppositeEdge
-            unless willOverflow 'y', oppositeEdge, oppositeTop
-              top = oppositeTop
+      return top
+    
+    
+    getLeft = => 
+      forHorizontalPlaneEdge = (edge) -> 
+        switch edge
+          when 'w' then return contextPosition.left - elPopup.width() - offset.x
+          when 'e' then return contextPosition.left + elContext.width() + offset.x
+      
+      forVerticalPlaneEdge = (edge) -> 
+        switch edge
+          when 'w' then return contextPosition.left + offset.x
+          when 'e' then return (contextPosition.left + elContext.width()) - elPopup.width() - offset.y
+      
+      switch plane
+        when 'x'
+          # Snapping to East or West edge.
+          left = forHorizontalPlaneEdge @edge
+          if willOverflowHorizontally @edge, left
+            left = forHorizontalPlaneEdge toOppositeEdge(@edge)
           
-      # Finish up.
-      top
-    
-    
-    
-    top = getTop()
-    
-    console.log 'top', top
-    
-    left = contextPosition.left # TEMP 
+        when 'y'
+          # Snapping to North or South edge.
+          left = forVerticalPlaneEdge 'w'
+          if willOverflowHorizontally 'e', left
+            left = forVerticalPlaneEdge 'e'
+      
+      return left
     
     
     # Update the popup position.
-    elPopup.css 'top',  top
-    elPopup.css 'left', left
-    
-    
+    elPopup.css 'left', getLeft()
+    elPopup.css 'top',  getTop()
+
 
 # PRIVATE --------------------------------------------------------------------------
 
