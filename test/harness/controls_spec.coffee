@@ -324,13 +324,17 @@ describe 'Controls',
     describe 'Popup', ->
       popup = null
       beforeAll ->
-        popup = new controls.Popup()
-        page.add popup, width: 300, height:280
+        popup = new controls.Popup width:300, height:250
+        page.add popup
         
         page.pane.reset()
         page.pane.add.css
           label: 'CSS'
           url:   '/stylesheets/core/controls/popup.css'
+      
+      it 'Smaller size: 250 x 100', -> 
+        popup.width 250
+        popup.height 100
       
       it 'Anchor: n',  -> popup.anchor 'n'
       it 'Anchor: s',  -> popup.anchor 's'

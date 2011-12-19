@@ -131,7 +131,6 @@ module.exports = class PopupController
         when 'x' 
           switch relativeToEdge
             when 'w'
-              console.log '+++', value
               return false if value > 0
             when 'e'
               right       = value + elPopup.width()

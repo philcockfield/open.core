@@ -1,11 +1,18 @@
 describe 'Controllers', ->
   describe 'Popup Controller', ->
-    context     = null
-    controller  = null
+    context         = null
+    controller      = null
+    usePopupControl = false
     
     beforeAll -> initWithView()
     
-    fnPopup = -> new test.Dummy width: 400, height:180, color:'green' 
+    fnPopup = -> 
+      if usePopupControl
+        return new controls.Popup width:280, height:160
+      else
+        return new test.Dummy width: 400, height:180, color:'green' 
+      
+      
     
     init = (fnContext) -> 
       context = fnContext()
@@ -18,6 +25,10 @@ describe 'Controllers', ->
     
     it 'Init with View', -> initWithView()
     it 'Init with Button', -> initWithButton()
+    it 'Use popup control', -> 
+      usePopupControl = true
+      initWithView()
+      controller.offset = { x:0, y:12 }
     it 'Edge: n', -> controller.edge = 'n'
     it 'Edge: s', -> controller.edge = 's'
     it 'Edge: w', -> controller.edge = 'w'

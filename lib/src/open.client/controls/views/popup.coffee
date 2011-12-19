@@ -1,4 +1,5 @@
-core = require 'open.client/core'
+core           = require 'open.client/core'
+SizeController = require '../controllers/size'
 
 
 ###
@@ -7,6 +8,8 @@ the origin controls the popup is extending.
 ###
 module.exports = class Popup extends core.mvc.View
   defaults:
+    width:   null
+    height:  null
     anchor: 'nw'  # Gets or sets the edge that the anchor pointer is on.
                   # Values are abbreviations of north, south, east, west cardinals.
                   # 
@@ -32,6 +35,9 @@ module.exports = class Popup extends core.mvc.View
     # Setup initial conditions.
     super _.extend props, className: @_className 'popup'
     @html new Tmpl().root(prefix:@_cssPrefix)
+    
+    # Create controllers.
+    new SizeController @
     
     # Wire up events.
     @anchor.onChanging (e) -> 
