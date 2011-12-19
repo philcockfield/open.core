@@ -1,4 +1,4 @@
-.core_icon {
+.core_icon_button {
   position: relative;
   cursor: default;
   display: inline-block;
@@ -6,7 +6,7 @@
   margin: 0px;
   padding: 0px;
 }
-.core_icon div.core_left_icon {
+.core_icon_button div.core_left_icon {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -15,16 +15,16 @@
   background-repeat: no-repeat;
   background-position: 0px 50%;
 }
-.core_icon p.core_label {
+.core_icon_button p.core_label {
   font-size: 9pt;
 }
-.core_icon.core_enabled {
+.core_icon_button.core_enabled {
   cursor: pointer;
   color: #00a5d5;
 }
-.core_icon.core_enabled:hover p.core_label {
+.core_icon_button.core_enabled:hover p.core_label {
   text-decoration: underline;
 }
-.core_icon.core_disabled {
+.core_icon_button.core_disabled {
   color: #999;
 }

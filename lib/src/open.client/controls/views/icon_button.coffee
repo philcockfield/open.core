@@ -17,7 +17,7 @@ module.exports = class Icon extends Button
   
   constructor: (props = {}) -> 
     # Setup initial conditions.
-    super _.extend props, tagName:'span', className:@_className 'icon'
+    super _.extend props, tagName:'span', className:@_className 'icon_button'
     @render()
     @el.disableTextSelect()
     

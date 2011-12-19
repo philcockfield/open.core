@@ -117,7 +117,7 @@ describe 'Controls',
           it 'remove first', -> rdoSet.remove rdoSet.buttons.first()
           
 
-      describe 'Icon', ->
+      describe 'IconButton', ->
         btn = null
         FOLDER = '/images/test/controls/icon'
         ICONS =
@@ -138,9 +138,31 @@ describe 'Controls',
             markdown:
               '''
                   :coffee
-                  # Create the control.
                   controls = require 'open.client/controls'
-                  btn      = new controls.Icon label:'My Label'
+                  
+                  # Create the control referencing a loose image file as the icon.
+                  btn = new controls.IconButton 
+                    label:    'My Label'
+                    icon:     '/images/my_icon.png'
+                    iconType: 'url' # default
+                  
+                  # An icon can also be referenced as a CSS class when the image
+                  # is embedded within the stylesheet (see below).
+                  btn = new controls.IconButton 
+                    label:    'My Label'
+                    icon:     'icon_name'
+                    iconType: 'css'
+                  
+              
+              Embedding images in CSS can be achieved using the [data-URI](http://en.wikipedia.org/wiki/Data_URI_scheme) scheme.
+              
+                  :css
+                  .icon_name {
+                    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEU ... etc");
+                  }
+              
+              See the `toDataUris()` method (in `server/util/tasks/css`) for converting a folder of images to 
+              [Stylus](http://learnboost.github.com/stylus/docs/js.html) constants containing data-URI's for each image file.
               
               '''          
           page.pane.add.css
@@ -165,7 +187,7 @@ describe 'Controls',
           params.label ?= "My Label #{page.el.children().length + 1}"
           params.icon ?= if params.iconType is 'css' then ICONS.accept.css else ICONS.accept.url
           
-          btn = new controls.Icon params
+          btn = new controls.IconButton params
           page.add btn, className:'test_icon'
           btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
           btn
@@ -177,8 +199,6 @@ describe 'Controls',
         it 'Change: iconType - css', -> changeIconType 'css'
         it 'Icon: Accept (url)', -> changeIcon ICONS.accept
         it 'Icon: Warning (url)', -> changeIcon ICONS.warning
-        # it 'Icon: Accept (css)', -> btn.icon 'icon_warning'
-        # it 'Icon: Warning (css)', -> btn.icon 'icon_accept'
         it 'Set: tooltip', -> btn.tooltip 'A tooltip value \nover two lines'
         it 'Change: labelOffset', -> btn.labelOffset x:15, y:-5
         it 'Change: iconOffset', -> btn.iconOffset x:7, y:-15

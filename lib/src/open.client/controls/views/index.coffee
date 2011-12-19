@@ -18,5 +18,5 @@ module.exports =
   RadioButtonSet:  view 'rdo_set'
   SystemToggle:    view 'system_toggle'
   SystemToggleSet: view 'system_toggle_set'
-  Icon:            view 'icon'
+  IconButton:      view 'icon_button'
 
