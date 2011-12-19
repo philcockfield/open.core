@@ -32,8 +32,7 @@ module.exports = class Popup extends core.mvc.View
                   #  - en:  right top
                   #  
                   #  etc.
-    
-    
+  
   constructor: (props = {}) -> 
     # Setup initial conditions.
     super _.extend props, className: @_className 'popup'
@@ -45,10 +44,11 @@ module.exports = class Popup extends core.mvc.View
     wirePopupController = (oldController, newController) =>  
       old.unbind 'updated' if oldController?
       if newController?
+        switch newController.edge
+          when 'n', 's' then newController.offset = { x:0, y:10 }
+          when 'w', 'e' then newController.offset = { x:10, y:0 }
+        
         newController.bind 'updated', (e) => 
-          
-          console.log 'newController.offset', newController.offset
-          
           switch e.edge
             when 'n' then @anchor 'sw'
             when 's' then @anchor 'nw'

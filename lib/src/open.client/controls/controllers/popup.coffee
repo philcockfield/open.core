@@ -199,7 +199,7 @@ getPosition = (obj, edge) ->
     return true # Will overfow.
   
   
-  getTop = => 
+  getTop = =>
     forHorizontalPlaneEdge = (planeEdge) -> 
       switch planeEdge
         when 'n' then return contextPosition.top + offset.y
@@ -221,9 +221,9 @@ getPosition = (obj, edge) ->
         # Snapping to North or South edge.
         top = forVerticalPlaneEdge edge
         if willOverflowVertically edge, top
-          displayEdge = toOppositeEdge(edge) # Invert the edge to avoid overflow.
+          # INVERT -- the edge to avoid overflow.
+          displayEdge = toOppositeEdge(edge) 
           top = forVerticalPlaneEdge displayEdge
-        else
         
     return top
   
@@ -244,7 +244,8 @@ getPosition = (obj, edge) ->
         # Snapping to East or West edge.
         left = forHorizontalPlaneEdge edge
         if willOverflowHorizontally edge, left
-          displayEdge = toOppositeEdge(edge) # Invert the edge to avoid overflow.
+          # INVERT -- the edge to avoid overflow.
+          displayEdge = toOppositeEdge(edge)
           left = forHorizontalPlaneEdge displayEdge
         
       when 'y'
