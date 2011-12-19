@@ -86,21 +86,17 @@ syncSize = (view) ->
 syncIcon = (view) -> 
   el   = view._icon
   icon = view.icon()
+  el.attr 'class', view._className('left_icon') # Reset CSS class.
   
   bg = (url) -> 
     url = if url? then "url(#{url})" else null
     el.css 'background-image', url
   
   switch view.iconType()
-    when 'url' 
-      bg icon
-      el.removeClass icon
-    when 'css' 
-      bg null
-      el.addClass icon
+    when 'url' then bg icon
+    when 'css' then el.addClass icon
     else return
-  
-  
+
 
 class Tmpl extends core.mvc.Template
   root:

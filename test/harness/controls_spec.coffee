@@ -152,7 +152,6 @@ describe 'Controls',
                     label:    'My Label'
                     icon:     'icon_class_name'
                     iconType: 'css'
-                  
               
               Embedding images in CSS can be achieved using the [data-URI](http://en.wikipedia.org/wiki/Data_URI_scheme) scheme.
               
@@ -179,6 +178,7 @@ describe 'Controls',
         
         changeIcon = (iconSample) -> 
           value = if btn.iconType() is 'url' then iconSample.url else iconSample.css
+          console.log "iconType: #{btn.iconType()} | icon: #{value}"
           btn.icon value
           btn
           
@@ -188,7 +188,7 @@ describe 'Controls',
           params.icon ?= if params.iconType is 'css' then ICONS.accept.css else ICONS.accept.url
           
           btn = new controls.IconButton params
-          page.add btn, className:'test_icon'
+          page.add btn, className:'test_icon_button'
           btn.onClick (e) -> console.log 'onClick: ', e.source.label(), e
           btn
         
@@ -197,8 +197,8 @@ describe 'Controls',
         it 'Change: label', -> btn.label new Date().getTime()
         it 'Change: iconType - url', -> changeIconType 'url'
         it 'Change: iconType - css', -> changeIconType 'css'
-        it 'Icon: Accept (url)', -> changeIcon ICONS.accept
-        it 'Icon: Warning (url)', -> changeIcon ICONS.warning
+        it 'Icon: Accept', -> changeIcon ICONS.accept
+        it 'Icon: Warning', -> changeIcon ICONS.warning
         it 'Set: tooltip', -> btn.tooltip 'A tooltip value \nover two lines'
         it 'Change: labelOffset', -> btn.labelOffset x:15, y:-5
         it 'Change: iconOffset', -> btn.iconOffset x:7, y:-15
