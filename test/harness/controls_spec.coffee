@@ -195,6 +195,7 @@ describe 'Controls',
         it 'Toggle: enabled', -> btn.enabled.toggle()
         it 'Add new', -> add()
         it 'Change: label', -> btn.label new Date().getTime()
+        it 'Change: label - null', -> btn.label null
         it 'Change: iconType - url', -> changeIconType 'url'
         it 'Change: iconType - css', -> changeIconType 'css'
         it 'Icon: Accept', -> changeIcon ICONS.accept

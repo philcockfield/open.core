@@ -134,6 +134,7 @@
   vertical-align: bottom;
   margin: 0px;
   padding: 0px;
+  font-size: 9pt;
 }
 .core_icon_button div.core_left_icon {
   position: absolute;
@@ -143,9 +144,6 @@
   bottom: 0px;
   background-repeat: no-repeat;
   background-position: 0px 50%;
-}
-.core_icon_button p.core_label {
-  font-size: 9pt;
 }
 .core_icon_button.core_enabled {
   cursor: pointer;

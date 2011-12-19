@@ -80,6 +80,7 @@ syncSize = (view) ->
   css elLabel, 'margin-top', labelOffset.y
   
   # Height.
+  css view.el, 'min-width', iconSize.x
   css view.el, 'min-height', iconSize.y
   
   # Icon offset.
