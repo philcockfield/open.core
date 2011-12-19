@@ -7,6 +7,26 @@ describe 'Controls',
     
     
     describe 'Buttons', ->
+      describe 'Button', ->
+        class MyButton extends controls.Button
+          defaults:
+            width: 120
+            height: 40
+          constructor: (props = {}) -> 
+            super _.extend props, className: 'test_dummy'
+            new controls.controllers.Size @
+            
+        btn = null
+        beforeAll ->
+          btn = new MyButton()
+          page.add btn
+          btn.onClick (e) -> console.log 'onClick', e
+        
+        it 'Toggle: enabled', -> 
+          btn.enabled.toggle()
+          console.log 'enabled()', btn.enabled()
+      
+      
       describe 'Command (CmdButton)', ->
         buttons   = []
         addCmdButton = (options) -> 
