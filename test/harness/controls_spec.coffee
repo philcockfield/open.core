@@ -119,7 +119,7 @@ describe 'Controls',
 
       describe 'IconButton', ->
         btn = null
-        FOLDER = '/images/test/controls/icon'
+        FOLDER = '/images/test/controls/icon_button'
         ICONS =
           warning:
             url: "#{FOLDER}/warning.png"
@@ -150,14 +150,14 @@ describe 'Controls',
                   # is embedded within the stylesheet (see below).
                   btn = new controls.IconButton 
                     label:    'My Label'
-                    icon:     'icon_name'
+                    icon:     'icon_class_name'
                     iconType: 'css'
                   
               
               Embedding images in CSS can be achieved using the [data-URI](http://en.wikipedia.org/wiki/Data_URI_scheme) scheme.
               
                   :css
-                  .icon_name {
+                  .icon_class_name {
                     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEU ... etc");
                   }
               
