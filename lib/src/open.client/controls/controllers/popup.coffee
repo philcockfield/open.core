@@ -54,7 +54,9 @@ module.exports = class PopupController
           return if context.enabled? and context.enabled() is no
           @show() 
     
-    core.bind 'window:resize', => @update()
+    $(window).resize => @update()
+    
+    # core.bind 'window:resize', => @update()
   
   
   ###

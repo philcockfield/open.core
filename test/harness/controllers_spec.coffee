@@ -5,14 +5,9 @@ describe 'Controllers', ->
     
     beforeAll -> initWithView()
     
-    fnPopup = -> new test.Dummy width: 200, height:180, color:'green' 
+    fnPopup = -> new test.Dummy width: 400, height:180, color:'green' 
     
     init = (fnContext) -> 
-      
-      trHost = $ '.th_host tr.th_body'
-      
-      console.log 'trHost', trHost
-      
       context = fnContext()
       page.add context, reset:true
       controller = new controls.controllers.Popup context, fnPopup
