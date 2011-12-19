@@ -8,8 +8,10 @@ the origin controls the popup is extending.
 ###
 module.exports = class Popup extends core.mvc.View
   defaults:
-    width:   null
-    height:  null
+    width:        null
+    height:       null
+    controller:   null # Gets or sets the [PopupController] that is controlling this view.
+    
     anchor: 'nw'  # Gets or sets the edge that the anchor pointer is on.
                   # Values are abbreviations of north, south, east, west cardinals.
                   # 
@@ -30,7 +32,8 @@ module.exports = class Popup extends core.mvc.View
                   #  - en:  right top
                   #  
                   #  etc.
-  
+    
+    
   constructor: (props = {}) -> 
     # Setup initial conditions.
     super _.extend props, className: @_className 'popup'
@@ -39,6 +42,19 @@ module.exports = class Popup extends core.mvc.View
     # Create controllers.
     new SizeController @
     
+    wirePopupController = (oldController, newController) =>  
+      old.unbind 'updated' if oldController?
+      if newController?
+        newController.bind 'updated', (e) => 
+          
+          console.log 'newController.offset', newController.offset
+          
+          switch e.edge
+            when 'n' then @anchor 'sw'
+            when 's' then @anchor 'nw'
+            when 'w' then @anchor 'en'
+            when 'e' then @anchor 'wn'
+    
     # Wire up events.
     @anchor.onChanging (e) -> 
         # Ensure the anchor exists and that it is lower case.
@@ -46,9 +62,11 @@ module.exports = class Popup extends core.mvc.View
         value = 'nw' if value is null or _(value).isBlank()
         e.newValue = value.toLowerCase()
     @anchor.onChanged => syncAnchor @
+    @controller.onChanged (e) => wirePopupController e.oldValue, e.newValue
     
     # Finish up.
     syncAnchor @
+    wirePopupController null, @controller()
 
 
 # PRIVATE --------------------------------------------------------------------------
@@ -85,6 +103,9 @@ syncAnchor = (view) ->
     when 'w', 'e'
       y = edgePosition n:'top', s:'bottom'
       elEdge.css 'background-position', "left #{y}"
+
+
+
 
 
 class Tmpl extends core.mvc.Template

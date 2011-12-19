@@ -25,7 +25,18 @@ describe 'Controls',
         it 'Toggle: enabled', -> 
           btn.enabled.toggle()
           console.log 'enabled()', btn.enabled()
-      
+        
+        it 'Set popup function', ->
+          btn.popup -> 
+            popupController = btn.popup.controller
+            # popupController.offset = { x:0, y:10 }
+            new controls.Popup width:200, height:120, controller: btn.popup.controller
+          
+        it 'Popup: east',  -> 
+          btn.popup.controller?.edge = 'e'
+          
+        it 'Popup: south', -> 
+          btn.popup.controller?.edge = 's'
       
       describe 'Command (CmdButton)', ->
         buttons   = []
@@ -48,7 +59,6 @@ describe 'Controls',
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
         it 'Width: 200',    -> btn.width 200 for btn in buttons
         it 'Width: null',   -> btn.width null for btn in buttons
-        
         
         describe 'ButtonSet', ->
           buttonSet = null

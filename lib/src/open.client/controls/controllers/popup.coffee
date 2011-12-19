@@ -7,6 +7,11 @@ MAX = 2147483647
 
 ###
 Manages displaying a popup view over a context object.
+
+Events:
+  - updated:  Fires after the 'update' method has executed.  This is run each time the popup is posiitoned.
+  - updating: Fires immediately before the 'update' method executes.
+  
 ###
 module.exports = class PopupController
   ###
@@ -30,6 +35,8 @@ module.exports = class PopupController
     
     # Setup initial conditions.
     Button ?= require '../views/button' # NB: Required here so that the proper singleton instance is used.
+    throw Error('A context must be provided') unless @context?
+    _(@).extend Backbone.Events
     
     toJQuery  = core.util.toJQuery
     context   = @context
@@ -46,17 +53,14 @@ module.exports = class PopupController
     @elContext = elContext = toJQuery context
     
     # Wire up events.
+    $(window).resize => @update()
     if options.clickable is yes
       if (context instanceof Button)
         context.onClick => @show()
       else
-        elContext.click => 
+        util.toJQuery(context).click => 
           return if context.enabled? and context.enabled() is no
           @show() 
-    
-    $(window).resize => @update()
-    
-    # core.bind 'window:resize', => @update()
   
   
   ###
@@ -110,6 +114,9 @@ module.exports = class PopupController
     
     # Hide the screen mask.
     @elMask?.remove()
+    
+    # Finish up.
+    @displayEdge = null
   
   
   ###
@@ -118,93 +125,34 @@ module.exports = class PopupController
   update: -> 
     # Setup initial conditions.
     return unless @isShowing()
-    elPopup         = @elPopup
-    elContext       = @elContext
-    offset          = @offset
-    contextPosition = elContext.offset()
-    plane           = toPlane @edge
+    position = getPosition @, @edge
+    edge     = position.edge
     
-    willOverflowVertically    = (relativeToEdge, value) -> willOverflow 'y', relativeToEdge, value
-    willOverflowHorizontally  = (relativeToEdge, value) -> willOverflow 'x', relativeToEdge, value
-    willOverflow = (onPlane, relativeToEdge, value) -> 
-      switch onPlane
-        when 'x' 
-          switch relativeToEdge
-            when 'w'
-              return false if value > 0
-            when 'e'
-              right       = value + elPopup.width()
-              screenWidth = $(window).width()
-              return false if right < screenWidth
-        
-        when 'y' 
-          switch relativeToEdge
-            when 'n'
-              return false if value > 0
-            when 's' 
-              bottom       = value + elPopup.height()
-              screenHeight = $(window).height()
-              return false if bottom < screenHeight
-          
-      return true # Will overfow.
-    
-    getTop = => 
-      forHorizontalPlaneEdge = (edge) -> 
-        switch edge
-          when 'n' then return contextPosition.top + offset.y
-          when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
-      
-      forVerticalPlaneEdge = (edge) -> 
-        switch edge
-          when 'n' then return contextPosition.top - elPopup.height() - offset.y
-          when 's' then return contextPosition.top + elContext.height() + offset.y
-      
-      switch plane
-        when 'x'
-          # Snapping to West or East edge.
-          top = forHorizontalPlaneEdge 'n'
-          if willOverflowVertically 's', top
-            top = forHorizontalPlaneEdge 's'
-        
-        when 'y'
-          # Snapping to North or South edge.
-          top = forVerticalPlaneEdge @edge
-          if willOverflowVertically @edge, top
-            top = forVerticalPlaneEdge toOppositeEdge(@edge)
-          
-      return top
-    
-    
-    getLeft = => 
-      forHorizontalPlaneEdge = (edge) -> 
-        switch edge
-          when 'w' then return contextPosition.left - elPopup.width() - offset.x
-          when 'e' then return contextPosition.left + elContext.width() + offset.x
-      
-      forVerticalPlaneEdge = (edge) -> 
-        switch edge
-          when 'w' then return contextPosition.left + offset.x
-          when 'e' then return (contextPosition.left + elContext.width()) - elPopup.width() - offset.y
-      
-      switch plane
-        when 'x'
-          # Snapping to East or West edge.
-          left = forHorizontalPlaneEdge @edge
-          if willOverflowHorizontally @edge, left
-            left = forHorizontalPlaneEdge toOppositeEdge(@edge)
-          
-        when 'y'
-          # Snapping to North or South edge.
-          left = forVerticalPlaneEdge 'w'
-          if willOverflowHorizontally 'e', left
-            left = forVerticalPlaneEdge 'e'
-      
-      return left
-    
+    # Fire pre event.
+    @trigger 'updating', edge:edge
     
     # Update the popup position.
-    elPopup.css 'left', getLeft()
-    elPopup.css 'top',  getTop()
+    el = @elPopup
+    el.css 'left', position.left
+    el.css 'top',  position.top
+    
+    # Finish up.
+    @displayEdge = edge
+    @trigger 'updated', edge:edge
+
+
+# STATIC METHODS ----------------------------------------------------------------------
+
+
+###
+Retreives the X or Y plane that the given edge is on.
+@param edge: The cardinal to evaluate.
+@returns either 'x' or 'y'.
+###
+PopupController.plane = (edge) -> 
+  switch edge
+    when 'n', 's' then return 'y'
+    when 'w', 'e' then return 'x'
 
 
 # PRIVATE --------------------------------------------------------------------------
@@ -218,15 +166,107 @@ toOppositeEdge = (edge) ->
     when 'e' then return 'w'
 
 
-toPlane = (edge) -> 
-  switch edge
-    when 'n', 's' then return 'y'
-    when 'w', 'e' then return 'x'
-
-
-
-
-
-
-
+getPosition = (obj, edge) -> 
+  elPopup         = obj.elPopup
+  elContext       = obj.elContext
+  offset          = obj.offset
+  contextPosition = elContext.offset()
+  plane           = PopupController.plane edge
+  displayEdge     = edge
   
+  willOverflowVertically    = (relativeToEdge, value) -> willOverflow 'y', relativeToEdge, value
+  willOverflowHorizontally  = (relativeToEdge, value) -> willOverflow 'x', relativeToEdge, value
+  willOverflow = (onPlane, relativeToEdge, value) -> 
+    switch onPlane
+      when 'x' 
+        switch relativeToEdge
+          when 'w'
+            return false if value > 0
+          when 'e'
+            right       = value + elPopup.width()
+            screenWidth = $(window).width()
+            return false if right < screenWidth
+      
+      when 'y' 
+        switch relativeToEdge
+          when 'n'
+            return false if value > 0
+          when 's' 
+            bottom       = value + elPopup.height()
+            screenHeight = $(window).height()
+            return false if bottom < screenHeight
+        
+    return true # Will overfow.
+  
+  
+  getTop = => 
+    forHorizontalPlaneEdge = (planeEdge) -> 
+      switch planeEdge
+        when 'n' then return contextPosition.top + offset.y
+        when 's' then return (contextPosition.top + elContext.height()) - elPopup.height() - offset.y
+    
+    forVerticalPlaneEdge = (planeEdge) -> 
+      switch planeEdge
+        when 'n' then return contextPosition.top - elPopup.height() - offset.y
+        when 's' then return contextPosition.top + elContext.height() + offset.y
+    
+    switch plane
+      when 'x'
+        # Snapping to West or East edge.
+        top = forHorizontalPlaneEdge 'n'
+        if willOverflowVertically 's', top
+          top = forHorizontalPlaneEdge 's'
+      
+      when 'y'
+        # Snapping to North or South edge.
+        top = forVerticalPlaneEdge edge
+        if willOverflowVertically edge, top
+          displayEdge = toOppositeEdge(edge) # Invert the edge to avoid overflow.
+          top = forVerticalPlaneEdge displayEdge
+        else
+        
+    return top
+  
+  
+  getLeft = => 
+    forHorizontalPlaneEdge = (edge) ->
+      switch edge
+        when 'w' then return contextPosition.left - elPopup.width() - offset.x
+        when 'e' then return contextPosition.left + elContext.width() + offset.x
+    
+    forVerticalPlaneEdge = (edge) ->
+      switch edge
+        when 'w' then return contextPosition.left + offset.x
+        when 'e' then return (contextPosition.left + elContext.width()) - elPopup.width() - offset.y
+    
+    switch plane
+      when 'x'
+        # Snapping to East or West edge.
+        left = forHorizontalPlaneEdge edge
+        if willOverflowHorizontally edge, left
+          displayEdge = toOppositeEdge(edge) # Invert the edge to avoid overflow.
+          left = forHorizontalPlaneEdge displayEdge
+        
+      when 'y'
+        # Snapping to North or South edge.
+        left = forVerticalPlaneEdge 'w'
+        if willOverflowHorizontally 'e', left
+          left = forVerticalPlaneEdge 'e'
+    
+    return left
+  
+  # Calcualge X:Y positions and edge.
+  left = getLeft()
+  top  = getTop()
+  
+  # Finish up.
+  result =
+    left: left
+    top:  top
+    edge: displayEdge
+
+
+
+
+
+

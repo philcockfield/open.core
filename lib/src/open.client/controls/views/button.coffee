@@ -1,5 +1,7 @@
-core = require 'open.client/core'
-util = core.util
+core  = require 'open.client/core'
+util  = core.util
+Popup = require '../controllers/popup'
+
 
 ###
 A click-able button.
@@ -30,6 +32,7 @@ module.exports = class Button extends core.mvc.View
           over:       false                      # Gets whether the the mouse is currently over the button (Read-only.  Written to internally.)
           down:       false                      # Gets whether the button is currently in a depressed state (Read-only.  Written to internally.)
           value:      null                       # Gets or sets a value to associate with the button. This is useful for things like RadioButtons and Checkboxes.
+          popup:      null                       # Gets or sets the factory method to use to create a popup.
       
       # Wire up events.
       @selected.onChanged (e) => 
@@ -41,6 +44,17 @@ module.exports = class Button extends core.mvc.View
           self._stateChanged('selected')
           self.handleSelectedChanged args
           self.trigger('selected', args) if self.canToggle() and isSelected
+      
+      
+      # Allow easy extension of popup.
+      handlePopup = (button) -> 
+          fnPopup = button.popup()
+          
+          # Create the controller if it doesn't yet exist.
+          controller = button.popup.controller ?= new Popup(button)
+          controller.fnPopup = fnPopup
+      
+      @popup.onChanged => handlePopup @
       
       # Mouse events.
       do -> 
