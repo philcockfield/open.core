@@ -21,6 +21,10 @@ module.exports = class Icon extends Button
     @render()
     @el.disableTextSelect()
     
+    # Format offsets.
+    @iconOffset  Icon.formatPoint(@iconOffset())
+    @labelOffset Icon.formatPoint(@labelOffset())
+    
     # Wire up events.
     @label.onChanged        => syncText @
     @tooltip.onChanged      => syncText @
@@ -104,3 +108,18 @@ class Tmpl extends core.mvc.Template
     <div class='<%= prefix %>_left_icon'></div>
     <p class="<%= prefix %>_label">Label</p>
     """
+
+
+# PUBLIC STATIC ----------------------------------------------------------------------
+
+
+###
+Formats the X:Y point, ensuring it has both values.
+###
+Icon.formatPoint = (value = {}) -> 
+  value.x ?= 0
+  value.y ?= 0
+  value
+  
+
+
