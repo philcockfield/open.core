@@ -1,6 +1,6 @@
-core  = require 'open.client/core'
-util  = core.util
-Popup = require '../controllers/popup'
+core            = require 'open.client/core'
+util            = core.util
+PopupController = require '../controllers/popup'
 
 
 ###
@@ -44,17 +44,6 @@ module.exports = class Button extends core.mvc.View
           self._stateChanged('selected')
           self.handleSelectedChanged args
           self.trigger('selected', args) if self.canToggle() and isSelected
-      
-      
-      # Allow easy extension of popup.
-      handlePopup = (button) -> 
-          fnPopup = button.popup()
-          
-          # Create the controller if it doesn't yet exist.
-          controller = button.popup.controller ?= new Popup(button)
-          controller.fnPopup = fnPopup
-      
-      @popup.onChanged => handlePopup @
       
       # Mouse events.
       do -> 

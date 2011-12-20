@@ -42,7 +42,7 @@ module.exports = class PopupController
     context   = @context
     popup     = @popup
     
-    options.cssPrefix       ?= 'core_'
+    options.cssPrefix       ?= 'core'
     options.clickable       ?= true
     options.edge            ?= 's'
     options.offset          ?= { x:0, y:0 }
@@ -76,13 +76,15 @@ module.exports = class PopupController
     
     # Setup initial conditions.
     return if @isShowing()
-    body = $ 'body'
+    popup = @fnPopup?()
+    return unless popup?
+    body  = $ 'body'
     
     # Get and display the screen mask.
     @elMask = do => 
       
       # Create and insert the mask.
-      elMask = $ "<div class='#{@cssPrefix}popup_mask'></div>"
+      elMask = $ "<div class='#{@cssPrefix}_popup_mask'></div>"
       body.append elMask
       
       # Wire up events.
@@ -92,7 +94,6 @@ module.exports = class PopupController
       elMask
     
     # Create and insert the popup.
-    popup   = @fnPopup()
     elPopup = core.util.toJQuery popup
     elPopup.css 'z-index', MAX
     elPopup.css 'position', 'absolute'

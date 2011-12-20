@@ -35,8 +35,12 @@ module.exports = class Popup extends core.mvc.View
   
   constructor: (props = {}) -> 
     # Setup initial conditions.
-    super _.extend props, className: @_className 'popup'
+    className = props.className ?= 'popup'
+    super _.extend props, className: @_className(className)
+      
+    # Render base HTML.
     @html new Tmpl().root(prefix:@_cssPrefix)
+    @elBody   = @$ ".#{@_className('inner')}"
     
     # Create controllers.
     new SizeController @
@@ -67,7 +71,9 @@ module.exports = class Popup extends core.mvc.View
     # Finish up.
     syncAnchor @
     wirePopupController null, @controller()
-
+  
+  
+  
 
 # PRIVATE --------------------------------------------------------------------------
 

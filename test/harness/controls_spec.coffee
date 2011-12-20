@@ -28,7 +28,6 @@ describe 'Controls',
         
         it 'Set popup function', ->
           btn.popup -> 
-            popupController = btn.popup.controller
             new controls.Popup width:200, height:120, controller: btn.popup.controller
         
         it 'Popup: east',  -> btn.popup.controller?.edge = 'e'
