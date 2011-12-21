@@ -7,14 +7,9 @@ module.exports = (module) ->
       # Setup initial conditions.
       super _.extend props, className:'th_tab'
       
-      # Syncers.
-      syncScroll = => module.core.util.syncScroll @el, @scroll()
+      # Enabled scrolling.
+      new module.controls.controllers.Scroll @
       
-      # Wire up events.
-      @scroll.onChanged syncScroll
-      
-      # Finish up.
-      syncScroll()
     
     
     ###

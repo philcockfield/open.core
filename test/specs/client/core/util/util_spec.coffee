@@ -111,9 +111,6 @@ describe 'util', ->
     it 'does not set the target for [mailto:] links', ->
       expect(a8.attr('target')).toEqual null
     
-    
-    
-  
   
   describe 'scrollClasses', ->
     div = null
