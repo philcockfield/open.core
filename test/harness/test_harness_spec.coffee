@@ -5,7 +5,15 @@ describe 'Test Harness', ->
     TestHarness = require 'open.client/harness'
     pane = page.pane
     pane.reset()
-
+  
+  it 'Set default summary',   -> 
+    page.defaultSummary 'Default <a href="http://google.com">summary lorem</a> ipsum dolor sit amet, consectetur adipiscing elit.'
+    console.log 'page.defaultSummary(): ', page.defaultSummary()
+    
+  it 'Clear default summary', -> 
+    page.defaultSummary null
+    console.log 'page.defaultSummary(): ', page.defaultSummary()
+  
   describe 'Dummy View', ->
     dummy = null
     beforeAll -> 
@@ -96,7 +104,7 @@ describe 'Test Harness', ->
   
   
   describe 'Suite', ->
-    describe 'Summary | Options', 'Summary text!', foo:'summary and options', ->
+    describe 'Summary | Options', 'Summary text and <a href="http://google.com">external link</a> and an <a href="/harness">internal link</a>.', foo:'summary and options', ->
     describe 'Options', foo:'options only', ->
   
   

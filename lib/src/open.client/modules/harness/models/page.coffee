@@ -12,12 +12,24 @@ module.exports = (module) ->
   class Page extends module.mvc.Model
     constructor: -> super
     defaults:
-      title:   null   # Gets or sets the title of the page.
-      summary: null   # Gets or sets the summary of the page.
+      title:          null  # Gets or sets the title of the page.
+      summary:        null  # Gets or sets the summary of the page.
+      defaultSummary: null  # Gets or sets the summary used by default when no summary is specified within a suite.
     
     
     # Gets the [ContextPane] - the panel to display options below the control host.
     pane: undefined # Set by Main.
+    
+    ###
+    Returns the summary text.  
+    If null the default summary is returned.
+    If there is no summary or default summary then an empty-string is returned.
+    ###
+    getSummary: -> 
+      summary = _.nullIfBlank @summary()
+      summary = _.nullIfBlank(@defaultSummary()) unless summary?
+      summary = '' unless summary?
+      summary
     
     
     ###

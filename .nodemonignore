@@ -1,4 +1,5 @@
 _tmp/*
 lib/public/*
 lib/views/*
+test/*
 .git

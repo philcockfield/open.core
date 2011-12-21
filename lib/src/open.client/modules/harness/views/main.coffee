@@ -1,4 +1,6 @@
 module.exports = (module) ->
+  util = module.core.util
+  
   class Main extends module.mvc.View
     constructor: () -> 
         
@@ -6,18 +8,22 @@ module.exports = (module) ->
         super className: 'th_main'
         @render()
         @_updateState()
+        page = module.page
+        
+        # Syncers.
+        syncSummary = => @_syncSummary()
         
         # Wire up events.
         module.selectedSuite.onChanged (e) => @_updateState()
         
         # - Page events.
-        page = module.page
         page.bind 'add',       (e) => @add e.element, e.options
         page.bind 'clear',     (e) => @clear()
         page.bind 'reset',     (e) => @reset()
         page.bind 'css',       (e) => @css e.urls
         page.title.onChanged   (e) => @pTitle.html   e.newValue
-        page.summary.onChanged (e) => @pSummary.html e.newValue
+        page.summary.onChanged syncSummary
+        page.defaultSummary.onChanged syncSummary
     
     
     # See [page] object for documentation on available options.
@@ -34,10 +40,10 @@ module.exports = (module) ->
         el.css 'width',  width   if width?
         el.css 'height', height  if height?
         el.css 'border', "solid 1px #{border}" if border?
-
+        
         # Update CSS options.
         @css options.css
-        module.core.util.syncScroll el, options.scroll if options.scroll?
+        util.syncScroll el, options.scroll if options.scroll?
         
         # Update the host pane elements.
         @trTitle.toggle (options.showTitle ?= true)
@@ -115,9 +121,17 @@ module.exports = (module) ->
         suite = module.selectedSuite()
         syncPaneHeight @
         
-        # Update title.
+        # Update title and summary.
         @divTitle.toggle suite?
-  
+        @_syncSummary()
+    
+    
+    _syncSummary: -> 
+        @pSummary.html module.page.getSummary()
+        
+        util.formatLinks @pSummary
+        
+      
   
   # PRIVATE --------------------------------------------------------------------------
   

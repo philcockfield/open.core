@@ -1,5 +1,10 @@
+
+
+fnBlank = _.isBlank
+
+
 ###
-Underscore extensions.
+Underscore string extensions.
 ###
 _.mixin
 
@@ -15,4 +20,20 @@ _.mixin
       # Convert string.
       text[0].toUpperCase() + text.substring(1)
       
-    
+  
+  # Overrides [underscore.string]'s verion of this method to 
+  # handle null/undefined values.
+  isBlank: (text) -> 
+    return true unless text?
+    fnBlank text
+  
+  
+  ###
+  Converts a blank string to null.
+  ###
+  nullIfBlank: (text) -> if _.isBlank(text) then null else text
+
+
+
+
+  

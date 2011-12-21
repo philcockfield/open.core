@@ -1,6 +1,5 @@
-require './_string'  # Cause string extensions to be loaded (added to underscore.string).
-
-jQueryUtil = require './_jquery'   # NB: Also causees jQuery extensions to be loaded.
+require './_string'               # Cause string extensions to be loaded (added to underscore.string).
+jQueryUtil = require './_jquery'  # Cause jQuery extensions to be loaded.
 
 
 module.exports = util =
