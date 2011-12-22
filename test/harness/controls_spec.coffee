@@ -54,6 +54,8 @@ describe 'Controls',
         it 'Color: Silver', -> btn.color 'silver' for btn in buttons
         it 'Width: 200',    -> btn.width 200 for btn in buttons
         it 'Width: null',   -> btn.width null for btn in buttons
+        it 'Toggle: labelOnly', -> btn.labelOnly.toggle() for btn in buttons
+        it 'Focus', -> btn.focus() for btn in buttons
         
         describe 'ButtonSet', ->
           buttonSet = null

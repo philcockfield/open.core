@@ -89,7 +89,7 @@ module.exports = class Button extends core.mvc.View
             handleClick e
     
       # Finish up.
-      syncClasses @
+      @update()
   
   
   ###
@@ -168,8 +168,14 @@ module.exports = class Button extends core.mvc.View
       return false if not @canToggle()
       @selected(not @selected(), options)
       true
-
-
+  
+  
+  ###
+  Updates the visual state of the button.
+  ###
+  update: -> syncClasses @
+  
+  
   ###
   Invoked when the state of the button has changed (ie. via a mouse event)
   Override this to update visual state.
@@ -194,8 +200,7 @@ module.exports = class Button extends core.mvc.View
   
   
   _stateChanged: (state, options = {}) => 
-    # Update button state.
-    syncClasses @
+    @update()
     
     # Alert listeners.
     args = 
@@ -214,6 +219,14 @@ syncClasses = (view) ->
     toggle 'selected', view.selected
     toggle 'over',     view.over
     toggle 'down',     view.down
+    
+    # In default state if no special state has been set.
+    defaultState = -> 
+      for state in ['selected', 'over', 'down', 'focused']
+        return false if view.el.hasClass view._className(state)
+      true
+    toggle 'default', defaultState
+    
 
 
 

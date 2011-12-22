@@ -1,6 +1,7 @@
 core            = require 'open.client/core'
-focusController = require '../controllers/focus'
+FocusController = require '../controllers/focus'
 Button          = require './button'
+
 
 
 ###
@@ -8,9 +9,10 @@ A 'command' style button.
 ###
 module.exports = class CmdButton extends Button
   defaults:
-    size: 'm'        # The size of the button (default 'm' - medium). Options: s, m, l.
-    color: 'silver'  # The color of the button (default 'silver'). Options: silver, blue, green.
-    width: null      # Number. The pixel width of the button.  Set to null for default offset width around the label.
+    size:       'm'       # The size of the button (default 'm' - medium). Options: s, m, l.
+    color:      'silver'  # The color of the button (default 'silver'). Options: silver, blue, green.
+    width:      null      # Number. The pixel width of the button.  Set to null for default offset width around the label.
+    labelOnly:  false     # Flag indicating whether the background should be hidden (showing only the label) in it's 'normal' state.
   
   
   constructor: (params = {}) -> 
@@ -26,9 +28,12 @@ module.exports = class CmdButton extends Button
               toggle e.oldValue, false
               toggle e.newValue, true
     
-    onSizeChanged     = (e) => toggleClass e, @_className('size_')
-    onColorChanged    = (e) => toggleClass e, @_className('color_')
-    onSelectedChanged = (e) => self._btn.toggleClass 'active', e.newValue
+    onSizeChanged      = (e) => toggleClass e, @_className('size_')
+    onColorChanged     = (e) => toggleClass e, @_className('color_')
+    onSelectedChanged  = (e) => self._btn.toggleClass 'active', e.newValue
+    onLabelOnlyChanged = (e) => 
+      @el.toggleClass @_className('label_only'), e.newValue
+      @update()
     onWidthChanged = (e) =>  
       width = e.newValue
       if width? 
@@ -39,7 +44,8 @@ module.exports = class CmdButton extends Button
     
     
     # Create controllers.
-    new focusController @, @_btn
+    focus = new FocusController @, @_btn, => @update()
+    
     
     # Wire up events.
     @size.onChanged     onSizeChanged
@@ -51,13 +57,14 @@ module.exports = class CmdButton extends Button
       width   = null if width is 0
       e.value = width
     @label.onChanged (e) => @_btn.text e.newValue
-    
+    @labelOnly.onChanged onLabelOnlyChanged
     
     # Finish up.
-    onSizeChanged     newValue: @size()
-    onColorChanged    newValue: @color()
-    onSelectedChanged newValue: @selected()
-    onWidthChanged    newValue: params.width ? null
+    onSizeChanged       newValue: @size()
+    onColorChanged      newValue: @color()
+    onSelectedChanged   newValue: @selected()
+    onWidthChanged      newValue: params.width ? null
+    onLabelOnlyChanged  newValue: @labelOnly()
   
   
   render: -> 

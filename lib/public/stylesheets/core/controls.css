@@ -36,6 +36,10 @@
   color: #666;
   border-color: #b3b3b3;
 }
+.core_btn_cmd.core_color_silver.core_label_only.core_default > button {
+  border-color: transparent;
+  background: none;
+}
 .core_btn_cmd.core_color_silver.core_over > button {
   background: #ccc;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #ccc));
@@ -144,6 +148,10 @@
   bottom: 0px;
   background-repeat: no-repeat;
   background-position: 0px 50%;
+}
+.core_icon_button p.core_label {
+  position: relative;
+  display: inline-block;
 }
 .core_icon_button.core_enabled {
   cursor: pointer;

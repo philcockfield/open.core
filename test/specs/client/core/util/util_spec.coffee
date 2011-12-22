@@ -44,6 +44,7 @@ describe 'util', ->
             <a href="hTtp://foo" class="core_external">6</a>
             <a href="/bar" target="_self">7</a>
             <a href="mailto:bob@domain.com">8</a>
+            <a href="/bar" target="_blank">9</a>
            </div>    
            """
     div = null
@@ -56,6 +57,7 @@ describe 'util', ->
     a6  = null
     a7  = null
     a8  = null
+    a9  = null
     beforeEach ->
       div = $ html
       core.util.formatLinks div
@@ -69,6 +71,7 @@ describe 'util', ->
       a6 = $ children[6]
       a7 = $ children[7]
       a8 = $ children[8]
+      a9 = $ children[9]
     
     it 'does nothing if no element is passed', ->
       core.util.formatLinks()
@@ -87,6 +90,10 @@ describe 'util', ->
       expect(a4.hasClass('core_external')).toEqual true
       expect(a5.hasClass('core_external')).toEqual true
       expect(a8.hasClass('core_external')).toEqual true
+    
+    it 'adds the CSS class to internal links that open in a new window', ->
+      expect(a9.hasClass('core_external')).toEqual true
+    
     
     it 'sets a custom CSS class name', ->
       core.util.formatLinks div, className:'foo_external'

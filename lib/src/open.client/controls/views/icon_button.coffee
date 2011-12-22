@@ -47,10 +47,13 @@ module.exports = class Icon extends Button
     @_label = el 'label'
     @_icon  = el 'left_icon'
     @_carat = el 'carat'
+    @_isRendered = true
   
   
   # Updates the visual state of the control.
   update: -> 
+    super
+    return unless @_isRendered is yes
     syncText @
     syncSize @
     syncIcon @
@@ -81,7 +84,8 @@ syncSize = (view) ->
   
   # Height.
   css view.el, 'min-width', iconSize.x
-  css view.el, 'min-height', iconSize.y
+  css view.el, 'height',    iconSize.y
+
   
   # Icon offset.
   css elIcon, 'left', iconOffset.x 

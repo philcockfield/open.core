@@ -1,12 +1,14 @@
 ###
 Handles updating the focus behavior of a control.
+
 ###
 module.exports = class FocusController
-  constructor: (view, element) -> 
+  constructor: (view, element, onFocusChanged) -> 
     
     # Syncers.
     syncFocus = (hasFocus) => 
       view.el.toggleClass view._className('focused'), hasFocus
+      onFocusChanged?()
     
     # Wire up events.
     element.focusin => syncFocus(true)

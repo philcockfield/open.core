@@ -16,6 +16,10 @@
   background-repeat: no-repeat;
   background-position: 0px 50%;
 }
+.core_icon_button p.core_label {
+  position: relative;
+  display: inline-block;
+}
 .core_icon_button.core_enabled {
   cursor: pointer;
   color: #00a5d5;

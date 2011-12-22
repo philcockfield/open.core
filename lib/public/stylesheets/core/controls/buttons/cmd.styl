@@ -61,6 +61,10 @@ command-button-down(bg, darken=20%)
         textEmboss()
         color darken(white, 60%)
         border-color darken(white, 30%)
+    &.core_label_only.core_default > button
+      border-color transparent
+      background none
+      box-shadow none
     &.core_over > button
         command-button-over(SILVER, 20%)
     &.core_down > button, &.core_selected > button

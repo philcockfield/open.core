@@ -481,7 +481,32 @@ describe 'controls/views/button', ->
         button.selected true
         button.selected false
         expect(button.el.hasClass('core_selected')).toEqual false
-
+    
+    describe 'default class', ->
+      it 'has [core_default] class', ->
+        button._stateChanged()
+        expect(button.el.hasClass('core_default')).toEqual true
+        
+      it 'does not have [core_default] class when [selected]', ->
+        button.selected true
+        button._stateChanged()
+        expect(button.el.hasClass('core_default')).toEqual false
+        
+      it 'does not have [core_default] class when [over]', ->
+        button.over true
+        button._stateChanged()
+        expect(button.el.hasClass('core_default')).toEqual false
+        
+      it 'does not have [core_default] class when [down]', ->
+        button.down true
+        button._stateChanged()
+        expect(button.el.hasClass('core_default')).toEqual false
+        
+      it 'does not have [core_default] class when [focused]', ->
+        button.el.addClass 'core_focused'
+        button._stateChanged()
+        expect(button.el.hasClass('core_default')).toEqual false
+          
     describe 'over class', ->
       it 'has [core_over] class', ->
         button.el.mouseover()

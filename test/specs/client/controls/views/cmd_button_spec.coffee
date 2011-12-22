@@ -39,6 +39,20 @@ describe 'controls/views/cmd_button', ->
       it 'has [active] class when selected is set in constructor', ->
         button = new CmdButton canToggle:true, selected:true
         expect(button._btn.hasClass 'active').toEqual true
+    
+    describe 'label only', ->
+      it 'does not have [label_only] class by default', ->
+        expect(button.el.hasClass('core_label_only')).toEqual false
+        
+      it 'has [label_only] class upon construction', ->
+        button = new CmdButton labelOnly:true
+        expect(button.el.hasClass('core_label_only')).toEqual true
+
+      it 'has [label_only] class upon changing property', ->
+        button.labelOnly true
+        expect(button.el.hasClass('core_label_only')).toEqual true
+      
+      
   
   describe 'size', ->
     it 'is a medium (m) sized button by default', ->

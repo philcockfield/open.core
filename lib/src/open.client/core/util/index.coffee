@@ -11,7 +11,6 @@ module.exports = util =
   Cookie:   require './cookie'
   
   
-  
   ###
   Executes a [require] call within a try/catch block.
   @param path : Path to the require statement.
@@ -85,19 +84,27 @@ module.exports = util =
           href = _(href.toLowerCase()) if href?
           href
       
-      isExternal = (href) -> 
+      isExternal = (href, a) -> 
           return false unless href?
+          
+          # Check for external domains.
           for prefix in ['http://', 'https://', 'mailto:']
             return true if href.startsWith(prefix)
+          
+          # Check for links opening in another tab/window.
+          return true if a.attr('target') is target
+          
+          # Not external.
           false
       
       targetNewWindow = (href) -> 
-          not href.startsWith('mailto:')
+          return false if href.startsWith('mailto:')
+          return true
       
       # Process each anchor.
       process = (a) -> 
           href = getHref a
-          return unless isExternal(href)
+          return unless isExternal(href, a)
           
           # Update the CSS class.
           a.addClass className
@@ -109,8 +116,10 @@ module.exports = util =
           a.attr 'title', tooltip if tooltip?
       
       process $(a) for a in el.find('a')
-  
 
 
 # Extend with partial modules.
 _.extend util, require './_conversion'
+
+
+
