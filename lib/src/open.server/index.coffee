@@ -26,6 +26,7 @@ module.exports = core =
           - port: (optional) The port to start the server on (default 8080).
   ###
   start: (options = {})->
+    
     # Setup initial conditions.
     @init null, 
       baseUrl: '/', 
