@@ -1,4 +1,4 @@
-core       = require 'open.server'
+core       = require '../../open.server'
 clientUtil = core.client.core.util
 
 

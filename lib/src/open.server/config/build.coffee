@@ -1,4 +1,4 @@
-core      = require 'open.server'
+core      = require '../../open.server'
 Builder   = core.util.javascript.Builder
 ModuleDef = core.util.ModuleDef
 

@@ -1,5 +1,5 @@
 express = require 'express'
-core    = require('open.server')
+core    = require('open.core/open.server')
 
 describe 'config/configure', ->
   app = null

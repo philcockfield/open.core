@@ -1,4 +1,4 @@
-core       = require 'open.server'
+core       = require '../../../open.server'
 TestRunner = require './test_runner'
 
 ###

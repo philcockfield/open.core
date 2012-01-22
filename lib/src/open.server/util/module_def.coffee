@@ -1,4 +1,4 @@
-core        = require 'open.server'
+core        = require '../../open.server'
 fs          = require 'fs'
 fsUtil      = require './fs'
 Builder     = require './javascript/build/builder'

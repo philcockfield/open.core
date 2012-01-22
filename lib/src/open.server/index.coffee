@@ -26,7 +26,6 @@ module.exports = core =
           - port: (optional) The port to start the server on (default 8080).
   ###
   start: (options = {})->
-    
     # Setup initial conditions.
     @init null, 
       baseUrl: '/', 
@@ -103,7 +102,7 @@ do ->
   # NB: Set here to avoid load order problems with sub-modules that
   #     in turn require the [server] module.
   core.paths       = require './config/paths'
-  core.client      = require 'open.client'
+  core.client      = require '../open.client'
   core.version     = core.client.core.version
   core.mvc         = core.client.core.mvc
   core.util        = require './util'

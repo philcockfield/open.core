@@ -1,5 +1,5 @@
 describe 'open.server', ->
-  server = require 'open.server'
+  server = require 'open.core/open.server'
 
   it 'exists', ->
     expect(server).toBeDefined()

@@ -1,4 +1,4 @@
-core    = require 'open.server'
+core    = require '../'
 app     = core.app
 send    = core.util.send
 

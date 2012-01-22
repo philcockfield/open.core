@@ -1,6 +1,6 @@
 fs           = require 'fs'
 CoffeeScript = require 'coffee-script'
-core         = require 'open.server'
+core         = require '../../../open.server'
 util         = core.util
 
 

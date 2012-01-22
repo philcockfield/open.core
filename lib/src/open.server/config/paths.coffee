@@ -22,8 +22,11 @@ module.exports = paths =
 # NOTE: Only do this if another reference to [open.core] has not
 #       already been registered.  This will happen if there is more 
 #       than one dependency reference to [open.core].
-unless _(require.paths).include 'node_modules/open.core/'
-  require.paths.unshift paths.src
-
-
+# unless _(require.paths).include 'node_modules/open.core/'
+#   require.paths.unshift paths.src
+# unless _(process.env.NODE_PATH).include 'node_modules/open.core/'
+#   console.log "IN UNLESS"
+#   process.env.NODE_PATH = "#{process.env.NODE_PATH}:#{paths.src}"
+# 
+# console.log 'NODE_PATH: ', process.env.NODE_PATH
 

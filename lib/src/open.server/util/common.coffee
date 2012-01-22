@@ -1,4 +1,5 @@
-client = require 'open.client/core'
+client = require '../../open.client/core'
+server = require '../../open.server'
 
 # Store color in global namespace.
 global.color =
@@ -34,14 +35,15 @@ module.exports = commonUtil =
   To suppress output to the log (for example when testing code that emits log output) 
   set the [silent] property of this function to true.
   
-     eg. core.util.log.silent = true
+     eg. server.util.log.silent = true
   
   @param message      : to write to the console.
   @param color        : (optional) the color to use.  Omit for standard (black).  See [global.color]
   @param explanation  : (optional) follow on text written in black.
   ###
   log: log
-
+  
+  
   ###
   Renders the specified template from the 'views' path.
   @param response   : object to write to.
@@ -49,20 +51,20 @@ module.exports = commonUtil =
   @param options    : variables to pass to the template.
   ###
   render: (response, template, options = {}) ->
-          core = require 'open.server'
-          extension = options.extension ?= 'jade'
-          options.baseUrl ?= core.baseUrl
-          response.render "#{core.paths.views}/#{template}.#{extension}", options
-
+    extension = options.extension ?= 'jade'
+    options.baseUrl ?= server.baseUrl
+    response.render "#{server.paths.views}/#{template}.#{extension}", options
+  
+  
   ###
   Default handler after the invoked 'exec' command.
   Prints output to console and exits process if failed.
-
+  
   To suppress output to the log (for example when testing code that emits log output) 
   set the [silent] property of this function to true.
   
-     eg. core.util.log.silent = true
-
+     eg. server.util.log.silent = true
+  
   @param err    : the error (if any).
   @param stdout : the standard out.
   @param stderr : the standard error.
@@ -70,6 +72,7 @@ module.exports = commonUtil =
   onExec: (err, stdout, stderr) ->
     log stdout if stdout
     log(stderr, color.red) if stderr
+    
     # Write the err message and kill the process.
     if err?
         process.stdout.write "#{color.red}#{err.stack}#{color.reset}\n"
