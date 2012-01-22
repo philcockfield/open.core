@@ -39,6 +39,9 @@
 .core_btn_cmd.core_color_silver.core_label_only.core_default > button {
   border-color: transparent;
   background: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .core_btn_cmd.core_color_silver.core_over > button {
   background: #ccc;

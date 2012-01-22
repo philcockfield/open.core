@@ -102,7 +102,7 @@ do ->
   # NB: Set here to avoid load order problems with sub-modules that
   #     in turn require the [server] module.
   core.paths       = require './config/paths'
-  core.client      = require '../open.client'
+  core.client      = require '../client'
   core.version     = core.client.core.version
   core.mvc         = core.client.core.mvc
   core.util        = require './util'

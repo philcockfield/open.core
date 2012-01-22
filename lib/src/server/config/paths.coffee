@@ -13,7 +13,7 @@ module.exports = paths =
     views:        "#{lib}/views"
     src:          "#{lib}/src"
     server:       "#{lib}/src/server"
-    client:       "#{lib}/src/open.client"
+    client:       "#{lib}/src/client"
     test:         "#{root}/test"
     specs:        "#{root}/test/specs"
 

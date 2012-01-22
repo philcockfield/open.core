@@ -1,4 +1,4 @@
-client = require '../../open.client/core'
+client = require '../../client/core'
 server = require '../../server'
 
 # Store color in global namespace.
