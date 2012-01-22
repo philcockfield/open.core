@@ -1,5 +1,5 @@
 express = require 'express'
-core    = require('open.core/open.server')
+core    = test.server
 
 describe 'config/configure', ->
   app = null
@@ -18,14 +18,6 @@ describe 'config/configure', ->
     it 'turns padded "/" into empty empty string', ->
       core.init app, baseUrl: '  /  ', -> 
       expect(core.baseUrl).toEqual ''
-
-
-
-
-
-
-
-
 
 
 
