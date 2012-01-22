@@ -1,4 +1,4 @@
-core     = require '../../../open.server'
+core     = require '../../../server'
 markdown = (require 'markdown').markdown
 pygments = require './pygments'
 

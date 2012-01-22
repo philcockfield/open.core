@@ -1,5 +1,5 @@
 client = require '../../open.client/core'
-server = require '../../open.server'
+server = require '../../server'
 
 # Store color in global namespace.
 global.color =

@@ -14,7 +14,7 @@ To initialize the **open.core** library from [Express](http://expressjs.com/):
 ```coffeescript
 
   express = require 'express'
-  core    = require 'open.core/open.server'
+  core    = require 'open.core/server'
 
   app = express.createServer()
   core.configure app
@@ -37,7 +37,7 @@ host application:
 
 ```coffeescript
 
-  core = require 'open.server'
+  core = require 'server'
   core.configure.specs app,
             title:      'My Specs'
             url:        '/specs'

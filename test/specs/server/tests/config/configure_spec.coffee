@@ -7,7 +7,7 @@ describe 'config/configure', ->
     app = express.createServer()
 
   describe 'baseUrl', ->
-    it 'stores the base url on [open.server]', ->
+    it 'stores the base url on [server]', ->
       core.init app, baseUrl: '/abc', -> 
       expect(core.baseUrl).toEqual '/abc'
 

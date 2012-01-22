@@ -1,4 +1,4 @@
-core   = require '../../../open.server'
+core   = require '../../../server'
 fs     = require 'fs'
 
 

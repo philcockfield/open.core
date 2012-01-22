@@ -1,4 +1,4 @@
-describe 'open.server', ->
+describe 'server', ->
   server = test.server
   
   

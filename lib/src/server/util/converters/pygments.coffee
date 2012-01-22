@@ -1,6 +1,6 @@
 {exec} = require 'child_process'
 uuid   = require 'node-uuid'
-core   = require '../../../open.server'
+core   = require '../../../server'
 rest   = require 'restler'
 
 

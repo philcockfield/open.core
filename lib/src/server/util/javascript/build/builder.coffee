@@ -1,4 +1,4 @@
-core      = require '../../../../open.server'
+core      = require '../../../../server'
 fsUtil    = require '../../fs'
 BuildPath = require './build_path'
 minifier  = require '../minifier'
