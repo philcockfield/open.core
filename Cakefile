@@ -10,7 +10,7 @@ logDone = -> log 'Done', color.green
 
 
 task 'specs', 'Run the server-side Jasmine BDD specs', ->
-  exec 'jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
+  exec './node_modules/jasmine-node/bin/jasmine-node --color --coffee test/specs/server', (err, stdout, stderr) ->
       console.log stdout + stderr
 
 option '-t', '--throw', 'Throw an exception if any client specs fail'
