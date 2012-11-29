@@ -13,21 +13,27 @@
 		"url": "git://github.com/philcockfield/open.core.git"
 	},
 	"dependencies": {
-		"express": ">= 2.4.0",
+		"express": "2.4.0",
 		"stylus": ">= 0.13.5",
 		"nib": ">= 0.0.8",
 		"jade": ">= 0.0.1",
-		"coffee-script": ">= 1.1.1",
+		"coffee-script": "1.0.1",
 		"underscore": ">=1.1.6",
 		"underscore.string": ">=1.1.5",
 		"backbone": ">=0.3.3",
 		"jquery": "1.6.2",
-		"uglify-js": ">= 1.0.3",
+		"uglify-js": "1.0.3",
 		"rimraf": ">= 1.0.2",
 		"zombie": ">=0.12.1",
 		"node-uuid": "1.2.0",
 		"markdown": ">= 0.3.1",
 		"restler": ">= 0.2.1"
+	},
+	"devDependencies" : {
+		"jasmine-node" : "1.0.26"
+	},
+	"scripts": {
+		"test" : "cake specs"
 	},
 	"keywords": [
 		"utility",
