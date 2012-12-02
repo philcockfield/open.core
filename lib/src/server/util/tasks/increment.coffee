@@ -20,9 +20,9 @@ module.exports = (options = {}, callback) ->
   throw new Error('Failed to increment version. [rootPath] not provided.') unless rootPath?
   
   # Increment the [package.json] file.
-  package = new Package(rootPath)
-  package.incrementVersion save:yes
-  version = package.data.version
+  pkg = new Package(rootPath)
+  pkg.incrementVersion save:yes
+  version = pkg.data.version
   
   # Increment the core library.
   if clientPath?
@@ -37,9 +37,9 @@ module.exports = (options = {}, callback) ->
   
   # Finish up.
   unless options.silent is yes
-    log "Version of [#{package.data.name}] incremented to:", color.blue, version
+    log "Version of [#{pkg.data.name}] incremented to:", color.blue, version
     log 'Files changed:', color.blue
-    log ' - ' + package.path
+    log ' - ' + pkg.path
     log ' - ' + clientPath if clientPath?
     log()
   callback? version

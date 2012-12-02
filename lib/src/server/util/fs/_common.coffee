@@ -5,7 +5,7 @@ fsPath = require 'path'
 module.exports = 
   # Constants
   FILE_MODE:
-      DEFAULT: 0777 # Full permissions.
+      DEFAULT: 0o0777 # Full permissions.
   ERROR: 
       NOT_EMPTY: 'ENOTEMPTY'
       NOT_EXIST: 'ENOENT'    # No such file or directory.
