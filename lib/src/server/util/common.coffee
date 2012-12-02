@@ -3,15 +3,15 @@ server = require '../../server'
 
 # Store color in global namespace.
 global.color =
-    bold   : "\033[0;1m"
-    gray   : "\033[0;30m"
-    red    : "\033[0;31m"
-    green  : "\033[0;32m"
-    yellow : "\033[0;33m"
-    blue   : "\033[0;34m"
-    pink   : "\033[0;35m"
-    cyan   : "\033[0;36m"
-    reset  : "\033[0m"
+    bold   : "\x1b[0;1m"
+    gray   : "\x1b[0;30m"
+    red    : "\x1b[0;31m"
+    green  : "\x1b[0;32m"
+    yellow : "\x1b[0;33m"
+    blue   : "\x1b[0;34m"
+    pink   : "\x1b[0;35m"
+    cyan   : "\x1b[0;36m"
+    reset  : "\x1b[0m"
 
 
 log        = (message, color = '', explanation = '') -> log.line message, color, explanation

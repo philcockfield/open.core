@@ -14,7 +14,7 @@ describe 'util/fs', ->
           # Creating empty folders for tests is needed
           # because Git does not store empty folders.
           return if fsPath.existsSync(path)
-          fs.mkdirSync path, 0777
+          fs.mkdirSync path, 0o0777
   createEmptyFolder("#{sampleDir}/empty")
 
   includesPath = (paths, file) -> _.any paths, (p) -> _.endsWith(p, file)
