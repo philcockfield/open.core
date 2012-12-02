@@ -37,7 +37,7 @@ app.get "#{core.baseUrl}/:stylesheet?.css", (req, res) ->
 
 # GET: Javascript file.
 app.get "#{core.baseUrl}/:package?.js", (req, res) ->
-    package = req.params.package
+    pkg = req.params.package
     min  = if minRequested(req) then '-min' else ''
     dir  = "#{paths.public}/javascripts"
     file = (name) -> 
@@ -46,12 +46,12 @@ app.get "#{core.baseUrl}/:package?.js", (req, res) ->
     libFile = (name) -> "#{dir}/libs/#{file(name)}"
     
     # Look for lib files.
-    switch package
+    switch pkg
       when 'libs', 'libs-min' then file = libFile 'libs'
       when 'require', 'require-min' then file = libFile 'require'
       else
         # Not a lib file, return the core java-script.
-        file = "#{dir}/core/#{file(package)}"
+        file = "#{dir}/core/#{file(pkg)}"
 
     send.scriptFile res, file
 

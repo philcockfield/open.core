@@ -18,7 +18,7 @@ module.exports = version =
   Increments the version of the given package.
   @param package : {object}. The [package.json] to increment.
   ###
-  incrementPackage: (package) -> package.version = version.next(package.version)
+  incrementPackage: (pkg) -> pkg.version = version.next(pkg.version)
 
 
   ###
@@ -27,9 +27,9 @@ module.exports = version =
   @param package    : The package to sync.
   @param dependency : The dependency package to sync with.
   ###
-  syncDependency: (package, dependency) ->
-    for key of package.dependencies
+  syncDependency: (pkg, dependency) ->
+    for key of pkg.dependencies
       if key == dependency.name
-          value = package.dependencies[key]
-          package.dependencies[key] = dependency.version
+          value = pkg.dependencies[key]
+          pkg.dependencies[key] = dependency.version
 

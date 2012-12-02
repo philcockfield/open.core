@@ -350,7 +350,7 @@ module.exports = class PrivatePackage extends JsonFile
 # PRIVATE STATIC --------------------------------------------------------------------------
 
 
-createModulesDir = (package) -> fsUtil.createDirSync package.modulesDir
+createModulesDir = (pkg) -> fsUtil.createDirSync pkg.modulesDir
 
 
 deleteLink = (path, options = {}) -> 
@@ -365,15 +365,15 @@ deleteLink = (path, options = {}) ->
       return false
 
 
-dependencyPaths = (package, item) -> 
+dependencyPaths = (pkg, item) -> 
   paths =
-    source: "#{package.linkDir}/#{item.name}"
-    target: "#{package.modulesDir}/#{item.name}"
+    source: "#{pkg.linkDir}/#{item.name}"
+    target: "#{pkg.modulesDir}/#{item.name}"
 
 
-scrubGitIgnore = (package) -> 
+scrubGitIgnore = (pkg) -> 
   # Setup initial conditions.
-  path = "#{package.dir}/.gitignore"
+  path = "#{pkg.dir}/.gitignore"
   
   # Read the file.
   gitignore = fs.readFileSync(path).toString()
