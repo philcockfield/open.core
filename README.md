@@ -32,7 +32,7 @@ To run client-side tests in browser:
 1. Configure **open.core** in your host application (see above).
 2. Run tests in the browser at: `http://localhost:8000/core/specs`
 
-To use the [Jasmine](http://pivotal.github.com/jasmine/) test runner in the browser from your
+To use the [Jasmine](https://jasmine.github.io/) test runner in the browser from your
 host application:
 
 ```coffeescript
